@@ -42,8 +42,8 @@ from collections import deque
 #  [설정] — 여기만 수정하면 됩니다
 # ══════════════════════════════════════════════════════════════
 
-VIDEO_PATH           = r"squat_ex.mp4"
-EXERCISE             = "dead"
+VIDEO_PATH           = r"./data/squat_ex.mp4"
+EXERCISE             = "squat"
 OUTPUT_PATH          = None
 DETECTION_CONFIDENCE = 0.5
 PRESENCE_CONFIDENCE  = 0.5
@@ -279,7 +279,7 @@ if __name__ == "__main__":
 
     out = OUTPUT_PATH or os.path.join(
         os.path.dirname(os.path.abspath(VIDEO_PATH)),
-        f"expert_{EXERCISE}2.json"
+        f"expert_{EXERCISE}.json"
     )
 
     ensure_model()

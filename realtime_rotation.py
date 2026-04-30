@@ -47,7 +47,7 @@ EXERCISE = "squat"
 ANTHROPIC_API_KEY = None           # 예: "sk-ant-api03-..."
 
 # 전문가 JSON 경로 (None → 같은 폴더 자동 탐색)
-EXPERT_JSON_PATH = r'expert_dead2.json'
+EXPERT_JSON_PATH = r'./data/expert_squat.json'
 
 # 모델 파일 경로 (None → 자동 탐색 + 없으면 다운로드)
 MODEL_PATH = None
@@ -672,7 +672,7 @@ if __name__ == "__main__":
     model_path = MODEL_PATH or _DEFAULT_MODEL_PATH
     json_path  = EXPERT_JSON_PATH or os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
-        f"expert_{EXERCISE}.json"
+        f"./data/expert_{EXERCISE}.json"
     )
 
     ensure_model(model_path)
@@ -681,7 +681,7 @@ if __name__ == "__main__":
     ex_frames= expert["frames"]
 
     # cap = cv2.VideoCapture(CAMERA_INDEX)
-    cap = cv2.VideoCapture("squat_user1.mp4")
+    cap = cv2.VideoCapture("./data/squat_user2.mp4")
     if not cap.isOpened():
         print(f"[오류] 웹캠 {CAMERA_INDEX}번을 열 수 없습니다.")
         sys.exit(1)
