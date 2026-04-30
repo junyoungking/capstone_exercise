@@ -1,6 +1,43 @@
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
 .venv/
+venv/
+env/
+
+# Environment variables
 .env
+
+# PyCharm
+.idea/
+
+# Jupyter
 .ipynb_checkpoints/
+
+# Data / media files
 data/
+dataset/
+datasets/
+videos/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.parquet
+
+# Model / checkpoint files
+models/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Logs
+logs/
+*.log
+runs/
