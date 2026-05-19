@@ -23,17 +23,14 @@ realtime_compare.py — 실시간 전문가 비교 + LLM 피드백
   - 푸시업: 팔꿈치각도 < DOWN_THRESHOLD 진입 후 UP_THRESHOLD 복귀
 """
 
-import cv2
-import numpy as np
-import math
-import json
-import time
-import os
-import sys
-import types
-import threading
-import urllib.request
+import cv2, numpy as np, math, json, time, os, sys, types, threading, urllib.request
 from collections import deque
+
+try:
+    from feedback_overlay import FeedbackRenderer, extract_expert_depth_target
+    _FB_OK = True
+except ImportError:
+    _FB_OK = False
 
 
 # ══════════════════════════════════════════════════════════════
@@ -64,16 +61,13 @@ WINDOW_SIZE = 5
 LLM_COOLDOWN = 3.0
 
 # 전문가 스켈레톤 투명도 (0.0=완전투명 ~ 1.0=불투명)
-EXPERT_ALPHA = 0.7
-
-# 전문가 스켈레톤 x축 평행 이동 (화면 너비 대비 비율, 음수=왼쪽)
-EXPERT_OFFSET_X = -0.15
-
-# 준비 자세 감지 (정지 감지 후 스케일/앵커 고정)
+EXPERT_ALPHA    = 0.7
+EXPERT_OFFSET_X = -0.18
 STILL_THRESHOLD = 0.008
 STILL_FRAMES    = 20
+TRAIL_MAX       = 120
 
-# 가시성 임계값
+# 가시성 임계값 — 이 값 미만 관절이 핵심 관절에 있으면 전문가 스켈레톤 숨김
 VISIBILITY_THRESHOLD = 0.6
 
 # ── 횟수 카운트 임계값 ────────────────────────────────────────
@@ -370,174 +364,169 @@ def check_visibility(lms) -> bool:
     return all(lms[i].visibility >= VISIBILITY_THRESHOLD
                for i in _KEY_JOINTS)
 
-# ── 준비 자세 감지 + 스케일/앵커 고정 (전역) ─────────────────
-_prev_hip_x    = None
-_prev_hip_y    = None
-_still_count   = 0
-_locked_scale  = None
-_locked_anc_x  = None
-_locked_anc_y  = None
+# ── 전역 변수 ─────────────────────────────────────────────────
+_prev_hip_x   = None; _prev_hip_y = None; _still_count = 0
+_locked_scale = None; _locked_anc_x = None; _locked_anc_y = None
+_EX_LM_WIN    = 7;    _ex_lm_buf  = deque(maxlen=_EX_LM_WIN)
+_trail_buf    = deque(maxlen=TRAIL_MAX)
+_ht_u = [dict() for _ in range(3)]
+_ht_e = [dict() for _ in range(3)]
+_N_BINS = 30
+
+_TRAIL_STYLES = [
+    ((0,   220, 220), 'knee'),
+    ((180,  80,   0), 'hip'),
+    ((0,   200,  80), 'wrist'),
+]
 
 
-def normalize_expert_landmarks(ex_lms_raw: list, lms) -> list:
-    """
-    전문가 좌표를 사용자 기준으로 정규화.
+def smooth_expert_landmarks(ex_lms_raw):
+    _ex_lm_buf.append(ex_lms_raw)
+    n = len(_ex_lm_buf)
+    return [[sum(b[j][k] for b in _ex_lm_buf)/n for k in range(4)]
+            for j in range(len(ex_lms_raw))]
 
-    핵심: 힙이 STILL_FRAMES 연속 정지하면 스케일/앵커 고정.
-    고정 후에는 사용자가 움직여도 전문가 크기/위치가 변하지 않음.
-    앵커: 사용자 발 중점 (31, 32번)
-    스케일: 발~어깨 전신 길이 기준
-    """
+
+def normalize_expert_landmarks(ex_lms_smooth, lms):
     global _prev_hip_x, _prev_hip_y, _still_count
     global _locked_scale, _locked_anc_x, _locked_anc_y
 
-    # ── 힙 이동량으로 정지 감지 ──
-    u_hip_x = (lms[23].x + lms[24].x) / 2
-    u_hip_y = (lms[23].y + lms[24].y) / 2
-
+    u_hip_x = (lms[23].x + lms[24].x)/2
+    u_hip_y = (lms[23].y + lms[24].y)/2
     if _prev_hip_x is not None:
-        mv = math.hypot(u_hip_x - _prev_hip_x, u_hip_y - _prev_hip_y)
-        _still_count = _still_count + 1 if mv < STILL_THRESHOLD else 0
+        mv = math.hypot(u_hip_x-_prev_hip_x, u_hip_y-_prev_hip_y)
+        _still_count = _still_count+1 if mv < STILL_THRESHOLD else 0
     _prev_hip_x, _prev_hip_y = u_hip_x, u_hip_y
 
-    # ── 준비 자세 감지 시 고정 ──
     if _locked_scale is None and _still_count >= STILL_FRAMES:
-        u_foot_x = (lms[31].x + lms[32].x) / 2
-        u_foot_y = (lms[31].y + lms[32].y) / 2
-        u_sh_y   = (lms[11].y + lms[12].y) / 2
-        u_body   = max(abs(u_sh_y - u_foot_y), 1e-6)
+        u_fx=(lms[31].x+lms[32].x)/2; u_fy=(lms[31].y+lms[32].y)/2
+        u_sy=(lms[11].y+lms[12].y)/2
+        u_b =max(abs(u_sy-u_fy),1e-6)
+        e_fy=(ex_lms_smooth[31][1]+ex_lms_smooth[32][1])/2
+        e_sy=(ex_lms_smooth[11][1]+ex_lms_smooth[12][1])/2
+        e_b =max(abs(e_sy-e_fy),1e-6)
+        _locked_scale=u_b/e_b; _locked_anc_x=u_fx; _locked_anc_y=u_fy
+        print("[Norm] Anchor locked!")
 
-        e_foot_y = (ex_lms_raw[31][1] + ex_lms_raw[32][1]) / 2
-        e_sh_y   = (ex_lms_raw[11][1] + ex_lms_raw[12][1]) / 2
-        e_body   = max(abs(e_sh_y - e_foot_y), 1e-6)
-
-        _locked_scale = u_body / e_body
-        _locked_anc_x = u_foot_x
-        _locked_anc_y = u_foot_y
-        print("[정규화] 준비 자세 감지 → 스케일/앵커 고정!")
-
-    # ── 스케일/앵커 결정 ──
     if _locked_scale is not None:
-        scale = _locked_scale
-        anc_x = _locked_anc_x
-        anc_y = _locked_anc_y
+        sc,ax,ay=_locked_scale,_locked_anc_x,_locked_anc_y
     else:
-        u_foot_x = (lms[31].x + lms[32].x) / 2
-        u_foot_y = (lms[31].y + lms[32].y) / 2
-        u_sh_y   = (lms[11].y + lms[12].y) / 2
-        u_body   = max(abs(u_sh_y - u_foot_y), 1e-6)
-        e_foot_y = (ex_lms_raw[31][1] + ex_lms_raw[32][1]) / 2
-        e_sh_y   = (ex_lms_raw[11][1] + ex_lms_raw[12][1]) / 2
-        e_body   = max(abs(e_sh_y - e_foot_y), 1e-6)
-        scale  = u_body / e_body
-        anc_x  = u_foot_x
-        anc_y  = u_foot_y
+        u_fx=(lms[31].x+lms[32].x)/2; u_fy=(lms[31].y+lms[32].y)/2
+        u_sy=(lms[11].y+lms[12].y)/2
+        u_b =max(abs(u_sy-u_fy),1e-6)
+        e_fy=(ex_lms_smooth[31][1]+ex_lms_smooth[32][1])/2
+        e_sy=(ex_lms_smooth[11][1]+ex_lms_smooth[12][1])/2
+        e_b =max(abs(e_sy-e_fy),1e-6)
+        sc=u_b/e_b; ax=u_fx; ay=u_fy
 
-    e_foot_x = (ex_lms_raw[31][0] + ex_lms_raw[32][0]) / 2
-    e_foot_y = (ex_lms_raw[31][1] + ex_lms_raw[32][1]) / 2
-
-    result = []
-    for p in ex_lms_raw:
-        nx = (p[0] - e_foot_x) * scale + anc_x
-        ny = (p[1] - e_foot_y) * scale + anc_y
-        result.append([nx, ny, p[2], p[3]])
-    return result
+    efx=(ex_lms_smooth[31][0]+ex_lms_smooth[32][0])/2
+    efy=(ex_lms_smooth[31][1]+ex_lms_smooth[32][1])/2
+    return [[(p[0]-efx)*sc+ax,(p[1]-efy)*sc+ay,p[2],p[3]]
+            for p in ex_lms_smooth]
 
 
-def draw_expert_skeleton(frame, ex_lms_raw: list, lms,
-                         bad_indices: set, alpha: float = 0.55,
-                         offset_x: float = 0.0):
-    """
-    전문가 스켈레톤: 단색(민트)으로 그림. 오류 표시 없음.
-    offset_x: 화면 너비 대비 x 평행 이동 (음수=왼쪽, 양수=오른쪽)
-    고정 전: 연한 색 / 고정 후: 정상 밝기
-    """
-    H, W    = frame.shape[:2]
-    overlay = frame.copy()
-
-    ex_lms = normalize_expert_landmarks(ex_lms_raw, lms)
-
-    is_locked  = _locked_scale is not None
-    LINE_COLOR = (180, 220, 60) if is_locked else (100, 140, 40)
-    DOT_COLOR  = (150, 200, 40) if is_locked else (80,  120, 30)
-
+def draw_expert_skeleton(frame, ex_lms_norm, bad_indices, alpha=0.55, offset_x=0.0):
+    H,W=frame.shape[:2]; ov=frame.copy()
+    is_locked=_locked_scale is not None
+    LC=(180,220,60) if is_locked else (100,130,35)
+    DC=(150,200,40) if is_locked else (80,110,25)
     for conn in PoseLandmarksConns:
-        if ex_lms_raw[conn.start][3] < 0.4 or ex_lms_raw[conn.end][3] < 0.4:
-            continue
-        a, b = ex_lms[conn.start], ex_lms[conn.end]
-        ax = int((a[0] + offset_x) * W)
-        ay = int(a[1] * H)
-        bx = int((b[0] + offset_x) * W)
-        by = int(b[1] * H)
-        if not (0 <= ax < W and 0 <= bx < W):
-            continue
-        cv2.line(overlay, (ax, ay), (bx, by), LINE_COLOR, 2, cv2.LINE_AA)
-
-    for i, p in enumerate(ex_lms):
-        if ex_lms_raw[i][3] < 0.4:
-            continue
-        cx = int((p[0] + offset_x) * W)
-        cy = int(p[1] * H)
-        if not (0 <= cx < W and 0 <= cy < H):
-            continue
-        cv2.circle(overlay, (cx, cy), 5, DOT_COLOR, -1, cv2.LINE_AA)
-        cv2.circle(overlay, (cx, cy), 5, (0, 0, 0),  1, cv2.LINE_AA)
-
-    cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0, frame)
-
-    # 상태 표시
-    if not is_locked:
-        msg   = f"준비 자세 유지... ({_still_count}/{STILL_FRAMES})"
-        color = (100, 200, 255)
-    else:
-        msg   = "앵커 고정 ✓"
-        color = (80, 220, 80)
-    cv2.putText(frame, msg, (10, H - 50),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+        a,b=ex_lms_norm[conn.start],ex_lms_norm[conn.end]
+        if a[3]<0.4 or b[3]<0.4: continue
+        ax=int((a[0]+offset_x)*W); ay=int(a[1]*H)
+        bx=int((b[0]+offset_x)*W); by=int(b[1]*H)
+        if not(0<=ax<W and 0<=bx<W): continue
+        cv2.line(ov,(ax,ay),(bx,by),LC,2,cv2.LINE_AA)
+    for p in ex_lms_norm:
+        if p[3]<0.4: continue
+        cx=int((p[0]+offset_x)*W); cy=int(p[1]*H)
+        if not(0<=cx<W and 0<=cy<H): continue
+        cv2.circle(ov,(cx,cy),5,DC,-1,cv2.LINE_AA)
+        cv2.circle(ov,(cx,cy),5,(0,0,0),1,cv2.LINE_AA)
+    cv2.addWeighted(ov,alpha,frame,1-alpha,0,frame)
+    msg="Hold still... ({}/{})".format(_still_count,STILL_FRAMES) if not is_locked else "Anchor locked"
+    cv2.putText(frame,msg,(10,frame.shape[0]-45),cv2.FONT_HERSHEY_SIMPLEX,0.42,
+                (220,160,60) if not is_locked else (80,220,80),1,cv2.LINE_AA)
 
 
-def draw_user_skeleton(frame, lms, deltas: dict,
-                       threshold: float = 15.0):
-    """
-    사용자 스켈레톤: delta 크기에 따라 연속 색상 변환.
-    초록(정상) → 노랑(약간 오류) → 빨강(큰 오류)
-    """
-    H, W = frame.shape[:2]
-
-    # 관절번호 → delta 매핑
-    joint_norm: dict = {}
-    for metric, raw_d in deltas.items():
-        norm = min(1.0, abs(raw_d) / threshold)
-        for idx in METRIC_TO_LM.get(metric, []):
-            joint_norm[idx] = max(joint_norm.get(idx, 0.0), norm)
-
-    def _color(norm):
-        if norm < 0.5:
-            t = norm * 2.0
-            return (0, 200, int(t * 255))      # 초록→노랑
-        else:
-            t = (norm - 0.5) * 2.0
-            return (0, int((1-t)*200), 255)    # 노랑→빨강
-
+def draw_user_skeleton(frame, lms, bad_indices):
+    H,W=frame.shape[:2]
     for conn in PoseLandmarksConns:
-        a, b = lms[conn.start], lms[conn.end]
-        if a.visibility < 0.3 or b.visibility < 0.3:
-            continue
-        avg  = (joint_norm.get(conn.start, 0) +
-                joint_norm.get(conn.end,   0)) / 2
-        col  = _color(avg)
-        cv2.line(frame,
-                 (int(a.x*W), int(a.y*H)),
-                 (int(b.x*W), int(b.y*H)),
-                 col, 2, cv2.LINE_AA)
+        a,b=lms[conn.start],lms[conn.end]
+        if a.visibility<0.4 or b.visibility<0.4: continue
+        bad=conn.start in bad_indices or conn.end in bad_indices
+        cv2.line(frame,(int(a.x*W),int(a.y*H)),(int(b.x*W),int(b.y*H)),
+                 (0,0,220) if bad else (240,240,240),2,cv2.LINE_AA)
+    for i,lm in enumerate(lms):
+        if lm.visibility<0.4: continue
+        cx,cy=int(lm.x*W),int(lm.y*H)
+        cv2.circle(frame,(cx,cy),5,(0,0,220) if i in bad_indices else (180,180,180),-1,cv2.LINE_AA)
+        cv2.circle(frame,(cx,cy),5,(0,0,0),1,cv2.LINE_AA)
 
-    for i, lm in enumerate(lms):
-        if lm.visibility < 0.3:
-            continue
-        col = _color(joint_norm.get(i, 0.0))
-        cx, cy = int(lm.x*W), int(lm.y*H)
-        cv2.circle(frame, (cx, cy), 5, col,   -1, cv2.LINE_AA)
-        cv2.circle(frame, (cx, cy), 5, (0,0,0), 1, cv2.LINE_AA)
+
+def update_trail(lms, ex_lms_norm, offset_x=0.0):
+    _trail_buf.append((
+        (lms[25].x+lms[26].x)/2,(lms[25].y+lms[26].y)/2,
+        (lms[23].x+lms[24].x)/2,(lms[23].y+lms[24].y)/2,
+        (lms[15].x+lms[16].x)/2,(lms[15].y+lms[16].y)/2,
+        (ex_lms_norm[25][0]+ex_lms_norm[26][0])/2+offset_x,
+        (ex_lms_norm[25][1]+ex_lms_norm[26][1])/2,
+        (ex_lms_norm[23][0]+ex_lms_norm[24][0])/2+offset_x,
+        (ex_lms_norm[23][1]+ex_lms_norm[24][1])/2,
+        (ex_lms_norm[15][0]+ex_lms_norm[16][0])/2+offset_x,
+        (ex_lms_norm[15][1]+ex_lms_norm[16][1])/2,
+    ))
+    _update_ht(lms, ex_lms_norm, offset_x)
+
+
+def _update_ht(lms, ex_lms_norm, offset_x):
+    ju=[(((lms[25].x+lms[26].x)/2),(lms[25].y+lms[26].y)/2),
+        (((lms[23].x+lms[24].x)/2),(lms[23].y+lms[24].y)/2),
+        (((lms[15].x+lms[16].x)/2),(lms[15].y+lms[16].y)/2)]
+    je=[((ex_lms_norm[25][0]+ex_lms_norm[26][0])/2+offset_x,(ex_lms_norm[25][1]+ex_lms_norm[26][1])/2),
+        ((ex_lms_norm[23][0]+ex_lms_norm[24][0])/2+offset_x,(ex_lms_norm[23][1]+ex_lms_norm[24][1])/2),
+        ((ex_lms_norm[15][0]+ex_lms_norm[16][0])/2+offset_x,(ex_lms_norm[15][1]+ex_lms_norm[16][1])/2)]
+    for j in range(3):
+        for ht,joints in [(_ht_u,ju),(_ht_e,je)]:
+            x,y=joints[j]; b=max(0,min(_N_BINS-1,int(y*_N_BINS)))
+            ht[j].setdefault(b,[]).append(x)
+
+
+def draw_trail(frame):
+    H,W=frame.shape[:2]; ov=frame.copy()
+    n=len(_trail_buf)
+    if n>=2:
+        pts=list(_trail_buf); usl=[(0,1),(2,3),(4,5)]; esl=[(6,7),(8,9),(10,11)]
+        for i in range(1,n):
+            ratio=i/n; thick=3 if ratio>0.7 else 2
+            for j,((uxi,uyi),(exi,eyi)) in enumerate(zip(usl,esl)):
+                col=tuple(int(c*ratio) for c in _TRAIL_STYLES[j][0])
+                cv2.line(ov,(int(pts[i-1][uxi]*W),int(pts[i-1][uyi]*H)),
+                         (int(pts[i][uxi]*W),int(pts[i][uyi]*H)),col,thick,cv2.LINE_AA)
+                if i%3!=0:
+                    cv2.line(ov,(int(pts[i-1][exi]*W),int(pts[i-1][eyi]*H)),
+                             (int(pts[i][exi]*W),int(pts[i][eyi]*H)),col,thick-1,cv2.LINE_AA)
+        last=pts[-1]
+        for j,((uxi,uyi),(exi,eyi)) in enumerate(zip(usl,esl)):
+            col=_TRAIL_STYLES[j][0]
+            cv2.circle(ov,(int(last[uxi]*W),int(last[uyi]*H)),6,col,-1,cv2.LINE_AA)
+            cv2.circle(ov,(int(last[exi]*W),int(last[eyi]*H)),6,col,2,cv2.LINE_AA)
+    for j in range(3):
+        col=_TRAIL_STYLES[j][0]
+        for ht,lw in [(_ht_u,2),(_ht_e,1)]:
+            pa=[]
+            for b in sorted(ht[j]):
+                xs=ht[j][b]
+                if len(xs)<3: continue
+                pa.append((int(sum(xs)/len(xs)*W),int((b+0.5)/_N_BINS*H)))
+            for i in range(1,len(pa)):
+                cv2.line(ov,pa[i-1],pa[i],col,lw,cv2.LINE_AA)
+    cv2.addWeighted(ov,0.9,frame,0.1,0,frame)
+
+
+def clear_height_trail():
+    for j in range(3):
+        _ht_u[j].clear(); _ht_e[j].clear()
 
 
 # ══════════════════════════════════════════════════════════════
@@ -736,7 +725,7 @@ if __name__ == "__main__":
     ex_frames= expert["frames"]
 
     # cap = cv2.VideoCapture(CAMERA_INDEX)
-    cap = cv2.VideoCapture("./data/squat_user1.mp4")
+    cap = cv2.VideoCapture("./data/squat_user2.mp4")
     if not cap.isOpened():
         print(f"[오류] 웹캠 {CAMERA_INDEX}번을 열 수 없습니다.")
         sys.exit(1)
@@ -764,7 +753,20 @@ if __name__ == "__main__":
     CAMERA_HEIGHT = TARGET_H
 
     video_fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
-    frame_interval = 1.0 / video_fps  # 한 프레임당 목표 시간
+    frame_interval = 1.0 / video_fps
+
+    if _FB_OK:
+        fb = FeedbackRenderer(fps=video_fps)
+        fb.enable(
+            'heatmap', 'rom', 'score_bar',
+            'ktg', 'arc', 'depth', 'metricbar',
+            'phase', 'symmetry', 'tempo', 'acl',
+        )
+        _ty = extract_expert_depth_target(ex_frames, EXERCISE)
+        fb.depth_line.set_expert_target(_ty, TARGET_H)
+        print(f"[FB] active: {fb._on}")
+    else:
+        fb = None
 
     while True:
         t_frame_start = time.perf_counter()
@@ -847,49 +849,45 @@ if __name__ == "__main__":
             else:
                 llm.text = ""
 
-            # STEP 5a: 전문가 스켈레톤 (단색, 왼쪽 평행 이동)
             skeleton_visible = check_visibility(lms)
+            ex_lms_smooth = smooth_expert_landmarks(ex_lms_raw)
+            ex_lms_norm   = normalize_expert_landmarks(ex_lms_smooth, lms)
 
             if skeleton_visible:
-                draw_expert_skeleton(view, ex_lms_raw, lms, bad_indices,
-                                     alpha=EXPERT_ALPHA,
-                                     offset_x=EXPERT_OFFSET_X)
+                draw_expert_skeleton(view, ex_lms_norm, bad_indices,
+                                     alpha=EXPERT_ALPHA, offset_x=EXPERT_OFFSET_X)
 
-            # STEP 5b: 사용자 스켈레톤 (delta 기반 연속 색상)
-            draw_user_skeleton(view, lms, deltas)
+            if fb is None or not fb.is_on('heatmap'):
+                draw_user_skeleton(view, lms, bad_indices)
+
+            if fb is not None:
+                fb.render(view, raw, ex_metrics, deltas, lms,
+                          PoseLandmarksConns, METRIC_TO_LM, EXERCISE)
+
+            update_trail(lms, ex_lms_norm, offset_x=EXPERT_OFFSET_X)
+            draw_trail(view)
             frame[:, :target_w] = view
 
-
         else:
-            llm.text = "자세를 인식할 수 없습니다. 전신이 보이도록 서주세요."
+            llm.text = "Cannot detect pose. Show full body."
 
-        # FPS
-        t_now  = time.perf_counter()
-        fps    = 1.0 / max(t_now - t_prev, 1e-9)
-        t_prev = t_now
-
-        frame = render_hud(
-            frame, EXERCISE, rep_counter.count, worst, deltas,
-            user_avg, ex_metrics, llm, fps, ex_idx, ex_total,
-            skeleton_visible
-        )
+        t_now=time.perf_counter(); fps=1.0/max(t_now-t_prev,1e-9); t_prev=t_now
+        frame = render_hud(frame, EXERCISE, rep_counter.count, worst, deltas,
+                           user_avg, ex_metrics, llm, fps, ex_idx, ex_total,
+                           skeleton_visible)
         cv2.imshow("Workout Posture Correction", frame)
 
-        # key = cv2.waitKey(1) & 0xFF
-        elapsed = time.perf_counter() - t_frame_start
-        remain_ms = max(1, int((frame_interval - elapsed) * 1000))
-
-        key = cv2.waitKey(remain_ms) & 0xFF
-        if key in (ord('q'), 27):
-            break
-        elif key == ord('r'):
-            rep_counter.count = 0
-            rep_counter._in_down = False
-            llm.text = ""
-            _locked_scale = _locked_anc_x = _locked_anc_y = None
-            _prev_hip_x = _prev_hip_y = None
-            _still_count = 0
-            print("[리셋] 횟수 초기화 + 앵커 해제")
+        elapsed=time.perf_counter()-t_frame_start
+        remain_ms=max(1,int((frame_interval-elapsed)*1000))
+        key=cv2.waitKey(remain_ms)&0xFF
+        if key in(ord('q'),27): break
+        elif key==ord('r'):
+            rep_counter.count=0; rep_counter._in_down=False; llm.text=""
+            _locked_scale=_locked_anc_x=_locked_anc_y=None
+            _prev_hip_x=_prev_hip_y=None; _still_count=0
+            _trail_buf.clear(); _ex_lm_buf.clear(); clear_height_trail()
+            if fb is not None: fb.reset()
+            print("[Reset] done")
 
     cap.release()
     landmarker.close()
