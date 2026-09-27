@@ -41,3 +41,8 @@ checkpoints/
 logs/
 *.log
 runs/
+# Local AI work files
+.omx/
+
+# Markdown
+*.md
