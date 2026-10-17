@@ -149,6 +149,11 @@ class Opts:
     gap: bool = True
     outliers_x: bool = False
     speed_factor: float = 1.0                       # slow-motion export (time stretched)
+    # comparison tests (sim/run_compare.py)
+    dur_rep_sd: Optional[float] = None              # rep-to-rep duration variation (fraction), else GEN
+    rom_rep_sd: Optional[float] = None              # rep-to-rep ROM variation (fraction), else GEN
+    down_trend: float = 0.0                         # lowering time change from the first to the last rep (s)
+    rom_last: Optional[tuple] = None                # (n, m): the last n reps' ROM changed by m metres
 
 
 def _rom(rng, ex, o: Opts):
@@ -206,11 +211,16 @@ def build(ex, rng, o: Opts = Opts()):
             hk["pre"](tl, rng, rest_h, rom0)
 
     sgn = -1.0 if ex != "deadlift" else 1.0     # direction of the far point
+    rsd = g["rom_rep_sd"] if o.rom_rep_sd is None else o.rom_rep_sd
+    dsd = g["dur_rep_sd"] if o.dur_rep_sd is None else o.dur_rep_sd
     for k in range(n_reps):
-        rom = rom0 * float(rng.normal(1, g["rom_rep_sd"]))
-        jd = float(rng.normal(1, g["dur_rep_sd"]))
-        ju = float(rng.normal(1, g["dur_rep_sd"]))
-        d_dur = max(0.3, t_down * jd)
+        rom = rom0 * float(rng.normal(1, rsd))
+        if o.rom_last and k >= n_reps - o.rom_last[0]:
+            rom += o.rom_last[1]
+        jd = float(rng.normal(1, dsd))
+        ju = float(rng.normal(1, dsd))
+        trend = o.down_trend * k / (n_reps - 1) if n_reps > 1 else 0.0
+        d_dur = max(0.3, (t_down + trend) * jd)
         u_dur = max(0.3, t_up * (1 + fat * k) * ju)
         shape = "stick" if rng.random() < g["sticking"] else "cos"
         sway = float(rng.uniform(-g["sway"], g["sway"]))

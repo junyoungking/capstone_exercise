@@ -59,11 +59,37 @@ class SpeedCfg:
 
 
 @dataclass(frozen=True)
+class CmpCfg:
+    alpha: float = 0.025              # false "different" per value the multiplier table is built for
+    table: str = "crit_table.json"    # in core/, made by sim/crit.py
+    set_min_n: int = 4                # in-set: values needed
+    set_group_n: int = 2              # in-set: first / last reps averaged
+    ref_user_min_n: int = 3           # vs reference: my values needed (reference with >= short_ref_n values)
+    short_ref_n: int = 3              # reference with fewer values is "short" (table C, my scatter only)
+    short_ref_user_min_n: int = 4     # vs a short reference: my values needed
+    min_change_s: float = 0.15
+    min_change_m: float = 0.02
+    floor_s: float = 0.07             # scatter floor for times (or 1/fps if larger)
+    floor_m: float = 0.01             # scatter floor for distances
+
+
+@dataclass(frozen=True)
+class TextCfg:
+    max_shown: int = 3
+    time_digits: int = 2
+    llm_polish: bool = False
+    banned: tuple = ("좋", "나쁘", "잘못", "틀렸", "틀린", "올바", "정확한 자세", "해야", "하세요", "하십시오",
+                     "권장", "추천", "위험", "부상")
+
+
+@dataclass(frozen=True)
 class Config:
     live: LiveCfg = field(default_factory=LiveCfg)
     final: FinalCfg = field(default_factory=FinalCfg)
     rep: RepCfg = field(default_factory=RepCfg)
     speed: SpeedCfg = field(default_factory=SpeedCfg)
+    cmp: CmpCfg = field(default_factory=CmpCfg)
+    text: TextCfg = field(default_factory=TextCfg)
 
 
 DEFAULT = Config()

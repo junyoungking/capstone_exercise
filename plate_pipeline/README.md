@@ -2,7 +2,7 @@
 
 원판 추적 기반 3대 운동 기록·피드백 파이프라인의 구현이다. 설계는 Claude Docs 문서 "3대 운동 기록·피드백 파이프라인 — 처음부터 설계"에 있고, 이 폴더는 그 문서의 구현 설계 탭을 따른다. 1학기 코드(저장소 루트)와는 섞지 않는다.
 
-지금 들어 있는 것은 구현 순서의 1단계다. 신호 처리, 상태기계, rep 값 계산, 합성 시험 도구까지만 있고, 영상을 읽거나 원판을 찾는 부분은 아직 없다.
+지금 들어 있는 것은 구현 순서의 1~2단계다. 1단계는 신호 처리, 상태기계, rep 값 계산, 합성 시험 도구, 2단계는 세트 요약, 판정 배수 표, 비교 판정, 문장 템플릿과 대조다. 영상을 읽거나 원판을 찾는 부분은 아직 없다.
 
 ## 구성
 
@@ -14,12 +14,20 @@ core/
   judge/state.py     상태기계 (진입 6 cm, 최소 폭 13 cm, 복귀 70%, 바운스 0.4초, 미완료 20초, 공백 규칙)
   judge/sets.py      최종 계산의 부분 rep, 다른 자리, 리랙 판정
   measure/times.py   시각 4개 (끝점 외삽 2*t1 - t2), ROM, 먼 점 거리, 평균 속도, 템포
+  crit_table.json    판정 배수 표 A·B·C (sim/crit.py가 만듦, 문서 표와 같음)
+  compare/summary.py 세트 요약: 값별 rep 번호와 값, 2차 차분 산포 (낮은 신뢰도 rep은 빠짐)
+  compare/judge.py   세트 안 비교와 기준 영상 비교, 건너뛴 이유
+  text/templates.py  문장 템플릿, 순서 (기준 비교 먼저, 비율 큰 순), 3개까지 보이기, none·skip 문장, 측정 요약
+  text/check.py      판정어 검사, 숫자·단위·방향 대조, 합니다체 검사
+  text/polish.py     LLM 다듬기 (기본 꺼짐, 대조에 걸리면 템플릿 문장으로 되돌림)
 sim/
   gen.py             합성 궤적과 관측 (생성기 값은 GEN에 전부 있음)
   scenarios.py       깨뜨리기 상황 41가지 + 따로 돌린 둘
   evaluate.py        코어를 돌려 정답과 비교
   run_base.py        기본 시험: fps x 잡음별 횟수, 잡음별 속도 오차
   run_break.py       깨뜨리기 시험
+  crit.py            판정 배수 표 만들기 (정규분포 40만 번, 씨앗 2026)
+  run_compare.py     비교 판정 시험: 표 대조, 정규분포 시험, 생성기 시험
 tests/               pytest 단위 시험
 results/             시험 결과 (json)
 ```
@@ -32,6 +40,8 @@ pip install numpy scipy pytest
 python -m pytest -q tests
 python -m sim.run_break --sets 600       # 깨뜨리기 41가지 (2코어로 약 10분)
 python -m sim.run_base                   # 기본 시험 (2코어로 약 15분)
+python -m sim.crit                       # 배수 표 다시 만들기 (약 1분)
+python -m sim.run_compare                # 비교 판정 시험 (2코어로 약 10분)
 ```
 
 ## 합성 생성기
