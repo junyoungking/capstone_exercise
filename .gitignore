@@ -46,3 +46,7 @@ runs/
 
 # Markdown
 *.md
+
+# plate_pipeline docs
+!plate_pipeline/**/*.md
+!plate_pipeline/*.md
