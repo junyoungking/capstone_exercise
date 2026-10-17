@@ -1,0 +1,715 @@
+{
+ "groups": 1500,
+ "cond": {
+  "0.5cm even": {
+   "noise": 0.005,
+   "dur_rep_sd": 0.05,
+   "rom_rep_sd": 0.02
+  },
+  "0.5cm uneven": {
+   "noise": 0.005,
+   "dur_rep_sd": 0.12,
+   "rom_rep_sd": 0.05
+  },
+  "1cm even": {
+   "noise": 0.01,
+   "dur_rep_sd": 0.05,
+   "rom_rep_sd": 0.02
+  },
+  "1cm uneven": {
+   "noise": 0.01,
+   "dur_rep_sd": 0.12,
+   "rom_rep_sd": 0.05
+  }
+ },
+ "res": {
+  "0.5cm even": {
+   "table": {
+    "vs ref report false": {
+     "rate": 1.4154870940882598,
+     "judged": 80.06666666666666,
+     "n": 1201
+    },
+    "vs ref down false": {
+     "rate": 0.7556675062972292,
+     "judged": 79.4,
+     "n": 1191
+    },
+    "vs ref far_pause false": {
+     "rate": 0.8587786259541985,
+     "judged": 69.86666666666666,
+     "n": 1048
+    },
+    "vs ref down 0.5 s": {
+     "rate": 79.51706910907578,
+     "judged": 80.06666666666666,
+     "n": 1201
+    },
+    "vs ref down 1 s": {
+     "rate": 94.76793248945148,
+     "judged": 79.0,
+     "n": 1185
+    },
+    "short ref 1 rep down false": {
+     "rate": 4.408352668213457,
+     "judged": 59.284731774415405,
+     "n": 431
+    },
+    "short ref 2 rep down false": {
+     "rate": 2.1739130434782608,
+     "judged": 71.41009055627426,
+     "n": 552
+    },
+    "short ref 1 rep down 0.5 s": {
+     "rate": 34.41558441558441,
+     "judged": 63.54883081155433,
+     "n": 462
+    },
+    "short ref 1 rep down 1 s": {
+     "rate": 70.74829931972789,
+     "judged": 60.66024759284732,
+     "n": 441
+    },
+    "short ref 2 rep down 0.5 s": {
+     "rate": 54.62794918330309,
+     "judged": 71.28072445019404,
+     "n": 551
+    },
+    "short ref 2 rep down 1 s": {
+     "rate": 83.42440801457195,
+     "judged": 71.02199223803363,
+     "n": 549
+    },
+    "inset far_dist false": {
+     "rate": 0.3227293683725219,
+     "judged": 72.3,
+     "n": 2169
+    },
+    "inset down false": {
+     "rate": 0.8372093023255814,
+     "judged": 71.66666666666667,
+     "n": 2150
+    },
+    "inset report false": {
+     "rate": 1.1065006915629323,
+     "judged": 72.3,
+     "n": 2169
+    },
+    "inset last 2 reps 4 cm less": {
+     "rate": 19.08256880733945,
+     "judged": 72.66666666666667,
+     "n": 1090
+    },
+    "inset down 1 s shorter": {
+     "rate": 89.28238583410997,
+     "judged": 71.53333333333333,
+     "n": 1073
+    }
+   },
+   "first": {
+    "vs ref report false": {
+     "rate": 5.07910074937552,
+     "judged": 80.06666666666666,
+     "n": 1201
+    },
+    "vs ref down false": {
+     "rate": 2.3509655751469354,
+     "judged": 79.4,
+     "n": 1191
+    },
+    "vs ref far_pause false": {
+     "rate": 3.2442748091603053,
+     "judged": 69.86666666666666,
+     "n": 1048
+    },
+    "vs ref down 0.5 s": {
+     "rate": 88.759367194005,
+     "judged": 80.06666666666666,
+     "n": 1201
+    },
+    "vs ref down 1 s": {
+     "rate": 98.48101265822785,
+     "judged": 79.0,
+     "n": 1185
+    },
+    "short ref 1 rep down false": {
+     "rate": 9.048723897911833,
+     "judged": 59.284731774415405,
+     "n": 431
+    },
+    "short ref 2 rep down false": {
+     "rate": 5.253623188405797,
+     "judged": 71.41009055627426,
+     "n": 552
+    },
+    "short ref 1 rep down 0.5 s": {
+     "rate": 62.77056277056277,
+     "judged": 63.54883081155433,
+     "n": 462
+    },
+    "short ref 1 rep down 1 s": {
+     "rate": 86.62131519274377,
+     "judged": 60.66024759284732,
+     "n": 441
+    },
+    "short ref 2 rep down 0.5 s": {
+     "rate": 75.68058076225046,
+     "judged": 71.28072445019404,
+     "n": 551
+    },
+    "short ref 2 rep down 1 s": {
+     "rate": 96.35701275045537,
+     "judged": 71.02199223803363,
+     "n": 549
+    },
+    "inset far_dist false": {
+     "rate": 5.394190871369295,
+     "judged": 72.3,
+     "n": 2169
+    },
+    "inset down false": {
+     "rate": 9.44186046511628,
+     "judged": 71.66666666666667,
+     "n": 2150
+    },
+    "inset report false": {
+     "rate": 13.877362840018442,
+     "judged": 72.3,
+     "n": 2169
+    },
+    "inset last 2 reps 4 cm less": {
+     "rate": 74.58715596330275,
+     "judged": 72.66666666666667,
+     "n": 1090
+    },
+    "inset down 1 s shorter": {
+     "rate": 99.06803355079217,
+     "judged": 71.53333333333333,
+     "n": 1073
+    }
+   },
+   "scatter": {
+    "down": 0.0924630361106567,
+    "far_dist": 0.009436067981321643,
+    "far_pause": 0.0953845040331814,
+    "down_true": 0.08180192852940107
+   }
+  },
+  "0.5cm uneven": {
+   "table": {
+    "vs ref report false": {
+     "rate": 2.809917355371901,
+     "judged": 80.66666666666667,
+     "n": 1210
+    },
+    "vs ref down false": {
+     "rate": 1.5088013411567478,
+     "judged": 79.53333333333333,
+     "n": 1193
+    },
+    "vs ref far_pause false": {
+     "rate": 1.5340364333652925,
+     "judged": 69.53333333333333,
+     "n": 1043
+    },
+    "vs ref down 0.5 s": {
+     "rate": 46.03836530442035,
+     "judged": 79.93333333333334,
+     "n": 1199
+    },
+    "vs ref down 1 s": {
+     "rate": 76.86504610226321,
+     "judged": 79.53333333333333,
+     "n": 1193
+    },
+    "short ref 1 rep down false": {
+     "rate": 1.8181818181818181,
+     "judged": 58.666666666666664,
+     "n": 440
+    },
+    "short ref 2 rep down false": {
+     "rate": 1.858736059479554,
+     "judged": 71.73333333333333,
+     "n": 538
+    },
+    "short ref 1 rep down 0.5 s": {
+     "rate": 11.973392461197339,
+     "judged": 60.13333333333333,
+     "n": 451
+    },
+    "short ref 1 rep down 1 s": {
+     "rate": 26.914660831509845,
+     "judged": 60.93333333333333,
+     "n": 457
+    },
+    "short ref 2 rep down 0.5 s": {
+     "rate": 20.309477756286267,
+     "judged": 68.93333333333334,
+     "n": 517
+    },
+    "short ref 2 rep down 1 s": {
+     "rate": 41.88191881918819,
+     "judged": 72.26666666666667,
+     "n": 542
+    },
+    "inset far_dist false": {
+     "rate": 1.2885411872986654,
+     "judged": 72.43333333333334,
+     "n": 2173
+    },
+    "inset down false": {
+     "rate": 1.208740120874012,
+     "judged": 71.7,
+     "n": 2151
+    },
+    "inset report false": {
+     "rate": 2.4390243902439024,
+     "judged": 72.43333333333334,
+     "n": 2173
+    },
+    "inset last 2 reps 4 cm less": {
+     "rate": 9.176915799432356,
+     "judged": 70.46666666666667,
+     "n": 1057
+    },
+    "inset down 1 s shorter": {
+     "rate": 62.90909090909091,
+     "judged": 73.33333333333333,
+     "n": 1100
+    }
+   },
+   "first": {
+    "vs ref report false": {
+     "rate": 8.347107438016529,
+     "judged": 80.66666666666667,
+     "n": 1210
+    },
+    "vs ref down false": {
+     "rate": 5.280804694048617,
+     "judged": 79.53333333333333,
+     "n": 1193
+    },
+    "vs ref far_pause false": {
+     "rate": 4.026845637583893,
+     "judged": 69.53333333333333,
+     "n": 1043
+    },
+    "vs ref down 0.5 s": {
+     "rate": 60.383653044203506,
+     "judged": 79.93333333333334,
+     "n": 1199
+    },
+    "vs ref down 1 s": {
+     "rate": 87.84576697401509,
+     "judged": 79.53333333333333,
+     "n": 1193
+    },
+    "short ref 1 rep down false": {
+     "rate": 6.136363636363637,
+     "judged": 58.666666666666664,
+     "n": 440
+    },
+    "short ref 2 rep down false": {
+     "rate": 7.806691449814126,
+     "judged": 71.73333333333333,
+     "n": 538
+    },
+    "short ref 1 rep down 0.5 s": {
+     "rate": 26.38580931263858,
+     "judged": 60.13333333333333,
+     "n": 451
+    },
+    "short ref 1 rep down 1 s": {
+     "rate": 51.42231947483589,
+     "judged": 60.93333333333333,
+     "n": 457
+    },
+    "short ref 2 rep down 0.5 s": {
+     "rate": 39.26499032882012,
+     "judged": 68.93333333333334,
+     "n": 517
+    },
+    "short ref 2 rep down 1 s": {
+     "rate": 69.18819188191883,
+     "judged": 72.26666666666667,
+     "n": 542
+    },
+    "inset far_dist false": {
+     "rate": 12.333179935572941,
+     "judged": 72.43333333333334,
+     "n": 2173
+    },
+    "inset down false": {
+     "rate": 12.226871222687123,
+     "judged": 71.7,
+     "n": 2151
+    },
+    "inset report false": {
+     "rate": 22.411412793373216,
+     "judged": 72.43333333333334,
+     "n": 2173
+    },
+    "inset last 2 reps 4 cm less": {
+     "rate": 41.248817407757805,
+     "judged": 70.46666666666667,
+     "n": 1057
+    },
+    "inset down 1 s shorter": {
+     "rate": 91.9090909090909,
+     "judged": 73.33333333333333,
+     "n": 1100
+    }
+   },
+   "scatter": {
+    "down": 0.18434464609977227,
+    "far_dist": 0.020744183366466728,
+    "far_pause": 0.09503625867788563,
+    "down_true": 0.19744357249254155
+   }
+  },
+  "1cm even": {
+   "table": {
+    "vs ref report false": {
+     "rate": 3.2976092333058533,
+     "judged": 80.86666666666666,
+     "n": 1213
+    },
+    "vs ref down false": {
+     "rate": 1.4119601328903655,
+     "judged": 80.26666666666667,
+     "n": 1204
+    },
+    "vs ref far_pause false": {
+     "rate": 2.200956937799043,
+     "judged": 69.66666666666667,
+     "n": 1045
+    },
+    "vs ref down 0.5 s": {
+     "rate": 66.21392190152801,
+     "judged": 78.53333333333333,
+     "n": 1178
+    },
+    "vs ref down 1 s": {
+     "rate": 87.80889621087314,
+     "judged": 80.93333333333334,
+     "n": 1214
+    },
+    "short ref 1 rep down false": {
+     "rate": 4.356846473029045,
+     "judged": 62.11340206185567,
+     "n": 482
+    },
+    "short ref 2 rep down false": {
+     "rate": 2.6565464895635675,
+     "judged": 72.79005524861878,
+     "n": 527
+    },
+    "short ref 1 rep down 0.5 s": {
+     "rate": 22.7765726681128,
+     "judged": 59.40721649484536,
+     "n": 461
+    },
+    "short ref 1 rep down 1 s": {
+     "rate": 47.676767676767675,
+     "judged": 63.78865979381443,
+     "n": 495
+    },
+    "short ref 2 rep down 0.5 s": {
+     "rate": 37.96477495107632,
+     "judged": 70.58011049723757,
+     "n": 511
+    },
+    "short ref 2 rep down 1 s": {
+     "rate": 65.51094890510949,
+     "judged": 75.69060773480663,
+     "n": 548
+    },
+    "inset far_dist false": {
+     "rate": 0.23084025854108955,
+     "judged": 72.2,
+     "n": 2166
+    },
+    "inset down false": {
+     "rate": 1.908752327746741,
+     "judged": 71.6,
+     "n": 2148
+    },
+    "inset report false": {
+     "rate": 2.123730378578024,
+     "judged": 72.2,
+     "n": 2166
+    },
+    "inset last 2 reps 4 cm less": {
+     "rate": 17.370892018779344,
+     "judged": 71.0,
+     "n": 1065
+    },
+    "inset down 1 s shorter": {
+     "rate": 76.19926199261992,
+     "judged": 72.26666666666667,
+     "n": 1084
+    }
+   },
+   "first": {
+    "vs ref report false": {
+     "rate": 7.831821929101402,
+     "judged": 80.86666666666666,
+     "n": 1213
+    },
+    "vs ref down false": {
+     "rate": 4.152823920265781,
+     "judged": 80.26666666666667,
+     "n": 1204
+    },
+    "vs ref far_pause false": {
+     "rate": 4.688995215311005,
+     "judged": 69.66666666666667,
+     "n": 1045
+    },
+    "vs ref down 0.5 s": {
+     "rate": 78.77758913412563,
+     "judged": 78.53333333333333,
+     "n": 1178
+    },
+    "vs ref down 1 s": {
+     "rate": 95.55189456342669,
+     "judged": 80.93333333333334,
+     "n": 1214
+    },
+    "short ref 1 rep down false": {
+     "rate": 8.921161825726141,
+     "judged": 62.11340206185567,
+     "n": 482
+    },
+    "short ref 2 rep down false": {
+     "rate": 6.641366223908919,
+     "judged": 72.79005524861878,
+     "n": 527
+    },
+    "short ref 1 rep down 0.5 s": {
+     "rate": 44.46854663774403,
+     "judged": 59.40721649484536,
+     "n": 461
+    },
+    "short ref 1 rep down 1 s": {
+     "rate": 70.5050505050505,
+     "judged": 63.78865979381443,
+     "n": 495
+    },
+    "short ref 2 rep down 0.5 s": {
+     "rate": 62.23091976516634,
+     "judged": 70.58011049723757,
+     "n": 511
+    },
+    "short ref 2 rep down 1 s": {
+     "rate": 84.67153284671532,
+     "judged": 75.69060773480663,
+     "n": 548
+    },
+    "inset far_dist false": {
+     "rate": 6.694367497691597,
+     "judged": 72.2,
+     "n": 2166
+    },
+    "inset down false": {
+     "rate": 13.175046554934823,
+     "judged": 71.6,
+     "n": 2148
+    },
+    "inset report false": {
+     "rate": 18.42105263157895,
+     "judged": 72.2,
+     "n": 2166
+    },
+    "inset last 2 reps 4 cm less": {
+     "rate": 66.94835680751174,
+     "judged": 71.0,
+     "n": 1065
+    },
+    "inset down 1 s shorter": {
+     "rate": 96.40221402214023,
+     "judged": 72.26666666666667,
+     "n": 1084
+    }
+   },
+   "scatter": {
+    "down": 0.13172354403946263,
+    "far_dist": 0.01098514809912561,
+    "far_pause": 0.10886560229290553,
+    "down_true": 0.08162449326411017
+   }
+  },
+  "1cm uneven": {
+   "table": {
+    "vs ref report false": {
+     "rate": 2.823920265780731,
+     "judged": 80.26666666666667,
+     "n": 1204
+    },
+    "vs ref down false": {
+     "rate": 1.839464882943144,
+     "judged": 79.73333333333333,
+     "n": 1196
+    },
+    "vs ref far_pause false": {
+     "rate": 1.147227533460803,
+     "judged": 69.73333333333333,
+     "n": 1046
+    },
+    "vs ref down 0.5 s": {
+     "rate": 39.709649871904354,
+     "judged": 78.06666666666666,
+     "n": 1171
+    },
+    "vs ref down 1 s": {
+     "rate": 73.56608478802993,
+     "judged": 80.2,
+     "n": 1203
+    },
+    "short ref 1 rep down false": {
+     "rate": 3.056768558951965,
+     "judged": 60.823373173970786,
+     "n": 458
+    },
+    "short ref 2 rep down false": {
+     "rate": 2.973977695167286,
+     "judged": 72.02141900937082,
+     "n": 538
+    },
+    "short ref 1 rep down 0.5 s": {
+     "rate": 7.623318385650224,
+     "judged": 59.22974767596281,
+     "n": 446
+    },
+    "short ref 1 rep down 1 s": {
+     "rate": 23.270440251572328,
+     "judged": 63.34661354581673,
+     "n": 477
+    },
+    "short ref 2 rep down 0.5 s": {
+     "rate": 12.76595744680851,
+     "judged": 69.21017402945114,
+     "n": 517
+    },
+    "short ref 2 rep down 1 s": {
+     "rate": 41.37931034482759,
+     "judged": 69.87951807228916,
+     "n": 522
+    },
+    "inset far_dist false": {
+     "rate": 1.3242009132420092,
+     "judged": 73.0,
+     "n": 2190
+    },
+    "inset down false": {
+     "rate": 2.448036951501155,
+     "judged": 72.16666666666667,
+     "n": 2165
+    },
+    "inset report false": {
+     "rate": 3.6986301369863015,
+     "judged": 73.0,
+     "n": 2190
+    },
+    "inset last 2 reps 4 cm less": {
+     "rate": 8.325624421831638,
+     "judged": 72.06666666666666,
+     "n": 1081
+    },
+    "inset down 1 s shorter": {
+     "rate": 55.61497326203209,
+     "judged": 74.8,
+     "n": 1122
+    }
+   },
+   "first": {
+    "vs ref report false": {
+     "rate": 7.308970099667774,
+     "judged": 80.26666666666667,
+     "n": 1204
+    },
+    "vs ref down false": {
+     "rate": 4.933110367892977,
+     "judged": 79.73333333333333,
+     "n": 1196
+    },
+    "vs ref far_pause false": {
+     "rate": 3.2504780114722753,
+     "judged": 69.73333333333333,
+     "n": 1046
+    },
+    "vs ref down 0.5 s": {
+     "rate": 53.88556789069172,
+     "judged": 78.06666666666666,
+     "n": 1171
+    },
+    "vs ref down 1 s": {
+     "rate": 85.12053200332502,
+     "judged": 80.2,
+     "n": 1203
+    },
+    "short ref 1 rep down false": {
+     "rate": 8.296943231441048,
+     "judged": 60.823373173970786,
+     "n": 458
+    },
+    "short ref 2 rep down false": {
+     "rate": 9.293680297397769,
+     "judged": 72.02141900937082,
+     "n": 538
+    },
+    "short ref 1 rep down 0.5 s": {
+     "rate": 21.973094170403588,
+     "judged": 59.22974767596281,
+     "n": 446
+    },
+    "short ref 1 rep down 1 s": {
+     "rate": 45.702306079664574,
+     "judged": 63.34661354581673,
+     "n": 477
+    },
+    "short ref 2 rep down 0.5 s": {
+     "rate": 29.98065764023211,
+     "judged": 69.21017402945114,
+     "n": 517
+    },
+    "short ref 2 rep down 1 s": {
+     "rate": 61.30268199233716,
+     "judged": 69.87951807228916,
+     "n": 522
+    },
+    "inset far_dist false": {
+     "rate": 13.60730593607306,
+     "judged": 73.0,
+     "n": 2190
+    },
+    "inset down false": {
+     "rate": 15.381062355658198,
+     "judged": 72.16666666666667,
+     "n": 2165
+    },
+    "inset report false": {
+     "rate": 26.164383561643834,
+     "judged": 73.0,
+     "n": 2190
+    },
+    "inset last 2 reps 4 cm less": {
+     "rate": 38.297872340425535,
+     "judged": 72.06666666666666,
+     "n": 1081
+    },
+    "inset down 1 s shorter": {
+     "rate": 88.68092691622104,
+     "judged": 74.8,
+     "n": 1122
+    }
+   },
+   "scatter": {
+    "down": 0.21168016690663385,
+    "far_dist": 0.020931405252394654,
+    "far_pause": 0.11204849704399546,
+    "down_true": 0.1958059094230144
+   }
+  }
+ }
+}
