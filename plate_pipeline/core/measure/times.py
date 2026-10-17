@@ -106,16 +106,21 @@ def rep_values(sig, raw_t, trip, rest, prev_end_t=None, next_entry_t=None, cfg: 
         return rv
     i_far = int(np.argmin(np.abs(t - trip.far_t)))
     a, b = _stretch(sig, i_far)
-    lo_t = trip.entry_t - 3.0 if prev_end_t is None else max(prev_end_t - 0.5, trip.entry_t - 3.0)
+    # rest level before the rep: after the previous rep was counted, at most 3 s back
+    lo_t = trip.entry_t - 3.0 if prev_end_t is None else max(prev_end_t, trip.entry_t - 3.0)
     win = np.flatnonzero((t >= lo_t) & (t <= trip.end_t + 1e-9))
     win = win[(win >= a) & (win < b)]
     if len(win) == 0:
         rv.blank = "gap"
         return rv
+    own = win[t[win] >= trip.entry_t - 1e-9]          # this rep's own excursion: the far point is here
+    if len(own) == 0:
+        rv.blank = "gap"
+        return rv
     h = cfg.end_avg_s
     cut_pre = t[a] > lo_t + 1e-9
     if rest == "top":
-        f = win[np.argmin(y[win])]
+        f = own[np.argmin(y[own])]
         pre = win[t[win] <= trip.entry_t + 1e-9]
         if len(pre) == 0:
             rv.blank = "gap" if cut_pre else "no_start"
@@ -138,7 +143,7 @@ def rep_values(sig, raw_t, trip, rest, prev_end_t=None, next_entry_t=None, cfg: 
         if rv.start is not None and rv.far_in is not None:
             rv.down = rv.far_in - rv.start
     else:
-        f = win[np.argmax(y[win])]
+        f = own[np.argmax(y[own])]
         pre = win[t[win] <= trip.entry_t + 1e-9]
         if len(pre) == 0:
             rv.blank = "gap" if cut_pre else "no_start"

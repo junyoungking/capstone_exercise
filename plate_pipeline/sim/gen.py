@@ -297,10 +297,9 @@ def observe(rng, dense_t, dense_y, dense_x, fps, noise, o: Opts = Opts(), reps=(
         keep &= ~((ft >= g0) & (ft < g0 + g["gap_s"]))
     if o.occlude and reps:
         r = reps[int(rng.integers(len(reps)))]
-        a0 = min(r.far_in, r.raise0) - 0.8
-        a1 = max(r.far_out, r.raise1) + 0.2
         dur = rng.uniform(*o.occlude)
-        s0 = rng.uniform(a0, max(a0, a1 - dur))
+        # inside the rep: from leaving the rest side to coming back (a longer gap covers the whole rep)
+        s0 = rng.uniform(r.t0, max(r.t0, r.t1 - dur))
         keep &= ~((ft >= s0) & (ft < s0 + dur))
     return ft, ty, tx, ft[keep], oy[keep], ox[keep]
 

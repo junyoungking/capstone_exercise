@@ -409,3 +409,29 @@ SCENARIOS = {
     "세트 중간에 부분 rep 1개": (ALL, partial_mid, 0.993, 0.999),
     "방향을 거꾸로 줌": (ALL, base, 0.005, 0.025),
 }
+
+
+# ---- extra situations used only by the threshold sweeps (근거·출처 tab, 임계값 표) --------------
+
+def short_lockout(ex, rng):
+    """Squat/bench: each rep comes back only 85-100% of the way; the next rep starts from there."""
+    st = {"h": None}
+
+    def rep(tl, rng, k, n, rest_h, rom, d_dur, u_dur, shape, sway, fp):
+        start = tl.cy
+        x0 = tl.cx
+        tl.move(d_dur, y1=rest_h - rom, shape="cos", sway=sway)
+        fin = tl.now
+        tl.hold(_u(rng, fp))
+        fout = r0 = tl.now
+        top = rest_h - _u(rng, (0.0, 0.15)) * rom
+        tl.move(u_dur, y1=top, x1=x0, shape=shape)
+        return TrueRep(fin, fout, r0, tl.now, top - (rest_h - rom), (top - rest_h + rom) / (tl.now - r0))
+    return Opts(hooks={"rep": rep})
+
+
+EXTRA = {
+    "락아웃이 0~15% 모자란 스쿼트·벤치": (TOP, short_lockout),
+    "마지막 rep을 곧장 랙에 거는 벤치": (("bench",), bench_rack_last(0.0, 0.0)),
+    "ROM 0.15~0.22 m인 스쿼트·벤치": (TOP, lambda ex, rng: Opts(rom_range=(0.15, 0.22))),
+}

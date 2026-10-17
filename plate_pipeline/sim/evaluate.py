@@ -41,14 +41,32 @@ def run_final(rec, cfg: Config = DEFAULT):
     return fr, trips
 
 
-def run_live(rec, cfg: Config = DEFAULT):
+def run_live(rec, cfg: Config = DEFAULT, with_signal=False):
     lc = LiveCleaner(rec.fps, cfg.live)
     m = RepMachine(rec.rest, "live", cfg.rep)
+    sig = []
     for a, b, c in zip(rec.t, rec.y, rec.x):
         r = lc.push(float(a), float(b), float(c))
         if r is not None:
             m.push(*r)
-    return m.finish()
+            sig.append(r)
+    trips = m.finish()
+    return (trips, np.array(sig)) if with_signal else trips
+
+
+def live_raise_end(sig, trip, rest, cfg: Config = DEFAULT):
+    """When the live calculation knows the raise is over: no new high for live_flat_s, or the bar is
+    drop_m below the high. The raise starts at the far point (squat, bench) or at the entry (deadlift)."""
+    sc = cfg.speed
+    t0 = trip.far_t if rest == "top" else trip.entry_t
+    m = sig[:, 0] >= t0
+    best_t, best = None, -np.inf
+    for t, y in sig[m][:, :2]:
+        if y > best:
+            best, best_t = y, t
+        if t - best_t >= sc.live_flat_s or best - y >= sc.drop_m:
+            return float(t)
+    return None
 
 
 def time_match(reps, truth, tol=1.0):
@@ -75,14 +93,14 @@ def _match_speed(reps_a, vals_a, reps_b, vals_b, tol=1.0):
     return out
 
 
-def live_recompute_speed(rec, trip, cfg: Config = DEFAULT):
-    """Live 'speed right after the raise': raw samples from live_pre_s before the rep entry up to the
-    moment the raise is known to have ended, cleaned and filtered like the final calculation."""
+def live_recompute_speed(rec, trip, sig, cfg: Config = DEFAULT):
+    """Live speed right after the raise: raw samples from live_pre_s before the rep entry up to the moment
+    the live calculation knows the raise ended, cleaned and filtered like the final calculation."""
     sc = cfg.speed
+    t1 = live_raise_end(sig, trip, rec.rest, cfg)
+    if t1 is None:
+        return None
     t0 = trip.entry_t - sc.live_pre_s
-    # the raise end is known when no new high for live_flat_s or a drop of drop_m; approximate with
-    # the live count time + live_flat_s for squat/bench (raise ends at the return) and far_t + flat for dead
-    t1 = (trip.end_t if rec.rest == "top" else trip.far_t) + sc.live_flat_s + 0.2
     m = (rec.t >= t0) & (rec.t <= t1)
     if m.sum() < 10:
         return None
@@ -95,7 +113,7 @@ def live_recompute_speed(rec, trip, cfg: Config = DEFAULT):
 def evaluate(rec, cfg: Config = DEFAULT, speed=True, live=True):
     fr, trips = run_final(rec, cfg)
     reps_f = counted(trips)
-    res_live = run_live(rec, cfg) if live else []
+    res_live, live_sig = run_live(rec, cfg, with_signal=True) if live else ([], None)
     reps_l = counted(res_live)
     n = len(rec.reps)
     r = Result(n, len(reps_f), len(reps_l), len(reps_f) == n, len(reps_l) == n,
@@ -114,7 +132,7 @@ def evaluate(rec, cfg: Config = DEFAULT, speed=True, live=True):
         for va, vb in _match_speed(reps_f, vals, ref_reps, ref_vals):
             r.speed.append((va.v_mean, vb.v_mean, va.blank))
         if live and r.live_ok:
-            lv = [live_recompute_speed(rec, tr, cfg) for tr in reps_l]
+            lv = [live_recompute_speed(rec, tr, live_sig, cfg) for tr in reps_l]
             for va, vb in _match_speed(reps_l, lv, ref_reps, ref_vals):
                 if va is not None:
                     r.speed_live.append((va.v_mean, vb.v_mean))

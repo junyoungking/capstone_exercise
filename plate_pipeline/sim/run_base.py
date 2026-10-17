@@ -56,13 +56,14 @@ def main():
     ap.add_argument("--sets", type=int, default=900)
     ap.add_argument("--speed-sets", type=int, default=450)
     ap.add_argument("--procs", type=int, default=os.cpu_count())
+    ap.add_argument("--speed-only", action="store_true")
     args = ap.parse_args()
     out_dir = os.path.join(HERE, "results")
     os.makedirs(out_dir, exist_ok=True)
     t0 = time.time()
     counts = {}
     with Pool(args.procs) as pool:
-        for fps in (15, 30, 60):
+        for fps in (() if args.speed_only else (15, 30, 60)):
             for noise in (0.003, 0.01, 0.02, 0.03, 0.04):
                 rows = run((fps, noise), args.sets, False, pool)
                 key = f"{fps}fps_{noise*100:g}cm"
@@ -79,7 +80,8 @@ def main():
                 key = f"{fps}fps_{noise*100:g}cm"
                 speed[key] = dict(final=speed_stats(rows, "sp"), live_recompute=speed_stats(rows, "spl"))
                 print(key, speed[key], f"{time.time()-t0:.0f}s", flush=True)
-    json.dump(counts, open(os.path.join(out_dir, "base_counts.json"), "w"), indent=1)
+    if counts:
+        json.dump(counts, open(os.path.join(out_dir, "base_counts.json"), "w"), indent=1)
     json.dump(speed, open(os.path.join(out_dir, "base_speed.json"), "w"), indent=1)
 
 

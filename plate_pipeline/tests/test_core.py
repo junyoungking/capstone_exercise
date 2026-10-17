@@ -161,3 +161,13 @@ def test_base_set_counts(ex):
     from sim.evaluate import evaluate
     oks = [evaluate(make_recording(ex, rng, 30, 0.005), speed=False).final_ok for _ in range(10)]
     assert np.mean(oks) >= 0.9
+
+
+def test_each_rep_measured_on_its_own_excursion():
+    t, y, x = squat_like(4, rom=0.5, pause=0.6)
+    fr = clean_final(t, y, x, 30.0)
+    reps = counted(finalize(run_states(fr.sig.t, fr.sig.y, fr.sig.x, fr.sig.gap_before, "top")))
+    vals = all_rep_values(fr.sig, fr.raw_t, reps, "top")
+    for r, v in zip(reps, vals):
+        assert abs(v.far_in - r.far_t) < 0.3
+        assert v.start < r.entry_t < v.far_in
