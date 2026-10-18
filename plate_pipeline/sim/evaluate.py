@@ -137,3 +137,30 @@ def evaluate(rec, cfg: Config = DEFAULT, speed=True, live=True):
                 if va is not None:
                     r.speed_live.append((va.v_mean, vb.v_mean))
     return r
+
+
+# ---- several sets in one recording (core.judge.session) ---------------------------------------
+
+def run_final_sets(t, y, x, fps, exercise, label_t=(), label_v=(), cfg: Config = DEFAULT):
+    from core.judge.session import run_session
+    fr = clean_final(t, y, x, fps, cfg.final)
+    s = fr.sig
+    return fr, run_session(s.t, s.y, s.x, s.gap_before, exercise, "final", label_t, label_v, cfg)
+
+
+def run_live_sets(t, y, x, fps, exercise, label_t=(), label_v=(), cfg: Config = DEFAULT):
+    from core.judge.session import Session
+    lc = LiveCleaner(fps, cfg.live)
+    sess = Session(exercise, "live", cfg)
+    j, nl = 0, len(label_t)
+    for a, b, c in zip(t, y, x):
+        while j < nl and label_t[j] <= a:
+            sess.label_at(float(label_t[j]), label_v[j])
+            j += 1
+        r = lc.push(float(a), float(b), float(c))
+        if r is not None:
+            sess.push(*r)
+    while j < nl:
+        sess.label_at(float(label_t[j]), label_v[j])
+        j += 1
+    return sess.finish()

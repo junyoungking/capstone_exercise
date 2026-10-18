@@ -59,6 +59,13 @@ class SpeedCfg:
 
 
 @dataclass(frozen=True)
+class SetCfg:
+    gap_s: float = 45.0          # no rep and no excursion >= min_amp this long after the last rep -> close the set
+    label_hold_s: float = 3.0    # exercise label different from the set's for this long (no excursion) -> close
+    provisional_s: float = 5.0   # live: provisional report after this long without an excursion
+
+
+@dataclass(frozen=True)
 class CmpCfg:
     alpha: float = 0.025              # false "different" per value the multiplier table is built for
     table: str = "crit_table.json"    # in core/, made by sim/crit.py
@@ -88,6 +95,7 @@ class Config:
     final: FinalCfg = field(default_factory=FinalCfg)
     rep: RepCfg = field(default_factory=RepCfg)
     speed: SpeedCfg = field(default_factory=SpeedCfg)
+    sets: SetCfg = field(default_factory=SetCfg)
     cmp: CmpCfg = field(default_factory=CmpCfg)
     text: TextCfg = field(default_factory=TextCfg)
 

@@ -357,6 +357,26 @@ def partial_mid(ex, rng):
     return Opts(reps=int(rng.integers(3, 10)), hooks={"rep": rep})
 
 
+def fail_last(ex, rng):
+    """Squat, bench: the last rep comes up 10-50% of the way, stalls 0.5-2 s and sinks onto the safeties
+    0-5 cm below the bottom, where it stays to the end of the recording. Not in the truth."""
+    def rep(tl, rng, k, n, rest_h, rom, d_dur, u_dur, shape, sway, fp):
+        if k < n - 1:
+            return std_rep(tl, ex, rest_h, rom, d_dur, u_dur, shape, sway, _u(rng, fp))
+        bottom = rest_h - rom
+        tl.move(d_dur, y1=bottom, shape="cos", sway=sway)
+        tl.hold(_u(rng, fp))
+        f = _u(rng, (0.1, 0.5))
+        tl.move(u_dur * f * 1.5, y1=bottom + f * rom, shape="cos")
+        tl.hold(_u(rng, (0.5, 2.0)))
+        tl.move(_u(rng, (0.4, 1.0)), y1=bottom - _u(rng, (0.0, 0.05)), shape="cos")
+        return None
+
+    def post(tl, rng, rest_h, rom0):
+        tl.hold(_u(rng, (0.5, 2.0)))
+    return Opts(reps=int(rng.integers(2, 10)), hooks={"rep": rep, "post": post})
+
+
 def base(ex, rng):
     return Opts()
 
