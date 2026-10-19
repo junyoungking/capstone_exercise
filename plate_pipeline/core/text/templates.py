@@ -148,5 +148,8 @@ def summary_sentence(exercise, n_reps, speeds, loss_last_pct=None):
         rng = f"{lo:.2f} m/s" if round(lo, 2) == round(hi, 2) else f"{lo:.2f}~{hi:.2f} m/s"
         parts.append(f"올리는 평균 속도는 {rng}였습니다.")
     if loss_last_pct is not None and n_reps > 1:
-        parts.append(f"마지막 rep은 가장 빠른 rep보다 {loss_last_pct:.0f}% 느렸습니다.")
+        if round(loss_last_pct) <= 0:
+            parts.append("마지막 rep이 가장 빨랐습니다.")
+        else:
+            parts.append(f"마지막 rep은 가장 빠른 rep보다 {loss_last_pct:.0f}% 느렸습니다.")
     return Sentence("summary", " ".join(parts), "summary")
