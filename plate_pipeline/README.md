@@ -36,6 +36,12 @@ sim/
   run_compare.py     비교 판정 시험: 표 대조, 정규분포 시험, 생성기 시험
   two_sets.py        한 녹화에 두 세트 (같은 종목 / 다른 종목)
   run_sets.py        세트 시험: 두 세트, 마지막 rep 실패, 횟수·속도가 나오는 시점
+train/plate/          원판 검출기 학습 (README.md에 순서): 프레임 뽑기, Grounding DINO 자동 라벨, 손으로 고치는 도구,
+                      데이터셋 만들기 (세션 단위 분리), YOLOX-Tiny 미세조정, ONNX 내보내기
+eval/
+  plate_recall.py    시험 프레임에서 원판 검출 재현율 (95%, 벤치 따로)
+  noise.py           쉬는 바의 위치 잡음 (0.5 cm)
+  counts.py          내 세트들의 횟수 일치
 server/
   jobs.py            업로드 처리: 영상 → 프레임 줄 → 최종 계산 → 세트 → 리포트
   report.py          세트 리포트 HTML (문장, 바 높이, rep 표, 템포 막대, 속도)

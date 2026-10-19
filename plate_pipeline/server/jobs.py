@@ -28,6 +28,17 @@ from core.compare.judge import run_compare
 from core.text.templates import render, summary_sentence
 
 
+def pick_detection(dets, box):
+    """While tracking: the detection closest to the tracked plate (the tracker still gates it).
+    Before the first box: the biggest confident one (the near plate in a side view)."""
+    if not dets:
+        return None
+    if box is None:
+        return max(dets, key=lambda d: d.score * d.size[0] * d.size[1])
+    cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+    return min(dets, key=lambda d: (d.center[0] - cx) ** 2 + (d.center[1] - cy) ** 2)
+
+
 def recognize(path, detector=None, init_box=None, on_frame=None, rim=True):
     """Frame rows for a whole video. detector(image, seq) -> [Detection]. Without a detector the plate rim is
     looked for around the tracked box every frame (refine_circle) when rim=True."""
@@ -36,7 +47,7 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True):
     for seq, (t, img) in enumerate(video.frames(path)):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         dets = detector(img, seq) if detector is not None else []
-        det = max(dets, key=lambda d: d.score) if dets else None
+        det = pick_detection(dets, tr.box)
         if tr.box is None and det is None:
             if init_box is not None:
                 det = Detection(tuple(init_box), 1.0)
@@ -91,11 +102,12 @@ def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT):
     return out, sig
 
 
-def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None):
+def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None):
+    """rim: look for the plate rim when the detector gives nothing (default: only without a model)."""
     info = video.info(path)
     det = OnnxPlateDetector(model) if model else (BoxFileDetector(boxes) if boxes else None)
     t0 = time.time()
-    rows = recognize(path, det, init_box)
+    rows = recognize(path, det, init_box, rim=(model is None) if rim is None else rim)
     took = time.time() - t0
     fps = len(rows) / max(rows[-1]["t"] - rows[0]["t"], 1e-6) if len(rows) > 1 else info.fps
     sets, sig = analyse(rows, exercise, fps, plate_mm)

@@ -40,49 +40,65 @@ class BoxFileDetector:
         return [Detection(tuple(b), 1.0)] if b else []
 
 
+STRIDES = (8, 16, 32)
+
+
+def letterbox(image, size):
+    """YOLOX preprocessing: resize keeping the aspect ratio into a size x size canvas filled with 114,
+    top-left aligned; BGR 0-255, CHW float32. Returns (input, ratio)."""
+    h, w = image.shape[:2]
+    r = min(size / h, size / w)
+    img = np.full((size, size, 3), 114, np.uint8)
+    rs = cv2.resize(image, (int(round(w * r)), int(round(h * r))), interpolation=cv2.INTER_LINEAR)
+    img[:rs.shape[0], :rs.shape[1]] = rs
+    return img.transpose(2, 0, 1)[None].astype(np.float32), r
+
+
+def yolox_grids(size):
+    gs, ss = [], []
+    for st in STRIDES:
+        h = w = size // st
+        yv, xv = np.meshgrid(np.arange(h), np.arange(w), indexing="ij")
+        gs.append(np.stack((xv, yv), 2).reshape(-1, 2))
+        ss.append(np.full((h * w, 1), st))
+    return np.concatenate(gs).astype(np.float32), np.concatenate(ss).astype(np.float32)
+
+
+def decode_yolox(out, size, ratio, score_min=0.3, nms_iou=0.45) -> List[Detection]:
+    """Raw YOLOX head output (exported without decode_in_inference): rows of
+    (dx, dy, log w, log h, objectness, class score) over the stride 8/16/32 grids, sigmoids already applied
+    to the last two. Box centre = (d + grid) x stride, size = exp(log) x stride; back to image pixels / ratio."""
+    grid, stride = yolox_grids(size)
+    assert out.shape[0] == grid.shape[0], (out.shape, grid.shape)
+    xy = (out[:, :2] + grid) * stride
+    wh = np.exp(out[:, 2:4]) * stride
+    score = out[:, 4] * out[:, 5:].max(1)
+    keep = score >= score_min
+    if not keep.any():
+        return []
+    b = np.concatenate([xy[keep] - wh[keep] / 2, xy[keep] + wh[keep] / 2], 1) / ratio
+    s = score[keep]
+    idx = cv2.dnn.NMSBoxes([[float(q[0]), float(q[1]), float(q[2] - q[0]), float(q[3] - q[1])] for q in b],
+                           s.tolist(), score_min, nms_iou)
+    idx = np.array(idx).reshape(-1)
+    return [Detection(tuple(map(float, b[i])), float(s[i])) for i in idx]
+
+
 class OnnxPlateDetector:
-    """YOLOX-Tiny ONNX (input 1x3xSxS BGR 0-255, letterboxed; output N x (4 + 1 + 1) per anchor).
-    Kept to the standard YOLOX demo decoding; checked when the first model exists."""
+    """The trained one-class plate detector (train/plate: YOLOX-Tiny exported to ONNX)."""
 
-    def __init__(self, path, size=416, score_min=0.3, nms_iou=0.45):
+    def __init__(self, path, size=416, score_min=0.3, nms_iou=0.45, providers=None):
         import onnxruntime as ort
-        self.sess = ort.InferenceSession(str(path), providers=["CPUExecutionProvider"])
+        self.sess = ort.InferenceSession(str(path), providers=providers or ["CPUExecutionProvider"])
         self.inp = self.sess.get_inputs()[0].name
-        self.size, self.score_min, self.nms_iou = size, score_min, nms_iou
-        self._grid = None
-
-    def _grids(self, n):
-        if self._grid is None or self._grid[0].shape[0] != n:
-            gs, ss = [], []
-            for st in (8, 16, 32):
-                h = w = self.size // st
-                yv, xv = np.meshgrid(np.arange(h), np.arange(w), indexing="ij")
-                gs.append(np.stack((xv, yv), 2).reshape(-1, 2))
-                ss.append(np.full((h * w, 1), st))
-            self._grid = (np.concatenate(gs), np.concatenate(ss))
-        return self._grid
+        shape = self.sess.get_inputs()[0].shape
+        self.size = int(shape[2]) if isinstance(shape[2], int) else size
+        self.score_min, self.nms_iou = score_min, nms_iou
 
     def __call__(self, image, seq=None) -> List[Detection]:
-        h, w = image.shape[:2]
-        r = min(self.size / h, self.size / w)
-        img = np.full((self.size, self.size, 3), 114, np.uint8)
-        rs = cv2.resize(image, (int(w * r), int(h * r)))
-        img[:rs.shape[0], :rs.shape[1]] = rs
-        x = img.transpose(2, 0, 1)[None].astype(np.float32)
+        x, r = letterbox(image, self.size)
         out = self.sess.run(None, {self.inp: x})[0][0]
-        grid, stride = self._grids(out.shape[0])
-        xy = (out[:, :2] + grid) * stride
-        wh = np.exp(out[:, 2:4]) * stride
-        score = out[:, 4] * out[:, 5]
-        keep = score >= self.score_min
-        if not keep.any():
-            return []
-        b = np.concatenate([xy[keep] - wh[keep] / 2, xy[keep] + wh[keep] / 2], 1) / r
-        s = score[keep]
-        idx = cv2.dnn.NMSBoxes([list(map(float, (bb[0], bb[1], bb[2] - bb[0], bb[3] - bb[1]))) for bb in b],
-                               s.tolist(), self.score_min, self.nms_iou)
-        idx = np.array(idx).reshape(-1)
-        return [Detection(tuple(map(float, b[i])), float(s[i])) for i in idx]
+        return decode_yolox(out, self.size, r, self.score_min, self.nms_iou)
 
 
 def find_plate_circle(image, min_frac=0.08, max_frac=0.35) -> Optional[Detection]:

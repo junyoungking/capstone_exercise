@@ -54,3 +54,11 @@ runs/
 # plate_pipeline run outputs
 plate_pipeline/results/*.log
 plate_pipeline/results/break_quick.json
+
+# plate detector data and outputs
+plate_pipeline/data/
+plate_pipeline/datasets/
+plate_pipeline/models/
+plate_pipeline/eval_out/
+plate_pipeline/train/plate/work/
+plate_pipeline/out/
