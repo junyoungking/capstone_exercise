@@ -8,7 +8,8 @@ Steps: clone YOLOX into --work (once) and use it from there (no build step), ins
 dependencies, download yolox_tiny.pth (COCO pretrained), train with exps/plate_tiny.py, export
 models/plate_tiny.onnx without decoding in the graph (train/plate/export.py; the decoding is
 core/recog/plate.py: decode_yolox) and check the ONNX output against PyTorch.
-GPU: YOLOX's own trainer (tools/train.py, fp16). CPU: train/plate/cpu_train.py (same model, data and schedule).
+Training: train/plate/loop.py on the GPU (fp16) or the CPU - same model, data and schedule as YOLOX's trainer,
+tried end to end. --trainer yolox uses YOLOX's own tools/train.py instead (GPU only, multi-scale, COCO mAP).
 """
 import argparse
 import os
@@ -60,7 +61,8 @@ def main():
     ap.add_argument("--size", type=int, default=None, help="input size, multiple of 32; default 416 (GPU) / 320 (CPU)")
     ap.add_argument("--workers", type=int, default=None, help="data loader workers; default 4 (GPU) / 2 (CPU)")
     ap.add_argument("--threads", type=int, default=None, help="CPU threads for training (default: torch's choice)")
-    ap.add_argument("--devices", type=int, default=1, help="number of GPUs")
+    ap.add_argument("--devices", type=int, default=1, help="number of GPUs (--trainer yolox only)")
+    ap.add_argument("--trainer", default="own", choices=["own", "yolox"])
     ap.add_argument("--export-only", action="store_true")
     ap.add_argument("--ckpt", default=None)
     ap.add_argument("--onnx", default=os.path.join(ROOT, "models", "plate_tiny.onnx"))
@@ -80,12 +82,13 @@ def main():
                PLATE_WORKERS=str(workers))
     env["PYTHONPATH"] = os.pathsep.join([yolox, ROOT, env.get("PYTHONPATH", "")])
     os.environ.update({k: env[k] for k in ("PLATE_DATA", "PLATE_EPOCHS", "PLATE_SIZE", "PLATE_WORKERS")})
-    out_dir = os.path.join(yolox, "YOLOX_outputs", "plate_tiny" + ("_cpu" if cpu else ""))
+    own = a.trainer == "own" or cpu
+    out_dir = os.path.join(yolox, "YOLOX_outputs", "plate_tiny" + ("_own" if own else ""))
     if not a.export_only:
-        if cpu:
+        if own:
             sys.path.insert(0, yolox)
-            from train.plate.cpu_train import train
-            train(exp, w, out_dir, batch=batch, threads=a.threads)
+            from train.plate.loop import train
+            train(exp, w, out_dir, batch=batch, threads=a.threads, device="cpu" if cpu else "cuda")
         else:
             run([sys.executable, "tools/train.py", "-f", exp, "-d", str(a.devices), "-b", str(batch), "--fp16", "-o",
                  "-c", w], cwd=yolox, env=env)

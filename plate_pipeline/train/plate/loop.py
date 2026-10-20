@@ -1,10 +1,11 @@
-"""YOLOX fine-tuning loop that also runs without CUDA (YOLOX's own trainer is CUDA-only).
+"""YOLOX fine-tuning loop for GPU or CPU (YOLOX's own trainer is CUDA-only and was not testable here).
 
-Called by train/plate/train.py when there is no GPU (or --device cpu). Same model, data loader, augmentation,
-optimizer, learning-rate schedule and EMA as YOLOX's trainer; differences: one process, fixed input size (no
-multi-scale), and the check after each epoch is our own recall / precision at IoU 0.5 on the val split
-(core.recog.plate.decode_yolox, the same decoding the ONNX model gets), instead of COCO mAP. The best epoch
-by recall (then precision) is saved as best_ckpt.pth in YOLOX's checkpoint format, so YOLOX's export works.
+Called by train/plate/train.py (default trainer). Same model, data loader, augmentation, optimizer,
+learning-rate schedule and EMA as YOLOX's trainer; differences: one process / one device, fixed input size
+(no multi-scale), fp16 autocast on CUDA, and the check after each epoch is our own recall / precision at
+IoU 0.5 on the val split (core.recog.plate.decode_yolox, the same decoding the ONNX model gets) instead of
+COCO mAP. The best epoch by recall, then precision (ties: the later epoch) is saved as best_ckpt.pth in
+YOLOX's checkpoint format. Tried end to end on a CPU (train/plate/README.md, CPU 시험).
 """
 import os
 import time
@@ -17,7 +18,7 @@ from core.recog.plate import decode_yolox, letterbox
 from train.plate import coco
 
 
-def val_recall(model, data_dir, size, max_images=200, thr=0.5):
+def val_recall(model, data_dir, size, device="cpu", max_images=200, thr=0.5):
     ann = os.path.join(data_dir, "annotations", "instances_val2017.json")
     if not os.path.exists(ann):
         return None
@@ -30,7 +31,7 @@ def val_recall(model, data_dir, size, max_images=200, thr=0.5):
         for im in d["images"][:max_images]:
             img = cv2.imread(os.path.join(data_dir, "val2017", im["file_name"]))
             x, r = letterbox(img, size)
-            out = model(torch.from_numpy(x))[0].numpy()
+            out = model(torch.from_numpy(x).to(device))[0].float().cpu().numpy()
             pred = [(p.box, p.score) for p in decode_yolox(out, size, r)]
             a, b, c, _ = coco.match(truth.get(im["id"], []), pred, thr)
             tp, fn, fp = tp + a, fn + b, fp + c
@@ -38,7 +39,7 @@ def val_recall(model, data_dir, size, max_images=200, thr=0.5):
     return dict(recall=tp / max(tp + fn, 1), precision=tp / max(tp + fp, 1), plates=tp + fn)
 
 
-def train(exp_file, ckpt, out_dir, batch=8, threads=None, log_every=10):
+def train(exp_file, ckpt, out_dir, batch=8, threads=None, log_every=10, device="cpu"):
     from yolox.exp import get_exp
     from yolox.utils import ModelEMA, load_ckpt
 
@@ -50,7 +51,9 @@ def train(exp_file, ckpt, out_dir, batch=8, threads=None, log_every=10):
     model = exp.get_model()
     if ckpt:
         model = load_ckpt(model, torch.load(ckpt, map_location="cpu", weights_only=False)["model"])
-    model.train()
+    model.to(device).train()
+    cuda = str(device).startswith("cuda")
+    scaler = torch.amp.GradScaler("cuda", enabled=cuda)
     loader = exp.get_data_loader(batch_size=batch, is_distributed=False, no_aug=False)
     iters = len(loader)
     optimizer = exp.get_optimizer(batch)
@@ -59,8 +62,8 @@ def train(exp_file, ckpt, out_dir, batch=8, threads=None, log_every=10):
     it = iter(loader)
     best = None
     t_start = time.time()
-    print(f"CPU training: {len(loader.dataset)} images, input {size}, batch {batch}, {iters} iterations x "
-          f"{exp.max_epoch} epochs, {torch.get_num_threads()} threads")
+    print(f"training on {device}: {len(loader.dataset)} images, input {size}, batch {batch}, {iters} iterations x "
+          f"{exp.max_epoch} epochs" + ("" if cuda else f", {torch.get_num_threads()} threads"))
     for epoch in range(exp.max_epoch):
         if epoch == exp.max_epoch - exp.no_aug_epochs:
             print("last epochs without mosaic, with L1 loss")
@@ -71,13 +74,15 @@ def train(exp_file, ckpt, out_dir, batch=8, threads=None, log_every=10):
         losses = []
         for i in range(iters):
             imgs, targets, _, _ = next(it)
-            imgs, targets = imgs.float(), targets.float()
+            imgs, targets = imgs.float().to(device), targets.float().to(device)
             targets.requires_grad = False
-            out = model(imgs, targets)
+            with torch.autocast("cuda", dtype=torch.float16, enabled=cuda):
+                out = model(imgs, targets)
             loss = out["total_loss"]
             optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)
+            scaler.update()
             ema.update(model)
             lr = sched.update_lr(epoch * iters + i + 1)
             for g in optimizer.param_groups:
@@ -86,8 +91,8 @@ def train(exp_file, ckpt, out_dir, batch=8, threads=None, log_every=10):
             if (i + 1) % log_every == 0:
                 print(f"  epoch {epoch + 1} iter {i + 1}/{iters} loss {np.mean(losses[-log_every:]):.3f} lr {lr:.2e} "
                       f"({(time.time() - t0) / (i + 1):.2f} s/iter)")
-        v = val_recall(ema.ema, exp.data_dir, size)
-        state = {"model": ema.ema.state_dict(), "start_epoch": epoch + 1}
+        v = val_recall(ema.ema, exp.data_dir, size, device)
+        state = {"model": {k: t.detach().cpu() for k, t in ema.ema.state_dict().items()}, "start_epoch": epoch + 1}
         torch.save(state, os.path.join(out_dir, "last_ckpt.pth"))
         msg = f"epoch {epoch + 1}/{exp.max_epoch} loss {np.mean(losses):.3f} ({time.time() - t0:.0f} s)"
         if v is not None:

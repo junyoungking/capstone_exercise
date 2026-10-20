@@ -4,6 +4,18 @@
 
 모든 명령은 `plate_pipeline/` 폴더에서 실행한다.
 
+## 컴퓨터 두 대로 나눌 때
+
+학습(7단계)만 GPU 컴퓨터에서 하고 나머지는 CPU 컴퓨터에서 한다.
+
+| 어디서 | 할 일 | 넘길 것 |
+| --- | --- | --- |
+| CPU 컴퓨터 | 1~6단계: 촬영 영상 → 프레임 뽑기 → 자동 라벨(tiny 모델, 느리면 GPU 컴퓨터에서) → 손으로 고치기 → 데이터셋 만들기 | `datasets/plate/` 폴더 → GPU 컴퓨터 |
+| GPU 컴퓨터 | 저장소 받기 (`git clone -b plate-pipeline ...`), CUDA PyTorch 설치, 7단계 학습 | `models/plate_tiny.onnx` → CPU 컴퓨터 |
+| CPU 컴퓨터 | 8단계 평가, 영상 처리 (`--model models/plate_tiny.onnx`) | |
+
+ONNX 검출기는 CPU에서 돈다 (onnxruntime). 입력 크기는 파일에서 읽으므로 따로 맞출 필요 없다.
+
 ## 0. 환경
 
 ```bash
@@ -101,9 +113,11 @@ YOLOX를 `train/plate/work/`에 받아 그대로 쓰고(빌드 없음), COCO로 
 
 | | GPU | CPU |
 | --- | --- | --- |
-| 학습 코드 | YOLOX 원래 학습기 (fp16) | `cpu_train.py` (같은 모델·데이터·증강·학습률, 크기 고정) |
+| 학습 코드 | `loop.py` (fp16) | `loop.py` |
 | 기본값 | 입력 416, 배치 32, 80 에폭 | 입력 320, 배치 8, 40 에폭 |
-| 에폭마다 확인 | COCO mAP (val) | val의 재현율·정밀도 (IoU 0.5), 재현율이 가장 높은 에폭을 저장 |
+| 에폭마다 확인 | val의 재현율·정밀도 (IoU 0.5), 재현율이 가장 높은 에폭을 저장 | 같음 |
+
+`loop.py`는 YOLOX 학습기와 같은 모델·데이터·증강·학습률·EMA를 쓰고, 입력 크기를 고정한다. 여기서 CPU로 끝까지 돌려 봤다. YOLOX 원래 학습기(여러 크기 학습, COCO mAP)를 쓰려면 `--trainer yolox` (GPU만, 여기서는 시험 못 함).
 
 CPU 속도는 아래 "CPU 시험"을 본다. 오래 걸리면 `--epochs`를 줄이거나 `--size 256`으로 내린다 (입력은 32의 배수). GPU 메모리가 모자라면 `--batch 16`. 중간에 멈췄으면 `--export-only --ckpt <경로>`로 내보내기만 할 수 있다. 내보낸 ONNX의 입력 크기는 검출기가 자동으로 읽는다.
 
