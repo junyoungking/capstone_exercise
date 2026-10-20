@@ -67,6 +67,7 @@ def main():
               f"precision {r['precision']:.3f} IoU {r['mean_iou'] if r['mean_iou'] is None else round(r['mean_iou'], 3)}")
     print(f"detector {res['speed_ms']:.1f} ms per frame (median, CPU)")
     if a.out:
+        os.makedirs(a.out, exist_ok=True)
         json.dump(res, open(os.path.join(a.out, "recall.json"), "w"), indent=1)
 
 

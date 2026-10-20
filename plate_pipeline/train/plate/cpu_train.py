@@ -93,7 +93,7 @@ def train(exp_file, ckpt, out_dir, batch=8, threads=None, log_every=10):
         if v is not None:
             msg += f" val recall {v['recall']:.3f} precision {v['precision']:.3f} ({v['plates']} plates)"
             key = (v["recall"], v["precision"])
-            if best is None or key > best:
+            if best is None or key >= best:          # ties go to the later (longer trained) epoch
                 best = key
                 torch.save(state, os.path.join(out_dir, "best_ckpt.pth"))
                 msg += " *best"

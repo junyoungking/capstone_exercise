@@ -6,7 +6,8 @@ python -m train.plate.train --export-only --ckpt <best_ckpt.pth>
 
 Steps: clone YOLOX into --work (once) and use it from there (no build step), install its few Python
 dependencies, download yolox_tiny.pth (COCO pretrained), train with exps/plate_tiny.py, export
-models/plate_tiny.onnx without decoding in the graph (the decoding is core/recog/plate.py: decode_yolox).
+models/plate_tiny.onnx without decoding in the graph (train/plate/export.py; the decoding is
+core/recog/plate.py: decode_yolox) and check the ONNX output against PyTorch.
 GPU: YOLOX's own trainer (tools/train.py, fp16). CPU: train/plate/cpu_train.py (same model, data and schedule).
 """
 import argparse
@@ -89,10 +90,14 @@ def main():
             run([sys.executable, "tools/train.py", "-f", exp, "-d", str(a.devices), "-b", str(batch), "--fp16", "-o",
                  "-c", w], cwd=yolox, env=env)
     ckpt = a.ckpt or os.path.join(out_dir, "best_ckpt.pth")
-    os.makedirs(os.path.dirname(os.path.abspath(a.onnx)), exist_ok=True)
-    run([sys.executable, "tools/export_onnx.py", "--output-name", os.path.abspath(a.onnx), "-f", exp, "-c", ckpt,
-         "--no-onnxsim"], cwd=yolox, env=env)
-    print("ONNX ->", a.onnx, f"(input {size})")
+    if not os.path.exists(ckpt):
+        sys.exit(f"no checkpoint at {ckpt}")
+    if yolox not in sys.path:
+        sys.path.insert(0, yolox)
+    from train.plate.export import export
+    val_imgs = os.path.join(a.data, "val2017")
+    first = sorted(os.listdir(val_imgs))[0] if os.path.isdir(val_imgs) and os.listdir(val_imgs) else None
+    export(exp, ckpt, a.onnx, os.path.join(val_imgs, first) if first else None)
 
 
 if __name__ == "__main__":
