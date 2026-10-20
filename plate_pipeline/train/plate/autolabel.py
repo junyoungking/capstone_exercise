@@ -3,7 +3,8 @@
 python -m train.plate.autolabel --frames data/own/frames.json --images data/own/images --out data/own/auto.json
        [--model IDEA-Research/grounding-dino-base] [--prompt "weight plate."] [--box-thr 0.30]
 
-Needs: pip install torch transformers (GPU recommended). The model is downloaded from Hugging Face once.
+Needs: pip install torch transformers. Runs on a GPU or a CPU (--device auto; on a CPU the tiny model by
+default, slower). The model is downloaded from Hugging Face once.
 Boxes that are much wider than tall or tiny are dropped; the rest are kept with their score so review.py can
 show low-score ones first. Label rule (README): every plate that is at least half visible, the whole rim
 inside the box (not the bar end or the collar).
@@ -53,12 +54,18 @@ def main():
     ap.add_argument("--frames", required=True)
     ap.add_argument("--images", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--model", default="IDEA-Research/grounding-dino-base")
+    ap.add_argument("--model", default=None,
+                    help="default grounding-dino-base on a GPU, grounding-dino-tiny on a CPU")
     ap.add_argument("--prompt", default="weight plate.")
     ap.add_argument("--box-thr", type=float, default=0.30)
     ap.add_argument("--text-thr", type=float, default=0.25)
-    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--device", default="auto", help="auto | cuda | cpu")
     a = ap.parse_args()
+    if a.device == "auto":
+        import torch
+        a.device = "cuda" if torch.cuda.is_available() else "cpu"
+    a.model = a.model or ("IDEA-Research/grounding-dino-base" if a.device == "cuda" else "IDEA-Research/grounding-dino-tiny")
+    print(f"device {a.device}, model {a.model}")
     proc, model, torch = load_model(a.model, a.device)
     d = coco.load(a.frames)
     d["annotations"] = []

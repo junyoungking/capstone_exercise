@@ -14,8 +14,9 @@ class Exp(MyExp):
         # YOLOX-Tiny
         self.depth = 0.33
         self.width = 0.375
-        self.input_size = (416, 416)
-        self.test_size = (416, 416)
+        size = int(os.environ.get("PLATE_SIZE", 416))          # multiple of 32; 320 is lighter on a CPU
+        self.input_size = (size, size)
+        self.test_size = (size, size)
         self.random_size = (10, 20)
         self.mosaic_scale = (0.5, 1.5)
         self.enable_mixup = False

@@ -49,7 +49,7 @@ def letterbox(image, size):
     h, w = image.shape[:2]
     r = min(size / h, size / w)
     img = np.full((size, size, 3), 114, np.uint8)
-    rs = cv2.resize(image, (int(round(w * r)), int(round(h * r))), interpolation=cv2.INTER_LINEAR)
+    rs = cv2.resize(image, (int(w * r), int(h * r)), interpolation=cv2.INTER_LINEAR)   # as yolox preproc
     img[:rs.shape[0], :rs.shape[1]] = rs
     return img.transpose(2, 0, 1)[None].astype(np.float32), r
 

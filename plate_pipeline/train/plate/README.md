@@ -8,11 +8,14 @@
 
 ```bash
 conda create -n plate python=3.10 -y && conda activate plate
-# CUDA PyTorch: https://pytorch.org 에서 자기 CUDA 버전에 맞는 명령을 쓴다. 예:
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# PyTorch: https://pytorch.org 에서 자기 환경에 맞는 명령을 쓴다. 예:
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121   # GPU (CUDA 12.1)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu     # CPU만
 pip install numpy scipy opencv-python av onnxruntime pillow transformers pycocotools pytest
 python -m pytest -q tests        # 전부 통과해야 한다
 ```
+
+GPU가 없어도 전부 돌아간다. 자동 라벨과 학습이 느려질 뿐이다 (7단계).
 
 ## 1. 촬영
 
@@ -43,7 +46,7 @@ python -m train.plate.extract_frames --videos videos.csv --out data/own --per-vi
 python -m train.plate.autolabel --frames data/own/frames.json --images data/own/images --out data/own/auto.json
 ```
 
-처음 실행할 때 Hugging Face에서 모델을 받는다. 박스가 너무 적거나 많으면 `--box-thr`(기본 0.30)를 바꾼다.
+처음 실행할 때 Hugging Face에서 모델을 받는다. GPU가 있으면 base 모델, 없으면 tiny 모델을 쓴다 (`--device cpu`, `--model`로 바꿀 수 있음). 박스가 너무 적거나 많으면 `--box-thr`(기본 0.30)를 바꾼다.
 
 ## 4. 손으로 고치기
 
@@ -90,10 +93,19 @@ python -m train.plate.make_dataset --own data/own/labels.json --own-images data/
 ## 7. 학습과 내보내기
 
 ```bash
-python -m train.plate.train --data datasets/plate --batch 32 --epochs 80
+python -m train.plate.train --data datasets/plate                # GPU가 있으면 GPU, 없으면 CPU
+python -m train.plate.train --data datasets/plate --device cpu   # CPU로 강제
 ```
 
-YOLOX를 `train/plate/work/`에 받아 설치하고, COCO로 사전학습한 `yolox_tiny.pth`에서 미세조정한 뒤 `models/plate_tiny.onnx`로 내보낸다. GPU 메모리가 모자라면 `--batch 16`. 중간에 멈췄으면 `--export-only --ckpt <경로>`로 내보내기만 할 수 있다.
+YOLOX를 `train/plate/work/`에 받아 그대로 쓰고(빌드 없음), COCO로 사전학습한 `yolox_tiny.pth`에서 미세조정한 뒤 `models/plate_tiny.onnx`로 내보낸다.
+
+| | GPU | CPU |
+| --- | --- | --- |
+| 학습 코드 | YOLOX 원래 학습기 (fp16) | `cpu_train.py` (같은 모델·데이터·증강·학습률, 크기 고정) |
+| 기본값 | 입력 416, 배치 32, 80 에폭 | 입력 320, 배치 8, 40 에폭 |
+| 에폭마다 확인 | COCO mAP (val) | val의 재현율·정밀도 (IoU 0.5), 재현율이 가장 높은 에폭을 저장 |
+
+CPU 속도는 아래 "CPU 시험"을 본다. 오래 걸리면 `--epochs`를 줄이거나 `--size 256`으로 내린다 (입력은 32의 배수). GPU 메모리가 모자라면 `--batch 16`. 중간에 멈췄으면 `--export-only --ckpt <경로>`로 내보내기만 할 수 있다. 내보낸 ONNX의 입력 크기는 검출기가 자동으로 읽는다.
 
 ## 8. 평가 (3단계 완료 기준)
 
