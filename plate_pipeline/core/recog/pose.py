@@ -87,21 +87,49 @@ class SideLock:
 
 
 def person_box(lms, vis_thr=0.3):
-    """Visible bounds, with the lower edge anchored only to visible feet/ankles.
-
-    No foot/ankle observation means no usable ground box (None). Out-of-frame
-    coordinates are retained; clipping would change the observed foot height.
-    """
+    """Bounds of all visible points, independent of foot visibility."""
     if not _valid(lms):
         return None
     visible = lms[:, 3] >= vis_thr
-    feet = np.array([27, 28, 29, 30, 31, 32])
-    feet = feet[visible[feet]]
-    if not len(feet):
+    if not visible.any():
         return None
     pts = lms[visible, :2]
     return (float(pts[:, 0].min()), float(pts[:, 1].min()),
-            float(pts[:, 0].max()), float(lms[feet, 1].max()))
+            float(pts[:, 0].max()), float(pts[:, 1].max()))
+
+
+def feet_y(lms, vis_thr, frame_h):
+    """Lowest visible ankle/heel/foot within the frame's lower 97% (or None)."""
+    if not _valid(lms):
+        return None
+    feet = lms[[27, 28, 29, 30, 31, 32]]
+    good = (feet[:,3] >= vis_thr) & (feet[:,1] >= 0) & (feet[:,1] <= .97*frame_h)
+    return float(feet[good,1].max()) if good.any() else None
+
+
+def near_wrist(kp, plate_box, vis_thr=.5, frame_h=None, *, frame_w=None):
+    """Nearest visible wrist to the plate center; kp is 33x[x,y,visibility].
+
+    frame_h is required when selecting: observations above/below the displayed
+    frame are rejected. Supply frame_w to also reject wrists beyond the right
+    edge; frame_h alone cannot establish the image width.
+    """
+    if kp is None or plate_box is None or frame_h is None:
+        return None
+    points = np.asarray(kp, float)
+    if points.shape != (33,3):
+        return None
+    wrists = points[[15,16]]
+    good = (np.isfinite(wrists).all(axis=1) & (wrists[:,2] >= vis_thr)
+            & (wrists[:,0] >= 0) & (wrists[:,1] >= 0) & (wrists[:,1] <= frame_h))
+    if frame_w is not None:
+        good &= wrists[:,0] <= frame_w
+    if not good.any():
+        return None
+    center = (np.asarray(plate_box[:2])+np.asarray(plate_box[2:]))/2
+    choices = wrists[good,:2]
+    selected = choices[np.argmin(np.linalg.norm(choices-center,axis=1))]
+    return tuple(map(float,selected))
 
 
 def person_center(lms, vis_thr=0.3):

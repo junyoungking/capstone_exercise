@@ -19,7 +19,7 @@ from core.io import video
 from core.io.rows import write_rows
 from core.recog.plate import BoxFileDetector, OnnxPlateDetector, find_plate_circle, refine_circle, Detection
 from core.recog.track import PlateTracker
-from core.recog.pose import PoseEstimator, SideLock, person_box, person_center, select_lifter
+from core.recog.pose import PoseEstimator, SideLock, person_box, person_center, select_lifter, feet_y
 from core.signal.height import height_signal
 from core.signal.final import clean_final
 from core.judge.session import run_session, REST
@@ -66,6 +66,10 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
             det = refine_circle(gray, tr.box)
         st = tr.step(gray, det)
         row = {"t": round(t, 4), "seq": seq}
+        if detector is not None:
+            ranked = sorted(dets, key=lambda d: d.score, reverse=True)[:10]
+            row["dets"] = [[*map(float, d.box), float(d.score)] for d in ranked]
+            row["pick"] = next((i for i,d in enumerate(ranked) if d is det), None)
         if st is not None:
             x0, y0, x1, y1 = st.box
             cx, cy = st.center
@@ -86,6 +90,7 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
                 row["person"] = {
                     "box": [round(v, 1) for v in person_box(lms, pose_cfg.vis_thr)],
                     "vis": round(float(lms[[11, 12, 23, 24], 3].mean()), 2),
+                    "feet_y": feet_y(lms, pose_cfg.vis_thr, img.shape[0]),
                 }
                 row["kp"] = [[round(float(p[0]), 1), round(float(p[1]), 1),
                               round(float(p[3]), 2)] for p in lms]
@@ -132,10 +137,10 @@ def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT):
 
 
 def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None,
-                  pose=False):
+                  pose=False, device="auto"):
     """rim: look for the plate rim when the detector gives nothing (default: only without a model)."""
     info = video.info(path)
-    det = OnnxPlateDetector(model) if model else (BoxFileDetector(boxes) if boxes else None)
+    det = OnnxPlateDetector(model, device=device) if model else (BoxFileDetector(boxes) if boxes else None)
     estimator = PoseEstimator() if pose is True else (pose or None)
     t0 = time.time()
     try:
@@ -154,7 +159,7 @@ def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, mod
                plate_source="model" if model else ("label boxes" if boxes else
                                                    ("첫 프레임 박스(입력) + 원판 테두리 원 찾기 + KLT" if init_box
                                                     else "첫 프레임 원 찾기 + 원판 테두리 원 찾기 + KLT")),
-               sets=sets)
+               sets=sets, detector_providers=getattr(det, "providers", []))
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
         write_rows(os.path.join(out_dir, "rows.jsonl.gz"), rows)
@@ -172,11 +177,13 @@ def main():
     ap.add_argument("--box", default=None, help="x0,y0,x1,y1 of the plate in the first frame")
     ap.add_argument("--boxes", default=None)
     ap.add_argument("--model", default=None)
+    ap.add_argument("--device", choices=("auto", "cuda", "cpu"), default="auto")
     ap.add_argument("--pose", action="store_true", help="record optional MediaPipe pose observations")
     ap.add_argument("--out", default="out")
     a = ap.parse_args()
     box = tuple(float(v) for v in a.box.split(",")) if a.box else None
-    res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out, pose=a.pose)
+    res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out,
+                              pose=a.pose, device=a.device)
     for s in res["sets"]:
         print(f"set {s['set']}: {s['reps']} reps ({s['reason']})")
         for x in s["sentences"]:

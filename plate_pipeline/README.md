@@ -154,14 +154,141 @@ python -m eval.pose_check OUT/rows.jsonl.gz --video VIDEO --sheet OUT/sheet.jpg
 주므로 포즈 단계에서는 회전하지 않는다.
 
 포즈 실행 프레임에는 `pose.n/ms`, 선택 성공 시 `person.box/vis`, 픽셀 단위
-`kp`(33×[x,y,visibility]), `side`가 추가된다. 발/발목이 안 보이면 person box를
-만들지 않는다. 포즈를 생략한 프레임에 이전 kp를 복사하지 않는다.
-`person.box` 아래 끝은 보이는 발목·뒤꿈치·발끝 중 가장 아래 y다.
+`kp`(33×[x,y,visibility]), `side`가 추가된다. S1.5a부터 발이 없어도 보이는 모든 점으로
+`person.box`를 만든다. 화면 안의 발 높이 `person.feet_y`는 별도로 기록하며 없으면 null이다.
+포즈를 생략한 프레임에 이전 kp를 복사하지 않는다.
 
 `eval.pose_check`의 `lifter_ratio`와 2초 구간별 비율은 포즈 실행 프레임을
 분모로 하고, `lifter_all_frames_ratio`는 전체 프레임을 분모로 한다.
 `floor`는 기존 450 mm 원판 높이 신호가 0.5초 이상 3 cm 범위에 있는 관측
-구간별로 `(사람 box 아래 y − 원판 box 아래 y)/원판 높이`의 중앙값을 낸다.
+구간별로 `(person.feet_y − 원판 box 아래 y)/원판 높이`의 중앙값을 낸다.
 추적 공백을 보간하지 않으며 포즈 관측이 없으면 중앙값은 null이다.
 이 값은 바닥 여부의 진단 자료이며 판정 임계값이나 rep 입력이 아니다.
 시트는 각 0.5초 시점 이후 첫 포즈 실행 프레임을 사용한다.
+
+
+## S1.5a: CPU 복구와 원판 추적 진단 (2026-10-22)
+
+기준 `origin/plate-pipeline`의 `7bd01cf`. 원판 선택·KLT·height_signal·필터·FSM·rep 값
+계산 규칙과 임계값은 바꾸지 않았다. CPU 실행 선택, 기록과 읽기 전용 진단만 추가했다.
+포즈의 사람 상자는 보이는 모든 점으로 만들고 바닥 검사용 발은 분리했다.
+
+### 실행
+
+```bash
+cd plate_pipeline
+python -m pytest -q tests
+python -m eval.counts --sets eval/lists/team9.csv --root data/team/test9 \
+  --model models/plate_tiny.onnx --pose --debug --device auto --out eval_out/NEW_RUN
+python -m server.jobs data/team/test9/squat/stu10_70.mp4 --exercise squat \
+  --model models/plate_tiny.onnx --pose --device cpu --out eval_out/NEW_CPU_RUN
+python -m eval.debug_track eval_out/NEW_RUN/stu8_7/rows.jsonl.gz \
+  --result eval_out/NEW_RUN/stu8_7/result.json --png eval_out/NEW_RUN/stu8_7/timeline_extra.png \
+  --video data/team/test9/benchpress/stu8_7.mp4 --mp4 eval_out/NEW_RUN/stu8_7/debug_extra.mp4 --truth 5
+```
+
+`server.jobs`, `eval.counts`, `eval.plate_recall`에 `--device auto|cuda|cpu`가 있다.
+기본 auto는 CUDA provider가 있으면 CUDA+CPU를 요청하고, 없으면 CPU만 요청한다.
+CUDA 초기화 실패로 CPU가 활성화되면 auto는 CPU로 계속한다. cuda는 CUDA 활성화를
+검사하고 runtime fallback을 끈다. cpu는 CPU만 요청하며 torch를 import하지 않는다.
+CUDA를 요청할 때만 사용 가능한 ORT preload_dlls, 그 다음 선택적 torch import를 시도한다.
+실제 활성 provider 목록을 `detector.providers`와 `result.json.detector_providers`에 남긴다.
+목록은 활성 backend 정보이며 개별 연산의 GPU 배치를 측정한 값은 아니다.
+
+`eval.counts --out`은 기존 디렉터리를 거부한다. `--root`는 CSV의 상대 경로 앞에 붙인다.
+`team9.csv`는 원본 sets.csv에서 만든 파일 이름만 담으므로 root 아래에서 같은 이름을
+재귀 탐색해 **유일하게 존재하는 파일만** 사용한다. 중복 이름은 오류이며, 운동 라벨로
+폴더 이름을 추측하지 않는다. `quality=unrated`는 품질을 아직 따로 주석하지 않았다는 뜻이다.
+
+각 영상에 rows/result/report와 `diagnostics.json`이 생긴다. `--debug`이면 타임라인을
+만들고, 횟수가 틀린 영상에는 폭 540 디버그 mp4도 만든다. 요약은 counts.csv/summary.json이다.
+`exact`는 세트 수와 무관하게 총 횟수 일치, 기존 `right`는 세트 하나이고 횟수 일치다.
+
+### 개발용 9개 결과
+
+**이 영상들은 디버깅에 사용한 개발용이다. 독립 시험 성능이 아니다.**
+CUDA 활성 auto + 포즈 + 진단 기록으로 실행했다. 기대 횟수
+`5/18/3/4/16/6/5/0/3`과 모두 같다. 합 **60/71**, exact/right **5/9**, MAE **1.44**.
+기준 커밋 함수에 동일 검출 후보를 재생했을 때 9개 모두 원판 rows·높이 신호·세트와
+모든 rep 값이 정확히 같았다. 별도 신경망 재추론 비교가 아닌 저장된 후보 재생 검증이다.
+
+| 영상 | 종목 | 정답 | 예측 | err | used | y_range | jumps | moving_cands | wrist_r | fps | 유형 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| stu10_70 | squat | 5 | 5 | +0 | 98.2% | 1.318 | 0 | 1 | 0.907 | 48.7 | 정상 대조 |
+| stu3_64 | squat | 17 | 18 | +1 | 98.3% | 1.564 | 2 | 1 | 0.970 | 67.8 | 바(잠정) |
+| stu8_67 | squat | 3 | 3 | +0 | 96.1% | 1.206 | 0 | 0 | 0.990 | 65.6 | 정상 대조 |
+| stu8_7 | bench | 5 | 4 | -1 | 49.5% | 1.095 | 3 | 4 | 0.784 | 74.5 | 가(대상 원판 한정) |
+| stu9_10 | bench | 17 | 16 | -1 | 72.1% | 1.141 | 5 | 4 | 0.517 | 72.4 | 마(라 동반) |
+| stu2_10_edited | bench | 6 | 6 | +0 | 100.0% | 0.852 | 0 | 0 | 0.986 | 72.9 | 정상 대조 |
+| stu7_1_1 | deadlift | 5 | 5 | +0 | 100.0% | 1.316 | 1 | 0 | 0.948 | 69.5 | 마 관측·횟수 정상 |
+| stu4_2_-1 | deadlift | 10 | 0 | -10 | 0.2% | 0.000 | 0 | 0 | — | 77.8 | 가 |
+| deadlift_08 | deadlift | 3 | 3 | +0 | 100.0% | 0.945 | 0 | 3 | 0.986 | 35.6 | 정상 대조 |
+
+실제 활성 provider는 9개 모두 `[CUDAExecutionProvider, CPUExecutionProvider]`였다.
+CPU `stu10_70`도 **5회**, `[CPUExecutionProvider]`, `recog_fps=19.9`였다.
+해당 CUDA 실행의 recog_fps는 48.7이다. 두 실행 모두 포즈를 켰으며, FPS에는 디코드·검출·KLT·
+포즈·프레임 기록이 포함되고 진단 렌더링은 제외된다. 이 값은 해당 컴퓨터의 실행 관측값이다.
+
+### 실패 분류와 근거 시각
+
+- **stu4_2_-1 — 가.** 404프레임 중 후보 없음 378개(93.6%). 0~1.125초에는 추적 대상도
+  없다. 1.1667초 첫 검출 `[192.6,139.3,327.5,228.5]`은 몸통 영역의 오검출이며, 1.2083초부터
+  끝 16.7917초까지 lost다. used는 1프레임뿐이다. y_range=0은 이 한 관측값으로 계산됐으므로
+  안정적으로 배경 원판을 추적했다는 근거가 아니다. moving_cands=0도 실제 운동이 없다는 뜻이 아니다.
+- **stu8_7 — 가(선택된 오른쪽 원판의 검출 공백).** 0초에는 실제 오른쪽 원판으로 시작한다.
+  1.3347~4.1375초, 5.8058~7.0404초에 lost가 이어진다. 그때 왼쪽 원판 후보는 움직인다
+  (대체 후보 궤적 2.3357~7.8745초 등). 전체 후보 없음은 59/660으로 적으므로 '모든 원판의
+  후보가 거의 없다'는 설명은 맞지 않는다. jumps=0.7674/4.1708/7.0737초는 공백 뒤 같은
+  오른쪽 원판을 재획득한 장면이다. 나/다의 증거로 쓰지 않았다. 부족한 신호에서 5회 중 4회다.
+- **stu9_10 — 마, 라 동반.** KLT 비중 44.6%. 18.8856~20.1869초 등 KLT가 길게 이어지고,
+  13.2132초 KLT box 높이가 123.2 px까지 커진 뒤 13.2799초 검출로 75.5 px가 돼 −38.6% 점프한다.
+  23.8572초에는 +41.9%, 27.8612초 −31.5%, 40.9743초 +33.0%다. rep 4의 11.943~14.420초
+  높이는 75.08~124.64 px(최대/최소 1.66). 리프터의 실제 같은 쪽 원판 부근에 있으나 box의
+  크기와 일부 위치가 KLT 중 변하고 검출 때 다시 맞춰진다. 다른 원판으로 바뀌었다는 다는 확정하지 않았다.
+  wrist_r 전체 0.517, 20~22초 −0.729지만, 선택된 골격이 서 있는 보조자에 해당하는 프레임도 있다
+  (예: 20.4872초 person box `[116.1,99.5,185.7,295.4]`). 따라서 낮은 상관만으로 원판이 틀렸다고
+  단정할 수 없다. 횟수 오차 −1을 특정 한 프레임/한 원인으로 완전히 설명한 것은 아니다.
+- **stu3_64 — 바(잠정), 초반 공백·크기 변동 동반.** 전체 r=0.970, 주기적 움직임과 선택 원판은
+  대체로 일치한다. 1.2000~1.8333초 lost, 2.1333/3.3667초 jumps가 있다. 첫 FSM trip은
+  entry 0.2998 / far 1.1326 / end 2.2664초, far_gap=True로 1회지만 rep_values.back은 공란이다.
+  마지막 52.3355~53.9012초는 failed다. 첫 구간에 'Thank you for watching' 자막이 보인다.
+  편집/부분 반복을 GT 17에서 어떻게 처리했는지는 시간별 정답이 없어 미확인이다. 초반 자막만으로
+  영상 컷이나 중복 삽입을 확정하지 않았다. 올바른 원판의 불완전 관측과 기존 최종 판정·라벨 정의를
+  우선 재검토할 사례다. 어느 trip이 정답과 어긋났는지는 추가 수동 대조가 필요하다.
+- **stu7_1_1 — 정상 대조, 마에 해당하는 변동도 관측.** det 100%, 전체 r=0.948, 정상 5회다.
+  8.4000→8.4333초 center jump는 같은 원판이 내려오는 구간이며 원판 교체 증거가 아니다.
+  rep 4(10.729~12.355초) 높이 111.04~144.35 px, rep 5(14.805~16.391초) 108.77~148.47 px다.
+  따라서 마 지표가 있어도 횟수가 틀린다고 볼 수 없다. 실제 투영 크기와 검출 오차의 분해는 정답 box가 필요하다.
+
+나/다를 이번 다섯 영상에서 확정한 사례는 없다. 정상 대조 영상의 횟수 일치는 프레임별 원판 identity의
+정답 검증을 대신하지 않는다. 임계값 조정, 영상별 예외, 재학습은 적용하지 않았다.
+
+### 진단 해석과 산출물
+
+- `dets`: 검출기 반환 후보(confidence/NMS 적용 후)를 **별도 사본**에서 점수순 최대 10개 기록한다.
+  `pick`은 그 목록의 0-based 순번이며, 후보 없음·원 찾기 사용·선택 후보가 기록 상한 밖이면 null이다.
+  원래 후보 배열을 정렬하거나 상한으로 선택을 제한하지 않는다. `pick`은 tracker가 받아들였다는 뜻도 아니다.
+- `used_ratio`: 현재 Track. `src_share` 분모는 전체 프레임이며 box가 없으면 none이다.
+  초기 원 찾기의 src=det 표기는 기존 동작이며 모델 검출 성공으로 해석하지 않는다.
+- `y_range`: used box 중심 y의 p95−p5 / used box 높이 중앙값. lost의 고정 box는 통계에서 제외한다.
+  `jumps`는 이전 used 관측 대비 높이 ±25% 초과 또는 중심 이동 0.3×이전 높이 초과다.
+  재획득·빠른 실제 움직임도 표시하므로 원판 교체 판정이 아니다.
+- `moving_cands`: 현재 추적 box와 IoU<0.3인 후보를 IoU≥0.3으로 1:1 탐욕 연결한다.
+  최대 5개 누락 프레임을 허용하고, 0.5초 이상·세로 범위가 자기 높이 중앙값의 0.3배 초과인
+  궤적 수/시각이다. 실제 다른 원판 수, 운동 횟수 또는 정답 identity가 아니다.
+- `wrist_r`: used 원판과 현재 프레임에서 보이는 가까운 손목의 상관이다. 2초 창은 쌍 10개 이상,
+  원판 y 범위가 높이 중앙값의 0.1배 초과일 때만 계산한다. `wrist_seen` 분모는 used이며
+  pose/kp 기록이 있는 프레임이다. 포즈 생략 프레임에 보간/이전 kp 복사는 하지 않는다.
+  frame_h가 없으면 손목 통계는 미정이다. `near_wrist`의 선택적 frame_w로 가로 경계도 검사하며
+  디버거는 result/video의 폭을 전달한다. frame_h만 넘기는 호출은 오른쪽 가로 경계를 알 수 없다.
+- 타임라인은 원시·최종 높이, start~back 구간과 번호, 실제 세션 open/close를 표시한다.
+  속도 끝점이 공란인 rep은 번호에 `*`를 붙이고 구간을 임의로 채우지 않는다.
+  mp4 누적 횟수는 같은 최종 FSM의 end_t를 재생하므로 back 공란 rep도 빠지지 않는다.
+  끊긴 원시/손목 관측 사이를 이은 선은 실제 관측이나 보간을 뜻하지 않는다.
+- MediaPipe는 선택 의존성이고 포즈 없는 rows, dets 없는 기존 rows도 읽을 수 있다.
+  feet_y는 visibility 조건과 0≤y≤0.97×frame_h인 발만 사용한다. 몸 상자 아래 끝을 바닥으로 쓰지 않는다.
+  바닥 검사에 몸의 위아래 순서, 관측 5개 이상, 처음 움직인 뒤 고정하는 규칙은 아직 연결하지 않았다(S2).
+
+로컬 산출물은 `eval_out/s15a_team9_20261022/`(9개 타임라인·틀린 4개 debug.mp4·후보/포즈 rows),
+`eval_out/s15a_cpu_stu10_20261022/`(CPU 결과)다. 전자는 base_replay_validation.json,
+cpu_comparison.json과 evidence의 샘플 프레임/FSM 자료도 포함한다. 영상·모델·평가 산출물은 커밋하지 않는다.

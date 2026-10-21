@@ -87,14 +87,34 @@ def decode_yolox(out, size, ratio, score_min=0.3, nms_iou=0.45) -> List[Detectio
 class OnnxPlateDetector:
     """The trained one-class plate detector (train/plate: YOLOX-Tiny exported to ONNX)."""
 
-    def __init__(self, path, size=416, score_min=0.3, nms_iou=0.45, providers=None):
-        import torch
+    def __init__(self, path, size=416, score_min=0.3, nms_iou=0.45, providers=None, device="auto"):
+        if device not in ("auto", "cuda", "cpu"):
+            raise ValueError(f"Unknown detector device: {device}")
         import onnxruntime as ort
-        requested = providers if providers is not None else ["CUDAExecutionProvider", "CPUExecutionProvider"]
+        cuda, cpu = "CUDAExecutionProvider", "CPUExecutionProvider"
+        available = ort.get_available_providers()
+        if device == "cuda" and cuda not in available:
+            raise RuntimeError(f"CUDAExecutionProvider not available: {available}")
+        requested = ([cpu] if device == "cpu" else [cuda, cpu]
+                     if device == "cuda" or cuda in available else [cpu])
+        if providers is not None and device == "auto":
+            requested = providers  # retain the existing explicit provider override
+        if cuda in requested:
+            if hasattr(ort, "preload_dlls"):
+                try:
+                    ort.preload_dlls()
+                except Exception:
+                    pass  # the provider initialization below determines availability
+            try:
+                import torch  # optional CUDA shared-library loading, never required for CPU
+            except Exception:
+                pass
         self.sess = ort.InferenceSession(str(path), providers=requested)
-        if "CUDAExecutionProvider" not in self.sess.get_providers():
-            raise RuntimeError(f"CUDAExecutionProvider not active: {self.sess.get_providers()}")
-        self.sess.disable_fallback()
+        self.providers = self.sess.get_providers()
+        if device == "cuda":
+            if cuda not in self.providers:
+                raise RuntimeError(f"CUDAExecutionProvider not active: {self.providers}")
+            self.sess.disable_fallback()
         self.inp = self.sess.get_inputs()[0].name
         shape = self.sess.get_inputs()[0].shape
         self.size = int(shape[2]) if isinstance(shape[2], int) else size
@@ -103,6 +123,7 @@ class OnnxPlateDetector:
     def __call__(self, image, seq=None) -> List[Detection]:
         x, r = letterbox(image, self.size)
         out = self.sess.run(None, {self.inp: x})[0][0]
+        self.providers = self.sess.get_providers()
         return decode_yolox(out, self.size, r, self.score_min, self.nms_iou)
 
 
