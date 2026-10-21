@@ -90,6 +90,16 @@ class TextCfg:
 
 
 @dataclass(frozen=True)
+class PoseCfg:
+    every_n: int = 2
+    num_poses: int = 2
+    min_conf: float = 0.45
+    vis_thr: float = 0.3
+    near_plate: float = 0.5
+    model_path: str = None
+
+
+@dataclass(frozen=True)
 class Config:
     live: LiveCfg = field(default_factory=LiveCfg)
     final: FinalCfg = field(default_factory=FinalCfg)
@@ -98,6 +108,7 @@ class Config:
     sets: SetCfg = field(default_factory=SetCfg)
     cmp: CmpCfg = field(default_factory=CmpCfg)
     text: TextCfg = field(default_factory=TextCfg)
+    pose: PoseCfg = field(default_factory=PoseCfg)
 
 
 DEFAULT = Config()

@@ -131,3 +131,37 @@ GitHub 공개 저장소 dw2kim/BarbellTrackingCode의 `test_squat.mov`(옆에서
 - **생성기 시험 (최종 계산 전체, 4조건 x 1,500묶음).** 지금 표의 거짓은 값 하나 2.4% 이하, 리포트 3.7% 이하다. 기준 1 rep의 내리는 시간만 1.8~4.4%인데, 스쿼트·벤치의 첫 rep 내리는 시간을 더 크게 틀리게 재기 때문으로 보인다. 검출은 처음 규칙(고정 배수)보다 낮다: 기준 대비 1초 차이 74~95%, 세트 안에서 마지막 2 rep이 4 cm 덜 가면 8~19%.
 - **생성기의 rep 편차** (같은 버릇 세트의 2차 차분 산포 중앙값). 내리는 시간 0.09~0.21초, 먼 점 거리 0.9~2.1 cm, 먼 점에서 멈춘 시간 0.10~0.11초.
 - 세트 안에서는 하한 x 배수가 늘 최소 변화량보다 커서, 최소 변화량은 기준 대비에서만 판정에 낀다.
+
+## 선택 포즈 기록 (S1)
+
+`server.jobs --pose`는 원판 추적 다음에 기본 2프레임마다 MediaPipe Tasks
+PoseLandmarker(VIDEO, 최대 2명, confidence 0.45)를 실행한다. 선택된 사람의
+포즈는 rows에만 기록하며 원판 신호, 반복 횟수, rep 값과 판정에는 사용하지 않는다.
+MediaPipe는 선택 의존성으로 `PoseEstimator`를 생성할 때만 import한다.
+모델 기본 경로는 저장소 루트의 `pose_landmarker_lite.task`이고,
+`PoseEstimator(model_path=...)` 또는 `PoseCfg.model_path`로 바꿀 수 있다.
+
+```bash
+python -m server.jobs VIDEO --exercise squat --box x0,y0,x1,y1 --pose --out OUT
+python -m eval.pose_check OUT/rows.jsonl.gz --video VIDEO --sheet OUT/sheet.jpg
+```
+
+원판 box 근처에 사람이 없으면 포즈 후보가 있어도 리프터를 고르지 않는다.
+원판 box 자체가 없는 경우에만 v4의 몸통 수평도(벤치), 크기, 직전 중심 점수를
+사용한다. `select_lifter(..., image_size=(width,height))`는 이 점수 계산 때만
+픽셀 좌표를 정규화한다. 직접 호출하면서 프레임 크기를 생략하면 보이는 좌표의
+최대 범위(축마다 최소 1)를 대신 사용한다. 입력 영상은 `core.io.video.frames`가 표시 방향으로
+주므로 포즈 단계에서는 회전하지 않는다.
+
+포즈 실행 프레임에는 `pose.n/ms`, 선택 성공 시 `person.box/vis`, 픽셀 단위
+`kp`(33×[x,y,visibility]), `side`가 추가된다. 발/발목이 안 보이면 person box를
+만들지 않는다. 포즈를 생략한 프레임에 이전 kp를 복사하지 않는다.
+`person.box` 아래 끝은 보이는 발목·뒤꿈치·발끝 중 가장 아래 y다.
+
+`eval.pose_check`의 `lifter_ratio`와 2초 구간별 비율은 포즈 실행 프레임을
+분모로 하고, `lifter_all_frames_ratio`는 전체 프레임을 분모로 한다.
+`floor`는 기존 450 mm 원판 높이 신호가 0.5초 이상 3 cm 범위에 있는 관측
+구간별로 `(사람 box 아래 y − 원판 box 아래 y)/원판 높이`의 중앙값을 낸다.
+추적 공백을 보간하지 않으며 포즈 관측이 없으면 중앙값은 null이다.
+이 값은 바닥 여부의 진단 자료이며 판정 임계값이나 rep 입력이 아니다.
+시트는 각 0.5초 시점 이후 첫 포즈 실행 프레임을 사용한다.

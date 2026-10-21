@@ -19,6 +19,7 @@ from core.io import video
 from core.io.rows import write_rows
 from core.recog.plate import BoxFileDetector, OnnxPlateDetector, find_plate_circle, refine_circle, Detection
 from core.recog.track import PlateTracker
+from core.recog.pose import PoseEstimator, SideLock, person_box, person_center, select_lifter
 from core.signal.height import height_signal
 from core.signal.final import clean_final
 from core.judge.session import run_session, REST
@@ -39,13 +40,19 @@ def pick_detection(dets, box):
     return min(dets, key=lambda d: (d.center[0] - cx) ** 2 + (d.center[1] - cy) ** 2)
 
 
-def recognize(path, detector=None, init_box=None, on_frame=None, rim=True):
+def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=None, exercise="squat"):
     """Frame rows for a whole video. detector(image, seq) -> [Detection].
     rim enables circle fallback both for initialization and around the tracked box.
     With rim=False, wait for a detection (or an explicit init_box) to initialize.
     """
     tr = PlateTracker()
     rows = []
+    pose_cfg = getattr(pose, "cfg", DEFAULT.pose)
+    every_n = getattr(pose, "every_n", pose_cfg.every_n)
+    if pose is not None and every_n < 1:
+        raise ValueError("pose.every_n must be positive")
+    side_lock = SideLock(exercise) if pose is not None else None
+    prev_center = None
     for seq, (t, img) in enumerate(video.frames(path)):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         dets = detector(img, seq) if detector is not None else []
@@ -66,6 +73,26 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True):
                             "used": st.src != "lost", "center": [round(cx, 2), round(cy, 2)],
                             "size_px": [round(x1 - x0, 2), round(y1 - y0, 2)], "src": st.src, "n_pts": st.n_pts}
         row["cam"] = [0.0, 0.0]
+        if pose is not None and seq % every_n == 0:
+            start = time.perf_counter()
+            candidates = pose(img, t)
+            elapsed_ms = (time.perf_counter() - start) * 1000
+            row["pose"] = {"n": len(candidates), "ms": round(elapsed_ms, 3)}
+            index = select_lifter(candidates, st.box if st is not None else None,
+                                  prev_center, exercise, cfg=pose_cfg,
+                                  image_size=(img.shape[1], img.shape[0]))
+            if index is not None:
+                lms = candidates[index]
+                row["person"] = {
+                    "box": [round(v, 1) for v in person_box(lms, pose_cfg.vis_thr)],
+                    "vis": round(float(lms[[11, 12, 23, 24], 3].mean()), 2),
+                }
+                row["kp"] = [[round(float(p[0]), 1), round(float(p[1]), 1),
+                              round(float(p[3]), 2)] for p in lms]
+                row["side"] = side_lock.update(lms)
+                center = person_center(lms, pose_cfg.vis_thr)
+                if center is not None:
+                    prev_center = center
         rows.append(row)
         if on_frame is not None:
             on_frame(seq, t, img, st)
@@ -104,12 +131,19 @@ def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT):
     return out, sig
 
 
-def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None):
+def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None,
+                  pose=False):
     """rim: look for the plate rim when the detector gives nothing (default: only without a model)."""
     info = video.info(path)
     det = OnnxPlateDetector(model) if model else (BoxFileDetector(boxes) if boxes else None)
+    estimator = PoseEstimator() if pose is True else (pose or None)
     t0 = time.time()
-    rows = recognize(path, det, init_box, rim=(model is None) if rim is None else rim)
+    try:
+        rows = recognize(path, det, init_box, rim=(model is None) if rim is None else rim,
+                         pose=estimator, exercise=exercise)
+    finally:
+        if pose is True:
+            estimator.close()
     took = time.time() - t0
     fps = len(rows) / max(rows[-1]["t"] - rows[0]["t"], 1e-6) if len(rows) > 1 else info.fps
     sets, sig = analyse(rows, exercise, fps, plate_mm)
@@ -138,10 +172,11 @@ def main():
     ap.add_argument("--box", default=None, help="x0,y0,x1,y1 of the plate in the first frame")
     ap.add_argument("--boxes", default=None)
     ap.add_argument("--model", default=None)
+    ap.add_argument("--pose", action="store_true", help="record optional MediaPipe pose observations")
     ap.add_argument("--out", default="out")
     a = ap.parse_args()
     box = tuple(float(v) for v in a.box.split(",")) if a.box else None
-    res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out)
+    res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out, pose=a.pose)
     for s in res["sets"]:
         print(f"set {s['set']}: {s['reps']} reps ({s['reason']})")
         for x in s["sentences"]:
