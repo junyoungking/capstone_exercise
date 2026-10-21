@@ -88,8 +88,13 @@ class OnnxPlateDetector:
     """The trained one-class plate detector (train/plate: YOLOX-Tiny exported to ONNX)."""
 
     def __init__(self, path, size=416, score_min=0.3, nms_iou=0.45, providers=None):
+        import torch
         import onnxruntime as ort
-        self.sess = ort.InferenceSession(str(path), providers=providers or ["CPUExecutionProvider"])
+        requested = providers if providers is not None else ["CUDAExecutionProvider", "CPUExecutionProvider"]
+        self.sess = ort.InferenceSession(str(path), providers=requested)
+        if "CUDAExecutionProvider" not in self.sess.get_providers():
+            raise RuntimeError(f"CUDAExecutionProvider not active: {self.sess.get_providers()}")
+        self.sess.disable_fallback()
         self.inp = self.sess.get_inputs()[0].name
         shape = self.sess.get_inputs()[0].shape
         self.size = int(shape[2]) if isinstance(shape[2], int) else size

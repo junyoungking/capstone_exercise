@@ -40,8 +40,10 @@ def pick_detection(dets, box):
 
 
 def recognize(path, detector=None, init_box=None, on_frame=None, rim=True):
-    """Frame rows for a whole video. detector(image, seq) -> [Detection]. Without a detector the plate rim is
-    looked for around the tracked box every frame (refine_circle) when rim=True."""
+    """Frame rows for a whole video. detector(image, seq) -> [Detection].
+    rim enables circle fallback both for initialization and around the tracked box.
+    With rim=False, wait for a detection (or an explicit init_box) to initialize.
+    """
     tr = PlateTracker()
     rows = []
     for seq, (t, img) in enumerate(video.frames(path)):
@@ -51,7 +53,7 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True):
         if tr.box is None and det is None:
             if init_box is not None:
                 det = Detection(tuple(init_box), 1.0)
-            else:
+            elif rim:
                 det = find_plate_circle(img)
         if det is None and rim and tr.box is not None:
             det = refine_circle(gray, tr.box)
