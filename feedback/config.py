@@ -9,7 +9,7 @@ DEFAULT_CONFIG = Path("data/demo.json")
 DEFAULT_OUT = Path("out/demo")
 STAGES = ("segments", "metrics", "findings", "report")
 DEFAULT_UNTIL = "report"
-SEGMENT_MODES = ("labels", "model")
+SEGMENT_MODES = ("labels", "model", "plate")
 DEFAULT_REF_WIDTH = 300
 DEFAULT_REF_QUALITY = 72
 
@@ -44,6 +44,21 @@ POSITION_LABELS = {
     "MID_UP": "상승 중간",
     "LOCKOUT": "락아웃",
 }
+def position_labels(exercise):
+    labels = dict(POSITION_LABELS)
+    if exercise == "benchpress":
+        labels["BOTTOM"] = "가슴"
+    elif exercise == "deadlift":
+        labels.update(zip(POSITIONS, ("시작(바닥)", "상승 중간", "락아웃", "하강 중간", "끝(바닥)")))
+    return labels
+
+
+def phase_labels(exercise):
+    if exercise == "deadlift":
+        return {"down": "상승", "bottom": "위", "up": "하강"}
+    return {**PHASE_LABELS, "bottom": "가슴" if exercise == "benchpress" else "바닥"}
+
+
 PHASES = ("down", "bottom", "up")
 PHASE_LABELS = {"down": "하강", "bottom": "바닥", "up": "상승"}
 HIP_MAX_GAP_FRAMES = 5
@@ -76,6 +91,9 @@ POSE3D_METRIC_JOINTS = {
     "trunk_lean": {"right": [0, 7, 8], "left": [0, 7, 8]},
     "foot_flatness": {"right": [3], "left": [6]},
     "head_hip_line": {"right": [10, 0], "left": [10, 0]},
+    "elbow_angle": {"right": [14, 15, 16], "left": [11, 12, 13]},
+    "lockout_angle_min": {"right": [14, 15, 16], "left": [11, 12, 13]},
+    "wrist_elbow_x_diff": {"right": [15, 16], "left": [12, 13]},
 }
 POSE3D_JOINTS = (
     "pelvis", "right_hip", "right_knee", "right_ankle",
@@ -134,6 +152,15 @@ METRIC_TEMPLATES = {
         "+": "머리와 엉덩이의 가로 거리가 레퍼런스보다 몸통 길이의 {n}%만큼 멉니다",
         "-": "머리와 엉덩이의 가로 거리가 레퍼런스보다 몸통 길이의 {n}%만큼 가깝습니다",
     },
+}
+for _metric in ("elbow_angle", "lockout_angle_min"):
+    METRIC_TEMPLATES[_metric] = {
+        "+": "팔꿈치를 레퍼런스보다 {n}° 더 폈습니다",
+        "-": "팔꿈치를 레퍼런스보다 {n}° 더 굽혔습니다",
+    }
+METRIC_TEMPLATES["wrist_elbow_x_diff"] = {
+    "+": "손목과 팔꿈치의 가로 거리가 레퍼런스보다 몸통 길이의 {n}%만큼 멉니다",
+    "-": "손목과 팔꿈치의 가로 거리가 레퍼런스보다 몸통 길이의 {n}%만큼 가깝습니다",
 }
 SINGLE_TEMPLATE = "{where}에서 {phrase}."
 DEPTH_TEMPLATES = {

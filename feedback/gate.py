@@ -90,7 +90,7 @@ def _video_report(settings: dict[str, Any], role: str) -> tuple[dict[str, Any], 
 
     r_fps = _rate(probe.get("r_fps"))
     avg_fps = _rate(probe.get("avg_fps"))
-    if r_fps and avg_fps and abs(r_fps - avg_fps) > config.VIDEO_FPS_TOLERANCE:
+    if r_fps and avg_fps and (probe.get("variable_fps") or abs(r_fps - avg_fps) > config.VIDEO_FPS_TOLERANCE):
         raise GateFailure(
             1,
             config.GATE_TEXT["variable_fps"].format(

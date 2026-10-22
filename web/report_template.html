@@ -358,7 +358,7 @@ function tempoHTML(){
   const rows=["user","ref"].map(role=>'<div class="tempo-row"><span>'+(role==="user"?"사용자":"ref")+'</span><div class="tempo-track">'+
     items.map(i=>'<div class="tempo-part '+(role==="user"?i.color:"")+'" data-tempo="'+i.metric+'" data-role="'+role+'" style="width:'+((i[role]??0)/max*100)+'%;background:var(--'+i.metric.replace("_s","")+')" title="'+esc(W.meta.phase_labels[i.metric.replace("_s","")])+' '+fmt(i[role],"s")+'"><span>'+(i[role]===null?"—":i[role].toFixed(2))+'</span></div>').join("")+'</div></div>').join("");
   return '<section class="panel"><h2>템포 <span class="muted" style="font-size:11px">초 · 같은 시간 축</span></h2>'+rows+
-    '<div class="tempo-summary">하강:상승 사용자 '+(t.ratio.user===null?"—":t.ratio.user.toFixed(2)+":1")+' / ref '+(t.ratio.ref===null?"—":t.ratio.ref.toFixed(2)+":1")+'</div>'+
+    '<div class="tempo-summary">'+esc(W.meta.phase_labels.down)+':'+esc(W.meta.phase_labels.up)+' 사용자 '+(t.ratio.user===null?"—":t.ratio.user.toFixed(2)+":1")+' / ref '+(t.ratio.ref===null?"—":t.ratio.ref.toFixed(2)+":1")+'</div>'+
     '<div class="tempo-summary">'+items.map(i=>esc(W.meta.phase_labels[i.metric.replace("_s","")])+': '+(i.user===null?"—":i.user.toFixed(2))+' / '+(i.ref===null?"—":i.ref.toFixed(2))+'초').join(" · ")+'</div></section>';
 }
 function tableHTML(){

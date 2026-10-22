@@ -306,7 +306,7 @@ ADVISORY_METRICS = {
     # bench_line_diff(머리-어깨-엉덩이 라인)는 측면 벤치에서 nose-어깨-엉덩이 기하가
     # 카메라 각도에 민감해 user/expert 비교가 불안정하다(expert가 user의 ~2배로 측정됨).
     # PDF 0.08 절대 기준을 강제하면 거의 항상 '주의'가 되어 노이즈가 되므로 보조 지표로 둔다.
-    "benchpress": {"bar_proxy_conf", "bench_line_diff"},
+    "benchpress": {"bar_proxy_conf", "bench_line_diff", "lockout_angle_min"},
 }
 
 # bar proxy 레이어를 그릴 종목(가려짐이 심하면 끈다).
@@ -968,7 +968,8 @@ def compute_metrics(lms: Optional[np.ndarray], exercise: str, side: str) -> Dict
 
     v = shoulder_c - hip_c
     n = np.linalg.norm(v)
-    bench_line_diff = 0.0 if n < 1e-6 else abs(float(np.cross(v, nose - hip_c))) / (float(n) * tlen)
+    offset = nose - hip_c
+    bench_line_diff = 0.0 if n < 1e-6 else abs(float(v[0] * offset[1] - v[1] * offset[0])) / (float(n) * tlen)
 
     put("knee_angle", knee_angle, [hid, kid, aid])
     put("hip_angle", hip_angle, [sid, hid, kid])

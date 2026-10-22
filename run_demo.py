@@ -22,6 +22,8 @@ def build_parser() -> argparse.ArgumentParser:
                         help=config.CLI_HELP["until"])
     parser.add_argument("--segment", choices=config.SEGMENT_MODES,
                         help=config.CLI_HELP["segment"])
+    parser.add_argument("--model", type=Path, help="plate 모드 원판 ONNX 모델 (생략하면 plate_box)")
+    parser.add_argument("--device", choices=("auto", "cuda", "cpu"), default="auto")
     parser.add_argument("--ckpt", type=Path, help=config.CLI_HELP["ckpt"])
     parser.add_argument("--override", type=Path, help=config.CLI_HELP["override"])
     parser.add_argument("--ref-width", type=int, default=config.DEFAULT_REF_WIDTH,
@@ -42,7 +44,7 @@ def segment_mode(settings: dict, explicit: str | None = None) -> str:
     ref = settings.get("ref", settings.get("expert", {}))
     if "reps" in settings.get("user", {}) and "reps" in ref:
         return "labels"
-    return "model"
+    return "plate"
 
 
 def _read_json(path: Path, parser: argparse.ArgumentParser) -> dict:
@@ -65,9 +67,26 @@ def _run_segments(settings: dict, args: argparse.Namespace, overrides: dict,
     results = {}
     for role, video in videos.items():
         cache_path = out / f"pose_{role}.npz"
-        pose = extract_pose(project_path(Path(video["video"])), cache_path, settings["exercise"],
-                            no_cache=args.no_cache)
-        results[role] = {"pose": pose}
+        plate_data = None
+        pose_options = {"no_cache": args.no_cache}
+        if mode == "plate":
+            from feedback.plate import analyze_video
+            plate_data = analyze_video(video, settings["exercise"], out / f"plate_{role}",
+                                       model=project_path(args.model) if args.model else None,
+                                       device=args.device)
+            pose_options["plate_rows"] = plate_data[0]
+        shared_pose = next((r["pose"] for r in results.values()
+                            if mode == "plate" and r["pose"]["video"] == str(project_path(Path(video["video"])).resolve())
+                            and r["plate"][0] == plate_data[0]), None)
+        if shared_pose is None:
+            pose = extract_pose(project_path(Path(video["video"])), cache_path, settings["exercise"],
+                                **pose_options)
+        else:
+            import shutil
+            first_role = next(role for role, result in results.items() if result["pose"] is shared_pose)
+            shutil.copyfile(out / f"pose_{first_role}.npz", cache_path)
+            pose = {**shared_pose, "cache_hit": True}
+        results[role] = {"pose": pose, "plate": plate_data}
         cache_status = "hit" if pose["cache_hit"] else "miss"
         print(f"{role}: cache={cache_status} file={cache_path.name}")
     if mode == "model":
@@ -83,7 +102,12 @@ def _run_segments(settings: dict, args: argparse.Namespace, overrides: dict,
         gate.check_exercises(*exercises)
         gate.check_views(*(video["view"] for video in videos.values()))
         for role, result in results.items():
-            gate.check_detection(role, result["pose"])
+            try:
+                gate.check_detection(role, result["pose"])
+            except gate.GateFailure as error:
+                if mode != "plate":
+                    raise
+                result["detection_failure"] = str(error)
         if mode == "labels":
             for role, video in videos.items():
                 gate.check_label_ranges(role, video, results[role]["pose"]["total"])
@@ -95,6 +119,10 @@ def _run_segments(settings: dict, args: argparse.Namespace, overrides: dict,
                 from feedback.segment import build_model_segments
 
                 segments = build_model_segments(pose, video, inference, overrides.get(role))
+            elif mode == "plate":
+                from feedback.plate import build_plate_segments
+                segments = build_plate_segments(pose, video, settings["exercise"],
+                                                *results[role]["plate"], overrides.get(role))
             else:
                 segments = build_segments(pose, video, settings["exercise"], overrides.get(role))
         except (ValueError, KeyError) as error:
@@ -141,6 +169,10 @@ def _run_metrics(results: dict, out: Path) -> dict:
     measured = {}
     for role, result in results.items():
         metrics = build_metrics(result["pose"], result["segments"])
+        if result.get("detection_failure"):
+            for rep in metrics["reps"]:
+                rep["excluded"] = True
+                rep["exclude_reason"] = result["detection_failure"]
         measured[role] = metrics
         _write_json(out / f"metrics_{role}.json", metrics)
         names = config.DISPLAY_METRICS[metrics["exercise"]]
@@ -159,12 +191,13 @@ def _run_metrics(results: dict, out: Path) -> dict:
     return measured
 
 
-def _run_findings(measured: dict, settings: dict, out: Path) -> dict:
+def _run_findings(measured: dict, settings: dict, out: Path, *, plate: bool = False) -> dict:
     from feedback.compare import compare_reps
     from feedback.select import select_goals
 
     reference = settings.get("ref", settings.get("expert"))
-    findings = select_goals(compare_reps(measured["user"], measured["ref"], reference.get("rep", 1)))
+    findings = select_goals(compare_reps(measured["user"], measured["ref"], reference.get("rep", 1),
+                                          allow_excluded_reference=plate))
     _write_json(out / "findings.json", findings)
     names = config.DISPLAY_METRICS[findings["exercise"]]
     print("[compare: diff/k/color]")
@@ -248,6 +281,9 @@ def main(argv: list[str] | None = None) -> int:
     from feedback import gate
 
     try:
+        if mode == "plate":
+            from feedback.plate import prepare_videos
+            prepare_videos(settings, project_path(args.out))
         inputs = gate.check_inputs(settings, mode)
         warnings = list(inputs.get("warnings", []))
         results = _run_segments(settings, args, overrides, mode, validate=True)
@@ -265,9 +301,11 @@ def main(argv: list[str] | None = None) -> int:
             measured = _run_metrics(results, project_path(args.out))
             if args.until in ("findings", "report"):
                 reference = settings.get("ref", settings.get("expert"))
-                gate.check_reference(measured["ref"], reference.get("rep", 1))
-                findings = _run_findings(measured, settings, project_path(args.out))
-                gate.check_comparable(findings, measured["ref"], reference.get("rep", 1))
+                if mode != "plate":
+                    gate.check_reference(measured["ref"], reference.get("rep", 1))
+                findings = _run_findings(measured, settings, project_path(args.out), plate=mode == "plate")
+                if mode != "plate":
+                    gate.check_comparable(findings, measured["ref"], reference.get("rep", 1))
                 _print_descriptions(findings)
                 if args.until == "report":
                     _run_report(results, measured, findings, args, warnings=warnings, angles=angles)
@@ -284,6 +322,8 @@ def main(argv: list[str] | None = None) -> int:
                 command.extend(["--segment", args.segment])
             if args.ckpt:
                 command.extend(["--ckpt", args.ckpt.as_posix()])
+            if args.model:
+                command.extend(["--model", args.model.as_posix(), "--device", args.device])
             try:
                 failure = export_failure(reason, project_path(args.out), command,
                                          remedy=getattr(error, "remedy", None),

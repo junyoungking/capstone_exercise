@@ -4,11 +4,13 @@ from __future__ import annotations
 
 from pathlib import Path
 import zipfile
+import hashlib
+import json
 
 import numpy as np
 
 
-def _read_cache(cache_path: Path, video_path: Path, mtime_ns: int) -> dict | None:
+def _read_cache(cache_path: Path, video_path: Path, mtime_ns: int, selection: str = "first") -> dict | None:
     if not cache_path.is_file():
         return None
     try:
@@ -16,6 +18,9 @@ def _read_cache(cache_path: Path, video_path: Path, mtime_ns: int) -> dict | Non
             if str(saved["video"].item()) != video_path.as_posix():
                 return None
             if int(saved["mtime_ns"].item()) != mtime_ns:
+                return None
+            saved_selection = str(saved["selection"].item()) if "selection" in saved else "first"
+            if saved_selection != selection:
                 return None
             data = {
                 "lms": saved["lms"].copy(),
@@ -49,6 +54,7 @@ def extract_pose(
     exercise: str,
     *,
     no_cache: bool = False,
+    plate_rows: list | None = None,
 ) -> dict:
     """extract_sequence의 검출·스무딩을 재사용하고 경로·mtime으로 캐시를 확인한다."""
     video_path = Path(video_path).resolve()
@@ -56,8 +62,11 @@ def extract_pose(
     if not video_path.is_file():
         raise FileNotFoundError(video_path)
     mtime_ns = video_path.stat().st_mtime_ns
+    selection = "first" if plate_rows is None else "plate-v1:" + hashlib.sha256(
+        json.dumps([exercise, [(r['seq'], r.get('plate')) for r in plate_rows]],
+                   sort_keys=True).encode()).hexdigest()
     if not no_cache:
-        cached = _read_cache(cache_path, video_path, mtime_ns)
+        cached = _read_cache(cache_path, video_path, mtime_ns, selection)
         if cached is not None:
             return cached
 
@@ -65,7 +74,8 @@ def extract_pose(
     from offline_compare import extract_sequence
 
     info = video_info(video_path)
-    sequence = extract_sequence(video_path, exercise)
+    sequence = (extract_sequence(video_path, exercise) if plate_rows is None
+                else extract_plate_sequence(video_path, exercise, plate_rows))
     lms = np.full((len(sequence), 33, 4), np.nan, dtype=np.float32)
     valid = np.array([frame is not None for frame in sequence], dtype=bool)
     for frame_index, frame in enumerate(sequence):
@@ -80,8 +90,55 @@ def extract_pose(
         "total": len(sequence),
         "video": video_path.as_posix(),
         "mtime_ns": mtime_ns,
+        "selection": selection,
     }
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(cache_path, **data)
     data["cache_hit"] = False
     return data
+
+
+def choose_plate_candidate(candidates, row, previous_center, exercise, size):
+    """select_lifter consumes pixel x/y; feedback smoothing consumes normalized x/y."""
+    from feedback import plate  # establish the plate package import path
+    from core.recog.pose import select_lifter, person_center
+
+    pixel = [np.asarray(candidate, dtype=float).copy() for candidate in candidates[:2]]
+    for candidate in pixel:
+        candidate[:, :2] *= np.asarray(size)
+    box = row.get("plate", {}).get("box") if row.get("plate", {}).get("used") else None
+    index = select_lifter(pixel, box, previous_center, exercise, image_size=size)
+    if index is None:
+        return None, previous_center
+    center = person_center(pixel[index])
+    return candidates[index], center if center is not None else previous_center
+
+
+def extract_plate_sequence(video_path, exercise, rows):
+    import cv2
+    from unified_feedback_v4 import (create_landmarker, MODEL_PATH, extract_all_landmarks,
+                                     LandmarkSmoother, valid_lms)
+
+    capture = cv2.VideoCapture(str(video_path))
+    if not capture.isOpened():
+        raise RuntimeError(f"영상을 열 수 없습니다: {video_path}")
+    fps = capture.get(cv2.CAP_PROP_FPS)
+    smoother, sequence, previous = LandmarkSmoother(), [], None
+    try:
+        with create_landmarker(MODEL_PATH) as landmarker:
+            while True:
+                ok, image = capture.read()
+                if not ok:
+                    break
+                seq = len(sequence)
+                if seq >= len(rows):
+                    raise ValueError("포즈 프레임이 원판 rows보다 많습니다")
+                candidates = extract_all_landmarks(landmarker, image, int(seq / fps * 1000))
+                raw, previous = choose_plate_candidate(candidates, rows[seq], previous, exercise,
+                                                        (image.shape[1], image.shape[0]))
+                sequence.append(smoother.update(raw) if valid_lms(raw) else None)
+    finally:
+        capture.release()
+    if len(sequence) != len(rows):
+        raise ValueError(f"원판 rows({len(rows)})와 포즈 프레임({len(sequence)})이 다릅니다")
+    return sequence

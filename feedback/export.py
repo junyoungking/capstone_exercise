@@ -97,17 +97,17 @@ def _description_map(findings: dict[str, Any]) -> dict[int, dict[str, Any]]:
     return {int(item["rep"]): item for item in describe_reps(findings)}
 
 
-def _cell_label(cell: dict[str, Any]) -> str:
+def _cell_label(cell: dict[str, Any], exercise: str = "squat") -> str:
     metric = config.METRIC_LABELS_KO.get(cell["metric"], cell["metric"])
-    where = config.POSITION_LABELS.get(cell["where"], cell["where"])
+    where = config.position_labels(exercise).get(cell["where"], cell["where"])
     return f"{where} · {metric}"
 
 
-def _enriched_cells(cells: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _enriched_cells(cells: list[dict[str, Any]], exercise: str = "squat") -> list[dict[str, Any]]:
     enriched = []
     for cell in cells:
         item = deepcopy(cell)
-        item["label"] = _cell_label(cell)
+        item["label"] = _cell_label(cell, exercise)
         enriched.append(item)
     return enriched
 
@@ -127,6 +127,7 @@ def _enriched_goal(
     user_segment: dict[str, Any],
     ref_segment: dict[str, Any],
     description: dict[str, Any],
+    exercise: str = "squat",
 ) -> dict[str, Any] | None:
     goal = rep.get("goal")
     if goal is None:
@@ -141,7 +142,7 @@ def _enriched_goal(
     evidence = []
     for reference in goal.get("evidence", []):
         cell = deepcopy(cells[(reference["where"], reference["metric"])])
-        cell["label"] = _cell_label(cell)
+        cell["label"] = _cell_label(cell, exercise)
         evidence.append(cell)
     enriched["evidence"] = evidence
     return enriched
@@ -162,7 +163,7 @@ def _enriched_reps(
             goal = None
             exclude_sentence = description["goal_sentence"]
         else:
-            goal = _enriched_goal(rep, by_user_rep[rep_number], ref_segment, description)
+            goal = _enriched_goal(rep, by_user_rep[rep_number], ref_segment, description, findings["exercise"])
             exclude_sentence = None
         reps.append({
             "rep": rep_number,
@@ -171,7 +172,7 @@ def _enriched_reps(
             "exclude_sentence": exclude_sentence,
             "tab_label": description["tab_label"],
             "goal": goal,
-            "cells": _enriched_cells(rep.get("cells", [])),
+            "cells": _enriched_cells(rep.get("cells", []), findings["exercise"]),
             "tempo": {
                 "items": deepcopy(rep.get("tempo", [])),
                 "ratio": deepcopy(rep.get("tempo_ratio", {})),
@@ -244,8 +245,8 @@ def build_report(
             "view": user_segments.get("view"),
             "threshold_note": "임계값은 임시값(v4)",
             "positions": list(config.POSITIONS),
-            "position_labels": dict(config.POSITION_LABELS),
-            "phase_labels": dict(config.PHASE_LABELS),
+            "position_labels": config.position_labels(exercise),
+            "phase_labels": config.phase_labels(exercise),
             "metric_labels": _metric_labels(exercise),
             "thresholds": deepcopy(findings.get("thresholds", {})),
             "tempo_thresholds": deepcopy(findings.get("tempo_thresholds", {})),

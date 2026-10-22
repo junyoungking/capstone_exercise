@@ -136,7 +136,7 @@ def _select_posture_goal(rep: dict[str, Any], exercise: str) -> dict[str, Any]:
     consumed: set[tuple[str, str]] = set()
     goals: list[dict[str, Any]] = []
 
-    for key, group in config.GROUPS.items():
+    for key, group in (config.GROUPS.items() if exercise == "squat" else []):
         goal = _group_candidate(key, group, by_place_metric, metric_order)
         if goal is None:
             continue

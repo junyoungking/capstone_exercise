@@ -72,9 +72,9 @@ def test_labels_select_the_default_mode_with_both_reference_keys(ref_key):
     assert run_demo.segment_mode(settings, "model") == "model"
 
 
-def test_model_is_the_default_without_manual_labels():
+def test_plate_is_the_default_without_manual_labels():
     settings = {"user": {"video": "user.mp4"}, "ref": {"video": "ref.mp4"}}
-    assert run_demo.segment_mode(settings) == "model"
+    assert run_demo.segment_mode(settings) == "plate"
     assert run_demo.segment_mode(settings, "labels") == "labels"
 
 

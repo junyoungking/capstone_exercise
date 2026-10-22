@@ -92,13 +92,13 @@ def _position_values(frame_metrics: dict[str, list[float | None]], frame: int) -
     return values
 
 
-def _exclude_reason(detect: dict[str, float]) -> str | None:
+def _exclude_reason(detect: dict[str, float], exercise: str = "squat") -> str | None:
     minimum = float(config.MIN_VALID_RATIO)
     for phase in config.PHASES:
         ratio = detect[phase]
         if ratio < minimum:
             return config.DETECTION_REASON_TEMPLATE.format(
-                phase=config.PHASE_LABELS[phase], ratio=ratio, minimum=minimum
+                phase=config.phase_labels(exercise)[phase], ratio=ratio, minimum=minimum
             )
     return None
 
@@ -123,7 +123,7 @@ def build_metrics(pose: dict, segments: dict) -> dict:
             phase: _phase_detection(valid, int(phases[phase][0]), int(phases[phase][1]))
             for phase in config.PHASES
         }
-        exclude_reason = _exclude_reason(detect)
+        exclude_reason = _exclude_reason(detect, exercise)
         positions = {}
         for position in config.POSITIONS:
             frame = int(source["positions"][position])

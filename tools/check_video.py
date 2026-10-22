@@ -15,6 +15,7 @@ import argparse
 import json
 import shutil
 import subprocess
+from statistics import median
 from pathlib import Path
 
 import cv2
@@ -29,9 +30,9 @@ def ffprobe(path: Path) -> dict:
         return {"_error": "ffprobe 가 없습니다. ffmpeg 를 설치하세요."}
     cmd = [
         "ffprobe", "-v", "error", "-select_streams", "v:0", "-print_format", "json",
-        "-show_entries",
+        "-show_streams", "-show_packets", "-show_entries",
         "stream=codec_name,profile,pix_fmt,width,height,r_frame_rate,avg_frame_rate,nb_frames"
-        ":stream_side_data=rotation:format=duration",
+        ":packet=pts_time:format=duration",
         str(path),
     ]
     try:
@@ -44,6 +45,11 @@ def ffprobe(path: Path) -> dict:
     for sd in st.get("side_data_list", []) or []:
         if "rotation" in sd:
             rot = int(sd["rotation"])
+    timestamps = sorted(float(p["pts_time"]) for p in d.get("packets", []) if "pts_time" in p)
+    intervals = [b - a for a, b in zip(timestamps, timestamps[1:]) if b > a]
+    # Permit timebase rounding; detect actual cadence changes even when r == avg.
+    typical = median(intervals) if intervals else 0
+    variable = any(abs(delta - typical) > max(.001, typical * .05) for delta in intervals)
 
     def rate(s):
         try:
@@ -59,6 +65,8 @@ def ffprobe(path: Path) -> dict:
         "w": st.get("width"), "h": st.get("height"),
         "r_fps": round(rate(st.get("r_frame_rate", "0/1")), 3),
         "avg_fps": round(rate(st.get("avg_frame_rate", "0/1")), 3),
+        "avg_rate": st.get("avg_frame_rate", "0/1"),
+        "variable_fps": variable,
         "nb_frames": int(st["nb_frames"]) if st.get("nb_frames") else None,
         "rotation": rot,
         "duration": round(float(d.get("format", {}).get("duration", 0)), 3),
@@ -110,7 +118,7 @@ def diagnose(path: Path) -> list:
         problems.append("10bit 영상 — 브라우저가 디코딩하지 못할 수 있습니다")
 
     if fp.get("r_fps") and fp.get("avg_fps"):
-        if abs(fp["r_fps"] - fp["avg_fps"]) > 0.2:
+        if fp.get("variable_fps") or abs(fp["r_fps"] - fp["avg_fps"]) > 0.2:
             problems.append(
                 f"가변 프레임레이트 (r {fp['r_fps']} vs avg {fp['avg_fps']}) — "
                 "프레임 번호와 재생 시간이 어긋납니다")
@@ -134,9 +142,14 @@ def diagnose(path: Path) -> list:
     return problems
 
 
-def fix(path: Path, outdir: Path) -> Path:
+def fix(path: Path, outdir: Path, *, fps: float | None = None) -> Path:
     """브라우저·OpenCV 양쪽에서 동일하게 읽히는 형태로 다시 인코딩.
-    회전을 픽셀에 굽고, 고정 30fps 로 맞추고, H.264 8bit 로 변환한다."""
+    회전을 픽셀에 굽고, 원래 평균 fps의 CFR, H.264 8bit로 변환한다."""
+    probe = ffprobe(path)
+    rate = str(fps) if fps is not None else probe.get("avg_rate", str(probe.get("avg_fps", 0)))
+    from fractions import Fraction
+    if Fraction(rate) <= 0:
+        raise ValueError(f"원래 평균 fps를 읽을 수 없습니다: {path}")
     outdir.mkdir(parents=True, exist_ok=True)
     dst = outdir / (path.stem + "_web.mp4")
     cmd = [
@@ -144,7 +157,7 @@ def fix(path: Path, outdir: Path) -> Path:
         "-i", str(path),
         "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",   # 홀수 해상도 방지
         "-c:v", "libx264", "-profile:v", "high", "-pix_fmt", "yuv420p",
-        "-r", "30", "-vsync", "cfr",                  # 고정 프레임레이트
+        "-r", rate, "-vsync", "cfr",
         "-metadata:s:v", "rotate=0",                  # 회전 메타데이터 제거
         "-movflags", "+faststart", "-an",
         str(dst),
@@ -158,6 +171,7 @@ def main():
     ap = argparse.ArgumentParser(description="영상 진단 및 브라우저 호환 변환")
     ap.add_argument("videos", nargs="+", type=Path)
     ap.add_argument("--fix", action="store_true", help="문제가 있으면 재인코딩")
+    ap.add_argument("--fps", type=float, help="변환 fps 지정 (예: 30); 생략하면 원래 평균 fps 유지")
     ap.add_argument("--outdir", type=Path, default=Path("data/videos_web"))
     args = ap.parse_args()
 
@@ -167,7 +181,7 @@ def main():
             continue
         problems = diagnose(v)
         if args.fix and problems:
-            new = fix(v, args.outdir)
+            new = fix(v, args.outdir, fps=args.fps)
             print("  변환본 재진단")
             diagnose(new)
             print(f"\n  라벨 JSON 의 video 를 {new} 로 바꾸고 프레임 번호를 다시 확인하세요.")

@@ -10,17 +10,19 @@ def _amount(cell: dict) -> int:
     return round(abs(cell["diff"]) * scale)
 
 
-def _tempo_sentence(rep: dict) -> str | None:
+def _tempo_sentence(rep: dict, exercise: str = "squat") -> str | None:
     goal = rep["tempo_goal"]
     if goal is None:
         return None
     metric = goal["metric"]
     if metric == "bottom_s":
-        return config.TEMPO_BOTTOM_TEMPLATE.format(
+        template = config.TEMPO_BOTTOM_TEMPLATE.replace("바닥", config.phase_labels(exercise)["bottom"])
+        return template.format(
             n=abs(goal["diff"]), direction=config.TEMPO_BOTTOM_DIRECTIONS[goal["dir"]])
     phase = metric.removesuffix("_s")
-    return config.TEMPO_MOVEMENT_TEMPLATE.format(
-        phase=config.PHASE_LABELS[phase], n=abs(goal["diff"]),
+    return (config.TEMPO_MOVEMENT_TEMPLATE.replace("하강:상승", "상승:하강")
+            if exercise == "deadlift" else config.TEMPO_MOVEMENT_TEMPLATE).format(
+        phase=config.phase_labels(exercise)[phase], n=abs(goal["diff"]),
         direction=config.TEMPO_MOVEMENT_DIRECTIONS[goal["dir"]],
         user_ratio=rep["tempo_ratio"]["user"], ref_ratio=rep["tempo_ratio"]["ref"])
 
@@ -46,14 +48,14 @@ def describe_reps(findings: dict) -> list[dict]:
                 metric = goal["metric"]
                 cell = cells[goal["where"], metric]
                 amount = _amount(cell)
-                where = config.POSITION_LABELS[goal["where"]]
+                where = config.position_labels(findings["exercise"])[goal["where"]]
                 phrase = config.METRIC_TEMPLATES[metric][goal["dir"]].format(n=amount)
                 sentence = config.SINGLE_TEMPLATE.format(where=where, phrase=phrase)
                 label = config.TAB_SINGLE_TEMPLATE.format(
                     where=where, metric=config.METRIC_LABELS_KO[metric],
                     sign="+" if goal["dir"] == "+" else "−", n=amount,
                     unit="%" if cell["unit"] == "ratio" else "°")
-            tempo_sentence = _tempo_sentence(rep)
+            tempo_sentence = _tempo_sentence(rep, findings["exercise"])
         described.append({"rep": rep["rep"], "tab_label": label,
                           "goal_sentence": sentence, "tempo_sentence": tempo_sentence})
     return described

@@ -548,3 +548,65 @@ docs/design.md 7장 {N}단계 구현해.
 수정 가능 파일과 완료 조건은 7장 {N}단계 그대로.
 끝나면 AGENTS.md "단계 끝 보고" 형식으로 보고.
 ```
+
+## 12. plate 모드 (S2)
+
+`--segment plate`는 수동 라벨을 사용하지 않는다. 양쪽 설정에 `reps`가 있으면 기존 labels 모드, 없으면 plate가 기본이다. `--segment model --ckpt ...`는 기존 ST-GCN 동작을 유지한다. 종목은 `squat`, `benchpress` (`bench`도 허용), `deadlift`다. 원판 API에는 벤치를 `bench`로 전달한다.
+
+### 입력과 같은 프레임 사용
+
+- 원판 분석·MediaPipe·브라우저 재생은 같은 영상 파일을 쓴다. HEVC 등 브라우저 비호환 코덱, 10bit, 회전 또는 가변 fps면 `out/<run>/video_<role>/`에 H.264 yuv420p 사본을 만든다. 회전은 픽셀에 굽고, 원래 평균 fps(유리수)의 CFR, 무음으로 변환한다. 같은 입력 파일은 사본 하나를 공유한다. 호환 영상은 원본을 쓴다.
+- `tools/check_video.py VIDEO --fix`도 원래 평균 fps를 유지한다. `--fps 30`을 명시할 때만 30 fps로 바꾼다.
+- 역할마다 `plate_pipeline.server.jobs.process_video(..., pose=False)`를 호출한다. `--model`은 원판 ONNX, `--device auto|cuda|cpu`는 검출 장치다. 모델 없이 실행하면 역할별 `plate_box: [x0,y0,x1,y1]`가 첫 상자다. 좌표는 회전이 구워진 분석 영상 기준이다.
+- 결과는 `plate_<role>/result.json`, `rows.jsonl.gz`에 남긴다. 외부에서 쓰는 원판 출력은 `process_video`, `read_rows`, `height_signal`, `result.json`이다. rows 수·seq와 포즈 프레임 수가 다르면 오류로 멈춘다.
+
+### rep·phase·포지션
+
+모든 세트의 `rep_values`를 시작 시각 순으로 합쳐 1부터 번호를 붙인다. `ref.rep`도 이 전체 번호다. `back == null`인 rep은 `rep 끝 시점 없음`으로 제외하고, 번호와 이유를 `segments_*.json.excluded_reps`에 남긴다. `plate_rep_count`는 제외 전 개수다.
+
+각 시각은 rows의 `t`가 가장 가까운 행의 `seq`로 변환한다. phase는 반열림 구간이다:
+
+- down = `[start, far_in)`
+- bottom = `[far_in, far_out + 1)`
+- up = `[far_out + 1, back + 1)`
+
+`far_in > far_out`이면 그 두 시각 사이에서 시작 높이와 가장 먼 프레임 하나를 bottom으로 쓴다. phase는 빈틈 없이 이어진다.
+
+높이는 `height_signal(rows)`를 rows 시각에 보간한 값이다. START=start, LOCKOUT=back. BOTTOM은 far_in~far_out에서 시작(쉬는 자리) 높이와 가장 먼 프레임이다. MID_DOWN은 START~BOTTOM에서 두 끝 높이의 중간을 처음 지난 프레임이고, MID_UP은 BOTTOM~LOCKOUT에서 두 끝 높이의 중간을 처음 지난 프레임이다. 높이가 내려가거나 올라가는 양방향을 처리한다. `source`는 `plate`이며 수동 포지션 수정은 기존 `+override` 형식을 따른다. side·facing은 기존 포즈 방식이다.
+
+키는 START, MID_DOWN, BOTTOM, MID_UP, LOCKOUT을 유지하고 화면 이름만 바꾼다.
+
+| 종목 | 다섯 포지션 순서 | 템포 down / bottom / up |
+|---|---|---|
+| 스쿼트 | 시작 · 하강 중간 · 바닥 · 상승 중간 · 락아웃 | 하강 / 바닥 / 상승 |
+| 벤치 | 시작 · 하강 중간 · 가슴 · 상승 중간 · 락아웃 | 하강 / 가슴 / 상승 |
+| 데드 | 시작(바닥) · 상승 중간 · 락아웃 · 하강 중간 · 끝(바닥) | 상승 / 위 / 하강 |
+
+### 포즈와 비교
+
+plate 모드는 MediaPipe의 최대 두 후보를 매 프레임 받고 정규화 x/y를 픽셀로 바꿔 `core.recog.pose.select_lifter`에 원판 상자·직전 사람 중심을 전달한다. 고른 사람만 정규화 좌표에서 기존 스무딩을 한다. 원판이 없는 프레임도 select_lifter의 기존 규칙으로 고른다. 포즈 캐시에는 선택 방식과 원판 rows의 해시를 기록한다. labels/model의 첫 사람 선택 캐시와 섞지 않는다. 같은 영상·같은 rows인 두 역할은 포즈를 한 번만 추출한다.
+
+임계값, 검출률 60%, 측정 칸 50%, 목표 선택 배수, 색·글자는 기존 기준을 유지한다. 기준 rep이 제외되면 plate 모드는 사용자 rep도 비교에서 제외하고 이유를 기록한 findings와 report를 생성한다. 이때 목표 문장은 생성하지 않는다. labels/model은 기존 실패 화면 동작을 유지한다.
+
+벤치 `lockout_angle_min`은 `elbow_angle`과 같은 값이라 보조 지표로 표시하고 목표에서 뺀다. depth 묶음은 스쿼트만 쓴다. 팔꿈치각과 손목-팔꿈치 거리는 판정어 없이 방향·크기만 말한다. 3D 보기에는 H36M 팔꿈치(오른쪽 14·15·16 / 왼쪽 11·12·13), 손목-팔꿈치(15·16 / 12·13) 대응을 추가한다.
+
+### 실행
+
+설정 예시 (프로젝트 루트 기준 상대경로 또는 절대경로):
+
+```json
+{
+  "exercise": "squat",
+  "user": {"video": "/path/test_squat.mov", "view": "side", "plate_box": [710,920,1075,1290]},
+  "ref": {"video": "/path/test_squat.mov", "view": "side", "rep": 3, "plate_box": [710,920,1075,1290]}
+}
+```
+
+```bash
+python run_demo.py --config /path/sample.json --out out/sample --segment plate
+python run_demo.py --config /path/team.json --out out/team --model /path/plate_tiny.onnx --device cpu
+python -m pytest -q tests/fb
+(cd plate_pipeline && python -m pytest -q tests)
+```
+
+모델 없는 공개 샘플은 첫 명령을 쓴다. 팀 설정은 운동별 영상 경로와 `ref.rep: 1`을 넣고 두 번째 명령을 쓴다. MediaPipe 파일은 루트의 `pose_landmarker_lite.task`이며 `HAND_PROJECT_DIR`로 파일이 있는 폴더를 지정할 수 있다. 실제 실행 환경: NumPy 2.5.3. 시험 중 Node가 필요하다 (리포트 JavaScript 시험).

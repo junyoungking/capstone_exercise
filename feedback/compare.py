@@ -50,7 +50,7 @@ def _reference_available_ratio(rep: dict, exercise: str) -> float:
     return sum(_finite(value) for value in values) / len(values)
 
 
-def compare_reps(user: dict, ref: dict, ref_rep: int = 1) -> dict:
+def compare_reps(user: dict, ref: dict, ref_rep: int = 1, *, allow_excluded_reference: bool = False) -> dict:
     exercise = user["exercise"]
     if exercise != ref["exercise"]:
         raise ValueError({"user": exercise, "ref": ref["exercise"]})
@@ -58,10 +58,15 @@ def compare_reps(user: dict, ref: dict, ref_rep: int = 1) -> dict:
     if len(matches) != 1:
         raise ValueError({"ref_rep": ref_rep, "matches": len(matches)})
     reference = matches[0]
+    reference_reason = None
     if (reference["excluded"]
             or any(value < config.MIN_VALID_RATIO for value in reference["detect"].values())
             or _reference_available_ratio(reference, exercise) < config.MIN_REP_METRIC_RATIO):
-        raise ValueError(config.REF_EXCLUDE_REASON)
+        if not allow_excluded_reference:
+            raise ValueError(config.REF_EXCLUDE_REASON)
+        reference_reason = "레퍼런스 rep 제외: " + (reference.get("exclude_reason") or
+            config.METRIC_REASON_TEMPLATE.format(ratio=_reference_available_ratio(reference, exercise),
+                                                minimum=config.MIN_REP_METRIC_RATIO))
 
     reps = []
     for user_rep in user["reps"]:
@@ -69,6 +74,8 @@ def compare_reps(user: dict, ref: dict, ref_rep: int = 1) -> dict:
         available_ratio = sum(cell["status"] != "unavailable" for cell in cells) / len(cells)
         reason = user_rep["exclude_reason"]
         excluded = user_rep["excluded"]
+        if reference_reason:
+            excluded, reason = True, reference_reason
         if not excluded and available_ratio < config.MIN_REP_METRIC_RATIO:
             excluded = True
             reason = config.METRIC_REASON_TEMPLATE.format(ratio=available_ratio,
