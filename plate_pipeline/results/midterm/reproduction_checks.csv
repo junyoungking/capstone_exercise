@@ -1,0 +1,33 @@
+check,actual,expected,pass
+effective_split_hash (v40 full partition definition),c91ed670f0851ca78f5358224b0084f6ce9f2a0310dcb3099943db196ab68ca0,c91ed670f0851ca78f5358224b0084f6ce9f2a0310dcb3099943db196ab68ca0,True
+test membership vs records,73,73,True
+reference_test/videos,64,64,True
+reference_test/gt_reps,242,242,True
+reference_test/pred_reps,162,162,True
+reference_test/count_mae,1.25,1.25,True
+reference_test/count_exact,0.453125,0.453125,True
+reference_test/obo,0.859375,0.859375,True
+reference_test/event_f1,0.7574257425742574,0.7574257425742574,True
+reference_test/event_tp,153,153,True
+reference_test/event_fp,9,9,True
+reference_test/event_fn,89,89,True
+custom_test/videos,9,9,True
+custom_test/gt_reps,12,12,True
+custom_test/pred_reps,10,10,True
+custom_test/count_mae,0.4444444444444444,0.4444444444444444,True
+custom_test/count_exact,0.5555555555555556,0.5555555555555556,True
+custom_test/obo,1.0,1.0,True
+custom_test/event_f1,0.45454545454545453,0.45454545454545453,True
+custom_test/event_tp,5,5,True
+custom_test/event_fp,5,5,True
+custom_test/event_fn,7,7,True
+all_test/videos,73,73,True
+all_test/gt_reps,254,254,True
+all_test/pred_reps,172,172,True
+all_test/count_mae,1.1506849315068493,1.1506849315068493,True
+all_test/count_exact,0.4657534246575342,0.4657534246575342,True
+all_test/obo,0.8767123287671232,0.8767123287671232,True
+all_test/event_f1,0.7417840375586855,0.7417840375586855,True
+all_test/event_tp,158,158,True
+all_test/event_fp,14,14,True
+all_test/event_fn,96,96,True
