@@ -24,7 +24,8 @@ def _candidate_cells(rep: dict[str, Any]) -> list[dict[str, Any]]:
         for cell in rep.get("cells", [])
         if cell.get("status") == "ok"
         and cell.get("k") is not None
-        and float(cell["k"]) > config.K_NONE_MAX
+        and (cell["goal_eligible"] if "goal_eligible" in cell
+             else float(cell["k"]) > config.K_NONE_MAX)
     ]
 
 
@@ -179,7 +180,7 @@ def select_goals(findings: dict[str, Any]) -> dict[str, Any]:
             rep["tempo_goal"] = None
             continue
         rep["goal"] = _select_posture_goal(rep, exercise)
-        rep["tempo_goal"] = _select_tempo_goal(rep)
+        rep["tempo_goal"] = None if selected.get("source") == "plate" else _select_tempo_goal(rep)
     return selected
 
 

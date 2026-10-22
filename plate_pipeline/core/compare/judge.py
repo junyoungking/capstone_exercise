@@ -123,17 +123,21 @@ def compare_inset(sm, value, cfg: CmpCfg = DEFAULT.cmp, K: Multipliers = None) -
     return _finish(c)
 
 
-def compare_ref(mine, ref, value, cfg: CmpCfg = DEFAULT.cmp, K: Multipliers = None) -> Compare:
+def compare_series_ref(a, b, value, *, floor_a, floor_b, min_change,
+                       cfg: CmpCfg = DEFAULT.cmp, K: Multipliers = None,
+                       min_ref_n=1, max_user_scatter=None) -> Compare:
+    """Shared reference test for any Series, with value-specific noise/size units.
+
+    Scatter still requires three consecutive rep slots. The optional instability
+    guard applies to raw user scatter, before its measurement floor is applied.
+    Plate wrappers pass their existing floors/minimum changes and no guard.
+    """
     K = K or multipliers()
-    a, b = mine.get(value), ref.get(value)
     c = Compare("vs_ref", value, "skip", n_a=a.n, n_b=b.n)
-    if b.n == 0:                      # the reference has other values but not this one
-        c.reason, c.need = "ref_too_short", (cfg.short_ref_n if value == "far_pause" else 1)
+    if b.n < min_ref_n:
+        c.reason, c.need = "ref_too_short", min_ref_n
         return c
     short = b.n < cfg.short_ref_n
-    if value == "far_pause" and short:
-        c.reason, c.need = "ref_too_short", cfg.short_ref_n
-        return c
     need = cfg.short_ref_user_min_n if short else cfg.ref_user_min_n
     if a.n < need:
         c.reason, c.need = "set_too_short", need
@@ -142,8 +146,10 @@ def compare_ref(mine, ref, value, cfg: CmpCfg = DEFAULT.cmp, K: Multipliers = No
     if sa is None:
         c.reason, c.side = "no_scatter", "mine"
         return c
-    fl = floor_for(value, mine.fps, cfg)
-    c.s_a = max(sa, fl)
+    if max_user_scatter is not None and sa > max_user_scatter:
+        c.reason, c.s_a = "unstable_user", sa
+        return c
+    c.s_a = max(sa, floor_a)
     if short:
         c.se = c.s_a * math.sqrt(1 / a.n + 1 / b.n)
         c.k = K.short(a.n)
@@ -152,13 +158,21 @@ def compare_ref(mine, ref, value, cfg: CmpCfg = DEFAULT.cmp, K: Multipliers = No
         if sb is None:
             c.reason, c.side = "no_scatter", "ref"
             return c
-        c.s_b = max(sb, floor_for(value, ref.fps, cfg))
+        c.s_b = max(sb, floor_b)
         c.se = math.sqrt(c.s_a ** 2 / a.n + c.s_b ** 2 / b.n)
         c.k = K.ref(a.n, b.n)
     c.a, c.b = a.median(), b.median()
     c.delta = c.a - c.b
-    c.min_change = min_change_for(value, cfg)
+    c.min_change = min_change
     return _finish(c)
+
+
+def compare_ref(mine, ref, value, cfg: CmpCfg = DEFAULT.cmp, K: Multipliers = None) -> Compare:
+    return compare_series_ref(
+        mine.get(value), ref.get(value), value,
+        floor_a=floor_for(value, mine.fps, cfg), floor_b=floor_for(value, ref.fps, cfg),
+        min_change=min_change_for(value, cfg), cfg=cfg, K=K,
+        min_ref_n=cfg.short_ref_n if value == "far_pause" else 1)
 
 
 def run_compare(mine, ref=None, cfg: CmpCfg = DEFAULT.cmp) -> List[Compare]:

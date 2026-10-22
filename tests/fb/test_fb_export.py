@@ -698,3 +698,17 @@ def test_cli_report_reruns_metrics_after_position_override(tmp_path, monkeypatch
     assert cell["user"] == 8.0 and cell["ref"] == 8.0 and cell["diff"] == 0.0
     assert report["user"]["reps"][0]["positions"]["BOTTOM"] == 8
     assert report["ref"]["reps"][0]["positions"]["BOTTOM"] == 8
+
+
+def test_plate_set_and_tempo_evidence_survives_report_export(tmp_path, monkeypatch):
+    from feedback.set_judge import compare_plate_reps
+    measured={'user':_measured(value=80),'ref':_measured(value=100)}
+    results={role:{'segments':_segment(tmp_path/f'{role}.mp4'),'pose':_pose()} for role in measured}
+    monkeypatch.setattr(export_module,'build_sprite',lambda *args:{'data':'synthetic'})
+    findings=select_goals(compare_plate_reps(measured['user'],measured['ref']))
+    report=build_report(results,measured,findings,tmp_path)
+    assert report['posture_judgments']==findings['posture_judgments']
+    assert report['set_findings']==findings['set_findings']
+    assert report['tempo_comparison']==findings['tempo_comparison']
+    assert report['reps'][0]['unjudged_cell_count']==25
+    assert report['reps'][0]['tempo']['goal'] is None
