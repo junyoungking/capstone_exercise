@@ -19,7 +19,9 @@ env/
 .ipynb_checkpoints/
 
 # Data / media files
-data/
+data/*
+!data/demo.json
+!data/labels/
 dataset/
 datasets/
 videos/
@@ -28,6 +30,10 @@ videos/
 *.mov
 *.mkv
 *.parquet
+
+# Feedback demo outputs
+out/
+player_baseline.html
 
 # Model / checkpoint files
 models/

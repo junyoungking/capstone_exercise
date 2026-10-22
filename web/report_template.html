@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>세트 후 자세 비교</title>
+<style>
+:root{color-scheme:dark;--bg:#191c23;--panel:#242832;--inset:#1c2029;--text:#eeeef2;--dim:#a3aaba;--rule:#3b4250;
+  --down:#2E5C8A;--bottom:#6B4E9E;--up:#2F7A55;--yellow:#E3A008;--red:#D93F3F;--accent:#a7caff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,"Malgun Gothic",sans-serif}
+button,select{font:inherit;color:inherit;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:7px 11px}
+button{cursor:pointer}button:hover{background:#303746}button[aria-pressed=true],button[aria-current=true]{border-color:var(--accent);background:#2b3b52}
+button:disabled{opacity:.45;cursor:default}button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1500px;margin:auto;padding:24px 24px 40px}h1{font-size:22px;margin:0 0 4px;letter-spacing:-.02em}h2{font-size:15px;margin:0 0 12px}
+p{margin:0 0 12px}.muted{color:var(--dim)}.set-bar{display:flex;gap:9px 18px;align-items:center;flex-wrap:wrap;color:var(--dim);padding:12px 0}
+.set-bar strong{color:var(--text)}.badge{border:1px solid var(--rule);border-radius:4px;padding:2px 7px;font-size:12px}
+.warnings{width:100%;color:var(--dim)}.reptabs{display:flex;gap:6px;overflow-x:auto;padding:10px 0 16px}.reptabs button{white-space:nowrap}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;background:var(--dim)}.dot.yellow{background:var(--yellow)}.dot.red{background:var(--red)}
+.stage{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(350px,1fr);gap:20px;align-items:start}
+.stage>*,.side,.panel{min-width:0}.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}.vbox{position:relative;background:#080a0e;height:min(57vh,560px);overflow:hidden;border-radius:8px}
+.vbox video{display:block;width:100%;height:100%;object-fit:contain}.sprite{position:absolute;background-repeat:no-repeat;background-color:#080a0e}
+.vbox canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.vtag{position:absolute;left:10px;top:10px;background:#080a0ed9;padding:5px 9px;border-radius:4px;font-size:12px}
+.vtag b{font-weight:600}.vtag span{color:var(--dim);margin-left:7px}.view-empty{display:none;place-items:center;height:min(57vh,560px);background:#080a0e;border:1px solid var(--rule);border-radius:8px;color:var(--dim)}
+.view-3d .pair{display:none}.view-3d .view-empty{display:grid}.view-overlay .ref-box{opacity:.55}
+.report-3d{position:relative;width:100%;min-width:0;max-width:100%;overflow:hidden;background:#080a0e}
+.pose3d-toolbar{position:absolute;z-index:3;top:10px;left:10px;width:calc(100% - clamp(96px,28%,190px) - 34px);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pose3d-toolbar button{padding:5px 8px;font-size:12px;background:#10141de6}
+.pose3d-toolbar button[aria-pressed=true],.pose3d-toolbar button[aria-current=true]{background:#2b3b52;border-color:var(--accent);color:var(--text)}
+.pose3d-style{display:inline-flex}.pose3d-style button{border-radius:0}.pose3d-style button:first-child{border-radius:5px 0 0 5px}.pose3d-style button:last-child{border-radius:0 5px 5px 0;margin-left:-1px}
+.pose3d-stage,.pose3d-canvas{position:absolute;inset:0;min-width:0;max-width:100%}.pose3d-canvas canvas{display:block;width:100%;height:100%;max-width:100%;touch-action:none}
+.pose3d-message{position:absolute;z-index:2;inset:0;display:grid;place-items:center;padding:20px;text-align:center;background:#080a0ed9;color:var(--dim)}.pose3d-message[hidden]{display:none}
+.pose3d-role-label{position:absolute;z-index:2;transform:translate(-50%,-100%);padding:3px 7px;border-radius:4px;background:#10141de6;border:1px solid var(--rule);font-size:12px;white-space:nowrap;pointer-events:none;color:var(--text)}.pose3d-role-label[hidden]{display:none}
+.pose3d-pip{position:absolute;right:12px;top:12px;z-index:3;width:clamp(96px,28%,190px);max-width:calc(100% - 24px);border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:#05070a;box-shadow:0 8px 22px #0008}
+.pose3d-pip-header{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:3px 5px;font-size:11px;color:var(--dim)}.pose3d-pip-header button{padding:0 5px;line-height:20px;font-size:15px}
+.pose3d-pip video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain}.pose3d-pip.collapsed video{display:none}
+.cards{display:flex;gap:9px;overflow-x:auto;margin-top:12px;padding-bottom:5px;scroll-snap-type:x proximity}.frame-card{flex:0 0 calc((100% - 18px)/3);min-width:175px;scroll-snap-align:start;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:10px}
+.tl{margin-top:16px;padding:13px 0 22px}.position-lane{height:15px;position:relative}.position-dot{position:absolute;width:7px;height:7px;border:1px solid var(--text);border-radius:50%;background:var(--bg);transform:translateX(-50%);padding:0}
+.bands{height:25px;position:relative;background:#0f1219;cursor:pointer}.band{position:absolute;top:0;height:100%;border-right:1px solid #ffffff30}
+.band.down{background:var(--down)}.band.bottom{background:var(--bottom)}.band.up{background:var(--up)}.band.exc{opacity:.4}
+.replab{position:absolute;top:100%;color:var(--dim);font-size:10px;transform:translateX(-50%);padding-top:4px;white-space:nowrap}.cursor{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--text);pointer-events:none}
+.legend{display:flex;gap:14px;color:var(--dim);font-size:12px;margin:8px 0}.legend i{display:inline-block;width:10px;height:10px;margin-right:5px}
+.controls{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:10px}.controls label{display:flex;gap:5px;align-items:center}.frame-no{font-variant-numeric:tabular-nums;margin-left:auto;color:var(--dim)}
+.edit-bar{display:none;background:var(--panel);border:1px solid var(--rule);padding:12px;border-radius:6px;margin-top:12px}.edit-bar.active{display:block}
+.edit-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.edit-status{min-height:22px;color:var(--dim);margin-top:7px;font-size:12px}
+.side{display:grid;gap:14px}.panel{background:var(--panel);padding:17px;border:1px solid var(--rule);border-radius:8px}.foot{color:var(--dim);font-size:12px;border-top:1px solid var(--rule);margin-top:25px;padding-top:15px}
+kbd{border:1px solid var(--rule);border-radius:3px;padding:1px 5px;font:inherit}.notice{padding:10px;border:1px solid var(--rule);margin-top:10px;color:var(--dim);border-radius:6px}
+.num{font-variant-numeric:tabular-nums}.yellow{color:var(--yellow)}.red{color:var(--red)}.advisory{color:var(--dim)}
+.goal-sentence{font-size:16px;line-height:1.7}.evidence{border-top:1px solid var(--rule);padding:11px 0}.evidence-top{display:flex;gap:8px;justify-content:space-between;align-items:center}
+.evidence .badge{color:var(--dim);white-space:nowrap}.evidence-values{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:12px}
+.rangebar{height:14px;background:#121620;position:relative;margin:10px 0 4px;border-radius:3px}.ref-range{position:absolute;top:4px;height:6px;background:#7a8498;border-radius:2px}.user-marker{position:absolute;top:0;width:3px;height:14px;transform:translateX(-50%);background:var(--text)}
+.tempo-sentence{border-top:1px solid var(--rule);padding-top:12px;margin:12px 0 0;color:var(--dim)}.tempo-row{display:grid;grid-template-columns:46px 1fr;align-items:center;gap:8px;margin:9px 0}
+.tempo-track{height:36px;display:flex;background:#121620;border-radius:4px}.tempo-part{font-size:11px;display:flex;justify-content:center;align-items:center;white-space:nowrap;min-width:0;position:relative;color:var(--text)}
+.tempo-part span{position:absolute;left:50%;transform:translateX(-50%);z-index:1}.tempo-part.yellow{box-shadow:inset 0 -4px var(--yellow)}.tempo-part.red{box-shadow:inset 0 -4px var(--red)}.tempo-summary{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
+.table-scroll{width:100%;max-width:100%;min-width:0;overflow-x:auto}table{border-collapse:collapse;width:max-content;min-width:100%;font-size:12px}th,td{border-bottom:1px solid var(--rule);padding:8px 3px;text-align:center;white-space:nowrap}th:first-child{text-align:left;font-weight:500}
+td button{display:block;width:100%;font-size:12px;background:transparent;padding:5px 4px;border-color:transparent;white-space:nowrap}.advisory-note{font-size:10px;display:block}
+.table-note{font-size:11px;color:var(--dim);margin-top:9px}.graph-header{display:flex;justify-content:space-between;gap:8px;align-items:center}.graph-header h2{margin:0}.graph-header select{max-width:65%;font-size:12px}
+#graph{display:block;width:100%;height:235px;margin-top:9px}.graph-legend{display:flex;gap:12px;color:var(--dim);font-size:11px}.graph-legend i{display:inline-block;width:14px;height:3px;margin-right:4px;vertical-align:middle}.card-title{font-size:12px;font-weight:600;margin-bottom:8px}
+.card-values{display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:12px}.card-values span{color:var(--dim)}.card-diff{display:flex;align-items:baseline;justify-content:space-between;margin-top:7px;font-size:15px}.card-diff small{font-size:11px}
+@media(max-width:1100px){.stage{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.panel:last-child{grid-column:1/-1}}
+@media(max-width:650px){.wrap{padding:15px 12px}.side{grid-template-columns:1fr}.vbox{height:42vh}.frame-card{min-width:170px}.controls button{padding:7px 9px}}
+</style>
+</head>
+<body>
+<main class="wrap" id="app"></main>
+<script src="vendor/three.min.js"></script>
+<!--__POSE3D_SCRIPTS__-->
+<script>
+/* Video, sprite, canvas, diagnose and keyboard flow adapted from player_template.html. */
+const D = /*__DATA__*/null;
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+const esc = v => String(v ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let W,uv,uc,ec,esp,ux,ex_,curRep=0,curFrame=0,refFrame=0,total=0;
+let sync=true,skeleton=true,view="2d",speed=1,manualRef=null,edit=false,editRole="user",editPosition="BOTTOM",graphMetric;
+const copy = v => JSON.parse(JSON.stringify(v));
+const positions = () => W.meta.positions;
+const userRep = () => W.user.reps.find(r=>r.rep===W.reps[curRep].rep);
+const referenceRep = () => W.ref.reps[0];
+const currentFinding = () => W.reps[curRep];
+const colorHex = c => c==="red"?"#D93F3F":c==="yellow"?"#E3A008":"#eeeef2";
+const metrics = () => Object.keys(W.meta.metric_labels);
+const fmt = (v,unit="deg") => v===null||v===undefined?"—":unit==="ratio"?(v*W.meta.rules.ratio_percent_scale).toFixed(1)+"%":unit==="s"?v.toFixed(2)+"초":v.toFixed(1)+"°";
+const signed = (v,unit) => v===null||v===undefined?"—":(v<0?"−":v>0?"+":"")+fmt(Math.abs(v),unit);
+let pose3dView=null;
+const pose3dProfileCache=new WeakMap();
+
+function progressAt(frame,points,names){
+  if(frame<=points[names[0]]) return 0;
+  for(let i=0;i<names.length-1;i++){
+    if(frame<=points[names[i+1]]) return i+(frame-points[names[i]])/(points[names[i+1]]-points[names[i]]);
+  }
+  return names.length-1;
+}
+function frameAt(progress,points,names){
+  const p=clamp(progress,0,names.length-1),i=Math.min(Math.floor(p),names.length-2);
+  return Math.round(points[names[i]]+(p-i)*(points[names[i+1]]-points[names[i]]));
+}
+function referenceFrame(frame,ur,rr,names,userFps,refFps,synchronized){
+  const first=names[0],last=names[names.length-1];
+  if(!synchronized) return clamp(Math.round(rr.positions[first]+(frame-ur.positions[first])*refFps/userFps),rr.positions[first],rr.positions[last]);
+  if(frame<ur.phases.down[0]||frame>=ur.phases.up[1]) return rr.positions[first];
+  return frameAt(progressAt(frame,ur.positions,names),rr.positions,names);
+}
+function mappedRefFrame(){
+  return manualRef ?? referenceFrame(curFrame,userRep(),referenceRep(),positions(),W.user.fps,W.ref.fps,sync);
+}
+function pose3dMeta(report=W){
+  const meta=report?.meta?.pose3d||{};
+  return {parents:Array.isArray(meta.parents)?meta.parents:[],metric_joints:meta.metric_joints||{},labels:meta.labels||{},roles:meta.roles||{}};
+}
+function pose3dValidate(data,total){
+  return !!(data&&data.joints==="h36m17"&&Array.isArray(data.frames)&&
+    (total===undefined||Number(data.total)===Number(total))&&
+    (total===undefined||data.frames.length===Number(total)));
+}
+function pose3dDisplayFrame(data,frame,{mirror=false}={}){
+  if(!pose3dValidate(data)||!Number.isInteger(frame)||frame<0||frame>=data.frames.length)return null;
+  const raw=data.frames[frame];
+  if(!Array.isArray(raw)||raw.length<17)return null;
+  const points=raw.map(p=>{
+    if(!Array.isArray(p)||p.length<3||!p.every(Number.isFinite))return null;
+    const x=mirror?-p[0]:p[0];
+    return [x,-p[1],-p[2]];
+  });
+  if(points.some(p=>p===null))return null;
+  const ankles=[points[3],points[6]].filter(Boolean);
+  const floor=ankles.length?Math.min(...ankles.map(p=>p[1])):Math.min(...points.map(p=>p[1]));
+  return points.map(p=>[p[0],p[1]-floor,p[2]]);
+}
+function pose3dMedian(values){
+  if(!values.length)return 0;
+  const sorted=[...values].sort((a,b)=>a-b),middle=Math.floor(sorted.length/2);
+  return sorted.length%2?sorted[middle]:(sorted[middle-1]+sorted[middle])/2;
+}
+function pose3dBoneProfile(data,parents=pose3dMeta().parents){
+  if(!pose3dValidate(data))return {lengths:[],torsoLength:0};
+  const key=parents.join(","),cached=pose3dProfileCache.get(data);
+  if(cached?.frames===data.frames&&cached.key===key)return cached.profile;
+  const samples=parents.map(()=>[]),torsos=[];
+  for(const points of data.frames){
+    if(!Array.isArray(points)||points.length<17||points.some(p=>!Array.isArray(p)||p.length<3||!p.every(Number.isFinite)))continue;
+    for(let i=0;i<parents.length;i++){
+      const parent=parents[i];if(parent<0)continue;
+      samples[i].push(Math.hypot(...points[i].slice(0,3).map((v,axis)=>v-points[parent][axis])));
+    }
+    torsos.push(Math.hypot(...points[8].slice(0,3).map((v,axis)=>v-points[0][axis])));
+  }
+  const profile={lengths:samples.map(pose3dMedian),torsoLength:pose3dMedian(torsos),units:data.units||data.unit};
+  pose3dProfileCache.set(data,{frames:data.frames,key,profile});
+  return profile;
+}
+function pose3dFixedBones(points,profile,parents){
+  if(!points)return null;
+  const fixed=Array(points.length).fill(null),queue=[];
+  for(let i=0;i<parents.length;i++)if(parents[i]<0){fixed[i]=points[i]?[...points[i]]:null;queue.push(i);}
+  for(let cursor=0;cursor<queue.length;cursor++){
+    const parent=queue[cursor];
+    for(let i=0;i<parents.length;i++)if(parents[i]===parent){
+      if(points[i]&&points[parent]&&fixed[parent]){
+        const direction=points[i].map((v,axis)=>v-points[parent][axis]),length=Math.hypot(...direction),target=profile.lengths[i];
+        if(Number.isFinite(target)&&target>=0&&(length>0||target===0))
+          fixed[i]=fixed[parent].map((v,axis)=>v+(length?direction[axis]/length*target:0));
+      }
+      queue.push(i);
+    }
+  }
+  return fixed;
+}
+function pose3dRobotFrame(data,frame,options={},parents=pose3dMeta().parents){
+  const points=pose3dDisplayFrame(data,frame,options);
+  if(!points)return null;
+  const fixed=pose3dFixedBones(points,pose3dBoneProfile(data,parents),parents);
+  if(!fixed||fixed.some(p=>!p))return null;
+  const floor=Math.min(fixed[3][1],fixed[6][1]);
+  return fixed.map(p=>[p[0],p[1]-floor,p[2]]);
+}
+function pose3dMannequinSpec(profile){
+  const scale=1.55,unit=profile?.units==="m"?1:(profile?.torsoLength||.5)/.5,factor=unit*scale;
+  return {scale,headRadius:.10*factor,torsoRadius:.13*factor,thighRadius:.075*factor,
+    shinRadius:.055*factor,upperArmRadius:.045*factor,forearmRadius:.04*factor,
+    jointRadius:.05*factor,neckRadius:.025*factor,hipRadius:.09*factor,shoulderRadius:.07*factor};
+}
+function pose3dRepScenePoints(report,poses,userSegment,refSegment){
+  const points=[],parents=pose3dMeta(report).parents;
+  for(const [role,segment,offset] of [["user",userSegment,-.55],["ref",refSegment,.55]]){
+    const data=poses?.[role];if(!segment||!pose3dValidate(data,report[role].total))continue;
+    const start=Math.max(0,Math.min(segment.positions.START,segment.phases?.down?.[0]??segment.positions.START));
+    const end=Math.min(data.frames.length-1,Math.max(segment.positions.LOCKOUT,(segment.phases?.up?.[1]??segment.positions.LOCKOUT+1)-1));
+    const spec=pose3dMannequinSpec(pose3dBoneProfile(data,parents)),options={mirror:role==="ref"&&report.ref.mirror};
+    for(let frame=start;frame<=end;frame++){
+      const raw=pose3dScenePoints(pose3dDisplayFrame(data,frame,options),offset);
+      const robot=parents.length?pose3dScenePoints(pose3dRobotFrame(data,frame,options,parents),offset):null;
+      for(const [shape,radius] of [[raw,.06],[robot,Math.max(spec.headRadius,spec.torsoRadius,spec.thighRadius*1.1)]]){
+        if(!shape)continue;
+        for(const p of shape)points.push(p,p.map(v=>v-radius),p.map(v=>v+radius));
+      }
+    }
+  }
+  return points;
+}
+function pose3dGoalJoints(report,finding,role,userSegment,refSegment){
+  const goal=finding?.goal;
+  if(!goal||goal.type==="none")return [];
+  const side=(role==="ref"?refSegment:userSegment)?.side||"left";
+  const mapping=pose3dMeta(report).metric_joints;
+  return [...new Set((goal.metrics||[goal.metric]).flatMap(metric=>mapping[metric]?.[side]||[]))];
+}
+function pose3dFrameIndices(report,userFrame,refFrameValue){
+  return {user:clamp(Math.round(userFrame),0,report.user.total-1),
+          ref:clamp(Math.round(refFrameValue),0,report.ref.total-1)};
+}
+function pose3dCameraPreset(name,distance=3){
+  const presets={side:[distance,1.35,0],front:[0,1.35,distance],top:[0,distance+.8,.01],back:[0,1.35,-distance]};
+  return presets[name]||presets.side;
+}
+function pose3dScenePoints(points,offset=0,scale=1.55){
+  if(!points)return null;
+  const pelvis=points[0]||[0,0,0];
+  return points.map(p=>[(p[0]-pelvis[0])*scale+offset,p[1]*scale,(p[2]-pelvis[2])*scale]);
+}
+function pose3dOffsetPoints(points,offset=0){
+  return points?points.map(p=>[p[0]+offset,p[1],p[2]]):null;
+}
+function pose3dBounds(points){
+  const finite=(points||[]).filter(p=>p&&p.every(Number.isFinite));
+  if(!finite.length)return null;
+  const mins=[0,1,2].map(axis=>Math.min(...finite.map(p=>p[axis])));
+  const maxs=[0,1,2].map(axis=>Math.max(...finite.map(p=>p[axis])));
+  return {min:mins,max:maxs,center:mins.map((v,i)=>(v+maxs[i])/2),size:mins.map((v,i)=>Math.max(maxs[i]-v,.001))};
+}
+function pose3dFitCamera(points,{aspect=1,fov=45,preset="side",margin=1.45}={}){
+  const bounds=pose3dBounds(points);
+  if(!bounds)return {target:[0,.75,0],distance:3,bounds:null};
+  const vertical=bounds.size[1],horizontal=preset==="side"?bounds.size[2]:bounds.size[0];
+  const depth=preset==="side"?bounds.size[0]:preset==="front"||preset==="back"?bounds.size[2]:Math.max(bounds.size[0],bounds.size[2]);
+  const halfFov=Math.tan(fov*Math.PI/360);
+  const fit=Math.max(vertical/(2*halfFov),horizontal/(2*halfFov*Math.max(aspect,.2)));
+  const distance=Math.max(2.2,(fit+depth*.35)*margin);
+  return {target:bounds.center,distance,bounds};
+}
+function contentRect(box,source){
+  const width=box.clientWidth,height=box.clientHeight,scale=Math.min(width/source.size[0],height/source.size[1]);
+  return {x:(width-source.size[0]*scale)/2,y:(height-source.size[1]*scale)/2,w:source.size[0]*scale,h:source.size[1]*scale};
+}
+function goalJoints(role){
+  const g=currentFinding().goal;if(!g||g.type==="none") return [];
+  const side=role==="user"?userRep().side:referenceRep().side;
+  return [...new Set((g.metrics||[g.metric]).flatMap(m=>W.metric_joints[m]?.[side]||[]))];
+}
+function paint(cv,ctx,pts,joints,color,mirror=false,transform=null){
+  if(!cv) return;
+  const box=cv.parentElement,r=contentRect(box,cv===uc?W.user:W.ref),ratio=window.devicePixelRatio||1;
+  if(cv.width!==Math.round(box.clientWidth*ratio)||cv.height!==Math.round(box.clientHeight*ratio)){
+    cv.width=Math.round(box.clientWidth*ratio);cv.height=Math.round(box.clientHeight*ratio);
+  }
+  ctx.setTransform(ratio,0,0,ratio,0,0);if(!transform) ctx.clearRect(0,0,box.clientWidth,box.clientHeight);
+  if(!skeleton||!pts) return;
+  const flags=new Set(joints);
+  const point=i=>{let p=[mirror?1-pts[i][0]:pts[i][0],pts[i][1]];
+    return transform?transform(p):[r.x+p[0]*r.w,r.y+p[1]*r.h];};
+  const visible=i=>pts[i]&&pts[i][2]>=.5&&Number.isFinite(pts[i][0])&&Number.isFinite(pts[i][1]);
+  ctx.save();if(transform)ctx.globalAlpha=.55;
+  for(const [a,b] of W.connections){
+    if(!visible(a)||!visible(b))continue;
+    const on=flags.has(a)&&flags.has(b),pa=point(a),pb=point(b);
+    ctx.beginPath();ctx.moveTo(...pa);ctx.lineTo(...pb);ctx.lineWidth=on?4:2;
+    ctx.strokeStyle=on?color:"rgba(255,255,255,.8)";ctx.stroke();
+  }
+  for(let i=0;i<pts.length;i++){
+    if(!visible(i))continue;const on=flags.has(i);
+    ctx.beginPath();ctx.arc(...point(i),on?5:2.7,0,2*Math.PI);ctx.fillStyle=on?color:"rgba(255,255,255,.9)";ctx.fill();
+  }
+  ctx.restore();
+}
+function overlayTransform(){
+  const ur=userRep(),rr=referenceRep(),u=W.user.frames[String(ur.positions.START)],e=W.ref.frames[String(rr.positions.START)];
+  if(!u||!e)return null;
+  const ui=W.meta.side_ids[ur.side],ri=W.meta.side_ids[rr.side];
+  const ua=u[ui.ankle],uh=u[ui.hip],ra=e[ri.ankle],rh=e[ri.hip];
+  if([ua,uh,ra,rh].some(p=>!p||p[2]<.5))return null;
+  const rect=contentRect(uc.parentElement,W.user);
+  const pixel=(p,source,mirror=false)=>[(mirror?1-p[0]:p[0])*source.size[0],p[1]*source.size[1]];
+  const uA=pixel(ua,W.user),uH=pixel(uh,W.user),rA=pixel(ra,W.ref,W.ref.mirror),rH=pixel(rh,W.ref,W.ref.mirror);
+  const length=Math.hypot(rH[0]-rA[0],rH[1]-rA[1]);if(!length)return null;
+  const scale=Math.hypot(uH[0]-uA[0],uH[1]-uA[1])/length,displayScale=rect.w/W.user.size[0];
+  return p=>[rect.x+(uA[0]+(p[0]*W.ref.size[0]-rA[0])*scale)*displayScale,
+             rect.y+(uA[1]+(p[1]*W.ref.size[1]-rA[1])*scale)*displayScale];
+}
+function showSpriteFrame(frame){
+  const sp=W.ref.sprite;if(!esp||!sp)return;
+  let cell=sp.pos[String(frame)];
+  if(!cell){const keys=Object.keys(sp.pos).map(Number);
+    const near=keys.reduce((a,b)=>Math.abs(b-frame)<Math.abs(a-frame)?b:a,keys[0]);cell=sp.pos[String(near)];}
+  if(!cell)return;
+  const rect=contentRect(esp.parentElement,W.ref);
+  Object.assign(esp.style,{left:rect.x+"px",top:rect.y+"px",width:rect.w+"px",height:rect.h+"px",
+    backgroundPosition:(sp.cols>1?cell[0]/(sp.cols-1)*100:0)+"% "+(sp.rows>1?cell[1]/(sp.rows-1)*100:0)+"%",
+    transform:W.ref.mirror?"scaleX(-1)":"none"});
+}
+function drawBoth(){
+  refFrame=mappedRefFrame();showSpriteFrame(refFrame);
+  const color=colorHex(currentFinding().goal?.color);
+  paint(uc,ux,W.user.frames[String(curFrame)],goalJoints("user"),color);
+  paint(ec,ex_,W.ref.frames[String(refFrame)],goalJoints("ref"),color,W.ref.mirror);
+  if(view==="overlay"&&skeleton){const transform=overlayTransform();
+    if(transform)paint(uc,ux,W.ref.frames[String(refFrame)],goalJoints("ref"),color,W.ref.mirror,transform);}
+}
+function renderTimeline(){
+  let bands="",dots="";
+  for(const r of W.user.reps){
+    const finding=W.reps.find(x=>x.rep===r.rep);
+    for(const phase of ["down","bottom","up"]){const [a,b]=r.phases[phase];
+      bands+='<div class="band '+phase+(finding.excluded?' exc':'')+'" style="left:'+a/(total-1)*100+'%;width:'+(b-a)/total*100+'%" title="rep '+r.rep+' '+esc(W.meta.phase_labels[phase])+'"></div>';}
+    bands+='<span class="replab" style="left:'+((r.phases.down[0]+r.phases.up[1])/2)/(total-1)*100+'%">rep '+r.rep+'</span>';
+    for(const p of positions())dots+='<button class="position-dot" data-rep="'+r.rep+'" data-position="'+p+'" style="left:'+r.positions[p]/(total-1)*100+'%" title="rep '+r.rep+' '+esc(W.meta.position_labels[p])+' '+r.positions[p]+'"></button>';
+  }
+  document.getElementById("bands").innerHTML=bands+'<div class="cursor" id="cursor"></div>';
+  document.getElementById("position-lane").innerHTML=dots;
+}
+function renderRep(){
+  document.querySelectorAll(".reptabs button").forEach(b=>b.setAttribute("aria-current",String(+b.dataset.index===curRep)));
+  renderPanels();drawFrame();
+}
+function compareCell(user,ref,threshold,unit,advisory,rules){
+  if(!Number.isFinite(user)||!Number.isFinite(ref))return {user:null,ref:null,diff:null,unit,threshold:null,k:null,dir:null,color:"none",status:"unavailable",range:null};
+  const diff=user-ref,k=threshold>0?Math.abs(diff)/threshold:null;
+  return {user,ref,diff,unit,threshold,k,dir:diff>0?"+":diff<0?"-":"0",
+    color:k>rules.k_yellow_max?"red":k>rules.k_none_max?"yellow":"none",
+    status:advisory?"advisory":"ok",range:[ref-threshold,ref+threshold]};
+}
+function cellAt(where,metric,rep=currentFinding()){return rep.cells.find(c=>c.where===where&&c.metric===metric);}
+function rangeHTML(cell){
+  if(cell.status==="unavailable"||!cell.range)return '<p class="muted">측정 불가</p>';
+  const [a,b]=cell.range,extent=Math.max(b-a,Math.abs(cell.user-cell.ref),Number.EPSILON);
+  const lo=Math.min(a,cell.user)-extent*.15,hi=Math.max(b,cell.user)+extent*.15;
+  const x=v=>(v-lo)/(hi-lo)*100;
+  return '<div class="rangebar" title="ref '+esc(fmt(cell.ref,cell.unit))+' ± '+esc(fmt(cell.threshold,cell.unit))+'"><span class="ref-range" style="left:'+x(a)+'%;width:'+(x(b)-x(a))+'%"></span><span class="user-marker" style="left:'+x(cell.user)+'%;background:'+colorHex(cell.color)+'"></span></div>';
+}
+function evidenceHTML(cell){
+  return '<div class="evidence '+(cell.status==="advisory"?"advisory":cell.color)+'" data-evidence="'+esc(cell.where+"."+cell.metric)+'">'+
+    '<div class="evidence-top"><strong>'+esc(W.meta.metric_labels[cell.metric])+'</strong><span class="badge">'+esc(W.meta.position_labels[cell.where])+'</span></div>'+
+    '<div class="evidence-values"><span>사용자 <b class="num">'+fmt(cell.user,cell.unit)+'</b></span><span class="num">'+signed(cell.diff,cell.unit)+' · k '+(cell.k===null?"—":cell.k.toFixed(2))+'</span></div>'+
+    rangeHTML(cell)+'<div class="muted num" style="font-size:11px">ref '+fmt(cell.ref,cell.unit)+' ± '+fmt(cell.threshold,cell.unit)+'</div></div>';
+}
+function goalHTML(){
+  const r=currentFinding(),g=r.goal;
+  const changed=Object.values(positionChanges(W,D)).some(reps=>Object.keys(reps).length);
+  const notice=changed?'<p class="muted modified-notice">수정됨 — 저장 후 다시 실행하면 문장이 갱신됩니다</p>':'';
+  if(r.excluded)return '<section class="panel"><h2>레퍼런스와 가장 다른 곳</h2><p id="goal-sentence">'+esc(r.exclude_sentence)+'</p>'+notice+'</section>';
+  return '<section class="panel"><h2>레퍼런스와 가장 다른 곳</h2><p class="goal-sentence" id="goal-sentence">'+esc(g.sentence)+'</p>'+
+    notice+
+    (g.evidence||[]).map(evidenceHTML).join("")+
+    (g.type!=="none"?'<button id="scene">이 장면 보기</button>':'')+
+    (r.tempo.sentence?'<p class="tempo-sentence">'+esc(r.tempo.sentence)+'</p>':'')+'</section>';
+}
+function tempoHTML(){
+  const t=currentFinding().tempo,items=t.items;
+  const max=Math.max(...["user","ref"].map(role=>items.reduce((sum,i)=>sum+(i[role]??0),0)),Number.EPSILON);
+  const rows=["user","ref"].map(role=>'<div class="tempo-row"><span>'+(role==="user"?"사용자":"ref")+'</span><div class="tempo-track">'+
+    items.map(i=>'<div class="tempo-part '+(role==="user"?i.color:"")+'" data-tempo="'+i.metric+'" data-role="'+role+'" style="width:'+((i[role]??0)/max*100)+'%;background:var(--'+i.metric.replace("_s","")+')" title="'+esc(W.meta.phase_labels[i.metric.replace("_s","")])+' '+fmt(i[role],"s")+'"><span>'+(i[role]===null?"—":i[role].toFixed(2))+'</span></div>').join("")+'</div></div>').join("");
+  return '<section class="panel"><h2>템포 <span class="muted" style="font-size:11px">초 · 같은 시간 축</span></h2>'+rows+
+    '<div class="tempo-summary">하강:상승 사용자 '+(t.ratio.user===null?"—":t.ratio.user.toFixed(2)+":1")+' / ref '+(t.ratio.ref===null?"—":t.ratio.ref.toFixed(2)+":1")+'</div>'+
+    '<div class="tempo-summary">'+items.map(i=>esc(W.meta.phase_labels[i.metric.replace("_s","")])+': '+(i.user===null?"—":i.user.toFixed(2))+' / '+(i.ref===null?"—":i.ref.toFixed(2))+'초').join(" · ")+'</div></section>';
+}
+function tableHTML(){
+  return '<section class="panel"><h2>포지션별 차이 <span class="muted" style="font-size:11px">사용자 − ref</span></h2><div class="table-scroll"><table><thead><tr><th>지표</th>'+
+    positions().map(p=>'<th>'+esc(W.meta.position_labels[p])+'</th>').join("")+'</tr></thead><tbody>'+
+    metrics().map(metric=>'<tr><th>'+esc(W.meta.metric_labels[metric])+'</th>'+positions().map(p=>{
+      const c=cellAt(p,metric),cls=c.status==="advisory"?"advisory":c.color;
+      return '<td><button data-cell="'+p+"."+metric+'" data-where="'+p+'" data-metric="'+metric+'" class="'+cls+'" title="'+esc(c.label)+' · 사용자 '+fmt(c.user,c.unit)+' / ref '+fmt(c.ref,c.unit)+' · k '+(c.k===null?"—":c.k.toFixed(2))+'">'+
+        signed(c.diff,c.unit)+(c.status==="advisory"?'<span class="advisory-note">참고</span>':'')+'</button></td>';
+    }).join("")+'</tr>').join("")+'</tbody></table></div><div class="table-note">비율 지표는 몸통 길이 대비 % · — 측정 불가 · 노랑 / 빨강은 차이의 크기</div></section>';
+}
+function graphHTML(){
+  return '<section class="panel"><div class="graph-header"><h2>포지션 진행도</h2><select id="graph-metric" aria-label="그래프 지표">'+metrics().map(m=>'<option value="'+m+'"'+(m===graphMetric?' selected':'')+'>'+esc(W.meta.metric_labels[m])+'</option>').join("")+'</select></div>'+
+    '<canvas id="graph" aria-label="사용자·레퍼런스 지표 곡선"></canvas><div class="graph-legend"><span><i style="background:#a7caff"></i>사용자</span><span><i style="background:#c1cad8"></i>ref</span><span><i style="height:8px;background:#c1cad830"></i>ref ± 임계값</span></div></section>';
+}
+function renderPanels(){
+  document.getElementById("side").innerHTML=goalHTML()+tempoHTML()+tableHTML()+graphHTML();
+  fitTempoLabels();
+  const scene=document.getElementById("scene");
+  if(scene)scene.onclick=()=>{graphMetric=defaultMetric();document.getElementById("graph-metric").value=graphMetric;positionSeek(currentFinding().goal.where);};
+  document.querySelectorAll("[data-cell]").forEach(b=>b.onclick=()=>{graphMetric=b.dataset.metric;document.getElementById("graph-metric").value=graphMetric;positionSeek(b.dataset.where);});
+  document.getElementById("graph-metric").onchange=e=>{graphMetric=e.target.value;drawGraph();};
+}
+function fitTempoLabels(){
+  document.querySelectorAll(".tempo-part").forEach(part=>{
+    const label=part.querySelector("span");
+    label.style.visibility=label.getBoundingClientRect().width<=part.getBoundingClientRect().width?"visible":"hidden";
+  });
+}
+function renderCurrentCards(){
+  const g=currentFinding().goal,first=g?.metrics||[g?.metric],ordered=[...new Set([...first.filter(Boolean),...metrics()])];
+  document.getElementById("current-cards").innerHTML=ordered.map(metric=>{
+    const u=W.user.frame_metrics[metric]?.[curFrame]??null,r=W.ref.frame_metrics[metric]?.[refFrame]??null;
+    const cell=currentFinding().cells.find(c=>c.metric===metric),advisory=W.meta.advisory_metrics.includes(metric);
+    const c=compareCell(u,r,W.meta.thresholds[metric],cell.unit,advisory,W.meta.rules);
+    return '<article class="frame-card"><div class="card-title">'+esc(W.meta.metric_labels[metric])+(advisory?' <span class="muted">참고</span>':'')+'</div>'+
+      '<div class="card-values"><div><span>사용자</span><br><b class="num">'+fmt(u,c.unit)+'</b></div><div><span>ref</span><br><b class="num">'+fmt(r,c.unit)+'</b></div></div>'+
+      '<div class="card-diff '+(advisory?"advisory":c.color)+'"><b class="num">'+signed(c.diff,c.unit)+'</b><small>k '+(c.k===null?"—":c.k.toFixed(2))+'</small></div></article>';
+  }).join("");
+}
+function drawGraph(){
+  const cv=document.getElementById("graph");if(!cv)return;
+  const width=cv.clientWidth,height=cv.clientHeight;if(!width||!height)return;
+  const ratio=window.devicePixelRatio||1;cv.width=Math.round(width*ratio);cv.height=Math.round(height*ratio);
+  const ctx=cv.getContext("2d");ctx.setTransform(ratio,0,0,ratio,0,0);
+  const ur=userRep(),rr=referenceRep(),names=positions(),metric=graphMetric;
+  const threshold=W.meta.thresholds[metric],unit=cellAt(names[0],metric).unit,steps=Math.max(80,Math.round(width));
+  const samples=Array.from({length:steps+1},(_,i)=>{
+    const progress=i/steps*(names.length-1),uf=frameAt(progress,ur.positions,names),rf=frameAt(progress,rr.positions,names);
+    return {progress,user:W.user.frame_metrics[metric]?.[uf]??null,ref:W.ref.frame_metrics[metric]?.[rf]??null};
+  });
+  const values=samples.flatMap(s=>[s.user,s.ref===null?null:s.ref-threshold,s.ref===null?null:s.ref+threshold]).filter(Number.isFinite);
+  if(!values.length){ctx.fillStyle="#a3aaba";ctx.fillText("측정 데이터 없음",20,45);return;}
+  let lo=Math.min(...values),hi=Math.max(...values);const padding=Math.max((hi-lo)*.12,Number.EPSILON);lo-=padding;hi+=padding;
+  const margin={left:48,right:12,top:13,bottom:36},plotW=width-margin.left-margin.right,plotH=height-margin.top-margin.bottom;
+  const x=p=>margin.left+p/(names.length-1)*plotW,y=v=>margin.top+(hi-v)/(hi-lo)*plotH;
+  ctx.font='10px "Malgun Gothic", sans-serif';ctx.textBaseline="middle";ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4,py=y(v);ctx.strokeStyle="#3b4250";ctx.beginPath();ctx.moveTo(margin.left,py);ctx.lineTo(width-margin.right,py);ctx.stroke();
+    ctx.fillStyle="#a3aaba";ctx.textAlign="right";ctx.fillText(unit==="ratio"?(v*W.meta.rules.ratio_percent_scale).toFixed(0)+"%":v.toFixed(0)+"°",margin.left-7,py);}
+  for(let i=0;i<names.length;i++){ctx.setLineDash([3,4]);ctx.strokeStyle="#5e687a";ctx.beginPath();ctx.moveTo(x(i),margin.top);ctx.lineTo(x(i),height-margin.bottom);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle="#a3aaba";ctx.textAlign=i===0?"left":i===names.length-1?"right":"center";ctx.fillText(W.meta.position_labels[names[i]],x(i),height-16);}
+  ctx.save();ctx.beginPath();ctx.rect(margin.left,margin.top,plotW,plotH);ctx.clip();
+  let band=[];
+  const fillBand=()=>{if(!band.length)return;ctx.beginPath();band.forEach((s,i)=>i?ctx.lineTo(x(s.progress),y(s.ref+threshold)):ctx.moveTo(x(s.progress),y(s.ref+threshold)));
+    [...band].reverse().forEach(s=>ctx.lineTo(x(s.progress),y(s.ref-threshold)));ctx.closePath();ctx.fillStyle="#c1cad826";ctx.fill();band=[];};
+  for(const s of samples){if(s.ref===null)fillBand();else band.push(s);}fillBand();
+  for(const [role,color] of [["ref","#c1cad8"],["user","#a7caff"]]){ctx.beginPath();let pen=false;
+    for(const s of samples){if(s[role]===null){pen=false;continue;}if(pen)ctx.lineTo(x(s.progress),y(s[role]));else ctx.moveTo(x(s.progress),y(s[role]));pen=true;}
+    ctx.lineWidth=2;ctx.strokeStyle=color;ctx.stroke();}
+  const head=x(progressAt(curFrame,ur.positions,names));ctx.beginPath();ctx.moveTo(head,margin.top);ctx.lineTo(head,height-margin.bottom);ctx.strokeStyle="#ffffff";ctx.lineWidth=1.5;ctx.stroke();ctx.restore();
+}
+function syncPose3dPip(){
+  if(!pose3dView?.pipVideo||!uv)return;
+  if(pose3dView.pipVideo.src!==uv.src)pose3dView.pipVideo.src=uv.src;
+  const tolerance=.5/(Number(W?.user?.fps)||30);
+  if(Math.abs((pose3dView.pipVideo.currentTime||0)-(uv.currentTime||0))>tolerance)pose3dView.pipVideo.currentTime=uv.currentTime||0;
+}
+function pose3dApplyCamera(){
+  if(!pose3dView)return;
+  const {azimuth,elevation,distance}=pose3dView.drag,target=pose3dView.target||[0,.75,0];
+  pose3dView.camera.position.set(
+    target[0]+Math.cos(elevation)*Math.sin(azimuth)*distance,
+    target[1]+Math.sin(elevation)*distance,
+    target[2]+Math.cos(elevation)*Math.cos(azimuth)*distance
+  );
+  pose3dView.camera.lookAt(target[0],target[1],target[2]);
+}
+function pose3dSetCamera(name){
+  if(!pose3dView)return;
+  pose3dView.preset=name;
+  if(pose3dView.scenePoints?.length){
+    if(pose3dView.viewport)pose3dRefitCamera();
+    else pose3dView.fit=pose3dFitCamera(pose3dView.scenePoints,{aspect:pose3dView.camera.aspect||1,fov:pose3dView.camera.fov,preset:name});
+    pose3dView.target=pose3dView.fit.target;
+  }
+  const target=pose3dView.target||[0,.75,0],distance=pose3dView.fit?.distance||pose3dView.distance;
+  const p=pose3dCameraPreset(name,distance);
+  const dx=p[0],dy=p[1]-.75,dz=p[2];
+  const actualDistance=Math.max(Math.hypot(dx,dy,dz),.001);
+  pose3dView.drag.distance=actualDistance;
+  pose3dView.drag.elevation=clamp(Math.asin(clamp(dy/actualDistance,-1,1)),-1.45,1.553);
+  pose3dView.drag.azimuth=Math.atan2(dx,dz);
+  pose3dView.target=target;
+  pose3dApplyCamera();
+  pose3dView.renderer?.render(pose3dView.scene,pose3dView.camera);
+  if(typeof document!=="undefined"){
+    pose3dView.root?.querySelectorAll("[data-3d-camera]").forEach(button=>button.setAttribute("aria-current",String(button.dataset["3dCamera"]===name)));
+    pose3dUpdateLabels();
+  }
+}
+function pose3dAimCamera(){
+  if(!pose3dView)return;
+  pose3dApplyCamera();
+  pose3dView.renderer?.render(pose3dView.scene,pose3dView.camera);
+  if(typeof document!=="undefined")pose3dUpdateLabels();
+}
+function pose3dRefitCamera(){
+  const ctx=pose3dView,{width,height,top,bottom}=ctx.viewport;
+  const usableHeight=Math.max(height-top-bottom,height*.3);
+  ctx.fit=pose3dFitCamera(ctx.scenePoints,{aspect:Math.max(width-32,1)/usableHeight,fov:ctx.camera.fov,preset:ctx.preset});
+  ctx.fit.distance*=height/usableHeight;
+  ctx.target=ctx.fit.target;ctx.drag.distance=ctx.fit.distance;
+  ctx.camera.setViewOffset(width,height,0,-(top-bottom)/2,width,height);
+  ctx.camera.far=Math.max(100,ctx.fit.distance*4);ctx.camera.updateProjectionMatrix();
+  ctx.fitKey=[ctx.repKey,width,height,top,bottom,ctx.preset].join("|");ctx.fitCount++;
+}
+function pose3dUpdateLabels(){
+  const ctx=pose3dView;if(!ctx)return;
+  const projected=[];
+  for(const role of ["user","ref"]){
+    const objects=ctx[role],label=ctx.root.querySelector('[data-3d-role-label="'+role+'"]');
+    if(!label)continue;
+    label.hidden=!objects.group.visible||!objects.points;
+    if(label.hidden)continue;
+    const p=ctx.style==="robot"?objects.head.position.clone():new THREE.Vector3(...objects.points[10]);
+    objects.group.localToWorld(p);
+    const screenUp=new THREE.Vector3(0,1,0).applyQuaternion(ctx.camera.quaternion);
+    p.addScaledVector(screenUp,ctx.style==="robot"?objects.spec.headRadius:.035*.62);p.project(ctx.camera);
+    const x=(p.x+1)*(ctx.width||ctx.root.clientWidth)/2,y=(1-p.y)*(ctx.height||ctx.root.clientHeight)/2-8;
+    label.style.left=x+"px";label.style.top=y+"px";projected.push({label,x,y});
+  }
+  if(projected.length===2){
+    const [a,b]=projected,gap=(a.label.offsetWidth+b.label.offsetWidth)/2+8;
+    if(Math.abs(a.x-b.x)<gap&&Math.abs(a.y-b.y)<Math.max(a.label.offsetHeight,b.label.offsetHeight)){
+      const [upper,lower]=a.y<=b.y?[a,b]:[b,a];
+      upper.label.style.top=(lower.y-lower.label.offsetHeight-6)+"px";
+    }
+  }
+}
+function pose3dCapsuleBetween(bone,a,b,radius=bone.radius){
+  const {mesh,caps}=bone;
+  const va=new THREE.Vector3(a[0],a[1],a[2]),vb=new THREE.Vector3(b[0],b[1],b[2]),mid=va.clone().add(vb).multiplyScalar(.5);
+  const len=va.distanceTo(vb);
+  mesh.position.copy(mid);mesh.scale.set(radius,Math.max(len,.001),radius);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),vb.clone().sub(va).normalize());
+  const visible=Number.isFinite(len)&&len>.001;
+  mesh.visible=visible;
+  caps[0].position.copy(va);caps[1].position.copy(vb);
+  caps.forEach(cap=>cap.scale.setScalar(radius));
+  caps[0].visible=visible;caps[1].visible=visible;
+  return visible;
+}
+function pose3dRoleObjects(role,offset){
+  const meta=pose3dMeta(),group=new THREE.Group();group.position.x=offset;
+  const stickJointMat=new THREE.MeshStandardMaterial({color:role==="user"?0xa7caff:0xc1cad8,roughness:.45});
+  const jointMat=new THREE.MeshStandardMaterial({color:role==="user"?0xa7caff:0xc1cad8,roughness:.88,metalness:0});
+  const boneMat=new THREE.MeshStandardMaterial({color:role==="user"?0x7f9fc7:0x939aa8,roughness:.88,metalness:0});
+  const hiMat=new THREE.MeshStandardMaterial({color:0xd93f3f,roughness:.35});
+  // Draw robot goal markers over the larger body volumes; retain the original stick material.
+  const robotHiMat=hiMat.clone();robotHiMat.depthTest=false;robotHiMat.depthWrite=false;
+  const jointGeo=new THREE.SphereGeometry(.035,16,12),hiGeo=new THREE.SphereGeometry(.06,20,14),boneGeo=new THREE.CylinderGeometry(1,1,1,20);
+  const capGeo=new THREE.SphereGeometry(1,20,16);
+  const joints=Array.from({length:17},()=>{const mesh=new THREE.Mesh(jointGeo,jointMat);group.add(mesh);return mesh;});
+  const highlights=Array.from({length:17},()=>{const mesh=new THREE.Mesh(hiGeo,hiMat);mesh.visible=false;group.add(mesh);return mesh;});
+  const bones=meta.parents.map((parent,index)=>parent<0?null:(()=>{const mesh=new THREE.Mesh(boneGeo,boneMat),caps=[new THREE.Mesh(capGeo,boneMat),new THREE.Mesh(capGeo,boneMat)];group.add(mesh,caps[0],caps[1]);return {mesh,caps,parent,index};})());
+  const edges=bones.filter(Boolean).map(({parent,index})=>[parent,index]);
+  const connectors=[[11,14],[1,4]].map(([parent,index])=>{
+    const mesh=new THREE.Mesh(boneGeo,boneMat),caps=[new THREE.Mesh(capGeo,boneMat),new THREE.Mesh(capGeo,boneMat)];
+    group.add(mesh,...caps);return {mesh,caps,parent,index};
+  });
+  const head=new THREE.Mesh(capGeo,jointMat);group.add(head);
+  const stickGeometry=new THREE.BufferGeometry();
+  stickGeometry.setAttribute("position",new THREE.BufferAttribute(new Float32Array(edges.length*2*3),3));
+  const stickLine=new THREE.LineSegments(stickGeometry,new THREE.LineBasicMaterial({color:role==="user"?0xa7caff:0xc1cad8}));
+  stickLine.visible=false;group.add(stickLine);
+  return {role,group,joints,highlights,bones,edges,stickLine,connectors,head,jointMat,stickJointMat,robotHiMat,stickHiMat:hiMat};
+}
+function initPose3d(){
+  if(pose3dView)return pose3dView;
+  const root=document.getElementById("view-3d");
+  if(!root)return null;
+  const message=document.getElementById("pose3d-message"),canvasHost=document.getElementById("pose3d-canvas");
+  if(!globalThis.THREE){message.textContent=pose3dMeta().labels.no_data||"";return null;}
+  const scene=new THREE.Scene();scene.background=new THREE.Color(0x080a0e);
+  const camera=new THREE.PerspectiveCamera(45,1,.01,100);
+  let renderer;
+  try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});}
+  catch(error){message.textContent=pose3dMeta().labels.no_data||"";return null;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));canvasHost.appendChild(renderer.domElement);
+  const hemi=new THREE.HemisphereLight(0xffffff,0x22242a,1.3),dir=new THREE.DirectionalLight(0xffffff,.75);dir.position.set(2,4,3);
+  scene.add(hemi,dir);
+  const floor=new THREE.GridHelper(2.6,10,0x3b4250,0x242832);floor.position.y=0;scene.add(floor);
+  const user=pose3dRoleObjects("user",-.55),ref=pose3dRoleObjects("ref",.55);scene.add(user.group,ref.group);
+  pose3dView={root,message,canvasHost,scene,camera,renderer,user,ref,style:"robot",distance:3,preset:"front",target:[0,.75,0],fit:null,
+    drag:{active:false,x:0,y:0,azimuth:0,elevation:.22,distance:3},
+    pipVideo:document.getElementById("pose3d-pip-video"),pip:document.getElementById("pose3d-pip"),fitCount:0,fitKey:null,repKey:null};
+  root.querySelectorAll("[data-3d-camera]").forEach(button=>button.onclick=()=>pose3dSetCamera(button.dataset["3dCamera"]));
+  root.querySelectorAll("[data-3d-style]").forEach(button=>button.onclick=()=>{
+    pose3dView.style=button.dataset["3dStyle"];
+    root.querySelectorAll("[data-3d-style]").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));
+    updatePose3d();
+  });
+  document.getElementById("pose3d-pip-toggle").onclick=e=>{
+    const collapsed=pose3dView.pip.classList.toggle("collapsed");
+    e.currentTarget.setAttribute("aria-expanded",String(!collapsed));e.currentTarget.textContent=collapsed?"+":"−";
+    updatePose3d();
+  };
+  canvasHost.onpointerdown=e=>{pose3dView.drag.active=true;pose3dView.drag.x=e.clientX;pose3dView.drag.y=e.clientY;canvasHost.setPointerCapture(e.pointerId);};
+  canvasHost.onpointermove=e=>{if(!pose3dView.drag.active)return;const d=pose3dView.drag;
+    d.azimuth+=(e.clientX-d.x)*.01;d.elevation=clamp(d.elevation+(d.y-e.clientY)*.01,-1.45,1.553);d.x=e.clientX;d.y=e.clientY;pose3dAimCamera();};
+  canvasHost.onpointerup=e=>{pose3dView.drag.active=false;canvasHost.releasePointerCapture?.(e.pointerId);};
+  new ResizeObserver(()=>{if(view==="3d")updatePose3d();}).observe(root);
+  pose3dSetCamera("front");
+  return pose3dView;
+}
+function updatePose3dRole(roleObjects,points,highlights){
+  const visible=!!points;
+  roleObjects.group.visible=visible;roleObjects.points=points;
+  if(!visible)return;
+  const mapped=points,highlightSet=new Set(highlights),spec=roleObjects.spec;
+  const robot=pose3dView.style==="robot";
+  const radius=index=>[7,8].includes(index)?spec.torsoRadius:[2,5].includes(index)?spec.thighRadius:
+    [3,6].includes(index)?spec.shinRadius:[12,15].includes(index)?spec.upperArmRadius:
+    [13,16].includes(index)?spec.forearmRadius:[1,4].includes(index)?spec.hipRadius:
+    [11,14].includes(index)?spec.shoulderRadius:spec.neckRadius;
+  for(let i=0;i<roleObjects.joints.length;i++){
+    const joint=roleObjects.joints[i],p=mapped[i];joint.position.set(p[0],p[1],p[2]);
+    const limbRadii=roleObjects.bones.filter(b=>b&&(b.parent===i||b.index===i)&&![7,8].includes(b.index)).map(b=>radius(b.index));
+    joint.scale.setScalar(robot?Math.max(spec.jointRadius,...limbRadii.map(r=>r*1.1))/.035:.62);
+    joint.material=robot?roleObjects.jointMat:roleObjects.stickJointMat;
+    const marker=roleObjects.highlights[i];marker.position.copy(joint.position);marker.visible=highlightSet.has(i);
+    marker.material=robot?roleObjects.robotHiMat:roleObjects.stickHiMat;
+    marker.renderOrder=robot?2:0;marker.scale.setScalar(robot?spec.jointRadius/.06:1);
+  }
+  const linePositions=roleObjects.stickLine.geometry.attributes.position.array;
+  let offset=0;
+  for(const bone of roleObjects.bones.filter(Boolean)){
+    bone.radius=radius(bone.index);
+    const visible=pose3dCapsuleBetween(bone,mapped[bone.parent],mapped[bone.index]);
+    bone.mesh.visible=robot&&visible;
+    bone.caps.forEach(cap=>{cap.visible=robot&&visible;});
+    for(const p of [mapped[bone.parent],mapped[bone.index]]){linePositions[offset++]=p[0];linePositions[offset++]=p[1];linePositions[offset++]=p[2];}
+  }
+  for(const connector of roleObjects.connectors){
+    connector.radius=spec.torsoRadius;
+    const visible=pose3dCapsuleBetween(connector,mapped[connector.parent],mapped[connector.index]);
+    connector.mesh.visible=robot&&visible;connector.caps.forEach(cap=>{cap.visible=robot&&visible;});
+  }
+  roleObjects.head.position.set(...mapped[9].map((v,k)=>(v+mapped[10][k])/2));
+  roleObjects.head.scale.setScalar(spec.headRadius);roleObjects.head.visible=robot;
+  roleObjects.stickLine.visible=!robot;
+  roleObjects.stickLine.geometry.attributes.position.needsUpdate=true;
+}
+function updatePose3d(){
+  if(view!=="3d")return;
+  const ctx=initPose3d();if(!ctx)return;
+  const rect=ctx.canvasHost?.getBoundingClientRect?.();
+  const width=rect?.width??ctx.root.clientWidth,height=rect?.height??ctx.root.clientHeight;
+  if(!width||!height)return;
+  if(ctx.width!==width||ctx.height!==height){
+    ctx.renderer.setSize(width,height,false);ctx.camera.aspect=width/height;ctx.camera.updateProjectionMatrix();
+    ctx.width=width;ctx.height=height;
+  }
+  const pose=globalThis.POSE3D||{},frames=pose3dFrameIndices(W,curFrame,refFrame);
+  const userValid=pose3dValidate(pose.user,W.user.total),refValid=pose3dValidate(pose.ref,W.ref.total);
+  const parents=pose3dMeta().parents,robot=ctx.style==="robot";
+  ctx.user.spec=pose3dMannequinSpec(pose3dBoneProfile(pose.user,parents));
+  ctx.ref.spec=pose3dMannequinSpec(pose3dBoneProfile(pose.ref,parents));
+  const display=robot?pose3dRobotFrame:pose3dDisplayFrame;
+  const userPoints=userValid?display(pose.user,frames.user,{},parents):null;
+  const refPoints=refValid?display(pose.ref,frames.ref,{mirror:W.ref.mirror},parents):null;
+  const userScene=pose3dScenePoints(userPoints),refScene=pose3dScenePoints(refPoints);
+  const ur=userRep(),rr=referenceRep(),finding=currentFinding(),uj=pose3dGoalJoints(W,finding,"user",ur,rr),rj=pose3dGoalJoints(W,finding,"ref",ur,rr);
+  updatePose3dRole(ctx.user,userScene,uj);updatePose3dRole(ctx.ref,refScene,rj);
+  const repKey=JSON.stringify([ur.rep,ur.phases,ur.positions,rr.rep,rr.phases,rr.positions,W.ref.mirror]);
+  if(ctx.repKey!==repKey||ctx.userData!==pose.user||ctx.refData!==pose.ref){
+    ctx.scenePoints=pose3dRepScenePoints(W,pose,ur,rr);ctx.repKey=repKey;
+    ctx.userData=pose.user;ctx.refData=pose.ref;ctx.fitKey=null;
+  }
+  const toolbar=ctx.root.querySelector(".pose3d-toolbar");
+  const top=Math.max(toolbar.offsetTop+toolbar.offsetHeight,ctx.pip.offsetTop+ctx.pip.offsetHeight)+34,bottom=24;
+  ctx.viewport={width,height,top,bottom};
+  const fitKey=[repKey,width,height,top,bottom,ctx.preset].join("|");
+  if(ctx.fitKey!==fitKey){pose3dRefitCamera();pose3dApplyCamera();}
+  ctx.last={frames,userRep:ur.rep,refRep:rr.rep,userHasData:!!userPoints,refHasData:!!refPoints,userHighlights:uj,refHighlights:rj,style:ctx.style,
+    camera:[ctx.camera.position.x,ctx.camera.position.y,ctx.camera.position.z],target:ctx.target,distance:ctx.drag.distance,preset:ctx.preset,fit:ctx.fit};
+  const labels=pose3dMeta().labels,missing=[];
+  if(!userPoints)missing.push("사용자 "+labels.no_data);
+  if(!refPoints)missing.push("ref "+labels.no_data);
+  ctx.message.hidden=missing.length===0;ctx.message.textContent=missing.join(" · ")||labels.no_data||"";
+  syncPose3dPip();
+  ctx.renderer.render(ctx.scene,ctx.camera);
+  pose3dUpdateLabels();
+}
+function drawFrame(){
+  drawBoth();renderCurrentCards();drawGraph();
+  updatePose3d();
+  document.getElementById("user-frame").textContent=curFrame;
+  document.getElementById("ref-frame").textContent=refFrame;
+  document.getElementById("cursor").style.left=curFrame/(total-1)*100+"%";
+  document.getElementById("bands").setAttribute("aria-valuenow",String(curFrame));
+  document.getElementById("play").textContent=uv.paused?"▶ 재생":"Ⅱ 정지";
+  document.getElementById("utag-frame").textContent="프레임 "+curFrame;
+  document.getElementById("etag-frame").textContent="프레임 "+refFrame+(W.ref.mirror?" · 좌우 반전":"");
+}
+function pause(){uv.pause();drawFrame();}
+function seek(frame,exactRef=null){
+  const before=curRep;curFrame=clamp(Math.round(frame),0,total-1);manualRef=exactRef;
+  const index=W.user.reps.findIndex(r=>curFrame>=r.phases.down[0]&&curFrame<r.phases.up[1]);
+  if(index>=0)curRep=index;
+  uv.currentTime=curFrame/W.user.fps+1e-4;
+  if(before!==curRep){graphMetric=defaultMetric();renderRep();}else drawFrame();
+}
+function selectRep(index){pause();curRep=clamp(index,0,W.reps.length-1);graphMetric=defaultMetric();renderRep();seek(userRep().positions.START,referenceRep().positions.START);}
+function positionSeek(name){editPosition=name;pause();seek(userRep().positions[name],referenceRep().positions[name]);updateControls();}
+function defaultMetric(){const g=currentFinding().goal;return g?.metric||g?.metrics?.[0]||metrics()[0];}
+function togglePlay(){if(uv.paused)uv.play().catch(()=>showNotice("사용자 영상을 재생할 수 없습니다."));else uv.pause();drawFrame();}
+function showNotice(message){const el=document.getElementById("notice");el.hidden=!message;el.textContent=message;}
+function updateControls(){
+  for(const id of ["sync","skeleton","edit"])document.getElementById(id).setAttribute("aria-pressed",String(id==="sync"?sync:id==="skeleton"?skeleton:edit));
+  document.getElementById("sync").textContent="동기화 "+(sync?"켜짐":"꺼짐");
+  document.getElementById("skeleton").textContent="스켈레톤 "+(skeleton?"켜짐":"꺼짐");
+  document.getElementById("edit-bar").classList.toggle("active",edit);
+  document.querySelectorAll("[data-position-button]").forEach(b=>b.setAttribute("aria-pressed",String(edit&&b.dataset.positionButton===editPosition)));
+  document.getElementById("edit-role").value=editRole;
+  document.getElementById("bands").setAttribute("aria-valuemin","0");
+  document.getElementById("bands").setAttribute("aria-valuemax",String(total-1));
+}
+function positionMedian(series,frame,rules){
+  const samples=series.slice(Math.max(0,frame-rules.position_window_radius),frame+rules.position_window_radius+1).filter(Number.isFinite).sort((a,b)=>a-b);
+  if(samples.length<rules.min_position_values)return null;
+  const middle=Math.floor(samples.length/2);
+  return samples.length%2?samples[middle]:(samples[middle-1]+samples[middle])/2;
+}
+function applyPositionEdit(report,role,repNumber,position,frame){
+  const source=report[role],segment=source.reps.find(r=>r.rep===repNumber),names=report.meta.positions,rules=report.meta.rules;
+  const index=names.indexOf(position);
+  if(!segment||index<0||!Number.isInteger(frame))return {ok:false,reason:"포지션 또는 프레임을 찾을 수 없습니다."};
+  const lo=Math.max(0,segment.phases.down[0]-rules.frame_padding),hi=Math.min(source.total,segment.phases.up[1]+rules.frame_padding);
+  if(frame<lo||frame>=hi)return {ok:false,reason:"수정 범위: "+lo+"–"+(hi-1)+" 프레임"};
+  if((index>0&&frame<=segment.positions[names[index-1]])||(index<names.length-1&&frame>=segment.positions[names[index+1]]))
+    return {ok:false,reason:"포지션 순서를 유지하는 프레임만 선택할 수 있습니다."};
+  segment.positions[position]=frame;
+  const affected=role==="ref"?report.reps:report.reps.filter(r=>r.rep===repNumber),refSegment=report.ref.reps[0];
+  for(const finding of affected){
+    const userSegment=report.user.reps.find(r=>r.rep===finding.rep);
+    for(const cell of finding.cells.filter(c=>c.where===position)){
+      const user=positionMedian(report.user.frame_metrics[cell.metric],userSegment.positions[position],rules);
+      const ref=positionMedian(report.ref.frame_metrics[cell.metric],refSegment.positions[position],rules);
+      Object.assign(cell,compareCell(user,ref,report.meta.thresholds[cell.metric],cell.unit,report.meta.advisory_metrics.includes(cell.metric),rules));
+    }
+    const goal=finding.goal;
+    if(goal){
+      goal.evidence=(goal.evidence||[]).map(e=>({...finding.cells.find(c=>c.where===e.where&&c.metric===e.metric)}));
+      if(goal.type!=="none"){
+        goal.frame=userSegment.positions[goal.where];goal.ref_frame=refSegment.positions[goal.where];
+        const targetMetrics=goal.metrics||[goal.metric],targets=finding.cells.filter(c=>c.where===goal.where&&targetMetrics.includes(c.metric)&&c.k!==null);
+        if(targets.length){const largest=targets.reduce((a,b)=>b.k>a.k?b:a);goal.k=largest.k;goal.color=largest.color;}
+        else {goal.k=null;goal.color="none";}
+      }
+    }
+  }
+  return {ok:true};
+}
+function positionChanges(report,original){
+  const changed={user:{},ref:{}};
+  for(const role of ["user","ref"])for(const segment of report[role].reps){
+    const base=original[role].reps.find(r=>r.rep===segment.rep),values={};
+    for(const name of report.meta.positions)if(segment.positions[name]!==base.positions[name])values[name]=segment.positions[name];
+    if(Object.keys(values).length)changed[role][String(segment.rep)]=values;
+  }
+  return changed;
+}
+function overrideJSON(){
+  /* Save the complete current positions so a report opened after --override remains reproducible. */
+  return Object.fromEntries(["user","ref"].map(role=>[role,Object.fromEntries(W[role].reps.map(r=>[String(r.rep),{...r.positions}]))]));
+}
+function updateEditStatus(reason=""){
+  const changes=positionChanges(W,D),modified=Object.values(changes).some(reps=>Object.keys(reps).length);
+  const message=modified?"수정됨 — 저장 후 다시 실행하면 문장이 갱신됩니다":"포지션을 고른 뒤 방향키로 이동 · Shift는 5프레임";
+  document.getElementById("edit-status").textContent=reason||message;
+}
+function moveFrame(delta){
+  if(!edit){seek(curFrame+delta);return;}
+  pause();
+  const segment=editRole==="user"?userRep():referenceRep(),frame=segment.positions[editPosition]+delta;
+  const result=applyPositionEdit(W,editRole,segment.rep,editPosition,frame);
+  if(!result.ok){updateEditStatus(result.reason);return;}
+  renderTimeline();renderRep();positionSeek(editPosition);updateEditStatus();
+}
+function resetPositions(){
+  const pausedRep=currentFinding().rep;
+  W=copy(D);curRep=W.reps.findIndex(r=>r.rep===pausedRep);
+  renderTimeline();renderRep();positionSeek(editPosition);updateEditStatus();
+}
+function savePositions(){
+  const blob=new Blob([JSON.stringify(overrideJSON(),null,2)+"\n"],{type:"application/json;charset=utf-8"}),url=URL.createObjectURL(blob);
+  const link=document.createElement("a");link.href=url;link.download="positions_override.json";link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function tick(){
+  if(!uv.paused&&!uv.ended){const next=clamp(Math.floor(uv.currentTime*W.user.fps+1e-3),0,total-1);
+    if(next!==curFrame){manualRef=null;const before=curRep;curFrame=next;
+      const index=W.user.reps.findIndex(r=>next>=r.phases.down[0]&&next<r.phases.up[1]);
+      if(index>=0)curRep=index;
+      if(before!==curRep){graphMetric=defaultMetric();renderRep();}else drawFrame();}}
+  requestAnimationFrame(tick);
+}
+function diagnose(){
+  if(uv.readyState===0){showNotice("사용자 영상 파일을 열 수 없습니다: "+W.user.video);return;}
+  if(!uv.videoWidth||!uv.videoHeight){showNotice("사용자 영상 코덱을 디코딩할 수 없습니다.");return;}
+  const expected=W.user.total/W.user.fps;
+  if(Number.isFinite(uv.duration)&&Math.abs(uv.duration-expected)>1)showNotice("영상 길이 차이: 재생 "+uv.duration.toFixed(1)+"초 / 분석 "+expected.toFixed(1)+"초");
+  if(uv.videoWidth!==W.user.size[0]||uv.videoHeight!==W.user.size[1])showNotice("영상 해상도 차이: 브라우저 "+uv.videoWidth+"×"+uv.videoHeight+" / 분석 "+W.user.size.join("×"));
+}
+function keydown(e){
+  if(e.target.matches?.("input,select,textarea")||e.target.isContentEditable)return;
+  if(e.key==="ArrowLeft"||e.key==="ArrowRight"){moveFrame((e.key==="ArrowLeft"?-1:1)*(e.shiftKey?(edit?5:10):1));e.preventDefault();}
+  else if(e.key===" "){togglePlay();e.preventDefault();}
+  else if(/^[1-5]$/.test(e.key)){positionSeek(positions()[Number(e.key)-1]);e.preventDefault();}
+  else if(e.key==="["||e.key==="]"){selectRep(curRep+(e.key==="["?-1:1));e.preventDefault();}
+}
+function build(){
+  if(!D){document.getElementById("app").textContent="데이터가 없습니다.";return;}
+  if(D.failure){
+    document.getElementById("app").innerHTML='<h1>분석할 수 없습니다</h1><section class="panel" style="max-width:760px;margin-top:20px">'+
+      '<h2>중단 이유</h2><p>'+esc(D.failure.reason)+'</p><p class="muted">영상 경로·코덱과 설정의 프레임 범위를 확인한 뒤 다시 실행.</p>'+
+      '<h2>촬영·영상 확인</h2><ul><li>측면에서 90°로 촬영했는지</li><li>전신과 원판이 다 보이는지</li><li>너무 멀지 않은지</li><li>뒤에 다른 사람이 없는지</li><li>고정 fps·H.264인지 (tools/check_video.py --fix)</li></ul>'+
+      '<h2>다시 실행</h2><code style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(D.failure.command)+'</code></section>';
+    document.title="분석할 수 없습니다";return;
+  }
+  W=copy(D);total=W.user.total;graphMetric=defaultMetric();
+  const p3Labels=pose3dMeta(W).labels,p3Label=key=>esc(p3Labels[key]||"");
+  const excluded=W.reps.filter(r=>r.excluded).length;
+  document.getElementById("app").innerHTML=
+    '<h1>세트 후 자세 비교</h1><div class="set-bar"><strong>'+esc(W.meta.exercise)+'</strong>'+
+    '<span>'+W.reps.length+' rep · 제외 '+excluded+'</span><span>각도 '+esc(W.meta.view)+'</span>'+
+    '<span>레퍼런스 '+esc(W.ref.video.split("/").pop())+' · rep '+W.ref.rep+'</span><span class="badge">'+esc(W.meta.threshold_note)+'</span>'+
+    (W.meta.warnings.length?'<div class="warnings">'+W.meta.warnings.map(esc).join(" · ")+'</div>':'')+'</div>'+
+    '<nav class="reptabs" aria-label="반복 선택">'+W.reps.map((r,i)=>'<button data-index="'+i+'" aria-current="'+(i===0)+'"><span class="dot '+esc(r.goal?.color||"none")+'"></span>rep '+r.rep+' · '+esc(r.tab_label)+'</button>').join("")+'</nav>'+
+    '<div class="stage"><section id="video-section"><div class="pair"><div class="vbox"><video id="uv" preload="auto" playsinline muted></video><canvas id="uc"></canvas><div class="vtag"><b>사용자</b><span id="utag-frame"></span></div></div>'+
+    '<div class="vbox ref-box"><div class="sprite" id="esp"></div><canvas id="ec"></canvas><div class="vtag"><b>레퍼런스</b><span id="etag-frame"></span></div></div></div>'+
+    '<div class="view-empty report-3d" id="view-3d"><div class="pose3d-toolbar"><div class="pose3d-style" id="pose3d-style" role="group"><button data-3d-style="robot" aria-pressed="true">'+p3Label("robot")+'</button><button data-3d-style="stick" aria-pressed="false">'+p3Label("stick")+'</button></div><button data-3d-camera="side">'+p3Label("side")+'</button><button data-3d-camera="front">'+p3Label("front")+'</button><button data-3d-camera="top">'+p3Label("top")+'</button><button data-3d-camera="back">'+p3Label("back")+'</button></div><div class="pose3d-stage"><div class="pose3d-canvas" id="pose3d-canvas"></div><div class="pose3d-message" id="pose3d-message">'+p3Label("no_data")+'</div><span class="pose3d-role-label" data-3d-role-label="user" hidden>'+esc(pose3dMeta().roles.user)+'</span><span class="pose3d-role-label" data-3d-role-label="ref" hidden>'+esc(pose3dMeta().roles.ref)+'</span><div class="pose3d-pip" id="pose3d-pip"><div class="pose3d-pip-header"><span class="pose3d-pip-label">'+p3Label("pip")+'</span><button id="pose3d-pip-toggle" aria-expanded="true" aria-controls="pose3d-pip-video" aria-label="'+p3Label("pip")+'">−</button></div><video id="pose3d-pip-video" preload="auto" playsinline muted></video></div></div></div><div class="cards" id="current-cards" aria-label="현재 프레임 지표"></div>'+
+    '<div class="tl"><div class="position-lane" id="position-lane"></div><div class="bands" id="bands" role="slider" tabindex="0" aria-label="영상 프레임"></div></div>'+
+    '<div class="legend">'+Object.entries(W.meta.phase_labels).map(([p,label])=>'<span><i style="background:var(--'+p+')"></i>'+esc(label)+'</span>').join("")+'</div>'+
+    '<div class="controls" id="positions">'+positions().map(p=>'<button data-position-button="'+p+'">'+esc(W.meta.position_labels[p])+'</button>').join("")+'</div>'+
+    '<div class="controls"><button id="prev" aria-label="이전 프레임">−1</button><button id="play">▶ 재생</button><button id="next" aria-label="다음 프레임">+1</button>'+
+    '<label>속도 <select id="speed" aria-label="재생 속도"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1×</option></select></label>'+
+    '<button id="sync" aria-pressed="true">동기화 켜짐</button><label>보기 <select id="view"><option value="2d">2D</option><option value="overlay">겹쳐</option><option value="3d">3D</option></select></label>'+
+    '<button id="skeleton" aria-pressed="true">스켈레톤 켜짐</button><button id="edit" aria-pressed="false">수정</button><span class="frame-no">사용자 <b id="user-frame"></b> / ref <b id="ref-frame"></b></span></div>'+
+    '<div class="edit-bar" id="edit-bar"><div class="edit-row"><label>포지션 대상 <select id="edit-role"><option value="user">사용자</option><option value="ref">레퍼런스</option></select></label><button id="undo">되돌리기</button><button id="save">저장 (JSON)</button></div><div class="edit-status" id="edit-status"></div></div>'+
+    '<div class="notice" id="notice" role="status" hidden></div></section><aside class="side" id="side"></aside></div>'+
+    '<footer class="foot"><kbd>Space</kbd> 재생 / 정지 · <kbd>←</kbd> <kbd>→</kbd> 1프레임 · <kbd>Shift</kbd> + 방향키 10프레임 (수정 중 5프레임) · <kbd>1</kbd>–<kbd>5</kbd> 포지션 · <kbd>[</kbd> <kbd>]</kbd> rep</footer>';
+  uv=document.getElementById("uv");uv.src=W.user.video.split("/").map(encodeURIComponent).join("/");
+  uc=document.getElementById("uc");ec=document.getElementById("ec");ux=uc.getContext("2d");ex_=ec.getContext("2d");esp=document.getElementById("esp");
+  if(W.ref.sprite){esp.style.backgroundImage='url("'+W.ref.sprite.data+'")';esp.style.backgroundSize=W.ref.sprite.cols*100+'% '+W.ref.sprite.rows*100+'%';}
+  else {esp.textContent="레퍼런스 프레임 이미지 없음";showNotice("레퍼런스 스프라이트를 만들 수 없습니다.");}
+  uv.addEventListener("loadedmetadata",()=>seek(userRep().positions.START,referenceRep().positions.START));
+  uv.addEventListener("loadeddata",diagnose);uv.addEventListener("error",()=>showNotice("사용자 영상 파일 또는 코덱을 열 수 없습니다: "+W.user.video));
+  uv.addEventListener("seeked",drawFrame);uv.addEventListener("pause",drawFrame);uv.addEventListener("play",drawFrame);uv.addEventListener("ended",drawFrame);
+  document.querySelectorAll(".reptabs button").forEach(b=>b.onclick=()=>selectRep(+b.dataset.index));
+  document.getElementById("positions").onclick=e=>{const b=e.target.closest("[data-position-button]");if(b)positionSeek(b.dataset.positionButton);};
+  document.getElementById("position-lane").onclick=e=>{const b=e.target.closest("[data-position]");if(b){selectRep(W.reps.findIndex(r=>r.rep===+b.dataset.rep));positionSeek(b.dataset.position);}};
+  document.getElementById("bands").onclick=e=>{const r=e.currentTarget.getBoundingClientRect();seek(Math.round((e.clientX-r.left)/r.width*(total-1)));};
+  document.getElementById("prev").onclick=()=>moveFrame(-1);document.getElementById("next").onclick=()=>moveFrame(1);document.getElementById("play").onclick=togglePlay;
+  document.getElementById("speed").onchange=e=>{speed=+e.target.value;uv.playbackRate=speed;};
+  document.getElementById("sync").onclick=()=>{sync=!sync;manualRef=null;updateControls();drawFrame();};
+  document.getElementById("skeleton").onclick=()=>{skeleton=!skeleton;updateControls();drawFrame();};
+  document.getElementById("view").onchange=e=>{view=e.target.value;document.getElementById("video-section").className="view-"+view;if(view==="3d")initPose3d();drawFrame();};
+  document.getElementById("edit").onclick=()=>{edit=!edit;pause();updateControls();updateEditStatus();};
+  document.getElementById("edit-role").onchange=e=>{editRole=e.target.value;positionSeek(editPosition);};
+  document.getElementById("undo").onclick=resetPositions;document.getElementById("save").onclick=savePositions;
+  document.addEventListener("keydown",keydown);
+  new ResizeObserver(()=>{fitTempoLabels();drawFrame();}).observe(document.getElementById("side"));
+  new ResizeObserver(()=>drawFrame()).observe(document.getElementById("video-section"));
+  renderTimeline();seek(userRep().positions.START,referenceRep().positions.START);updateControls();renderRep();requestAnimationFrame(tick);
+}
+globalThis.ReportMath={progressAt,frameAt,referenceFrame,compareCell,positionMedian,applyPositionEdit,positionChanges};
+globalThis.Report3D={displayFrame:pose3dDisplayFrame,validate:pose3dValidate,goalJoints:pose3dGoalJoints,frameIndices:pose3dFrameIndices,cameraPreset:pose3dCameraPreset,
+  boneProfile:pose3dBoneProfile,fixedBones:pose3dFixedBones,robotFrame:pose3dRobotFrame,mannequinSpec:pose3dMannequinSpec,repScenePoints:pose3dRepScenePoints,
+  scenePoints:pose3dScenePoints,offsetPoints:pose3dOffsetPoints,bounds:pose3dBounds,fitCamera:pose3dFitCamera,
+  debug:()=>pose3dView?{...pose3dView.last,style:pose3dView.style,preset:pose3dView.preset,target:pose3dView.target,
+    distance:pose3dView.drag?.distance,fit:pose3dView.fit,fitKey:pose3dView.fitKey,fitCount:pose3dView.fitCount,
+    camera:[pose3dView.camera.position.x,pose3dView.camera.position.y,pose3dView.camera.position.z],
+    message:pose3dView.message?.textContent,hidden:pose3dView.message?.hidden}:null};
+if(typeof document!=="undefined")build();
+</script>
+</body>
+</html>

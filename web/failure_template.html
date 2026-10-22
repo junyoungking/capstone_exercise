@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>분석할 수 없습니다</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#191c23;color:#eeeef2;font:14px/1.7 -apple-system,"Malgun Gothic",sans-serif}
+main{max-width:820px;margin:40px auto;padding:0 20px}h1{font-size:24px}h2{font-size:16px;margin-top:25px}
+section{padding:24px;background:#242832;border:1px solid #3b4250;border-radius:8px}.muted{color:#a3aaba}
+code{display:block;padding:12px;background:#191c23;white-space:pre-wrap;overflow-wrap:anywhere}li{margin:6px 0}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const D = /*__DATA__*/null;
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const esc = value => String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+if(typeof document!=="undefined"&&D?.failure){
+  const failure=D.failure;
+  document.title=failure.title;
+  const check=failure.check==null ? "" : '<p class="muted">'+esc(failure.check_label)+' '+clamp(failure.check,1,failure.check_count)+'/'+failure.check_count+'</p>';
+  document.getElementById("app").innerHTML='<h1>'+esc(failure.title)+'</h1><section>'+check+'<h2>중단 이유</h2><p id="reason">'+esc(failure.reason)+'</p>'+ 
+    '<p class="muted" id="remedy">'+esc(failure.remedy)+'</p><h2>촬영·영상 확인</h2><ul>'+failure.checklist.map(item=>'<li>'+esc(item)+'</li>').join("")+'</ul>'+
+    '<h2>다시 실행</h2><code id="command">'+esc(failure.command)+'</code></section>';
+}
+</script>
+</body>
+</html>

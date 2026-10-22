@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자세 비교 플레이어</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{--rubber:#1F2128;--panel:#262932;--chalk:#EFECE4;--dim:#878D9B;--dimmer:#5A606D;
+        --rule:#363A45;--over:#CE2A31;--steel:#6C7684;--marker:#E8B923;}
+  *{box-sizing:border-box}
+  body{margin:0;padding:26px 22px 56px;background:var(--rubber);color:var(--chalk);
+       font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+       font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1320px;margin:0 auto}
+  h1{margin:0 0 3px;font-size:23px;font-weight:700;letter-spacing:-.02em}
+  .sub{color:var(--dim);font-size:13px;margin-bottom:20px}
+  .stage{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px;align-items:start}
+
+  /* 나란히 두 화면 */
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .vbox{position:relative;background:#000;line-height:0}
+  .vbox video{display:block;width:100%;max-height:58vh;height:auto;object-fit:contain}
+  .vbox .sprite{display:block;width:100%;max-height:58vh;background-repeat:no-repeat;background-color:#000}
+  .vbox canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .vtag{position:absolute;left:9px;top:9px;padding:4px 9px;background:rgba(0,0,0,.7);
+        font-size:12px;line-height:1.35;letter-spacing:.01em}
+  .vtag b{color:var(--marker);font-weight:600}
+  .vtag.ref b{color:#7FC4A0}
+  .vtag.off b{color:var(--dimmer)}
+
+  /* 타임라인 — 색상은 phase, 빨강은 문제 표시 전용 */
+  :root{--p-down:#2E5C8A;--p-bottom:#6B4E9E;--p-up:#2F7A55;}
+  .tl{margin-top:12px}
+  .bmlane{position:relative;height:12px}
+  .bm{position:absolute;bottom:1px;width:0;height:0;transform:translateX(-6px);cursor:pointer;
+      border-left:6px solid transparent;border-right:6px solid transparent;
+      border-top:10px solid var(--over)}
+  .bm:hover{border-top-color:#FF6B70}
+  .bands{position:relative;height:24px;background:#15161B;cursor:pointer}
+  .band{position:absolute;top:0;bottom:0}
+  .band.down{background:var(--p-down)}
+  .band.bottom{background:var(--p-bottom)}
+  .band.up{background:var(--p-up)}
+  .band.has::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--over)}
+  .band.exc{background:repeating-linear-gradient(135deg,#2E3038 0 5px,#1C1E24 5px 10px)}
+  .replab{position:absolute;top:100%;font-size:10.5px;color:var(--dimmer);
+          line-height:1;padding-top:4px;transform:translateX(-50%)}
+  .cursor{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--marker);pointer-events:none}
+
+  .legend{display:flex;gap:14px;align-items:center;margin-top:20px;font-size:11.5px;color:var(--dim)}
+  .legend i{display:inline-block;width:11px;height:11px;margin-right:5px;vertical-align:-1px}
+  .legend .tri{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+               border-top:8px solid var(--over);margin-right:5px;display:inline-block}
+
+  .bmrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+  .bmrow button{appearance:none;border:1px solid var(--rule);border-left-width:3px;
+                background:#22242B;color:var(--chalk);font:inherit;font-size:12px;
+                padding:4px 10px 4px 9px;cursor:pointer}
+  .bmrow button:hover{background:#2C2F37}
+  .bmrow button b{color:var(--over);font-weight:600}
+  .bmrow .none{color:var(--dimmer);font-size:12.5px;padding:4px 0}
+
+  .controls{display:flex;align-items:center;gap:7px;margin-top:10px;flex-wrap:wrap}
+  .controls button{appearance:none;border:1px solid var(--rule);background:var(--panel);
+                   color:var(--chalk);font:inherit;font-size:13px;padding:6px 12px;cursor:pointer}
+  .controls button:hover{border-color:var(--dim)}
+  .controls .frame{margin-left:auto;color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums}
+  .controls .frame b{color:var(--chalk);font-weight:600}
+  .reptabs{display:flex;gap:2px;margin-top:13px;border-bottom:1px solid var(--rule)}
+  .reptabs button{appearance:none;border:0;background:none;color:var(--dim);font:inherit;
+                  font-size:13.5px;padding:8px 14px;cursor:pointer;
+                  border-bottom:2px solid transparent;margin-bottom:-1px}
+  .reptabs button[aria-current="true"]{color:var(--chalk);border-bottom-color:var(--marker);font-weight:600}
+  .reptabs button[data-exc="1"]{color:var(--dimmer);text-decoration:line-through}
+
+  /* 오른쪽 패널 — phase 별로 나눔 */
+  .panel{background:var(--panel);padding:15px 17px}
+  .panel>h2{margin:0 0 12px;font-size:15px;font-weight:600}
+  .ph{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+  .ph:last-of-type{border-bottom:0;margin-bottom:6px}
+  .ph>h3{margin:0 0 7px;font-size:12.5px;font-weight:600;color:var(--dim);
+         display:flex;align-items:center;gap:7px;cursor:pointer}
+  .ph>h3 i{width:9px;height:9px;flex:0 0 9px}
+  .ph.cur>h3{color:var(--chalk)}
+  .ph.cur{background:rgba(232,185,35,.05);margin-left:-17px;margin-right:-17px;
+          padding:0 17px 12px;border-left:3px solid var(--marker)}
+  .ph.cur>h3{padding-top:10px}
+  .ph>h3 em{font-style:normal;font-size:11px;color:var(--dimmer);font-weight:400}
+  .ph:not(.cur) .m{opacity:.45}
+  .m{padding:6px 0}
+  .m .top{display:flex;align-items:baseline;gap:8px}
+  .m .nm{font-size:13px;flex:1}
+  .m .now{font-size:12.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .m .rep{font-size:12px;font-variant-numeric:tabular-nums;color:var(--dim)}
+  .m.over .nm{color:var(--over);font-weight:600}
+  .m.over .rep b{color:var(--over)}
+  .m.na .nm,.m.na .now{color:var(--dimmer)}
+  .m .gauge{position:relative;height:4px;background:#15161B;margin-top:5px}
+  .m .gauge .zero{position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--marker);opacity:.7}
+  .m .gauge .fill{position:absolute;top:0;bottom:0;background:var(--steel)}
+  .m.over .gauge .fill{background:var(--over)}
+  .say{margin-top:14px;padding:13px 15px;background:#1B1D24;border-left:3px solid var(--marker);
+       font-size:14px;line-height:1.7}
+  .foot{margin-top:24px;padding-top:13px;border-top:1px solid var(--rule);color:var(--dimmer);font-size:12.5px}
+  kbd{background:#15161B;border:1px solid var(--rule);padding:1px 5px;font:inherit;font-size:11.5px}
+  @media(max-width:1000px){.stage{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const D = /*__DATA__*/null;
+const EX={squat:"스쿼트",deadlift:"데드리프트",benchpress:"벤치프레스"};
+const PH={down:"하강",bottom:"최저점",up:"상승",hold:"정지",lockout:"락아웃"};
+const PC={down:"var(--p-down)",bottom:"var(--p-bottom)",up:"var(--p-up)",
+          hold:"#5B6472",lockout:"#2F7A55"};
+const SPAN=3;
+let uv,ev,uc,ec,ux,ex_,curRep=0,curFrame=0,total=0;
+
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=(v,u)=>u==="ratio"?v.toFixed(3):v.toFixed(1)+"°";
+
+function phaseAt(f){
+  for(const r of D.reps) for(const p of r.phases)
+    if(f>=p.start&&f<p.end) return {rep:r,ph:p};
+  return null;
+}
+function expertFrame(f){
+  const h=phaseAt(f); if(!h) return null;
+  const p=h.ph, t=(f-p.start)/Math.max(p.end-p.start,1);
+  return Math.round(p.expert_start+t*(p.expert_end-p.expert_start));
+}
+
+function paint(cv,ctx,vid,pts,flagJ,flagB){
+  if(!cv||!vid) return;
+  const w=vid.clientWidth,h=vid.clientHeight;
+  if(!w||!h) return;
+  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}
+  ctx.clearRect(0,0,w,h);
+  if(!pts) return;
+  const P=i=>[pts[i][0]*w,pts[i][1]*h], vis=i=>pts[i][2]>=0.5;
+  for(const [a,b] of D.connections){
+    if(!vis(a)||!vis(b)) continue;
+    const on=flagB.has(a+"-"+b)||flagB.has(b+"-"+a);
+    const [x1,y1]=P(a),[x2,y2]=P(b);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+    ctx.strokeStyle=on?"#CE2A31":"rgba(120,225,140,.78)";
+    ctx.lineWidth=on?5:2.5;ctx.stroke();
+  }
+  for(let i=0;i<pts.length;i++){
+    if(!vis(i)) continue;
+    const [x,y]=P(i),on=flagJ.has(i);
+    ctx.beginPath();ctx.arc(x,y,on?6:3,0,6.2832);
+    ctx.fillStyle=on?"#CE2A31":"rgba(200,245,205,.9)";ctx.fill();
+    if(on){ctx.lineWidth=2;ctx.strokeStyle="rgba(255,255,255,.55)";ctx.stroke();}
+  }
+}
+
+function drawBoth(){
+  const h=phaseAt(curFrame);
+  const fj=new Set(h?h.ph.flagged_joints:[]);
+  const fb=new Set((h?h.ph.flagged_bones:[]).map(b=>b.join("-")));
+  paint(uc,ux,uv,D.user.frames[String(curFrame)],fj,fb);
+  const efr=expertFrame(curFrame);
+  paint(ec,ex_,esp||ev,efr!==null?D.expert.frames[String(efr)]:null,new Set(),new Set());
+}
+
+function panelHTML(){
+  const rep=D.reps[curRep], hit=phaseAt(curFrame);
+  const inst=D.instant[String(curFrame)]||{};
+  const phs=rep.phases.map(p=>{
+    const cur=hit&&hit.ph===p;
+    const rows=p.rows.map(r=>{
+      if(r.status==="unavailable")
+        return `<div class="m na"><div class="top"><span class="nm">${r.label}</span>
+                <span class="now">측정 불가</span></div></div>`;
+      const now=cur?inst[r.metric]:undefined;
+      const k=r.ratio_to_threshold??0,c=clamp(k,-SPAN,SPAN),half=50/SPAN,wd=Math.abs(c)*half;
+      return `<div class="m ${r.status==="over"?"over":""}">
+        <div class="top"><span class="nm">${r.label}</span>
+        <span class="now">${now!==undefined?fmt(now,r.unit):""}</span></div>
+        <div class="rep">${r.point} ${fmt(r.user,r.unit)} / 레퍼런스 ${fmt(r.expert,r.unit)}
+          &nbsp;<b>${r.diff>0?"+":""}${fmt(r.diff,r.unit)}</b></div>
+        <div class="gauge"><div class="zero"></div>
+          <div class="fill" style="left:${c>=0?50:50-wd}%;width:${Math.max(wd,.6)}%"></div></div>
+      </div>`;}).join("");
+    const n=p.marks.length;
+    return `<section class="ph ${cur?"cur":""}" data-f="${p.start}">
+      <h3><i style="background:${PC[p.phase]||"#6C7684"}"></i>${PH[p.phase]||p.phase}
+        <em>${p.end-p.start}프레임${n?` · 초과 ${n}`:""}</em></h3>
+      ${rows}</section>`;}).join("");
+  return `<div class="panel"><h2>rep ${rep.rep}</h2>${phs}
+    <div class="say">${rep.sentence}</div></div>`;
+}
+
+function bandsHTML(){
+  let h="";
+  for(const r of D.reps){
+    for(const p of r.phases){
+      const cls=(r.excluded?"exc":p.phase)+(p.marks.length&&!r.excluded?" has":"");
+      h+=`<div class="band ${cls}" style="left:${p.start/total*100}%;width:${(p.end-p.start)/total*100}%"
+           data-f="${p.start}" title="rep ${r.rep} ${PH[p.phase]||p.phase}${
+             p.marks.length?` · 초과 ${p.marks.length}`:""}"></div>`;
+    }
+    const mid=(r.start+r.end)/2/total*100;
+    h+=`<div class="replab" style="left:${mid}%">rep ${r.rep}</div>`;
+  }
+  h+=`<div class="cursor" style="left:${curFrame/total*100}%"></div>`;
+  return h;
+}
+
+function bmlaneHTML(){
+  let h="";
+  for(const r of D.reps) for(const p of r.phases) for(const m of p.marks)
+    h+=`<div class="bm" style="left:${m.frame/total*100}%" data-f="${m.frame}"
+         title="rep ${r.rep} ${PH[p.phase]||p.phase} · ${m.label} ${m.diff>0?"+":""}${fmt(m.diff,m.unit)}"></div>`;
+  return h;
+}
+
+function bookmarksHTML(){
+  const rep=D.reps[curRep];
+  const all=rep.phases.flatMap(p=>p.marks.map(m=>({...m,phase:p.phase})));
+  if(!all.length) return `<span class="none">이 rep 에는 임계를 넘은 항목이 없습니다</span>`;
+  return all.map(m=>`<button data-f="${m.frame}" style="border-left-color:${PC[m.phase]||"#6C7684"}">
+    ${PH[m.phase]||m.phase} · ${m.label} <b>${m.diff>0?"+":""}${fmt(m.diff,m.unit)}</b></button>`).join("");
+}
+
+function refresh(){
+  document.getElementById("side").innerHTML=panelHTML();
+  document.getElementById("bands").innerHTML=bandsHTML();
+  document.getElementById("bmlane").innerHTML=bmlaneHTML();
+  document.getElementById("bmrow").innerHTML=bookmarksHTML();
+  const h=phaseAt(curFrame);
+  const ut=document.getElementById("utag"),et=document.getElementById("etag");
+  ut.className="vtag"+(h?"":" off");
+  ut.innerHTML=h?`<b>사용자</b> rep ${h.rep.rep} · ${PH[h.ph.phase]||h.ph.phase}`:`<b>사용자</b> 구간 밖`;
+  const efr=expertFrame(curFrame);
+  et.className="vtag ref"+(h?"":" off");
+  et.innerHTML=h?`<b>레퍼런스</b> 같은 진행도 ${Math.round((curFrame-h.ph.start)/Math.max(h.ph.end-h.ph.start,1)*100)}%`
+                :`<b>레퍼런스</b> —`;
+  document.getElementById("fno").textContent=curFrame;
+  document.querySelectorAll(".reptabs button").forEach(b=>
+    b.setAttribute("aria-current",String(+b.dataset.i===curRep)));
+  document.querySelectorAll(".ph").forEach(s=>s.onclick=()=>seek(+s.dataset.f));
+  document.querySelectorAll("#bmrow button,.bm,.band").forEach(el=>
+    el.onclick=e=>{e.stopPropagation();seek(+el.dataset.f);});
+  drawBoth();
+}
+
+let lastPhase=null, evSeeking=false, esp=null;
+function showSpriteFrame(efr){
+  const sp=D.expert.sprite; if(!esp||!sp) return;
+  const key=String(efr);
+  let cell=sp.pos[key];
+  if(!cell){ // 없는 프레임이면 가장 가까운 것으로
+    const ks=Object.keys(sp.pos).map(Number);
+    const near=ks.reduce((a,b)=>Math.abs(b-efr)<Math.abs(a-efr)?b:a,ks[0]);
+    cell=sp.pos[String(near)];
+  }
+  if(!cell) return;
+  const [c,r]=cell;
+  esp.style.backgroundPosition =
+    `${sp.cols>1?c/(sp.cols-1)*100:0}% ${sp.rows>1?r/(sp.rows-1)*100:0}%`;
+}
+
+function hardSeek(efr){
+  const t=clamp(efr/D.expert.fps, 0, Math.max((ev.duration||1e9)-1/D.expert.fps, 0));
+  evSeeking=true; ev.currentTime=t+1e-4;
+}
+
+function syncExpert(){
+  const h=phaseAt(curFrame);
+  // 스프라이트 방식은 시크가 없어서 배경 위치만 바꾸면 끝난다.
+  if(esp){ const f=expertFrame(curFrame); if(f!==null) showSpriteFrame(f); return; }
+  if(!ev) return;
+
+  // rep 사이 구간에는 레퍼런스를 세워둔다. 방치하면 자기 속도로 흘러가 어긋난다.
+  if(!h){ if(!ev.paused) ev.pause(); lastPhase=null; return; }
+
+  const p=h.ph, efr=expertFrame(curFrame);
+  const rate=clamp((p.expert_end-p.expert_start)/Math.max(p.end-p.start,1),.25,4);
+  if(Math.abs(ev.playbackRate-rate)>1e-3) ev.playbackRate=rate;
+
+  const cur=ev.currentTime*D.expert.fps;
+  const changed=(p!==lastPhase);
+  lastPhase=p;
+
+  // 레퍼런스가 1 rep 뿐이라 매 rep 마다 되감아야 한다.
+  // phase 가 바뀌었거나, 영상이 끝났거나, 사용자가 멈춰 있으면 정확히 맞춘다.
+  if(changed || ev.ended || uv.paused){
+    if(Math.abs(cur-efr)>0.75) hardSeek(efr);
+  } else if(!evSeeking && Math.abs(cur-efr)>3){
+    hardSeek(efr);
+  }
+
+  // 사용자가 재생 중이면 레퍼런스도 재생 상태를 따라간다.
+  if(!uv.paused && (ev.paused||ev.ended)) ev.play().catch(()=>{});
+  if(uv.paused && !ev.paused) ev.pause();
+}
+
+function seek(f){
+  curFrame=clamp(f,0,total-1);
+  if(uv) uv.currentTime=curFrame/D.user.fps+1e-4;
+  const h=phaseAt(curFrame); if(h) curRep=D.reps.indexOf(h.rep);
+  syncExpert(); refresh();
+}
+
+function tick(){
+  if(uv&&!uv.paused&&!uv.ended){
+    curFrame=clamp(Math.round(uv.currentTime*D.user.fps),0,total-1);
+    const h=phaseAt(curFrame); if(h) curRep=D.reps.indexOf(h.rep);
+    syncExpert(); refresh();
+  }
+  requestAnimationFrame(tick);
+}
+
+function build(){
+  if(!D){document.getElementById("app").innerHTML="<p>데이터가 없습니다.</p>";return;}
+  total=D.user.total||Math.max(...D.reps.map(r=>r.end))+30;
+  document.getElementById("app").innerHTML=`
+    <h1>${EX[D.exercise]||D.exercise} 자세 비교</h1>
+    <div class="sub">레퍼런스는 사용자의 phase 진행도에 맞춰 재생됩니다 · 빨간 부위가 임계를 넘은 곳입니다</div>
+    <div class="stage"><div>
+      <div class="pair">
+        <div class="vbox"><video id="uv" src="${D.user.video}" preload="auto" playsinline muted></video>
+          <canvas id="uc"></canvas><div class="vtag" id="utag"></div></div>
+        <div class="vbox">${D.expert.sprite
+            ? `<div class="sprite" id="esp"></div>`
+            : `<video id="ev" src="${D.expert.video}" preload="auto" playsinline muted></video>`}
+          <canvas id="ec"></canvas><div class="vtag ref" id="etag"></div></div>
+      </div>
+      <div class="tl">
+        <div class="bmlane" id="bmlane"></div>
+        <div class="bands" id="bands"></div>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--p-down)"></i>하강</span>
+        <span><i style="background:var(--p-bottom)"></i>최저점</span>
+        <span><i style="background:var(--p-up)"></i>상승</span>
+        <span><i style="background:var(--over);height:3px"></i>임계 초과 구간</span>
+        <span><i class="tri"></i>차이가 가장 큰 프레임</span>
+      </div>
+      <div class="bmrow" id="bmrow"></div>
+      <div class="controls">
+        <button data-a="prev10">−10</button><button data-a="prev">−1</button>
+        <button data-a="play">재생</button>
+        <button data-a="next">+1</button><button data-a="next10">+10</button>
+        <span class="frame">프레임 <b id="fno">0</b></span>
+      </div>
+      <div class="reptabs">${D.reps.map((r,i)=>
+        `<button data-i="${i}" data-exc="${r.excluded?1:0}">rep ${r.rep}</button>`).join("")}</div>
+    </div><div id="side"></div></div>
+    <div class="foot"><kbd>←</kbd> <kbd>→</kbd> 한 프레임, <kbd>Shift</kbd>+방향키 10프레임,
+      <kbd>Space</kbd> 재생/정지. 빨간 삼각형은 그 지표의 차이가 가장 큰 프레임입니다.
+      판정은 phase 대표값 기준이라 구간 내내 유지됩니다. ${D.threshold_note}</div>`;
+
+  uv=document.getElementById("uv");ev=document.getElementById("ev");
+  uc=document.getElementById("uc");ec=document.getElementById("ec");
+  ux=uc.getContext("2d");ex_=ec.getContext("2d");
+  esp=document.getElementById("esp");
+  if(esp&&D.expert.sprite){
+    const sp=D.expert.sprite;
+    esp.style.backgroundImage=`url(${sp.data})`;
+    esp.style.backgroundSize=`${sp.cols*100}% ${sp.rows*100}%`;
+    esp.style.aspectRatio=`${sp.cell[0]} / ${sp.cell[1]}`;
+    new ResizeObserver(drawBoth).observe(esp);
+  }
+
+  const start=()=>seek(D.reps[0].start);
+  uv.addEventListener("loadedmetadata",start);
+  uv.addEventListener("seeked",()=>{curFrame=Math.round(uv.currentTime*D.user.fps);refresh();});
+  if(ev){
+    ev.addEventListener("seeked",()=>{evSeeking=false;drawBoth();});
+    ev.addEventListener("ended",()=>{const f=expertFrame(curFrame);
+      if(f!==null){hardSeek(f); if(!uv.paused) ev.play().catch(()=>{});}});
+    uv.addEventListener("pause",()=>{ev.pause();syncExpert();});
+    uv.addEventListener("play",()=>{syncExpert();ev.play().catch(()=>{});});
+    new ResizeObserver(drawBoth).observe(ev);
+  }
+  const fallback=(msg)=>{document.querySelectorAll(".vbox").forEach((b,i)=>{
+      b.style.aspectRatio=(i?D.expert:D.user).size.join(" / ");b.style.height="52vh";});
+    curFrame=D.reps[0].start;refresh();
+    if(msg){const t=document.getElementById("utag");
+      t.className="vtag off";t.innerHTML=`<b>영상 재생 불가</b> ${msg}`;}};
+  uv.addEventListener("error",()=>fallback(`${D.video||D.user.video} 를 열지 못했습니다`));
+
+  // 검은 화면의 원인을 구분해서 알려준다.
+  function diagnose(){
+    const v=uv;
+    if(v.readyState===0){fallback("파일을 찾지 못했습니다 — 경로를 확인하세요");return;}
+    if(!v.videoWidth||!v.videoHeight){
+      fallback("코덱을 디코딩하지 못합니다 — tools/check_video.py --fix 로 변환하세요");return;}
+    const expected=(D.user.total||total)/D.user.fps;
+    if(v.duration&&Math.abs(v.duration-expected)>1.0){
+      const t=document.getElementById("utag");t.className="vtag off";
+      t.innerHTML=`<b>길이 불일치</b> 재생 ${v.duration.toFixed(1)}s / 계산 ${expected.toFixed(1)}s`;
+      console.warn("가변 프레임레이트로 보입니다. check_video.py 로 고정 fps 변환이 필요합니다.");}
+    if(v.videoWidth!==D.user.size[0]||v.videoHeight!==D.user.size[1]){
+      console.warn(`해상도 불일치: 브라우저 ${v.videoWidth}x${v.videoHeight}, `
+                  +`추출 ${D.user.size.join("x")} — 회전 메타데이터 가능성`);}
+  }
+  uv.addEventListener("loadeddata",diagnose);
+  setTimeout(()=>{if(uv.readyState===0)fallback("파일을 찾지 못했습니다 — 경로를 확인하세요");},2500);
+  new ResizeObserver(drawBoth).observe(uv);
+
+  document.querySelectorAll(".controls button").forEach(b=>b.onclick=()=>{
+    const a=b.dataset.a;
+    if(a==="play"){ if(uv.paused){uv.play();if(ev)ev.play();b.textContent="정지";}
+                    else {uv.pause();if(ev)ev.pause();b.textContent="재생";} }
+    else seek(curFrame+({prev:-1,next:1,prev10:-10,next10:10})[a]);
+  });
+  document.querySelectorAll(".reptabs button").forEach(b=>
+    b.onclick=()=>{curRep=+b.dataset.i;seek(D.reps[curRep].start);});
+  document.getElementById("bands").onclick=e=>{
+    if(e.target.closest(".band,.bm")) return;
+    const r=e.currentTarget.getBoundingClientRect();
+    seek(Math.round((e.clientX-r.left)/r.width*total));
+  };
+  document.addEventListener("keydown",e=>{
+    const s=e.shiftKey?10:1;
+    if(e.key==="ArrowLeft"){seek(curFrame-s);e.preventDefault();}
+    if(e.key==="ArrowRight"){seek(curFrame+s);e.preventDefault();}
+    if(e.key===" "){uv.paused?(uv.play(),ev&&ev.play()):(uv.pause(),ev&&ev.pause());e.preventDefault();}
+  });
+  refresh();requestAnimationFrame(tick);
+}
+build();
+</script>
+</body></html>
