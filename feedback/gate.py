@@ -179,10 +179,18 @@ def check_views(settings: dict[str, Any] | str, ref_view: str | None = None) -> 
         )
 
 
-def check_detection(role: str, pose: dict[str, Any]) -> dict[str, Any]:
+def check_detection(role: str, pose: dict[str, Any], segments: dict | None = None) -> dict[str, Any]:
     valid = np.asarray(pose.get("valid", []), dtype=bool)
     total = int(pose.get("total", len(valid)))
-    detected = int(np.count_nonzero(valid[:total]))
+    if segments is not None and segments.get("source", "").startswith("plate"):
+        support = np.zeros(total, dtype=bool)
+        for rep in segments["reps"]:
+            positions = rep["positions"]
+            support[max(0, positions["START"]):min(total, positions["LOCKOUT"] + 1)] = True
+        detected = int(np.count_nonzero(valid[:total] & support))
+        total = int(np.count_nonzero(support))
+    else:
+        detected = int(np.count_nonzero(valid[:total]))
     ratio = detected / total if total > 0 else 0.0
     if ratio < config.MIN_VALID_RATIO:
         raise GateFailure(

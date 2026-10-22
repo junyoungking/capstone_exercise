@@ -31,8 +31,11 @@ def _read_cache(cache_path: Path, video_path: Path, mtime_ns: int, selection: st
                 "total": int(saved["total"].item()),
                 "video": video_path.as_posix(),
                 "mtime_ns": mtime_ns,
+                "raw_lms": saved["raw_lms"].copy() if "raw_lms" in saved else saved["lms"].copy(),
             }
         if data["lms"].shape != (data["total"], 33, 4):
+            return None
+        if data["raw_lms"].shape != data["lms"].shape:
             return None
         if data["valid"].shape != (data["total"],):
             return None
@@ -62,7 +65,7 @@ def extract_pose(
     if not video_path.is_file():
         raise FileNotFoundError(video_path)
     mtime_ns = video_path.stat().st_mtime_ns
-    selection = "first" if plate_rows is None else "plate-v1:" + hashlib.sha256(
+    selection = "first" if plate_rows is None else "plate-wrist-v2:" + hashlib.sha256(
         json.dumps([exercise, [(r['seq'], r.get('plate')) for r in plate_rows]],
                    sort_keys=True).encode()).hexdigest()
     if not no_cache:
@@ -91,6 +94,7 @@ def extract_pose(
         "video": video_path.as_posix(),
         "mtime_ns": mtime_ns,
         "selection": selection,
+        "raw_lms": np.asarray(getattr(sequence, "raw_lms", lms), dtype=np.float32),
     }
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(cache_path, **data)
@@ -114,6 +118,10 @@ def choose_plate_candidate(candidates, row, previous_center, exercise, size):
     return candidates[index], center if center is not None else previous_center
 
 
+class _PlateSequence(list):
+    """Keep selected raw landmarks for quality checks before EMA smoothing."""
+
+
 def extract_plate_sequence(video_path, exercise, rows):
     import cv2
     from unified_feedback_v4 import (create_landmarker, MODEL_PATH, extract_all_landmarks,
@@ -123,7 +131,8 @@ def extract_plate_sequence(video_path, exercise, rows):
     if not capture.isOpened():
         raise RuntimeError(f"영상을 열 수 없습니다: {video_path}")
     fps = capture.get(cv2.CAP_PROP_FPS)
-    smoother, sequence, previous = LandmarkSmoother(), [], None
+    smoother, sequence, previous = LandmarkSmoother(), _PlateSequence(), None
+    sequence.raw_lms = []
     try:
         with create_landmarker(MODEL_PATH) as landmarker:
             while True:
@@ -137,6 +146,8 @@ def extract_plate_sequence(video_path, exercise, rows):
                 raw, previous = choose_plate_candidate(candidates, rows[seq], previous, exercise,
                                                         (image.shape[1], image.shape[0]))
                 sequence.append(smoother.update(raw) if valid_lms(raw) else None)
+                sequence.raw_lms.append(np.asarray(raw, dtype=np.float32).copy() if valid_lms(raw)
+                                        else np.full((33, 4), np.nan, dtype=np.float32))
     finally:
         capture.release()
     if len(sequence) != len(rows):

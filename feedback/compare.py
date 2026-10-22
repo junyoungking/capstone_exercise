@@ -38,7 +38,14 @@ def _cells(user_rep: dict, ref_rep: dict, exercise: str) -> list[dict]:
             available = values["diff"] is not None
             status = "unavailable" if not available else (
                 "advisory" if metric in config.ADVISORY_METRICS.get(exercise, set()) else "ok")
+            reasons = []
+            if not available:
+                for label, rep in (("사용자", user_rep), ("레퍼런스", ref_rep)):
+                    item = rep["positions"][position]
+                    if not _finite(item["values"].get(metric)):
+                        reasons.append(label + ": " + (item.get("reasons", {}).get(metric) or "측정값 없음"))
             cells.append({"where": position, "metric": metric, "status": status, **values,
+                          "unavailable_reason": "; ".join(reasons) if reasons else None,
                           "range": [values["ref"] - values["threshold"],
                                     values["ref"] + values["threshold"]] if available else None})
     return cells

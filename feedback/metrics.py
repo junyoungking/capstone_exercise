@@ -9,6 +9,7 @@ from typing import Any
 import numpy as np
 
 from feedback import config
+from feedback.quality import observation_reason, window_reason
 from unified_feedback_v4 import SideLock, compute_metrics, normalize_exercise_name
 
 
@@ -22,8 +23,12 @@ def _json_number(value: Any) -> float | None:
     return number
 
 
-def _phase_detection(valid: np.ndarray, start: int, end: int) -> float:
+def _phase_detection(valid: np.ndarray, start: int, end: int, position: int | None = None) -> float:
     length = max(0, int(end) - int(start))
+    if position is not None and length < 5:
+        start = max(0, position - config.POSITION_WINDOW_RADIUS)
+        end = min(len(valid), position + config.POSITION_WINDOW_RADIUS + 1)
+        return float(np.count_nonzero(valid[start:end]) / 5)
     if length == 0:
         return 0.0
     return float(np.count_nonzero(valid[start:end]) / length)
@@ -115,21 +120,49 @@ def build_metrics(pose: dict, segments: dict) -> dict:
 
     sides = _frame_sides(lms, valid, segments)
     frame_metrics = _frame_metrics(lms, valid, exercise, display_metrics, sides)
+    # Quality uses the selected raw observations so EMA cannot conceal a joint
+    # outside the image or raise its visibility across the acceptance boundary.
+    plate = segments.get("source", "").startswith("plate")
+    raw = np.asarray(pose.get("raw_lms", lms))
+    frame_reasons = {metric: [] for metric in display_metrics}
+    for frame in range(total):
+        for metric in display_metrics:
+            if not valid[frame]:
+                reason = "포즈 미검출"
+            elif plate:
+                reason = observation_reason(raw[frame], metric, sides[frame])
+            else:
+                reason = None
+            if reason is None and frame_metrics[metric][frame] is None:
+                reason = "지표 계산 불가"
+            frame_reasons[metric].append(reason)
+            if reason is not None:
+                frame_metrics[metric][frame] = None
+    phase_positions = {"down": "MID_DOWN", "bottom": "BOTTOM", "up": "MID_UP"}
 
     reps = []
     for source in segments["reps"]:
         phases = source["phases"]
         detect = {
-            phase: _phase_detection(valid, int(phases[phase][0]), int(phases[phase][1]))
+            phase: _phase_detection(valid, int(phases[phase][0]), int(phases[phase][1]),
+                                    source["positions"][phase_positions[phase]] if plate else None)
             for phase in config.PHASES
         }
         exclude_reason = _exclude_reason(detect, exercise)
         positions = {}
         for position in config.POSITIONS:
             frame = int(source["positions"][position])
+            start = max(0, frame - config.POSITION_WINDOW_RADIUS)
+            end = min(total, frame + config.POSITION_WINDOW_RADIUS + 1)
+            counts = {metric: sum(value is not None for value in series[start:end])
+                      for metric, series in frame_metrics.items()}
             positions[position] = {
                 "frame": frame,
                 "values": _position_values(frame_metrics, frame),
+                "valid_frames": counts,
+                "reasons": {metric: window_reason(frame_reasons[metric][start:end], counts[metric],
+                                                  config.MIN_POSITION_VALUES)
+                            for metric in display_metrics},
             }
         reps.append({
             "rep": int(source["rep"]),
