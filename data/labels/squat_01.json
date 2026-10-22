@@ -1,0 +1,119 @@
+{
+  "_comment": [
+    "본 비교용. --pick-expert 결과에 따라 expert.reps 를 하나만 남긴다.",
+    "python offline_compare.py --labels data/labels/squat_01.json --out output/result_01_t18.json --html output/demo_01_t18.html"
+  ],
+  "exercise": "squat",
+  "user": {
+    "video": "data/videos/user1.mp4",
+    "reps": [
+      {
+        "index": 1,
+        "phases": {
+          "down": [
+            184,
+            231
+          ],
+          "bottom": [
+            231,
+            234
+          ],
+          "up": [
+            234,
+            276
+          ]
+        }
+      },
+      {
+        "index": 2,
+        "phases": {
+          "down": [
+            310,
+            353
+          ],
+          "bottom": [
+            353,
+            355
+          ],
+          "up": [
+            355,
+            407
+          ]
+        }
+      },
+      {
+        "index": 3,
+        "phases": {
+          "down": [
+            439,
+            481
+          ],
+          "bottom": [
+            481,
+            484
+          ],
+          "up": [
+            484,
+            534
+          ]
+        }
+      },
+      {
+        "index": 4,
+        "phases": {
+          "down": [
+            593,
+            635
+          ],
+          "bottom": [
+            635,
+            639
+          ],
+          "up": [
+            639,
+            696
+          ]
+        }
+      },
+      {
+        "index": 5,
+        "phases": {
+          "down": [
+            785,
+            822
+          ],
+          "bottom": [
+            822,
+            825
+          ],
+          "up": [
+            825,
+            884
+          ]
+        }
+      }
+    ]
+  },
+  "expert": {
+    "video": "data/videos/expert2.mp4",
+    "reps": [
+      {
+        "index": 1,
+        "phases": {
+          "down": [
+            42,
+            90
+          ],
+          "bottom": [
+            90,
+            92
+          ],
+          "up": [
+            92,
+            153
+          ]
+        }
+      }
+    ]
+  }
+}

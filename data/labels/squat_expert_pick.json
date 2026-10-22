@@ -1,0 +1,65 @@
+{
+  "_comment": [
+    "레퍼런스로 쓸 expert rep 을 고르기 위한 파일.",
+    "python offline_compare.py --labels data/labels/squat_expert_pick.json --pick-expert --out output/expert_pick.json"
+  ],
+  "exercise": "squat",
+  "expert": {
+    "reps": [
+      {
+        "index": 1,
+        "video": "data/videos/expert1.mp4",
+        "phases": {
+          "down": [
+            238,
+            297
+          ],
+          "bottom": [
+            297,
+            300
+          ],
+          "up": [
+            300,
+            366
+          ]
+        }
+      },
+      {
+        "index": 2,
+        "video": "data/videos/expert2.mp4",
+        "phases": {
+          "down": [
+            42,
+            90
+          ],
+          "bottom": [
+            90,
+            92
+          ],
+          "up": [
+            92,
+            153
+          ]
+        }
+      },
+      {
+        "index": 3,
+        "video": "data/videos/expert2.mp4",
+        "phases": {
+          "down": [
+            226,
+            275
+          ],
+          "bottom": [
+            275,
+            277
+          ],
+          "up": [
+            277,
+            339
+          ]
+        }
+      }
+    ]
+  }
+}
