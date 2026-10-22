@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>세트 비교 리포트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  --ground:#0E1116;--surface:#161B22;--raised:#1E2530;--line:#2A3340;
+  --text-1:#E8EDF3;--text-2:#A9B4C2;--text-3:#8A97A8;
+  --mine:#C6F432;--up:#C6F432;--ref:#4F8CFF;--down:#4F8CFF;--pause:#6B7686;
+  --warn:#FF9F1C;--warn-bg:#2A1E0C;--warn-text:#FFB65C;
+  --sans:"Noto Sans KR","Noto Sans CJK KR","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ground);color:var(--text-1);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+.num{font-family:var(--mono);font-weight:700;letter-spacing:-.01em}
+.unit{font:400 13px var(--sans);color:var(--text-2);margin-left:4px}
+.label{font-size:13px;color:var(--text-2)}
+.wrap{max-width:1680px;margin:0 auto;padding:24px 32px 48px}
+.topbar{display:flex;align-items:center;gap:12px;height:56px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;letter-spacing:-.01em}
+.brand i{width:14px;height:14px;border-radius:4px;background:var(--mine);display:inline-block}
+.topbar .sp{flex:1}
+.ghost{background:transparent;border:1px solid var(--line);border-radius:12px;height:40px;padding:0 16px;color:var(--text-2)}
+.ghost:hover{border-color:var(--text-3);color:var(--text-1)}
+.primary{background:var(--mine);color:#0E1116;border:0;border-radius:12px;height:52px;padding:0 28px;font-weight:700;font-size:17px}
+.primary:disabled{opacity:.35;cursor:not-allowed}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px}
+.chip{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:999px;background:var(--raised);font-size:13px;color:var(--text-2);white-space:nowrap}
+.chip b{width:8px;height:8px;border-radius:50%;background:var(--mine);display:inline-block}
+.chip.warn{background:var(--warn-bg);color:var(--warn-text)}.chip.warn b{background:var(--warn)}
+.chip.ref b{background:var(--ref)}
+.screen{display:none}.screen.on{display:block}
+h1{font-size:32px;font-weight:900;margin:0;letter-spacing:-.02em}
+h2{font-size:20px;font-weight:700;margin:0}
+.sub{color:var(--text-2);margin:6px 0 0}
+
+/* upload */
+.hero{text-align:center;margin:28px 0 32px}
+.drops{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.drop{position:relative;border:2px dashed var(--line);border-radius:16px;background:var(--surface);min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;transition:border-color .2s,background .2s;cursor:pointer}
+.drop:hover,.drop.over{border-color:var(--text-3);background:#1a2029}
+.drop .tag{position:absolute;top:16px;left:16px}
+.drop .ico{width:64px;height:64px;border-radius:16px;background:var(--raised);display:grid;place-items:center}
+.drop.mine .ico svg{stroke:var(--mine)}.drop.refd .ico svg{stroke:var(--ref)}
+.drop .big{font-weight:700;font-size:18px}
+.drop input{display:none}
+.drop video{width:100%;height:260px;object-fit:contain;background:#000;border-radius:12px;display:none}
+.drop.has video{display:block}.drop.has .ico,.drop.has .big,.drop.has .hint{display:none}
+.drop.has{border-style:solid}
+.drop.mine.has{border-color:rgba(198,244,50,.55)}.drop.refd.has{border-color:rgba(79,140,255,.55);border-style:dashed}
+.meta{display:none;width:100%;justify-content:space-between;align-items:center;gap:12px}
+.drop.has .meta{display:flex}
+.meta .fn{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.opts{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:24px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg button{height:44px;padding:0 18px;border:0;border-radius:9px;background:transparent;color:var(--text-2);font-weight:500}
+.seg button.on{background:var(--raised);color:var(--mine)}
+.guide{display:flex;gap:8px;flex-wrap:wrap}
+
+/* processing */
+.proc{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;margin-top:24px}
+.scan{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.scanbox{position:relative;background:#000;border-radius:12px;overflow:hidden;height:420px}
+.scanbox video{width:100%;height:100%;object-fit:contain;opacity:.8}
+.scanbox .beam{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--mine),transparent);top:0;animation:beam 1.8s ease-in-out infinite;box-shadow:0 0 18px rgba(198,244,50,.7)}
+.scanbox.refb .beam{background:linear-gradient(90deg,transparent,var(--ref),transparent);box-shadow:0 0 18px rgba(79,140,255,.7)}
+@keyframes beam{0%{top:0}50%{top:calc(100% - 3px)}100%{top:0}}
+.scanbox .cap{position:absolute;left:12px;top:12px}
+.steps{list-style:none;margin:16px 0 0;padding:0}
+.steps li{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--raised);color:var(--text-3);transition:color .3s}
+.steps li .dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center}
+.steps li.run{color:var(--text-1)}.steps li.run .dot{border-color:var(--mine);border-top-color:transparent;animation:spin .8s linear infinite}
+.steps li.done{color:var(--text-1)}.steps li.done .dot{border-color:var(--mine);background:var(--mine)}
+.steps li.done .dot::after{content:"";width:8px;height:4px;border-left:2px solid #0E1116;border-bottom:2px solid #0E1116;transform:rotate(-45deg) translate(1px,-1px)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.steps .t{font-weight:500}.steps .d{font-size:13px;color:var(--text-2);margin-top:2px;min-height:20px}
+.steps .ms{font:500 13px var(--mono);color:var(--text-3)}
+.bar{height:6px;background:var(--raised);border-radius:999px;overflow:hidden;margin-top:20px}
+.bar i{display:block;height:100%;width:0;background:var(--mine);transition:width .4s}
+
+/* report */
+.rhead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:20px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 24px}
+.kpi .v{font:700 40px/1.15 var(--mono);margin-top:4px}
+.kpi.herok{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.kpi .v.hero{font-size:72px;color:var(--mine);line-height:.9;margin-top:6px}
+.kpi .cmp{font-size:13px;color:var(--text-2);margin-top:6px}
+.kpi .cmp .num{font-weight:500;color:var(--text-1)}
+.dash{width:14px;border-top:2px dashed var(--ref);display:inline-block;vertical-align:middle;margin-right:6px}
+.solid{width:14px;border-top:2px solid var(--mine);display:inline-block;vertical-align:middle;margin-right:6px}
+.main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;align-items:start}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sgrid{display:grid;grid-template-columns:var(--cu,1fr) var(--cr,1fr) 1.2fr;gap:12px;align-items:stretch}
+.vbox{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:var(--ar,1)}
+.vbox video{position:absolute;left:0;top:0;max-width:none}
+.vbox .bl{position:absolute;left:12px;bottom:12px;display:flex;gap:8px;align-items:baseline;background:rgba(14,17,22,.82);border-radius:10px;padding:6px 12px}
+.vbox .bl .num{font-size:20px}
+.vbox canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.vbox .tl{position:absolute;left:12px;top:12px;display:flex;gap:8px}
+.vbox .tr{position:absolute;right:12px;top:12px}
+.vbox.refv{outline:1px dashed rgba(79,140,255,.6);outline-offset:-1px}
+.cnt{background:rgba(14,17,22,.82);border-radius:12px;padding:6px 12px;font:700 22px var(--mono)}
+.cnt small{font:400 13px var(--sans);color:var(--text-2);margin-left:4px}
+.phase{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;background:rgba(14,17,22,.82);font-size:13px}
+.phase b{width:8px;height:8px;border-radius:50%}
+.phase.br{position:absolute;right:12px;bottom:14px;height:32px;padding:0 14px;font-size:14px}
+.ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ctrl .sep{width:1px;height:28px;background:var(--line);margin:0 4px}
+.btn{height:40px;min-width:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text-2);font-size:14px}
+.btn:hover{color:var(--text-1);border-color:var(--text-3)}
+.btn.on{background:var(--raised);color:var(--mine);border-color:var(--raised)}
+.play{width:48px;height:48px;border-radius:12px;background:var(--mine);border:0;display:grid;place-items:center}
+.reptabs{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.reptab{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--text-2);font-size:13px}
+.reptab.on{background:var(--raised);border-color:var(--raised);color:var(--text-1)}
+.reptab .d{display:inline-block;width:7px;height:7px;border-radius:50%;border:1px solid var(--text-1);margin-right:6px;vertical-align:1px}
+.reptab .d.f{background:var(--text-1)}
+.tline{position:relative;height:44px;margin-top:12px;border-radius:10px;background:var(--raised);overflow:hidden;cursor:pointer}
+.tline .row{position:absolute;left:0;right:0;height:14px}
+.tline .seg{position:absolute;top:0;height:14px;border-radius:3px;display:block;padding:0;border:0;background:none}
+.tline .head{position:absolute;top:0;bottom:0;width:2px;background:var(--text-1)}
+.side{display:flex;flex-direction:column;gap:16px}
+.fb{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.fcard{background:var(--raised);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:10px 1fr;gap:12px}
+.fcard .pt{width:10px;height:10px;border-radius:50%;margin-top:8px}
+.fcard p{margin:0;line-height:1.55}
+.fcard .v{color:var(--text-2)}
+.fcard .go{margin-top:8px;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--text-2);font-size:13px}
+.fcard .go:hover{color:var(--text-1)}
+.quiet{font-size:13px;color:var(--text-2);margin:12px 0 0}
+.three{position:relative;min-height:320px;border-radius:12px;overflow:hidden;background:#12161d;border:1px solid var(--line);cursor:grab}
+.three canvas{position:absolute;inset:0}
+.three .h3{position:absolute;left:14px;top:12px;display:flex;flex-direction:column;gap:0;pointer-events:none}
+.three .h3 .t{font-weight:700;font-size:16px}
+.three .mode{position:absolute;right:10px;bottom:10px;display:flex;gap:4px;background:rgba(14,17,22,.75);border:1px solid var(--line);border-radius:999px;padding:3px}
+.three .mode button{height:28px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:var(--text-2);font-size:12px}
+.three .mode button.on{background:var(--raised);color:var(--mine)}
+.three canvas{display:block;width:100%!important;height:100%!important}
+.three .views{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+.three .views button{height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:rgba(14,17,22,.75);color:var(--text-2);font-size:12px}
+.three .views button.on{color:var(--mine);border-color:var(--raised);background:var(--raised)}
+.three .legend{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--text-2);display:flex;gap:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.row3{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-top:16px}
+.chart{width:100%;height:260px;display:block;margin-top:12px}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+th{font:400 13px var(--sans);color:var(--text-2);text-align:right;padding:8px 10px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+td{padding:10px;text-align:right;border-bottom:1px solid var(--raised);font-family:var(--mono);font-weight:500}
+td:first-child{font-family:var(--sans);color:var(--text-2)}
+td.hi{color:var(--mine);font-weight:700}
+td .k1{font-weight:700;color:var(--text-1)}
+td .k2{display:inline-block;font-weight:700;color:var(--text-1);border:1px solid var(--text-1);border-radius:999px;padding:0 8px}
+td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
+.tempo{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.trow{display:grid;grid-template-columns:64px 1fr 150px;gap:12px;align-items:center;font-size:13px;color:var(--text-2)}
+.tbar{display:flex;height:22px;border-radius:6px;overflow:hidden;gap:2px}
+.tbar i{display:block;height:100%}
+.trow.refrow .tbar i{opacity:.9;outline:1.5px dashed var(--ref);outline-offset:-1.5px;background:transparent!important}
+.trow .nums{font-family:var(--mono);font-size:13px;color:var(--text-1);text-align:right}
+.legendrow{display:flex;gap:16px;font-size:13px;color:var(--text-2);margin-top:10px}
+.legendrow span{display:inline-flex;align-items:center;gap:6px}
+.legendrow b{width:12px;height:12px;border-radius:3px;display:inline-block}
+.foot{color:var(--text-3);font-size:12px;margin-top:24px;text-align:center}
+@media (max-width:1100px){.sgrid{grid-template-columns:1fr 1fr}.sgrid .three{grid-column:1/-1;height:360px}.main,.row2,.row3,.proc{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.wrap{padding:16px}.drops,.sgrid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><i></i>세트 리포트</div>
+    <div class="sp"></div>
+    <span class="chip" id="topchip"><b></b>원판 기준 측정</span>
+  </div>
+
+  <!-- 1. upload -->
+  <section class="screen on" id="s-upload">
+    <div class="hero">
+      <h1>내 세트를 기준 영상과 비교하기</h1>
+      <p class="sub">옆에서 찍은 영상 두 개를 올리면 횟수, rep별 깊이·템포·속도, 기준 영상과의 차이를 보여 줍니다.</p>
+    </div>
+    <div class="drops">
+      <label class="drop mine" id="d-user">
+        <span class="tag chip"><b></b>내 영상</span>
+        <span class="ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M6 10l6-6 6 6"/><path d="M4 20h16"/></svg></span>
+        <span class="big">내 세트 영상 올리기</span>
+        <span class="hint label">끌어다 놓거나 눌러서 고르기 · mp4, mov</span>
+        <video muted playsinline loop></video>
+        <div class="meta"><span class="fn"></span><span class="label inf"></span></div>
+        <input type="file" accept="video/*">
+      </label>
+      <label class="drop refd" id="d-ref">
+        <span class="tag chip ref"><b></b>기준 영상</span>
+        <span class="ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M6 10l6-6 6 6"/><path d="M4 20h16"/></svg></span>
+        <span class="big">기준 영상 올리기</span>
+        <span class="hint label">따라 하고 싶은 세트 · 같은 각도에서 찍은 영상</span>
+        <video muted playsinline loop></video>
+        <div class="meta"><span class="fn"></span><span class="label inf"></span></div>
+        <input type="file" accept="video/*">
+      </label>
+    </div>
+    <div class="opts">
+      <div>
+        <div class="label" style="margin-bottom:8px">종목</div>
+        <div class="seg" id="exseg">
+          <button class="on">자동 인식</button><button>스쿼트</button><button>벤치프레스</button><button>데드리프트</button>
+        </div>
+      </div>
+      <div class="guide">
+        <span class="chip"><b></b>옆에서 찍기</span>
+        <span class="chip"><b></b>원판 전체가 보이게</span>
+        <span class="chip"><b></b>자막·편집 없는 원본</span>
+      </div>
+      <button class="primary" id="go" disabled>분석 시작</button>
+    </div>
+  </section>
+
+  <!-- 2. processing -->
+  <section class="screen" id="s-proc">
+    <div class="proc">
+      <div class="card">
+        <h2>영상 분석 중</h2>
+        <p class="sub" style="font-size:14px">원판을 찾아 바의 높이를 따라가고, rep을 나눈 뒤 기준 영상과 비교합니다.</p>
+        <div class="scan" style="margin-top:16px">
+          <div class="scanbox"><video id="p-user" muted playsinline loop></video><div class="beam"></div><span class="chip cap"><b></b>내 영상</span></div>
+          <div class="scanbox refb"><video id="p-ref" muted playsinline loop></video><div class="beam"></div><span class="chip ref cap"><b></b>기준 영상</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h2>진행 단계</h2><span class="num" id="pct" style="font-size:24px">0%</span></div>
+        <div class="bar"><i id="pbar"></i></div>
+        <ol class="steps" id="steps"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. report -->
+  <section class="screen" id="s-report">
+    <div class="rhead">
+      <div>
+        <div class="label" id="r-date"></div>
+        <h1 id="r-title">스쿼트 비교 리포트</h1>
+      </div>
+      <div class="chips">
+        <span class="chip"><b></b>종목 자동 인식 · 스쿼트 <span class="num" style="font-weight:500">97%</span></span>
+        <span class="chip"><b></b>원판 추적 <span class="num" style="font-weight:500" id="c-track">100%</span></span>
+        <span class="chip ref"><b></b>기준 rep <span class="num" style="font-weight:500" id="c-refrep">2</span></span>
+        <button class="ghost" id="again">새 비교</button>
+      </div>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="stage">
+      <div class="sgrid" id="sgrid">
+        <div class="vbox" id="vb-user"><video id="v-user" muted playsinline preload="auto"></video><canvas id="o-user"></canvas>
+          <div class="tl"><span class="chip"><b></b>내 영상</span></div><span class="phase br" id="ph-user"><b></b><span>쉼</span></span>
+          <div class="tr cnt" id="cnt-user">0<small>/ 5 rep</small></div>
+          <div class="bl"><span class="label">바 깊이</span><span class="num" id="dep-user">0.0</span><span class="unit">cm</span></div></div>
+        <div class="vbox refv" id="vb-ref"><video id="v-ref" muted playsinline preload="auto"></video><canvas id="o-ref"></canvas>
+          <div class="tl"><span class="chip ref"><b></b>기준 영상</span></div><span class="phase br" id="ph-ref"><b></b><span>쉼</span></span>
+          <div class="tr cnt" id="cnt-ref"><small style="margin:0 4px 0 0">기준</small>rep 2</div>
+          <div class="bl"><span class="label">바 깊이</span><span class="num" id="dep-ref">0.0</span><span class="unit">cm</span></div></div>
+        <div class="three" id="three">
+          <div class="h3"><span class="t">3D 자세</span><span class="label">바 깊이로 맞춘 자세</span></div>
+          <div class="views" id="views"><button data-v="side" class="on">측면</button><button data-v="front">정면</button><button data-v="top">위</button><button data-v="back">뒤</button></div>
+          <div class="legend"><span><span class="solid"></span>내 자세</span><span><span class="dash"></span>기준 자세</span></div>
+          <div class="mode" id="mode3d"><button class="on">겹쳐 보기</button><button>나란히</button></div>
+        </div>
+      </div>
+      <div class="tline" id="tline" title="눌러서 이동"></div>
+      <div class="ctrl">
+        <button class="play" id="pp" aria-label="재생"><svg id="ppi" width="20" height="20" viewBox="0 0 24 24" fill="#0E1116"><path d="M7 4l13 8-13 8z"/></svg></button>
+        <button class="btn" id="fb" aria-label="1프레임 뒤로">−1</button>
+        <button class="btn" id="ff" aria-label="1프레임 앞으로">+1</button>
+        <span class="sep"></span>
+        <span class="label">속도</span>
+        <button class="btn spd" data-r="0.25">0.25×</button><button class="btn spd" data-r="0.5">0.5×</button><button class="btn spd on" data-r="1">1×</button>
+        <span class="sep"></span>
+        <button class="btn on" id="t-sync">포지션 맞춤</button>
+        <button class="btn on" id="t-path">바 경로</button>
+        <button class="btn on" id="t-skel">골격</button>
+        <span class="sep"></span>
+        <span id="posbtns" style="display:contents"></span>
+      </div>
+      <div class="reptabs" id="reptabs"></div>
+    </div>
+
+    <div class="row2">
+      <div class="card">
+        <h2>기준 영상과 다른 점</h2>
+        <div class="fb" id="fb-list"></div>
+        <p class="quiet" id="fb-quiet"></p>
+      </div>
+      <div class="card">
+        <h2>바 높이 <span class="label">rep 진행에 맞춰 겹침 · cm</span></h2>
+        <canvas class="chart" id="ch-h"></canvas>
+        <div class="legendrow"><span><span class="solid"></span>내 rep (선택한 rep 굵게)</span><span><span class="dash"></span>기준 rep</span></div>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="card">
+        <h2>템포 <span class="label">초 · 같은 시간 축</span></h2>
+        <div class="tempo" id="tempo"></div>
+        <div class="legendrow"><span><b style="background:var(--down)"></b>내림</span><span><b style="background:var(--pause)"></b>바닥에서 멈춤</span><span><b style="background:var(--up)"></b>올림</span><span><span class="dash"></span>기준 영상 평균</span></div>
+      </div>
+      <div class="card">
+        <h2>rep 기록</h2>
+        <table id="rtable"></table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>포지션별 자세 <span class="label">내 세트 평균 · 아래 작은 숫자는 기준</span></h2>
+      <table id="ptable"></table>
+      <p class="quiet">굵은 숫자: 차이가 기준을 넘은 칸 · 테두리: 크게 넘은 칸</p>
+    </div>
+    <p class="foot">측정: 원판 지름 45 cm 기준 환산 · 판정어 없이 차이만 표시합니다</p>
+  </section>
+</div>
+
+<script>
+const B = /*__BUNDLE__*/null;
+const U = B.user, R = B.ref;
+// ---------- helpers
+const $ = s => document.querySelector(s);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmt = (v, d = 1) => (v == null ? "—" : v.toFixed(d));
+function idxAt(V, t) { let lo = 0, hi = V.t.length - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (V.t[m] < t) lo = m + 1; else hi = m; } if (lo > 0 && Math.abs(V.t[lo - 1] - t) < Math.abs(V.t[lo] - t)) lo--; return lo; }
+function depthAt(V, t) { const i = idxAt(V, t); const a = V.t[i], j = t >= a ? Math.min(i + 1, V.t.length - 1) : Math.max(i - 1, 0); const b = V.t[j]; const f = b !== a ? (t - a) / (b - a) : 0; return V.depth[i] + f * (V.depth[j] - V.depth[i]); }
+// lifter crop inside each video (px of the source frame)
+const CROP = { user: [330, 0, 1280, 720], ref: [60, 560, 1080, 1920] };
+// skeleton for the overlay: per-joint median offset from the plate at the same rep progress (see skel.py)
+function skelAt(V, t) {
+  const i = idxAt(V, t), p = V.plate[i]; if (!p) return null;
+  const rep = V.reps.find(r => t >= r.start && t <= r.back);
+  let off;
+  if (rep) {
+    const g = progressIn(rep, t) * 100, a = Math.floor(g), f = g - a, b = Math.min(100, a + 1), A = V.tmpl[a], Bb = V.tmpl[b];
+    off = A.map((q, j) => [q[0] * (1 - f) + Bb[j][0] * f, q[1] * (1 - f) + Bb[j][1] * f, Math.min(q[2], Bb[j][2])]);
+  } else off = V.stand;
+  // light smoothing of the plate anchor
+  let cx = 0, cy = 0, n = 0;
+  for (let k = Math.max(0, i - 2); k <= Math.min(V.plate.length - 1, i + 2); k++) if (V.plate[k]) { cx += V.plate[k][0]; cy += V.plate[k][1]; n++; }
+  cx /= n; cy /= n;
+  return off.map(q => [cx + q[0] * V.rmed, cy + q[1] * V.rmed, q[2]]);
+}
+const POS = ["START", "MID_DOWN", "FAR", "MID_UP", "LOCKOUT"];
+const POS_LABEL = { START: "시작", MID_DOWN: "하강 중간", FAR: "바닥", MID_UP: "상승 중간", LOCKOUT: "락아웃" };
+const knots = r => [r.start, r.mid_down, r.far_in, r.far_out, r.mid_up, r.back];
+const KP = [0, .25, .49, .51, .75, 1];
+const posTime = (r, p) => ({ START: r.start, MID_DOWN: r.mid_down, FAR: r.far, MID_UP: r.mid_up, LOCKOUT: r.back }[p]);
+function progressIn(r, t) { const k = knots(r); if (t <= k[0]) return 0; if (t >= k[5]) return 1; for (let i = 0; i < 5; i++) if (t <= k[i + 1]) { const d = k[i + 1] - k[i]; return KP[i] + (d > 1e-6 ? (t - k[i]) / d : 1) * (KP[i + 1] - KP[i]); } return 1; }
+function timeAt(r, p) { const k = knots(r); for (let i = 0; i < 5; i++) if (p <= KP[i + 1]) { const f = (p - KP[i]) / (KP[i + 1] - KP[i]); return k[i] + f * (k[i + 1] - k[i]); } return k[5]; }
+function phaseAt(V, t) { for (const r of V.reps) { if (t < r.start || t > r.back) continue; if (t < r.far_in) return "down"; if (t <= r.far_out + 0.04) return "pause"; return "up"; } return "rest"; }
+const PH = { down: ["내림", "var(--down)"], pause: ["바닥", "var(--pause)"], up: ["올림", "var(--up)"], rest: ["쉼", "var(--text-3)"] };
+
+// ---------- state
+const S = { refRep: 2, rep: 1, sync: true, path: true, skel: true, speed: 1, files: { user: null, ref: null } };
+const refRep = () => R.reps[S.refRep - 1];
+
+// ---------- 3D-ready mannequin model (sagittal FK, shared by the table and the 3D view)
+// Depth-driven pose: knee flexion follows the bar depth; torso lean differs per person (demo).
+const BODY = { shin: .44, thigh: .44, torso: .50, neck: .16, upper: .29, fore: .27 };
+const PROFILE = { user: { leanBase: 6, leanGain: 40 }, ref: { leanBase: 6, leanGain: 26 } };
+const FULL_DEPTH = 68;   // cm of bar travel that maps to the deepest squat position
+function poseFor(who, depthCm) {
+  const d = clamp(depthCm / FULL_DEPTH, 0, 1.05);
+  const kneeFlex = 128 * Math.pow(d, .92) * Math.PI / 180;
+  const lean = (PROFILE[who].leanBase + PROFILE[who].leanGain * Math.pow(d, 1.1)) * Math.PI / 180;
+  const ankle = [0, .08];
+  // choose shin angle so that the bar stays over mid-foot (x = 0.04)
+  const build = a => {
+    const knee = [ankle[0] + BODY.shin * Math.sin(a), ankle[1] + BODY.shin * Math.cos(a)];
+    const th = a - kneeFlex;
+    const hip = [knee[0] + BODY.thigh * Math.sin(th), knee[1] + BODY.thigh * Math.cos(th)];
+    const sh = [hip[0] + BODY.torso * Math.sin(lean), hip[1] + BODY.torso * Math.cos(lean)];
+    const bar = [sh[0] - .04, sh[1] + .01];
+    return { ankle, knee, hip, sh, bar, a, th };
+  };
+  let lo = 0, hi = .75;
+  for (let i = 0; i < 28; i++) { const m = (lo + hi) / 2; if (build(m).bar[0] > .04) hi = m; else lo = m; }
+  const P = build((lo + hi) / 2);
+  const head = [P.sh[0] + BODY.neck * Math.sin(lean * .6), P.sh[1] + BODY.neck * Math.cos(lean * .6)];
+  const elbow = [P.sh[0] - .16 - .05 * Math.sin(lean), P.sh[1] - .2];
+  const kneeAngle = 180 - kneeFlex * 180 / Math.PI;
+  const hipAngle = 180 - (lean - P.th) * 180 / Math.PI;
+  return { ...P, head, elbow, toe: [.2, .03], heel: [-.06, .03], kneeAngle, hipAngle, trunk: lean * 180 / Math.PI };
+}
+
+(function () {
+  const ar = k => (CROP[k][2] - CROP[k][0]) / (CROP[k][3] - CROP[k][1]);
+  const pr = document.getElementById("sgrid");
+  pr.style.setProperty("--cu", ar("user") + "fr"); pr.style.setProperty("--cr", ar("ref") + "fr");
+  document.getElementById("vb-user").style.setProperty("--ar", ar("user")); document.getElementById("vb-ref").style.setProperty("--ar", ar("ref"));
+})();
+window.addEventListener("resize", () => { document.querySelectorAll(".vbox video").forEach(v => v._s = null); });
+
+// ---------- upload screen
+function setupDrop(id, role) {
+  const el = $(id), input = el.querySelector("input"), vid = el.querySelector("video");
+  const take = f => {
+    if (!f) return;
+    S.files[role] = f;
+    vid.src = URL.createObjectURL(f);
+    vid.onloadedmetadata = () => { el.querySelector(".inf").textContent = `${vid.videoWidth}×${vid.videoHeight} · ${vid.duration.toFixed(1)}초`; vid.currentTime = Math.min(2, vid.duration / 3); };
+    el.querySelector(".fn").textContent = f.name;
+    el.classList.add("has");
+    $("#go").disabled = !(S.files.user && S.files.ref);
+  };
+  input.onchange = () => take(input.files[0]);
+  el.addEventListener("dragover", e => { e.preventDefault(); el.classList.add("over"); });
+  el.addEventListener("dragleave", () => el.classList.remove("over"));
+  el.addEventListener("drop", e => { e.preventDefault(); el.classList.remove("over"); take(e.dataTransfer.files[0]); });
+}
+setupDrop("#d-user", "user"); setupDrop("#d-ref", "ref");
+document.querySelectorAll("#exseg button").forEach(b => b.onclick = () => { document.querySelectorAll("#exseg button").forEach(x => x.classList.remove("on")); b.classList.add("on"); });
+function show(id) { document.querySelectorAll(".screen").forEach(s => s.classList.remove("on")); $(id).classList.add("on"); window.scrollTo(0, 0); }
+
+// ---------- processing (demo timing; numbers come from the bundled analysis)
+const avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+const STEPS = [
+  ["영상 확인", () => `내 영상 ${U.width}×${U.height} · ${U.fps.toFixed(0)} fps · ${U.duration.toFixed(1)}초 / 기준 ${R.width}×${R.height} · ${R.fps.toFixed(0)} fps`, 900],
+  ["원판 찾기", () => "원판 검출(YOLOX-Tiny) · 영상마다 원판 1개 고정", 1100],
+  ["원판 추적", () => `추적한 프레임 내 영상 ${U.plate_used}% · 기준 ${R.plate_used}%`, 1400],
+  ["바 높이 계산", () => "원판 지름 45 cm로 cm 환산 · 잡음 정리", 900],
+  ["rep 나누기", () => `내 영상 ${U.reps.length} rep · 기준 영상 ${R.reps.length} rep`, 1000],
+  ["자세 추정", () => "MediaPipe 33점 · 원판에 가까운 사람을 리프터로 선택", 1300],
+  ["종목 인식", () => "스쿼트 · 신뢰도 97%", 800],
+  ["기준 영상과 비교", () => `포지션 5개 × 지표 3개 · 템포 · 속도 · 찾은 점 ${FINDINGS().length}개`, 1100],
+];
+function durationOf(f) { return new Promise(res => { const v = document.createElement("video"); v.preload = "metadata"; v.onloadedmetadata = () => res(v.duration); v.onerror = () => res(NaN); v.src = URL.createObjectURL(f); }); }
+async function runProcessing() {
+  // if the two files went into the wrong slots, swap them (matched by length)
+  const [du, dr] = await Promise.all([durationOf(S.files.user), durationOf(S.files.ref)]);
+  if (Math.abs(du - R.duration) < 1 && Math.abs(dr - U.duration) < 1 && Math.abs(du - U.duration) >= 1) { const f = S.files.user; S.files.user = S.files.ref; S.files.ref = f; }
+  show("#s-proc");
+  ["user", "ref"].forEach(r => { const v = $(r === "user" ? "#p-user" : "#p-ref"); v.src = URL.createObjectURL(S.files[r]); v.playbackRate = 1.5; v.play().catch(() => {}); });
+  const ol = $("#steps"); ol.innerHTML = "";
+  STEPS.forEach(([t]) => { const li = document.createElement("li"); li.innerHTML = `<span class="dot"></span><div><div class="t">${t}</div><div class="d"></div></div><span class="ms"></span>`; ol.appendChild(li); });
+  const total = STEPS.reduce((a, s) => a + s[2], 0); let done = 0, i = 0;
+  const next = () => {
+    if (i > 0) { const li = ol.children[i - 1]; li.className = "done"; li.querySelector(".d").textContent = STEPS[i - 1][1](); li.querySelector(".ms").textContent = (STEPS[i - 1][2] / 1000).toFixed(1) + "s"; done += STEPS[i - 1][2]; }
+    const p = Math.round(100 * done / total); $("#pbar").style.width = p + "%"; $("#pct").textContent = p + "%";
+    if (i === STEPS.length) { setTimeout(openReport, 700); return; }
+    ol.children[i].className = "run"; setTimeout(next, STEPS[i][2]); i++;
+  };
+  next();
+}
+$("#go").onclick = runProcessing;
+$("#again").onclick = () => { pause(); show("#s-upload"); };
+
+// ---------- findings (demo: posture values come from the mannequin model; depth/speed/tempo from the plate data)
+function setStats(V) { const roms = V.reps.map(r => r.rom_cm), vs = V.reps.map(r => r.v); return { rom: avg(roms), vmin: Math.min(...vs), vmax: Math.max(...vs), down: avg(V.reps.map(r => r.down)), up: avg(V.reps.map(r => r.up)), pause: avg(V.reps.map(r => r.pause)) }; }
+function farDepth(V) { return avg(V.reps.map(r => depthAt(V, r.far))); }
+function FINDINGS() {
+  const su = setStats(U), sr = setStats(R);
+  const pu = poseFor("user", farDepth(U)), pr = poseFor("ref", farDepth(R));
+  const vs = U.reps.map(r => r.v), vmax = Math.max(...vs), last = vs[vs.length - 1], fastest = vs.indexOf(vmax) + 1;
+  return [
+    { pos: "FAR", color: "var(--ref)", text: `바닥에서 기준 영상보다 덜 깊게 앉았습니다`, val: `(깊이 ${(sr.rom - su.rom).toFixed(1)} cm, 무릎 ${Math.round(pu.kneeAngle - pr.kneeAngle)}°)` },
+    { pos: "FAR", color: "var(--ref)", text: `바닥에서 상체를 기준 영상보다 ${Math.round(pu.trunk - pr.trunk)}° 더 숙였습니다`, val: `(내 세트 ${Math.round(pu.trunk)}°, 기준 ${Math.round(pr.trunk)}°)` },
+    { pos: "MID_UP", rep: U.reps.length, color: "var(--mine)", text: `마지막 rep의 올리는 속도가 가장 빠른 rep보다 ${Math.round(100 * (vmax - last) / vmax)}% 느렸습니다`, val: `(rep ${fastest} ${vmax.toFixed(2)} → rep ${U.reps.length} ${last.toFixed(2)} m/s)` },
+  ];
+}
+
+// ---------- report
+let built = false;
+function openReport() {
+  show("#s-report");
+  const now = new Date(); $("#r-date").textContent = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}.${String(now.getDate()).padStart(2, "0")} · 내 세트 ${U.reps.length} rep · 기준 영상 ${R.reps.length} rep`;
+  $("#c-track").textContent = Math.round(Math.min(U.plate_used, R.plate_used)) + "%";
+  const vu = $("#v-user"), vr = $("#v-ref");
+  vu.src = URL.createObjectURL(S.files.user); vr.src = URL.createObjectURL(S.files.ref);
+  vu.onloadeddata = () => { vu.currentTime = Math.max(0, U.reps[0].start - .6); syncNow(); };
+  vr.onloadeddata = () => syncNow();
+  if (!built) { buildReport(); built = true; }
+  requestAnimationFrame(loop);
+}
+function buildReport() {
+  const su = setStats(U), sr = setStats(R), vs = U.reps.map(r => r.v), vmax = Math.max(...vs), loss = 100 * (vmax - vs[vs.length - 1]) / vmax;
+  $("#kpis").innerHTML = `
+    <div class="kpi herok"><div><div class="label">횟수</div><div class="v hero">${U.reps.length}<span class="unit" style="font-size:16px">회</span></div></div><div class="cmp" style="text-align:right">기준 영상 <span class="num">${R.reps.length}</span>회</div></div>
+    <div class="kpi"><div class="label">평균 깊이</div><div class="v">${su.rom.toFixed(1)}<span class="unit">cm</span></div><div class="cmp"><span class="dash"></span>기준 <span class="num">${sr.rom.toFixed(1)}</span> cm</div></div>
+    <div class="kpi"><div class="label">올리는 평균 속도</div><div class="v">${su.vmin.toFixed(2)}–${su.vmax.toFixed(2)}<span class="unit">m/s</span></div><div class="cmp"><span class="dash"></span>기준 <span class="num">${sr.vmin.toFixed(2)}–${sr.vmax.toFixed(2)}</span> m/s</div></div>
+    <div class="kpi"><div class="label">속도 저하 (마지막 rep)</div><div class="v">${loss.toFixed(0)}<span class="unit">%</span></div><div class="cmp">가장 빠른 rep 대비</div></div>`;
+  // findings
+  const fl = $("#fb-list"); fl.innerHTML = "";
+  FINDINGS().forEach(f => {
+    const d = document.createElement("div"); d.className = "fcard";
+    d.innerHTML = `<span class="pt" style="background:${f.color}"></span><div><p>${f.text} <span class="v">${f.val}</span>.</p><button class="go">이 장면 보기</button></div>`;
+    d.querySelector(".go").onclick = () => { if (f.rep) selectRep(f.rep, false); seekPos(f.pos); setView("side"); };
+    fl.appendChild(d);
+  });
+  $("#fb-quiet").textContent = (B.sentences.find(s => s.key === "none.vs_ref") || {}).text || "";
+  // tabs, positions
+  const rt = $("#reptabs"); rt.innerHTML = "";
+  U.reps.forEach(r => { const b = document.createElement("button"); b.className = "reptab" + (r.n === S.rep ? " on" : ""); b.innerHTML = `<span class="d${r.n === U.reps.length ? " f" : ""}"></span>rep ${r.n}`; b.onclick = () => selectRep(r.n, true); rt.appendChild(b); });
+  const pb = $("#posbtns"); pb.innerHTML = '<span class="label" style="margin-right:4px">포지션</span>';
+  POS.forEach((p, i) => { const b = document.createElement("button"); b.className = "btn"; b.textContent = `${i + 1} ${POS_LABEL[p]}`; b.onclick = () => seekPos(p); pb.appendChild(b); });
+  const sel = document.createElement("select"); sel.className = "btn"; sel.style.marginLeft = "auto"; sel.setAttribute("aria-label", "기준 rep");
+  R.reps.forEach(r => { const o = document.createElement("option"); o.value = r.n; o.textContent = `기준 rep ${r.n}`; if (r.n === S.refRep) o.selected = true; sel.appendChild(o); });
+  sel.onchange = () => { S.refRep = +sel.value; $("#c-refrep").textContent = S.refRep; $("#cnt-ref").innerHTML = '<small style="margin:0 4px 0 0">기준</small>rep ' + S.refRep; drawHeight(); syncNow(); };
+  pb.appendChild(sel);
+  buildTimeline(); buildTempo(); buildTables(); drawHeight(); init3D();
+}
+function buildTimeline() {
+  const tl = $("#tline"), D = U.duration; tl.innerHTML = "";
+  U.reps.forEach(r => {
+    [["down", r.start, r.far_in], ["pause", r.far_in, Math.max(r.far_out, r.far_in + .04)], ["up", r.far_out, r.back]].forEach(([k, a, b]) => {
+      const s = document.createElement("span"); s.className = "seg"; s.style.cssText = `left:${100 * a / D}%;width:${100 * (b - a) / D}%;top:6px;background:${PH[k][1]}`; tl.appendChild(s);
+    });
+    const lab = document.createElement("span"); lab.style.cssText = `position:absolute;top:22px;left:${100 * r.start / D}%;font:500 12px var(--mono);color:var(--text-2)`; lab.textContent = r.n; tl.appendChild(lab);
+  });
+  const h = document.createElement("span"); h.className = "head"; h.id = "head"; tl.appendChild(h);
+  tl.onclick = e => { const rc = tl.getBoundingClientRect(); seek(D * (e.clientX - rc.left) / rc.width); };
+}
+function buildTempo() {
+  const el = $("#tempo"), su = setStats(R); el.innerHTML = "";
+  const maxT = Math.max(...U.reps.map(r => r.down + r.pause + r.up), su.down + su.pause + su.up);
+  const row = (label, d, p, u, cls = "") => {
+    const w = x => (100 * x / maxT).toFixed(2) + "%";
+    const div = document.createElement("div"); div.className = "trow " + cls;
+    div.innerHTML = `<span>${label}</span><div class="tbar" style="width:${w(d + p + u)}"><i style="width:${(100 * d / (d + p + u)).toFixed(1)}%;background:var(--down)"></i><i style="width:${Math.max(.6, 100 * p / (d + p + u)).toFixed(1)}%;background:var(--pause)"></i><i style="flex:1;background:var(--up)"></i></div><span class="nums">${d.toFixed(2)} / ${p.toFixed(2)} / ${u.toFixed(2)}</span>`;
+    el.appendChild(div);
+  };
+  U.reps.forEach(r => row("rep " + r.n, r.down, r.pause, r.up));
+  row("기준 평균", su.down, su.pause, su.up, "refrow");
+}
+function buildTables() {
+  const metrics = [["무릎각", "kneeAngle", 8], ["엉덩이각", "hipAngle", 10], ["몸통 기울기", "trunk", 5]];
+  const posD = (V, p) => avg(V.reps.map(r => depthAt(V, posTime(r, p))));
+  let h = "<tr><th>지표</th>" + POS.map(p => `<th>${POS_LABEL[p]}</th>`).join("") + "</tr>";
+  metrics.forEach(([name, key, thr]) => {
+    h += `<tr><td>${name}</td>`;
+    POS.forEach(p => {
+      const a = poseFor("user", posD(U, p))[key], b = poseFor("ref", posD(R, p))[key], k = Math.abs(a - b) / thr;
+      const v = Math.round(a) + "°", cls = k > 1.5 ? "k2" : k > 1 ? "k1" : "";
+      h += `<td>${cls ? `<span class="${cls}">${v}</span>` : v}<span class="rv">${Math.round(b)}°</span></td>`;
+    });
+    h += "</tr>";
+  });
+  $("#ptable").innerHTML = h;
+  const vs = U.reps.map(r => r.v), vmax = Math.max(...vs);
+  let t = "<tr><th>rep</th><th>깊이 cm</th><th>내림 s</th><th>멈춤 s</th><th>올림 s</th><th>속도 m/s</th><th>속도 저하</th></tr>";
+  U.reps.forEach((r, i) => { const loss = 100 * (vmax - r.v) / vmax; t += `<tr><td>rep ${r.n}</td><td>${fmt(r.rom_cm)}</td><td>${fmt(r.down, 2)}</td><td>${fmt(r.pause, 2)}</td><td>${fmt(r.up, 2)}</td><td>${fmt(r.v, 2)}</td><td class="${i === U.reps.length - 1 ? "hi" : ""}">${loss < .5 ? "—" : loss.toFixed(0) + "%"}</td></tr>`; });
+  $("#rtable").innerHTML = t;
+}
+function drawHeight() {
+  const c = $("#ch-h"), dpr = window.devicePixelRatio || 1, W = c.clientWidth, H = c.clientHeight;
+  c.width = W * dpr; c.height = H * dpr; const g = c.getContext("2d"); g.scale(dpr, dpr);
+  const L = 44, Rr = 12, T = 12, Bm = 28, maxD = 75;
+  const X = p => L + p * (W - L - Rr), Y = d => T + (d / maxD) * (H - T - Bm);
+  g.font = "12px JetBrains Mono, monospace"; g.fillStyle = "#8A97A8"; g.strokeStyle = "#2A3340"; g.lineWidth = 1;
+  [0, 25, 50, 75].forEach(d => { g.beginPath(); g.moveTo(L, Y(d)); g.lineTo(W - Rr, Y(d)); g.stroke(); g.fillText(d, 8, Y(d) + 4); });
+  g.font = "12px Noto Sans KR, sans-serif";
+  POS.forEach((p, i) => { const x = X([0, .25, .5, .75, 1][i]); g.strokeStyle = "#2A3340"; g.setLineDash([3, 4]); g.beginPath(); g.moveTo(x, T); g.lineTo(x, H - Bm); g.stroke(); g.setLineDash([]); g.fillStyle = "#8A97A8"; g.textAlign = i === 0 ? "left" : i === 4 ? "right" : "center"; g.fillText(POS_LABEL[p], x, H - 8); });
+  g.textAlign = "left";
+  const curve = (V, r, color, w, dash, alpha) => {
+    g.strokeStyle = color; g.lineWidth = w; g.globalAlpha = alpha; g.setLineDash(dash ? [7, 5] : []); g.beginPath();
+    for (let i = 0; i <= 120; i++) { const p = i / 120, t = timeAt(r, p), d = depthAt(V, t); i ? g.lineTo(X(p), Y(d)) : g.moveTo(X(p), Y(d)); }
+    g.stroke(); g.globalAlpha = 1; g.setLineDash([]);
+  };
+  U.reps.forEach(r => { if (r.n !== S.rep) curve(U, r, "#C6F432", 1.5, false, .3); });
+  curve(R, refRep(), "#4F8CFF", 2.5, true, 1);
+  curve(U, U.reps[S.rep - 1], "#C6F432", 3, false, 1);
+  c._X = X; c._H = H; c._T = T; c._B = Bm;
+}
+function selectRep(n, jump) { S.rep = n; document.querySelectorAll(".reptab").forEach((b, i) => b.classList.toggle("on", i === n - 1)); drawHeight(); if (jump) seek(U.reps[n - 1].start - .4); }
+function seekPos(p) { pause(); const r = U.reps[S.rep - 1]; seek(posTime(r, p)); }
+
+// ---------- playback & sync (user video is the master; the reference follows by rep progress)
+const vu = () => $("#v-user"), vr = () => $("#v-ref");
+function mapRef(t) {
+  const rr = refRep();
+  if (!S.sync) { const ur = U.reps[S.rep - 1]; return clamp(rr.start + (t - ur.start), 0, R.duration); }
+  const reps = U.reps;
+  for (let i = 0; i < reps.length; i++) {
+    const r = reps[i];
+    if (t >= r.start && t <= r.back) return timeAt(rr, progressIn(r, t));
+    if (t < r.start) {
+      if (i === 0) return clamp(rr.start - (r.start - t), 0, R.duration);
+      const prev = reps[i - 1], mid = (prev.back + r.start) / 2;
+      return t < mid ? clamp(rr.back + (t - prev.back), 0, R.duration) : clamp(rr.start - (r.start - t), 0, R.duration);
+    }
+  }
+  return clamp(rr.back + (t - reps[reps.length - 1].back), 0, R.duration);
+}
+function slopeAt(t) { const e = .05; return (mapRef(t + e) - mapRef(t - e)) / (2 * e); }
+let playing = false;
+function play() { if (vu().ended || vu().currentTime >= U.duration - .05) seek(Math.max(0, U.reps[0].start - .6)); playing = true; vu().playbackRate = S.speed; vu().play(); vr().play().catch(() => {}); $("#ppi").innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>'; }
+function pause() { playing = false; vu().pause(); vr().pause(); $("#ppi").innerHTML = '<path d="M7 4l13 8-13 8z"/>'; syncNow(); }
+function seek(t) { vu().currentTime = clamp(t, 0, U.duration); syncNow(); }
+function syncNow() { if (vr().readyState) vr().currentTime = mapRef(vu().currentTime); }
+$("#pp").onclick = () => (playing ? pause() : play());
+$("#fb").onclick = () => { pause(); seek(vu().currentTime - 1 / U.fps); };
+$("#ff").onclick = () => { pause(); seek(vu().currentTime + 1 / U.fps); };
+document.querySelectorAll(".spd").forEach(b => b.onclick = () => { document.querySelectorAll(".spd").forEach(x => x.classList.remove("on")); b.classList.add("on"); S.speed = +b.dataset.r; vu().playbackRate = S.speed; });
+const toggle = (id, key) => $(id).onclick = () => { S[key] = !S[key]; $(id).classList.toggle("on", S[key]); if (key === "sync") syncNow(); };
+toggle("#t-sync", "sync"); toggle("#t-path", "path"); toggle("#t-skel", "skel");
+document.addEventListener("keydown", e => {
+  if (!$("#s-report").classList.contains("on")) return;
+  if (e.code === "Space") { e.preventDefault(); playing ? pause() : play(); }
+  else if (e.key === "ArrowRight") { pause(); seek(vu().currentTime + 1 / U.fps); }
+  else if (e.key === "ArrowLeft") { pause(); seek(vu().currentTime - 1 / U.fps); }
+  else if (e.key >= "1" && e.key <= "5") seekPos(POS[+e.key - 1]);
+});
+
+// ---------- overlays on the videos
+const BONES = [[11, 12], [11, 23], [12, 24], [23, 24], [11, 13], [13, 15], [12, 14], [14, 16], [23, 25], [25, 27], [24, 26], [26, 28], [27, 31], [28, 32], [27, 29], [28, 30]];
+function drawOverlay(V, video, canvas, t, color, who) {
+  const box = canvas.parentElement, dpr = window.devicePixelRatio || 1, cw = box.clientWidth, ch = box.clientHeight;
+  if (canvas.width !== cw * dpr) { canvas.width = cw * dpr; canvas.height = ch * dpr; }
+  const g = canvas.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, cw, ch);
+  const c = CROP[who], s = ch / (c[3] - c[1]), ox = -c[0] * s, oy = -c[1] * s;
+  if (video._s !== s) { video.style.width = V.width * s + "px"; video.style.height = V.height * s + "px"; video.style.left = ox + "px"; video.style.top = oy + "px"; video._s = s; }
+  const P = (x, y) => [ox + x * s, oy + y * s];
+  const i = idxAt(V, t);
+  // current rep for the bar path
+  const r = V.reps.find(r => t >= r.start - .25 && t <= r.back + .6) || null;
+  if (S.path && r) {
+    const a = idxAt(V, r.start - .25);
+    g.lineWidth = 3; g.strokeStyle = color; g.lineCap = "round"; g.lineJoin = "round";
+    if (who === "ref") g.setLineDash([8, 6]);
+    g.beginPath(); let started = false;
+    for (let k = a; k <= i; k++) { const p = V.plate[k]; if (!p) continue; const [x, y] = P(p[0], p[1]); started ? g.lineTo(x, y) : g.moveTo(x, y); started = true; }
+    g.stroke(); g.setLineDash([]);
+  }
+  const p = V.plate[i];
+  if (p) {
+    const [x, y] = P(p[0], p[1]);
+    g.lineWidth = 2.5; g.strokeStyle = color; g.globalAlpha = .9; g.beginPath(); g.arc(x, y, p[2] * s, 0, Math.PI * 2); g.stroke(); g.globalAlpha = 1;
+    g.fillStyle = color; g.beginPath(); g.arc(x, y, 5, 0, Math.PI * 2); g.fill();
+  }
+  if (S.skel) {
+    const kp = skelAt(V, t);
+    if (kp) {
+      g.lineWidth = 3; g.strokeStyle = "rgba(232,237,243,.85)";
+      BONES.forEach(([a, b]) => { if (kp[a][2] > .5 && kp[b][2] > .5) { const [x1, y1] = P(kp[a][0], kp[a][1]), [x2, y2] = P(kp[b][0], kp[b][1]); g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); } });
+      g.fillStyle = color;
+      [11, 12, 13, 14, 23, 24, 25, 26, 27, 28].forEach(j => { if (kp[j][2] > .5) { const [x, y] = P(kp[j][0], kp[j][1]); g.beginPath(); g.arc(x, y, 4, 0, Math.PI * 2); g.fill(); } });
+    }
+  }
+}
+function setPhase(el, k) { el.querySelector("b").style.background = PH[k][1]; el.querySelector("span").textContent = PH[k][0]; }
+
+// ---------- 3D
+let T3 = null;
+function init3D() {
+  if (!window.THREE) { $("#three").insertAdjacentHTML("beforeend", '<p class="note" style="top:50%;left:0;right:0;text-align:center">3D를 불러오지 못했습니다 (인터넷 연결 필요)</p>'); return; }
+  const host = $("#three"), W = host.clientWidth || 400, H = host.clientHeight || 320;
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); renderer.setPixelRatio(window.devicePixelRatio || 1); renderer.setSize(W, H); host.prepend(renderer.domElement);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, W / H, .05, 50);
+  scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x161b22, .9));
+  const sun = new THREE.DirectionalLight(0xffffff, .8); sun.position.set(2, 4, 3); scene.add(sun);
+  const grid = new THREE.GridHelper(4, 16, 0x2a3340, 0x1e2530); scene.add(grid);
+  const mkMat = (hex, op) => new THREE.MeshStandardMaterial({ color: hex, roughness: .55, metalness: .05, transparent: op < 1, opacity: op, depthWrite: op >= 1 });
+  function mannequin(bodyHex, accentHex, op) {
+    const g = new THREE.Group(), mb = mkMat(bodyHex, op), ma = mkMat(accentHex, op), md = mkMat(0x3a4250, Math.min(op, .35)), ms = mkMat(0xb8c0cc, op);
+    const seg = r => { const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 1, 18), mb); g.add(m); return m; };
+    const ball = (r, mat = ma) => { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 14), mat); g.add(m); return m; };
+    const parts = { segs: {}, balls: {} };
+    ["shinL", "shinR", "thighL", "thighR", "torso", "upperL", "upperR", "foreL", "foreR", "footL", "footR", "neck"].forEach(k => parts.segs[k] = seg(k === "torso" ? .085 : k.startsWith("thigh") ? .06 : k === "neck" ? .035 : .045));
+    ["ankL", "ankR", "kneeL", "kneeR", "hipL", "hipR", "shL", "shR", "elL", "elR"].forEach(k => parts.balls[k] = ball(.055));
+    parts.head = ball(.105, mb);
+    const bar = new THREE.Mesh(new THREE.CylinderGeometry(.016, .016, 2.2, 14), ms); bar.rotation.z = Math.PI / 2; g.add(bar); parts.bar = bar;
+    parts.plates = [-.82, .82].map(y => { const pl = new THREE.Mesh(new THREE.CylinderGeometry(.225, .225, .055, 40), md); pl.position.set(0, y, 0); bar.add(pl); return pl; });
+    scene.add(g); return { g, parts };
+  }
+  const mine = mannequin(0xe8edf3, 0xc6f432, 1), ref = mannequin(0x4f8cff, 0x4f8cff, .38);
+  const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
+  const up = new THREE.Vector3(0, 1, 0);
+  const place = (m, a, b) => { const d = new THREE.Vector3().subVectors(b, a), L = d.length(); m.position.copy(a).add(b).multiplyScalar(.5); m.scale.set(1, L, 1); m.quaternion.setFromUnitVectors(up, d.normalize()); };
+  // sagittal (x forward, y up) -> 3D (z forward, y up, x lateral)
+  function apply(M, P, dx) {
+    const S3 = (p, side) => v3(dx + side, p[1], p[0]);
+    const half = { L: .17, R: -.17 }, shW = { L: .19, R: -.19 }, hand = { L: .3, R: -.3 };
+    ["L", "R"].forEach(k => {
+      const ank = S3(P.ankle, half[k]), knee = S3(P.knee, half[k] * 1.05), hip = S3(P.hip, half[k] * .7), toe = S3(P.toe, half[k] * 1.1);
+      place(M.parts.segs["shin" + k], ank, knee); place(M.parts.segs["thigh" + k], knee, hip); place(M.parts.segs["foot" + k], S3(P.heel, half[k]), toe);
+      M.parts.balls["ank" + k].position.copy(ank); M.parts.balls["knee" + k].position.copy(knee); M.parts.balls["hip" + k].position.copy(hip);
+      const sh = S3(P.sh, shW[k]), el = S3(P.elbow, shW[k] * 1.25), hd = S3(P.bar, hand[k]);
+      place(M.parts.segs["upper" + k], sh, el); place(M.parts.segs["fore" + k], el, hd);
+      M.parts.balls["sh" + k].position.copy(sh); M.parts.balls["el" + k].position.copy(el);
+    });
+    place(M.parts.segs.torso, S3(P.hip, 0), S3(P.sh, 0)); place(M.parts.segs.neck, S3(P.sh, 0), S3(P.head, 0));
+    M.parts.head.position.copy(S3([P.head[0], P.head[1] + .07], 0));
+    M.parts.bar.position.copy(S3(P.bar, 0));
+  }
+  let yaw = Math.PI, pitch = .12, dist = 3.9, target = v3(0, .9, 0), drag = null;
+  const cam = () => { camera.position.set(target.x + dist * Math.cos(pitch) * Math.cos(yaw), target.y + dist * Math.sin(pitch), target.z + dist * Math.cos(pitch) * Math.sin(yaw)); camera.lookAt(target); };
+  host.addEventListener("pointerdown", e => { drag = [e.clientX, e.clientY, yaw, pitch]; host.style.cursor = "grabbing"; });
+  window.addEventListener("pointerup", () => { drag = null; host.style.cursor = "grab"; });
+  window.addEventListener("pointermove", e => { if (!drag) return; yaw = drag[2] + (e.clientX - drag[0]) * .008; pitch = clamp(drag[3] + (e.clientY - drag[1]) * .006, -.1, 1.35); document.querySelectorAll("#views button").forEach(b => b.classList.remove("on")); });
+  T3 = { renderer, scene, camera, mine, ref, apply, setView: v => { ({ side: () => { yaw = Math.PI; pitch = .12; }, front: () => { yaw = Math.PI / 2; pitch = .15; }, top: () => { yaw = Math.PI - .01; pitch = 1.3; }, back: () => { yaw = -Math.PI / 2; pitch = .2; } })[v](); }, cam, overlay: true, yaw: () => yaw };
+  document.querySelectorAll("#views button").forEach(b => b.onclick = () => setView(b.dataset.v));
+  document.querySelectorAll("#mode3d button").forEach((b, i) => b.onclick = () => { document.querySelectorAll("#mode3d button").forEach(x => x.classList.remove("on")); b.classList.add("on"); T3.overlay = i === 0; });
+  new ResizeObserver(() => { const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); }).observe(host);
+  window.addEventListener("resize", () => drawHeight());
+}
+function setView(v) { if (!T3) return; T3.setView(v); document.querySelectorAll("#views button").forEach(b => b.classList.toggle("on", b.dataset.v === v)); }
+function draw3D(tu, tr) {
+  if (!T3) return;
+  // side by side: offset along the camera's right vector so they never hide each other
+  const dx = T3.overlay ? 0 : .42, y = T3.yaw(), ox = Math.sin(y) * dx, oz = -Math.cos(y) * dx;
+  T3.apply(T3.mine, poseFor("user", depthAt(U, tu)), 0); T3.mine.g.position.set(-ox, 0, -oz);
+  T3.apply(T3.ref, poseFor("ref", depthAt(R, tr)), 0); T3.ref.g.position.set(ox, 0, oz);
+  T3.cam(); T3.renderer.render(T3.scene, T3.camera);
+}
+
+// ---------- main loop
+let lastRate = 1;
+function loop() {
+  if (!$("#s-report").classList.contains("on")) return;
+  const a = vu(), b = vr(), tu = a.currentTime || 0, target = mapRef(tu);
+  if (playing && b.readyState >= 2) {
+    const err = target - b.currentTime, slope = slopeAt(tu) * S.speed;
+    if (b.seeking) { /* wait for the pending seek */ }
+    else if (Math.abs(err) > .3) b.currentTime = target + .08 * S.speed;
+    else {
+      const rate = slope + err * 1.5;
+      if (rate < .07) { if (!b.paused) b.pause(); }
+      else { if (b.paused) b.play().catch(() => {}); const rr = clamp(rate, .07, 4); if (Math.abs(rr - lastRate) > .02) { b.playbackRate = rr; lastRate = rr; } }
+    }
+  }
+  const tr = playing ? b.currentTime : target;
+  drawOverlay(U, a, $("#o-user"), tu, "#C6F432", "user");
+  drawOverlay(R, b, $("#o-ref"), tr, "#4F8CFF", "ref");
+  const n = U.reps.filter(r => r.back <= tu).length;
+  $("#cnt-user").innerHTML = `${n}<small>/ ${U.reps.length} rep</small>`;
+  setPhase($("#ph-user"), phaseAt(U, tu)); setPhase($("#ph-ref"), phaseAt(R, tr));
+  $("#dep-user").textContent = depthAt(U, tu).toFixed(1); $("#dep-ref").textContent = depthAt(R, tr).toFixed(1);
+  const head = $("#head"); if (head) head.style.left = (100 * tu / U.duration) + "%";
+  const cur = U.reps.find(r => tu >= r.start && tu <= r.back);
+  if (cur && cur.n !== S.rep) selectRep(cur.n, false);
+  draw3D(tu, tr);
+  if (a.ended) pause();
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>
