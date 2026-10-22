@@ -10,6 +10,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
+from core.config import TrackCfg
 from core.io.rows import read_rows
 from core.io import video
 from core.recog.pose import near_wrist, POSE_CONNECTIONS
@@ -17,8 +18,8 @@ from core.signal.height import height_signal
 from core.signal.final import clean_final
 from core.judge.session import run_session
 
-COLORS = {'det': '#218a48', 'klt': '#377eb8', 'rim': '#e08214', 'lost': '#888888'}
-BGR = {'det': (50,190,50), 'klt': (230,140,50), 'rim': (20,160,240), 'lost': (140,140,140)}
+COLORS = {'det': '#218a48', 'det_low': '#a6a000', 'klt_drift': '#cc3377', 'klt': '#377eb8', 'rim': '#e08214', 'lost': '#888888'}
+BGR = {'det': (50,190,50), 'det_low': (0,190,190), 'klt_drift': (140,50,210), 'klt': (230,140,50), 'rim': (20,160,240), 'lost': (140,140,140)}
 
 
 def iou(a,b):
@@ -172,8 +173,10 @@ def timeline(rows,result,png,truth=None,stats=None):
     if candidates:
         times=np.array([a for a,_ in candidates]);ds=np.array([d for _,d in candidates])
         colors=np.tile([.3,.3,.3,1.0],(len(ds),1));colors[:,3]=.1+.8*np.clip(ds[:,4],0,1)
-        axes[0].scatter(times,(ds[:,1]+ds[:,3])/2,s=5,c=colors,label='candidates')
-        axes[1].scatter(times,ds[:,3]-ds[:,1],s=5,c=colors,label='candidates')
+        colors[ds[:,4] < TrackCfg().score_high, :3] = [0.8, 0.55, 0.0]
+        colors[ds[:,4] < TrackCfg().score_high, 3] = .65
+        axes[0].scatter(times,(ds[:,1]+ds[:,3])/2,s=5,c=colors,label='candidates (low=orange)')
+        axes[1].scatter(times,ds[:,3]-ds[:,1],s=5,c=colors,label='candidates (low=orange)')
     axes[0].set_ylabel('center y (px)'); axes[0].invert_yaxis()
     axes[1].set_ylabel('box height (px)')
     rt,ry,signal=_signals(rows,result)
