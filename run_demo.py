@@ -192,13 +192,19 @@ def _run_metrics(results: dict, out: Path) -> dict:
     return measured
 
 
-def _run_findings(measured: dict, settings: dict, out: Path, *, plate: bool = False) -> dict:
+def _run_findings(measured: dict, settings: dict, out: Path, *, plate: bool = False,
+                  results: dict | None = None, angles: dict | None = None) -> dict:
     from feedback.compare import compare_reps
     from feedback.select import select_goals
 
     reference = settings.get("ref", settings.get("expert"))
-    findings = select_goals(compare_reps(measured["user"], measured["ref"], reference.get("rep", 1),
-                                          allow_excluded_reference=plate))
+    if plate:
+        from feedback.set_judge import compare_plate_reps
+        plate_data = {role: item["plate"] for role, item in results.items()} if results is not None else None
+        findings = select_goals(compare_plate_reps(measured["user"], measured["ref"], reference.get("rep", 1),
+                                                   angles=angles, plate_data=plate_data))
+    else:
+        findings = select_goals(compare_reps(measured["user"], measured["ref"], reference.get("rep", 1)))
     _write_json(out / "findings.json", findings)
     names = config.DISPLAY_METRICS[findings["exercise"]]
     print("[compare: diff/k/color]")
@@ -304,7 +310,8 @@ def main(argv: list[str] | None = None) -> int:
                 reference = settings.get("ref", settings.get("expert"))
                 if mode != "plate":
                     gate.check_reference(measured["ref"], reference.get("rep", 1))
-                findings = _run_findings(measured, settings, project_path(args.out), plate=mode == "plate")
+                findings = _run_findings(measured, settings, project_path(args.out), plate=mode == "plate",
+                                         results=results, angles=angles)
                 if mode != "plate":
                     gate.check_comparable(findings, measured["ref"], reference.get("rep", 1))
                 _print_descriptions(findings)

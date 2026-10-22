@@ -284,6 +284,12 @@ def build_report(
     report["ref"]["sprite"] = build_sprite(
         _resolve_video(ref_segments["video"]), ref_frames, int(ref_width), int(ref_quality)
     )
+    if findings.get("source") == "plate":
+        report["set_findings"] = deepcopy(findings["set_findings"])
+        report["posture_judgments"] = deepcopy(findings["posture_judgments"])
+        report["tempo_comparison"] = deepcopy(findings["tempo_comparison"])
+        for rep, source in zip(report["reps"], findings["reps"]):
+            rep["unjudged_cell_count"] = source["unjudged_cell_count"]
     return report
 
 
