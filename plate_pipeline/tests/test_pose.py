@@ -7,7 +7,7 @@ import pytest
 
 from core.config import DEFAULT
 from core.recog.pose import (PoseEstimator, SIDE_IDS, SideLock, person_box,
-                             select_lifter)
+                             select_lifter, feet_y, near_wrist)
 from eval.pose_check import floor_intervals, summarize
 from server.jobs import process_video
 from test_upload import clip  # reuse the existing synthetic video fixture
@@ -26,17 +26,43 @@ def person(box):
     return p
 
 
-def test_person_box_visible_feet_only():
+def test_person_box_uses_all_visible_points_without_requiring_feet():
     p = person((10,20,100,200))
-    p[15,1] = 500  # low hand must not define the lower edge
+    p[15,1] = 500
     p[31,1] = 210
     p[32] = [900,900,0,.1]  # invisible outlier
-    assert person_box(p) == (10,20,100,210)
+    assert person_box(p) == (10,20,100,500)
     p[27:33,3] = .2
-    assert person_box(p) is None
+    assert person_box(p) == (10,20,100,500)
+    assert select_lifter([p], (50,100,80,150), None, 'squat') == 0
     assert person_box(None) is None
     p[27,3] = .3
-    assert person_box(p) == (10,20,100,200)
+    assert person_box(p) == (10,20,100,500)
+    p[:,3] = 0
+    assert person_box(p) is None
+
+
+def test_feet_y_rejects_invisible_and_out_of_frame_feet():
+    p=person((0,0,100,300))
+    p[27:33,3]=0
+    assert feet_y(p,.3,300) is None
+    p[27]=[30,280,0,.8]
+    p[28]=[40,295,0,.9]  # below the 97% screen boundary
+    p[29]=[50,-5,0,.9]
+    p[31]=[30,285,0,.1]
+    assert feet_y(p,.3,300) == 280
+
+
+def test_near_wrist_visibility_distance_and_frame_bounds():
+    kp=np.zeros((33,3))
+    kp[15]=[100,100,.8];kp[16]=[200,200,.9]
+    assert near_wrist(kp,[150,150,250,250],frame_h=480)==(200,200)
+    kp[16,1]=500
+    assert near_wrist(kp,[150,150,250,250],frame_h=480)==(100,100)
+    kp[15,2]=.4
+    assert near_wrist(kp,[150,150,250,250],frame_h=480) is None
+    kp[15]=[700,200,.9]
+    assert near_wrist(kp,[150,150,250,250],frame_h=480,frame_w=640) is None
 
 
 def test_plate_near_lifter_beats_large_background():
@@ -156,7 +182,7 @@ def test_pose_check_stationary_windows_and_gaps():
     rows=[]
     for k in range(31):
         rows.append(dict(t=k/30,plate=dict(used=True,center=[50,50],size_px=[100,100],box=[0,0,100,100]),
-                         person=dict(box=[0,0,100,150]),pose=dict(n=2,ms=3)))
+                         person=dict(box=[0,0,100,999],feet_y=150),pose=dict(n=2,ms=3)))
     stats = summarize(rows)
     assert stats['pose_frames'] == 31 and stats['lifter_ratio'] == 1
     assert stats['candidates'] == {2:31}

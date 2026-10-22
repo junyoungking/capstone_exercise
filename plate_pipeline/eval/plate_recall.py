@@ -52,12 +52,13 @@ def evaluate(det, d, img_dir, thr=0.5, out=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True)
+    ap.add_argument("--device", choices=("auto", "cuda", "cpu"), default="auto")
     ap.add_argument("--ann", required=True)
     ap.add_argument("--images", required=True)
     ap.add_argument("--score", type=float, default=0.3)
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
-    det = OnnxPlateDetector(a.model, score_min=a.score)
+    det = OnnxPlateDetector(a.model, score_min=a.score, device=a.device)
     res = evaluate(det, coco.load(a.ann), a.images, out=a.out)
     for k, r in res.items():
         if k == "speed_ms":
@@ -65,7 +66,8 @@ def main():
         flag = "OK" if r["recall"] >= 0.95 else "below 95%"
         print(f"{k:10s} frames {r['frames']:4d} plates {r['plates']:4d} recall {r['recall']:.3f} ({flag}) "
               f"precision {r['precision']:.3f} IoU {r['mean_iou'] if r['mean_iou'] is None else round(r['mean_iou'], 3)}")
-    print(f"detector {res['speed_ms']:.1f} ms per frame (median, CPU)")
+    print(f"detector {res['speed_ms']:.1f} ms per frame (median, {det.providers})")
+    res["detector_providers"] = det.providers
     if a.out:
         os.makedirs(a.out, exist_ok=True)
         json.dump(res, open(os.path.join(a.out, "recall.json"), "w"), indent=1)

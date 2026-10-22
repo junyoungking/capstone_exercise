@@ -52,8 +52,9 @@ def floor_intervals(rows, duration=.5, tolerance=.03):
             offsets = []
             for r in use[s:e]:
                 p = r['plate']; h = p['box'][3]-p['box'][1]
-                if 'person' in r and h > 0:
-                    offsets.append((r['person']['box'][3]-p['box'][3])/h)
+                foot = r.get('person', {}).get('feet_y')
+                if foot is not None and h > 0:
+                    offsets.append((foot-p['box'][3])/h)
             intervals.append(dict(t0=round(float(t[s]),4), t1=round(float(t[e-1]),4),
                                   n=len(offsets), median=float(np.median(offsets)) if offsets else None))
     return intervals
