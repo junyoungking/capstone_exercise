@@ -56,15 +56,25 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
     for seq, (t, img) in enumerate(video.frames(path)):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         dets = detector(img, seq) if detector is not None else []
-        det = pick_detection(dets, tr.box)
-        if tr.box is None and det is None:
+        det = None
+        if tr.box is None and not any(d.score >= tr.cfg.score_high for d in dets):
             if init_box is not None:
-                det = Detection(tuple(init_box), 1.0)
-            elif rim:
+                det = Detection(tuple(init_box), 1.0, "klt")
+            elif rim and detector is None:
                 det = find_plate_circle(img)
+                if det is not None:
+                    det.src = "rim"
         if det is None and rim and tr.box is not None:
             det = refine_circle(gray, tr.box)
-        st = tr.step(gray, det)
+        st = tr.step(gray, dets=dets + ([det] if det is not None else []), t=t)
+        det = tr.selected
+        if st is not None and st.drift:
+            for previous in reversed(rows):
+                plate = previous.get("plate", {})
+                if plate.get("src") in ("det", "det_low", "rim"):
+                    break
+                if plate.get("src") == "klt":
+                    plate.update(src="klt_drift", used=False)
         row = {"t": round(t, 4), "seq": seq}
         if detector is not None:
             ranked = sorted(dets, key=lambda d: d.score, reverse=True)[:10]

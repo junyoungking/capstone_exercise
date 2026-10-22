@@ -12,24 +12,16 @@ import cv2
 import numpy as np
 
 
-@dataclass(frozen=True)
-class TrackCfg:
-    max_pts: int = 150
-    min_pts: int = 25
-    inner: float = 0.85          # seed points inside this fraction of the plate radius ...
-    hub: float = 0.45            # ... and outside this one (the sleeve end sits in front of the plate)
-    fb_px: float = 1.0           # forward-backward error limit
-    gate: float = 0.5            # detection accepted if its centre is within gate x plate size
-    win: int = 21
-    levels: int = 3
+from core.config import TrackCfg
 
 
 @dataclass
 class PlateState:
     box: tuple
-    src: str                     # "det" | "klt" | "lost"
+    src: str                     # det | det_low | klt | rim | lost (rows may become klt_drift)
     n_pts: int
     score: float = 1.0
+    drift: bool = False
 
     @property
     def center(self):
@@ -48,6 +40,9 @@ class PlateTracker:
         self.prev = None
         self.pts = None
         self.box = None
+        self.time = None
+        self.lost_since = None
+        self.selected = None
 
     def _seed(self, gray, box):
         x0, y0, x1, y1 = box
@@ -64,12 +59,23 @@ class PlateTracker:
         self._seed(gray, self.box)
         return PlateState(self.box, "det", len(self.pts))
 
-    def step(self, gray, det=None) -> Optional[PlateState]:
+    def step(self, gray, det=None, *, dets=None, t=None) -> Optional[PlateState]:
         c = self.cfg
+        now = (self.time + 1 / 30 if self.time is not None else 0.0) if t is None else t
+        dt = max(0.0, now - self.time) if self.time is not None else 0.0
+        self.time = now
+        candidates = list(dets) if dets is not None else ([det] if det is not None else [])
+        high = [d for d in candidates if d.score >= c.score_high]
+        low = [d for d in candidates if c.score_low <= d.score < c.score_high]
+        self.selected = None
         if self.box is None:
-            if det is None:
+            if not high:
                 return None
-            return self.start(gray, det.box)
+            det = max(high, key=lambda d: d.score * d.size[0] * d.size[1])
+            self.selected = det
+            state = self.start(gray, det.box)
+            state.src, state.score = getattr(det, "src", "det"), det.score
+            return state
         moved = None
         n = 0
         if len(self.pts):
@@ -85,23 +91,55 @@ class PlateTracker:
                 if M is not None:
                     inl = inl.reshape(-1).astype(bool)
                     n = int(inl.sum())
-                    s = float(np.hypot(M[0, 0], M[1, 0]))
+                    s = float(np.clip(np.hypot(M[0, 0], M[1, 0]),
+                                      max(0.0, 1 - c.scale_rate_s * dt), 1 + c.scale_rate_s * dt))
                     cx, cy = (np.array(self.box[:2]) + np.array(self.box[2:])) / 2
                     ncx, ncy = M @ np.array([cx, cy, 1.0])
                     w, h = (self.box[2] - self.box[0]) * s, (self.box[3] - self.box[1]) * s
                     moved = (ncx - w / 2, ncy - h / 2, ncx + w / 2, ncy + h / 2)
                     self.pts = b[inl].reshape(-1, 1, 2).astype(np.float32)
         self.prev = gray
+        ref = moved or self.box
+        pc = (np.array(ref[:2]) + np.array(ref[2:])) / 2
+        size = max(ref[2] - ref[0], ref[3] - ref[1])
+        recovering = self.lost_since is not None
+        corridor = recovering and now - self.lost_since > c.lost_corridor_s
+        def eligible(d):
+            if corridor:
+                last = self.box
+                last_size = max(last[2] - last[0], last[3] - last[1])
+                ratio = max(d.size) / last_size
+                return (abs(d.center[0] - (last[0] + last[2]) / 2) <= c.gate * last_size
+                        and c.reacquire_size_min <= ratio <= c.reacquire_size_max)
+            return np.linalg.norm(np.array(d.center) - pc) <= c.gate * size
+        det = None
+        for group in (high, [] if recovering else low):
+            accepted = [d for d in group if eligible(d)]
+            if accepted:
+                if corridor:
+                    det = min(accepted, key=lambda d: abs(d.center[1] - (self.box[1] + self.box[3]) / 2))
+                else:
+                    # Preserve nearest-candidate selection, within the prediction gate.
+                    cx, cy = (np.array(self.box[:2]) + np.array(self.box[2:])) / 2
+                    det = min(accepted, key=lambda d: (d.center[0]-cx)**2 + (d.center[1]-cy)**2)
+                break
         if det is not None:
-            ref = moved or self.box
-            pc = ((ref[0] + ref[2]) / 2, (ref[1] + ref[3]) / 2)
-            size = max(ref[2] - ref[0], ref[3] - ref[1])
-            if np.hypot(det.center[0] - pc[0], det.center[1] - pc[1]) <= c.gate * size:
-                self.box = tuple(map(float, det.box))
-                self._seed(gray, self.box)
-                return PlateState(self.box, getattr(det, "src", "det"), len(self.pts), det.score)
+            drift = (getattr(det, "src", "det") == "det" and moved is not None
+                     and np.linalg.norm(np.array(det.center) - pc) > c.drift_fraction * size)
+            self.selected = det
+            self.box = tuple(map(float, det.box))
+            self._seed(gray, self.box)
+            self.lost_since = None
+            src = getattr(det, "src", "det")
+            if src == "det" and det.score < c.score_high:
+                src = "det_low"
+            return PlateState(self.box, src, len(self.pts), det.score, drift)
         if moved is None or n < c.min_pts // 2:
+            if self.lost_since is None:
+                self.lost_since = now
+            self.pts = np.empty((0, 1, 2), np.float32)
             return PlateState(self.box, "lost", n, 0.0)
+        self.lost_since = None
         self.box = moved
         if n < c.min_pts:
             self._seed(gray, self.box)

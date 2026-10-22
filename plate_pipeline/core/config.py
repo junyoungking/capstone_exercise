@@ -7,6 +7,31 @@ from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
+class TrackCfg:
+    # ByteTrack: weak evidence may maintain an identity, never initialize one.
+    score_low: float = 0.05
+    score_high: float = 0.3
+    # Side view: the bar travels vertically; retain a half-diameter x corridor.
+    lost_corridor_s: float = 0.3
+    gate: float = 0.5
+    reacquire_size_min: float = 0.75
+    reacquire_size_max: float = 1.33
+    # Fixed physical diameter; even walking changes apparent size slowly (~30%/s).
+    scale_rate_s: float = 0.5
+    # 0.15 diameter is about 7 cm for a 45 cm plate: reject preceding drift.
+    drift_fraction: float = 0.15
+    # A rep keeps its diameter; measured sizes in a +/-2.5 s window set scale.
+    measured_half_window_s: float = 2.5
+    max_pts: int = 150
+    min_pts: int = 25
+    inner: float = 0.85
+    hub: float = 0.45
+    fb_px: float = 1.0
+    win: int = 21
+    levels: int = 3
+
+
+@dataclass(frozen=True)
 class LiveCfg:
     start_n: int = 5            # valid samples before the live signal starts (median)
     out_speed: float = 6.0      # m/s, outlier gate slope

@@ -10,6 +10,8 @@ import json
 from dataclasses import dataclass
 from typing import List, Optional
 
+from core.config import TrackCfg
+
 import cv2
 import numpy as np
 
@@ -64,7 +66,7 @@ def yolox_grids(size):
     return np.concatenate(gs).astype(np.float32), np.concatenate(ss).astype(np.float32)
 
 
-def decode_yolox(out, size, ratio, score_min=0.3, nms_iou=0.45) -> List[Detection]:
+def decode_yolox(out, size, ratio, score_min=TrackCfg().score_low, nms_iou=0.45) -> List[Detection]:
     """Raw YOLOX head output (exported without decode_in_inference): rows of
     (dx, dy, log w, log h, objectness, class score) over the stride 8/16/32 grids, sigmoids already applied
     to the last two. Box centre = (d + grid) x stride, size = exp(log) x stride; back to image pixels / ratio."""
@@ -79,7 +81,7 @@ def decode_yolox(out, size, ratio, score_min=0.3, nms_iou=0.45) -> List[Detectio
     b = np.concatenate([xy[keep] - wh[keep] / 2, xy[keep] + wh[keep] / 2], 1) / ratio
     s = score[keep]
     idx = cv2.dnn.NMSBoxes([[float(q[0]), float(q[1]), float(q[2] - q[0]), float(q[3] - q[1])] for q in b],
-                           s.tolist(), score_min, nms_iou)
+                           s.tolist(), 0.0, nms_iou)  # already filtered inclusively above
     idx = np.array(idx).reshape(-1)
     return [Detection(tuple(map(float, b[i])), float(s[i])) for i in idx]
 
@@ -87,7 +89,7 @@ def decode_yolox(out, size, ratio, score_min=0.3, nms_iou=0.45) -> List[Detectio
 class OnnxPlateDetector:
     """The trained one-class plate detector (train/plate: YOLOX-Tiny exported to ONNX)."""
 
-    def __init__(self, path, size=416, score_min=0.3, nms_iou=0.45, providers=None, device="auto"):
+    def __init__(self, path, size=416, score_min=TrackCfg().score_low, nms_iou=0.45, providers=None, device="auto"):
         if device not in ("auto", "cuda", "cpu"):
             raise ValueError(f"Unknown detector device: {device}")
         import onnxruntime as ort

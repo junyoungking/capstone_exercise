@@ -77,15 +77,15 @@ def test_cuda_preload_before_optional_torch(monkeypatch):
 def test_candidate_logging_is_sorted_bounded_and_does_not_change_plate(monkeypatch):
     img=np.zeros((100,100,3),np.uint8)
     monkeypatch.setattr(jobs.video,'frames',lambda _:iter([(0,img.copy()),(.1,img.copy())]))
-    dets=[Detection((20,20,60,60),.2+i*.05) for i in range(12)]
+    dets=[Detection((20,20,60,60),.2+i*.05) for i in range(14)]
     picked=jobs.pick_detection(dets,None)
     assert picked is dets[-1]
     rows=jobs.recognize('unused',detector=lambda *_:dets,rim=False)
-    assert rows[0]['dets']==[[*map(float,d.box),d.score] for d in reversed(dets[2:])]
+    assert rows[0]['dets']==[[*map(float,d.box),d.score] for d in reversed(dets[4:])]
     assert rows[0]['pick']==0 and len(rows[0]['dets'])==10
-    # Once initialized, the original closest-center tie picks the FIRST input
-    # candidate, even when it has low confidence. Logging must not sort in place.
-    expected=jobs.recognize('unused',detector=lambda img,seq:[picked if seq==0 else dets[0]],rim=False)
+    # Within the high-score tier, closest-center ties retain input order.
+    # Logging must not sort or truncate the selection candidates.
+    expected=jobs.recognize('unused',detector=lambda img,seq:[picked if seq==0 else dets[2]],rim=False)
     assert [r['plate'] for r in rows]==[r['plate'] for r in expected]
     assert rows[1]['pick'] is None  # selected candidate falls outside the stored top ten
     no_det=jobs.recognize('unused',init_box=picked.box,rim=False)
