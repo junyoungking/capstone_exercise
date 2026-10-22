@@ -76,19 +76,23 @@ def test_only_far_people_returns_none():
     assert select_lifter([], None, None, 'squat') is None
 
 
-def test_plate_ranking_distance_then_area_then_continuity():
+def test_plate_ranking_wrist_distance_then_continuity():
     plate = (100,100,120,120)
     small = person((100,90,130,130))
     large = person((90,80,140,150))
-    assert select_lifter([small,large], plate, None, 'squat') == 1
-    # Both contain plate center and have equal area; continuity is last tie-breaker.
+    assert select_lifter([small,large], plate, None, 'squat') == 0
+    # Equal wrist distances use continuity, independently of person-box area.
     a,b = person((90,60,130,160)),person((100,60,140,160))
+    a[[15,16],:2] = (90,110)
+    b[[15,16],:2] = (130,110)
     prev = b[[11,12,23,24],:2].mean(axis=0)
     assert select_lifter([a,b],plate,prev,'squat') == 1
-    # Exact half-diameter distance qualifies, farther does not.
-    edge = person((120,100,150,140))
+    # The measured shared limit is four plate heights, not cfg.near_plate.
+    edge = person((190,90,190,130))
     assert select_lifter([edge],plate,None,'squat') == 0
-    assert select_lifter([edge],plate,None,'squat',cfg=replace(DEFAULT.pose,near_plate=.49)) is None
+    assert select_lifter([edge],plate,None,'squat',cfg=replace(DEFAULT.pose,near_plate=.49)) == 0
+    edge[:,0] += 1
+    assert select_lifter([edge],plate,None,'squat') is None
 
 
 def test_no_plate_size_and_continuity():

@@ -102,12 +102,8 @@ def _run_segments(settings: dict, args: argparse.Namespace, overrides: dict,
         gate.check_exercises(*exercises)
         gate.check_views(*(video["view"] for video in videos.values()))
         for role, result in results.items():
-            try:
+            if mode != "plate":
                 gate.check_detection(role, result["pose"])
-            except gate.GateFailure as error:
-                if mode != "plate":
-                    raise
-                result["detection_failure"] = str(error)
         if mode == "labels":
             for role, video in videos.items():
                 gate.check_label_ranges(role, video, results[role]["pose"]["total"])
@@ -130,6 +126,11 @@ def _run_segments(settings: dict, args: argparse.Namespace, overrides: dict,
                 raise ValueError(gate.friendly_error(error, role)) from error
             raise
         results[role]["segments"] = segments
+        if validate and mode == "plate":
+            try:
+                gate.check_detection(role, pose, segments)
+            except gate.GateFailure as error:
+                results[role]["detection_failure"] = str(error)
         if inference is not None:
             print(f"{role}: model exercise={inference['exercise']} "
                   f"ratio={inference['exercise_ratio']:.3f} reps={len(segments['reps'])}")

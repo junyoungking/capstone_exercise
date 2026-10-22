@@ -164,7 +164,10 @@ def select_lifter(cands, plate_box, prev_center, exercise, *, cfg=DEFAULT.pose, 
     image_size=(width,height) preserves v4 normalized fallback scoring for pixel
     inputs. Without it, use the visible coordinate extent (at least 1 per axis),
     which also accepts normalized inputs. Plate gating uses original coordinates.
-    Distance, area, continuity are lexicographic there.
+    With a plate, rank by visible in-frame wrist distance, falling back to the
+    visible person box only when neither wrist qualifies. Break distance ties
+    by previous torso center, then candidate index. Without a plate the original
+    normalized fallback scoring is unchanged.
     """
     boxes = [(i, person_box(p, cfg.vis_thr)) for i, p in enumerate(cands)]
     boxes = [(i, b) for i, b in boxes if b is not None]
@@ -174,14 +177,22 @@ def select_lifter(cands, plate_box, prev_center, exercise, *, cfg=DEFAULT.pose, 
         if h <= 0:
             return None
         cx,cy = (x0+x1)/2, (y0+y1)/2
+        # S3a stage0: pooled single-candidate box p99=1.015149, wrist
+        # p99=3.407489 plate heights across all 10 videos. Ceil(max(...))=4.
+        # One shared limit for S1 and feedback; no per-exercise/video tuning.
+        limit = 4.0
+        frame_w, frame_h = image_size if image_size is not None else (float('inf'), float('inf'))
         ranked = []
         for i, (a,b,c,d) in boxes:
-            distance = float(np.hypot(max(a-cx, 0, cx-c), max(b-cy, 0, cy-d))) / h
-            if distance > cfg.near_plate:
+            wrist = near_wrist(cands[i][:, [0, 1, 3]], plate_box, vis_thr=.5,
+                               frame_h=frame_h, frame_w=frame_w)
+            distance = (float(np.hypot(wrist[0]-cx, wrist[1]-cy)) / h if wrist is not None
+                        else float(np.hypot(max(a-cx, 0, cx-c), max(b-cy, 0, cy-d))) / h)
+            if distance > limit:
                 continue
             center = person_center(cands[i], cfg.vis_thr)
             prev_dist = float(np.linalg.norm(center-prev_center)) if center is not None and prev_center is not None else float('inf')
-            ranked.append(((distance, -max(0,c-a)*max(0,d-b), prev_dist), i))
+            ranked.append(((distance, prev_dist), i))
         return min(ranked)[1] if ranked else None
     if not boxes:
         return None
