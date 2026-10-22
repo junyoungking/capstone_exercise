@@ -1,6 +1,6 @@
 """Frame rows -> bar height and sideways position in metres (pipeline tab, 스케일; 구현 설계 tab height_signal).
 
-Vertical/horizontal scale uses measured box height/width medians within +/-2.5 s,
+Vertical/horizontal scale uses measured box height/width medians within +/-measured_half_window_s,
 or the nearest measurement outside the window. With no measurements, use all sizes
 with the legacy 0.5 s median. KLT size estimates do not set physical scale. The camera's own
 movement (row["cam"], px) is subtracted. Height is integrated from frame-to-frame centre moves with the

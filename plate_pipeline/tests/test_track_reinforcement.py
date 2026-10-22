@@ -98,13 +98,14 @@ def test_low_cannot_recover_before_corridor():
 
 
 def test_measured_window_median_and_nearest():
-    # At t=4 only t=2 is in the inclusive +/-2.5s window; at t=6 neither is.
+    # +/-0.25 s window: t=0 and t=0.2 see both measurements; KLT rows (t=1, t=2) are not
+    # measurements and take the nearest one (t=0.2); t=5 sees only itself.
     rows=[]
-    for t,src,size in [(0,'rim',60),(2,'det_low',120),(4,'klt',900),(6,'klt',3),(10,'det',240)]:
+    for t,src,size in [(0,'rim',60),(.2,'det_low',120),(1,'klt',900),(2,'klt',3),(5,'det',240)]:
         rows.append({'t':t,'plate':{'used':True,'src':src,'center':[100,300-t*10],'size_px':[size,size]}})
     _,y,_=height_signal(rows)
     scales=np.array([.45/90,.45/90,.45/120,.45/120,.45/240])
-    np.testing.assert_allclose(np.diff(y),np.diff([0,2,4,6,10])*10*(scales[1:]+scales[:-1])/2)
+    np.testing.assert_allclose(np.diff(y),np.diff([0,.2,1,2,5])*10*(scales[1:]+scales[:-1])/2)
 
 
 def test_occluded_disc_recovers_at_different_y(monkeypatch):

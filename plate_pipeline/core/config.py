@@ -20,8 +20,10 @@ class TrackCfg:
     scale_rate_s: float = 0.5
     # 0.15 diameter is about 7 cm for a 45 cm plate: reject preceding drift.
     drift_fraction: float = 0.15
-    # A rep keeps its diameter; measured sizes in a +/-2.5 s window set scale.
-    measured_half_window_s: float = 2.5
+    # Scale from measured sizes only (det, det_low, rim); KLT sizes are estimates.
+    # Keep the window short: the apparent size does change within a rep with perspective
+    # (public squat sample: the rigid ArUco tag on the plate grows 12-14% at the bottom).
+    measured_half_window_s: float = 0.25
     max_pts: int = 150
     min_pts: int = 25
     inner: float = 0.85
