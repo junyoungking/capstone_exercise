@@ -1,0 +1,62 @@
+key,type,gt_count,pred_count,signed_error,abs_error,exact,obo,tp,fp,fn,tracked_fraction,plate_ratio,view,counted_trips,incomplete_counted_trips,cause,development,subset
+squat/squat_11.mp4,squat,1,1,0,0,True,True,1,0,0,1.0,0.9966331116195817,옆,1,0,일치,False,reference_test
+squat/stu4_69.mp4,squat,2,2,0,0,True,True,2,0,0,1.0,0.9767657992565058,옆,2,0,일치,False,reference_test
+squat/val1235.mp4,squat,1,2,1,1,False,True,1,1,0,1.0,1.075445424985281,옆,2,0,검출 대상·세트/rep 분할 확인 필요,False,reference_test
+squat/val1256.mp4,squat,2,2,0,0,True,True,2,0,0,1.0,1.0701221141668698,옆,2,0,일치,False,reference_test
+benchpress/bench press_31.mp4,benchpress,1,1,0,0,True,True,1,0,0,0.987012987012987,0.48483589530535903,비스듬,1,0,일치,False,reference_test
+benchpress/bench press_40.mp4,benchpress,3,3,0,0,True,True,3,0,0,1.0,1.0348675034867505,옆,3,0,일치,False,reference_test
+benchpress/stu10_11.mp4,benchpress,20,0,-20,20,False,False,0,0,20,0.046162402669632924,0.3338584205244216,정면,0,0,원판 추적 누락/초기화 확인 필요,False,reference_test
+benchpress/stu8_15.mp4,benchpress,12,4,-8,8,False,False,4,0,8,0.7535087719298246,1.1008849557522125,옆,5,1,검출 대상·세트/rep 분할 확인 필요,False,reference_test
+benchpress/stu8_7.mp4,benchpress,5,2,-3,3,False,False,2,0,3,0.7621212121212121,0.9011658989654913,옆,4,2,검출 대상·세트/rep 분할 확인 필요,True,reference_test
+benchpress/test153.mp4,benchpress,5,0,-5,5,False,False,0,0,5,0.06333333333333334,0.2412420382165606,정면,0,0,원판 추적 누락/초기화 확인 필요,False,reference_test
+deadlift/deadlift_7.mp4,deadlift,1,1,0,0,True,True,0,1,1,1.0,1.3815355439918764,옆,1,0,일치,False,reference_test
+deadlift/deadlift_23.mp4,deadlift,1,0,-1,1,False,True,0,0,1,0.6111111111111112,0.4923946110386791,비스듬,0,0,정면·비스듬 조건에서 신호/가림 확인 필요,False,reference_test
+deadlift/deadlift_30.mp4,deadlift,2,2,0,0,True,True,2,0,0,1.0,0.9530403371462973,옆,2,0,일치,False,reference_test
+squat/stu6_11_2.mp4,squat,4,0,-4,4,False,False,0,0,4,1.0,1.0043337221701685,옆,0,0,검출 대상·세트/rep 분할 확인 필요,False,reference_test
+squat/stu6_11_3.mp4,squat,1,0,-1,1,False,True,0,0,1,1.0,1.1075268817204302,옆,0,0,검출 대상·세트/rep 분할 확인 필요,False,reference_test
+squat/val1250.mp4,squat,3,0,-3,3,False,False,0,0,3,0.40789473684210525,0.44782021500729285,비스듬,0,0,원판 추적 누락/초기화 확인 필요,False,reference_test
+benchpress/bench press_61.mp4,benchpress,2,2,0,0,True,True,2,0,0,1.0,0.6631489883301853,비스듬,2,0,일치,False,reference_test
+benchpress/stu1_6_4.mp4,benchpress,1,1,0,0,True,True,1,0,0,0.9827586206896551,0.5675438596491222,비스듬,1,0,일치,False,reference_test
+benchpress/stu7_12_2.mp4,benchpress,5,5,0,0,True,True,5,0,0,0.9913232104121475,0.8389651531151004,옆,5,0,일치,False,reference_test
+benchpress/stu7_7.mp4,benchpress,2,2,0,0,True,True,2,0,0,1.0,1.7258953168044084,옆,2,0,일치,False,reference_test
+benchpress/stu8_6_2.mp4,benchpress,3,3,0,0,True,True,3,0,0,1.0,1.2038586907851199,옆,3,0,일치,False,reference_test
+deadlift/deadlift_sihoo02.mp4,deadlift,1,1,0,0,True,True,0,1,1,1.0,0.8280827935006612,옆,1,0,일치,False,reference_test
+deadlift/PB_S01_R10.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9872611464968153,0.9999937395986036,옆,1,0,일치,False,reference_test
+deadlift/PB_S03_R13.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,0.9964906083736815,옆,1,0,일치,False,reference_test
+deadlift/PB_S03_R14.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,0.9708625969737409,옆,1,0,일치,False,reference_test
+deadlift/PB_S04_R03.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9716312056737588,0.9922822491730976,옆,1,0,일치,False,reference_test
+deadlift/PB_S05_R22.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9782608695652174,1.039153439153439,옆,1,0,일치,False,reference_test
+deadlift/PB_S06_R25.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9285714285714286,1.0127576054955842,옆,1,0,일치,False,reference_test
+deadlift/PB_S07_R19.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.852112676056338,0.9542190305206466,옆,1,0,일치,False,reference_test
+deadlift/GB_S01_R01.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9916666666666667,1.096061479346782,옆,1,0,일치,False,reference_test
+deadlift/GB_S01_R07.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9647887323943662,1.0941329461774016,옆,1,0,일치,False,reference_test
+deadlift/GB_S01_R11.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9779411764705882,0.9579009307206516,옆,1,0,일치,False,reference_test
+deadlift/GB_S01_R16.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9801324503311258,1.0107880447840083,옆,1,0,일치,False,reference_test
+deadlift/GB_S01_R18.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9481481481481482,1.0056168947588597,옆,1,0,일치,False,reference_test
+deadlift/GB_S04_R03.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,1.0432846242932081,옆,1,0,일치,False,reference_test
+deadlift/GB_S04_R04.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,0.9991762767710052,옆,1,0,일치,False,reference_test
+deadlift/GB_S04_R07.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,0.9698366097040108,옆,1,0,일치,False,reference_test
+deadlift/GB_S05_R47.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,1.0162361623616238,옆,1,0,일치,False,reference_test
+deadlift/GB_S06_R63.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,1.0591357088703566,옆,1,0,일치,False,reference_test
+deadlift/GB_S07_R12.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.8561643835616438,0.9775390625000001,옆,1,0,일치,False,reference_test
+deadlift/GB_S07_R14.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.8278145695364238,1.011157524169819,옆,1,0,일치,False,reference_test
+deadlift/GB_S07_R20.mp4,deadlift,1,1,0,0,True,True,0,1,1,0.7785714285714286,0.7931671283471838,옆,1,0,일치,False,reference_test
+deadlift/LLK_S01_R02.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,1.0347627392365046,옆,1,0,일치,False,reference_test
+deadlift/LLK_S01_R03.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.9864864864864865,1.0081967213114755,옆,1,0,일치,False,reference_test
+deadlift/LLK_S01_R04.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,1.0189359783588823,옆,1,0,일치,False,reference_test
+deadlift/LLK_S01_R06.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.8787878787878788,1.0443548387096773,옆,1,0,일치,False,reference_test
+deadlift/LLK_S03_R11.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,0.9569420035149386,옆,1,0,일치,False,reference_test
+deadlift/LLK_S04_R05.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,1.0604026845637584,옆,1,0,일치,False,reference_test
+deadlift/LLK_S05_R15.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,1.083679079799325,옆,1,0,일치,False,reference_test
+deadlift/LLK_S05_R17.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,1.0546982518813504,옆,1,0,일치,False,reference_test
+deadlift/LLK_S06_R31.mp4,deadlift,1,1,0,0,True,True,1,0,0,0.912621359223301,1.0309033583134593,옆,1,0,일치,False,reference_test
+deadlift/LLK_S06_R32.mp4,deadlift,1,0,-1,1,False,True,0,0,1,0.7238095238095238,1.093877551020408,옆,0,0,검출 대상·세트/rep 분할 확인 필요,False,reference_test
+deadlift/deadlift_01.mp4,deadlift,1,1,0,0,True,True,1,0,0,1.0,0.6353149955634427,비스듬,1,0,일치,False,custom_test
+deadlift/deadlift_02.mp4,deadlift,1,1,0,0,True,True,0,1,1,0.8165137614678899,0.6250569476082006,비스듬,1,0,일치,False,custom_test
+deadlift/deadlift_03.mp4,deadlift,2,2,0,0,True,True,0,2,2,0.9611451942740287,0.6082055906221818,비스듬,2,0,일치,False,custom_test
+benchpress/bench_01.mp4,benchpress,3,3,0,0,True,True,1,2,2,1.0,0.7462257368799423,비스듬,3,0,일치,False,custom_test
+benchpress/bench_02.mp4,benchpress,1,1,0,0,True,True,1,0,0,1.0,0.8216480965559463,옆,1,0,일치,False,custom_test
+benchpress/bench_03.mp4,benchpress,1,1,0,0,True,True,1,0,0,1.0,0.7738376674546888,옆,1,0,일치,False,custom_test
+squat/squat_01.mp4,squat,1,0,-1,1,False,True,0,0,1,0.8134110787172012,0.6622052262587637,비스듬,1,1,정면·비스듬 조건에서 신호/가림 확인 필요,False,custom_test
+squat/squat_02.mp4,squat,1,1,0,0,True,True,1,0,0,0.916030534351145,0.5139623842664989,비스듬,1,0,일치,False,custom_test
+squat/squat_03.mp4,squat,1,0,-1,1,False,True,0,0,1,0.9498327759197325,0.501876959290861,비스듬,1,1,정면·비스듬 조건에서 신호/가림 확인 필요,False,custom_test
