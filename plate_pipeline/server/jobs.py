@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import time
+from dataclasses import replace
 
 import cv2
 import numpy as np
@@ -108,6 +109,8 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
                 center = person_center(lms, pose_cfg.vis_thr)
                 if center is not None:
                     prev_center = center
+            elif pose_cfg.backend == "rtmpose":
+                prev_center = None
         rows.append(row)
         if on_frame is not None:
             on_frame(seq, t, img, st)
@@ -188,12 +191,19 @@ def main():
     ap.add_argument("--boxes", default=None)
     ap.add_argument("--model", default=None)
     ap.add_argument("--device", choices=("auto", "cuda", "cpu"), default="auto")
-    ap.add_argument("--pose", action="store_true", help="record optional MediaPipe pose observations")
+    ap.add_argument("--pose", action="store_true", help="record optional pose observations (RTMPose by default)")
+    ap.add_argument("--pose-backend", choices=("rtmpose", "mediapipe"), default=DEFAULT.pose.backend)
+    ap.add_argument("--pose-mode", choices=("lightweight", "balanced"), default=DEFAULT.pose.mode)
     ap.add_argument("--out", default="out")
     a = ap.parse_args()
     box = tuple(float(v) for v in a.box.split(",")) if a.box else None
-    res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out,
-                              pose=a.pose, device=a.device)
+    estimator = PoseEstimator(cfg=replace(DEFAULT.pose, backend=a.pose_backend, mode=a.pose_mode)) if a.pose else None
+    try:
+        res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out,
+                                  pose=estimator, device=a.device)
+    finally:
+        if estimator is not None:
+            estimator.close()
     for s in res["sets"]:
         print(f"set {s['set']}: {s['reps']} reps ({s['reason']})")
         for x in s["sentences"]:

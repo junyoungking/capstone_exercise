@@ -136,7 +136,7 @@ def test_side_lock_holds_and_resets_candidate():
 
 
 def test_estimator_pixels_rgb_and_monotonic_ms_without_mediapipe():
-    est = PoseEstimator.__new__(PoseEstimator)
+    est = PoseEstimator.__new__(PoseEstimator, cfg=replace(DEFAULT.pose, backend="mediapipe"))
     est._last_ms = -1
     calls = []
     def detect(image, ms):
@@ -199,7 +199,8 @@ def test_pose_check_stationary_windows_and_gaps():
 
 def test_mediapipe_synthetic_smoke(clip):
     pytest.importorskip('mediapipe')
-    result,rows,_ = process_video(clip,'squat',init_box=(120,110,200,190),pose=True)
+    with PoseEstimator(cfg=replace(DEFAULT.pose,backend='mediapipe',every_n=2)) as estimator:
+        result,rows,_ = process_video(clip,'squat',init_box=(120,110,200,190),pose=estimator)
     assert [s['reps'] for s in result['sets']] == [3]
     assert sum('pose' in r for r in rows) == 210
 

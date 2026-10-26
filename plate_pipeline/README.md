@@ -132,17 +132,27 @@ GitHub 공개 저장소 dw2kim/BarbellTrackingCode의 `test_squat.mov`(옆에서
 - **생성기의 rep 편차** (같은 버릇 세트의 2차 차분 산포 중앙값). 내리는 시간 0.09~0.21초, 먼 점 거리 0.9~2.1 cm, 먼 점에서 멈춘 시간 0.10~0.11초.
 - 세트 안에서는 하한 x 배수가 늘 최소 변화량보다 커서, 최소 변화량은 기준 대비에서만 판정에 낀다.
 
-## 선택 포즈 기록 (S1)
+## 선택 포즈 기록 (S1, M1 갱신)
 
-`server.jobs --pose`는 원판 추적 다음에 기본 2프레임마다 MediaPipe Tasks
-PoseLandmarker(VIDEO, 최대 2명, confidence 0.45)를 실행한다. 선택된 사람의
-포즈는 rows에만 기록하며 원판 신호, 반복 횟수, rep 값과 판정에는 사용하지 않는다.
-MediaPipe는 선택 의존성으로 `PoseEstimator`를 생성할 때만 import한다.
-모델 기본 경로는 저장소 루트의 `pose_landmarker_lite.task`이고,
-`PoseEstimator(model_path=...)` 또는 `PoseCfg.model_path`로 바꿀 수 있다.
+`server.jobs --pose`는 원판 추적 다음에 매 프레임 RTMPose를 실행한다.
+기본 `PoseCfg(backend="rtmpose", mode="lightweight")`는 rtmlib BodyWithFeet의
+사람 검출 → 모든 사람의 Halpe26 포즈(ONNX Runtime CPU) → MP33 어댑터다.
+`mode="balanced"`도 지원한다. 포즈는 rows에만 기록하며 원판 신호,
+반복 횟수, rep 값과 판정에는 사용하지 않는다. 의존성은 estimator 생성 시 import한다.
+
+비교용 `PoseCfg(backend="mediapipe")`는 기존 MediaPipe Tasks VIDEO,
+최대 2명, confidence 0.45다. MediaPipe 모델 기본 경로는 저장소 루트의
+`pose_landmarker_lite.task`이고 `PoseEstimator(model_path=..., cfg=...)`로 바꾼다.
+RTMPose 모델은 rtmlib의 mode 모델을 캐시로 받는다. `rtmlib==0.0.16`이 필요하다.
+
+벤치의 누운 사람 우선과 연속성 규칙, 점수 변환, 없는 관절의 영향은
+[eval/M1_NOTES.md](eval/M1_NOTES.md)에, 두 모드 실행·지표·원판 불변 비교는
+[eval/BASELINE.md](eval/BASELINE.md)에 적었다.
 
 ```bash
 python -m server.jobs VIDEO --exercise squat --box x0,y0,x1,y1 --pose --out OUT
+python -m server.jobs VIDEO --exercise squat --model PLATE.onnx --pose --pose-mode balanced --out OUT
+python -m server.jobs VIDEO --exercise squat --model PLATE.onnx --pose --pose-backend mediapipe --out OUT
 python -m eval.pose_check OUT/rows.jsonl.gz --video VIDEO --sheet OUT/sheet.jpg
 ```
 

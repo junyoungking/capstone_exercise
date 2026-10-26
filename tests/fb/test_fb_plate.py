@@ -148,7 +148,7 @@ def test_cache_selection_is_part_of_identity(monkeypatch, tmp_path):
     calls=[]
     monkeypatch.setattr(export_overlay,'video_info',lambda p:{'fps':30,'w':100,'h':100})
     monkeypatch.setattr(offline_compare,'extract_sequence',lambda *a:calls.append('first') or [None])
-    monkeypatch.setattr(module,'extract_plate_sequence',lambda *a:calls.append('plate') or [None])
+    monkeypatch.setattr(module,'extract_backend_sequence',lambda *a:calls.append('plate') or [None])
     cache=tmp_path/'pose.npz'
     assert not extract_pose(video,cache,'squat')['cache_hit']
     assert extract_pose(video,cache,'squat')['cache_hit']

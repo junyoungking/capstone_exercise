@@ -6,8 +6,11 @@ OpenCV, NumPy, pandas, pytest가 필요하다. 영상 준비에는 ffmpeg/ffprob
 
 ```bash
 cd plate_pipeline
-python -m eval.baseline --out eval_out/baseline_mp
+python -m eval.baseline --out eval_out/baseline_mp --backend mediapipe
 ```
+
+M0 브랜치의 원래 명령에는 backend 옵션이 없었다. M1에서는 기본이 RTMPose라서
+MediaPipe를 다시 측정할 때 위처럼 `--backend mediapipe`를 명시한다.
 
 기본 입력은 Git 공통 디렉터리가 있는 원래 작업 트리의 다음 경로다.
 별도 worktree에서도 같은 로컬 입력을 사용한다.
@@ -86,3 +89,56 @@ CFR 결과로 바꾸지 않는다.
 `wrong ...`으로 시작하면 별도 목록에 들어간다. 여섯 장 확인은 영상 전체의
 오류가 없다는 보장이 아니다. rep이 없으면 전체 영상 진단 이미지를 만들고
 이미지에 `NO COMPLETED REP`이라고 명시한다.
+
+## M1 RTMPose 실행
+
+`rtmlib==0.0.16`을 같은 M0 Python 환경에 추가한다. ONNX Runtime CPU를
+사용하고, BodyWithFeet의 Halpe26 모델과 사람 검출기는 첫 실행 때
+`~/.cache/rtmlib/hub/checkpoints/`에 받는다. 저장소에 모델을 넣지 않는다.
+
+```bash
+python -m pip install --no-deps rtmlib==0.0.16  # ORT/OpenCV/NumPy가 있는 M0 환경에서
+python -m eval.baseline --out eval_out/baseline_rtm/lightweight --mode lightweight
+python -m eval.baseline --out eval_out/baseline_rtm/balanced --mode balanced
+# M0의 MediaPipe 생산자와 선택 규칙을 그대로 다시 실행:
+python -m eval.baseline --out eval_out/baseline_mp --backend mediapipe
+```
+
+기본 backend는 `rtmpose`, mode는 `lightweight`다. `core.config.PoseCfg`로
+운영 경로도 바꿀 수 있다. 두 모드 모두 매 프레임 사람 검출 → 검출된 모든
+사람에게 포즈 → 원판으로 리프터 선택 → 기존 feedback EMA 순서다.
+`--pose-results` 재생도 유지한다. `pose.npz` 계약은 위 표와 같다.
+RTMPose의 z=0은 2D 자리 채움 값이다. 3D 관측이 아니다.
+
+RTMPose 시간은 `timing.person_detection`, `timing.pose`에 각각 저장한다.
+모델의 입력/출력 전후처리를 포함하며, `rest`와 겹치지 않는다. MP33 어댑터, 점수 분포 계산, 사람 선택과 EMA는 `rest`에 포함된다. MediaPipe는
+검출 시간이 내부에 포함돼 분리하지 않는다. `score_distribution`에는 모든
+프레임·모든 사람·26점의 원점수 개수와 분위수를 영상별로 기록한다.
+`--resume`에는 backend/mode와 생산자·어댑터·설정 코드 해시도 포함된다.
+
+69개 확인 이미지를 두 모드 모두 검토해 각 출력의 `lifter_review.json`을
+작성한 뒤 다음 비교 명령으로 표에 반영한다. 이 명령은 최초 실행의
+`wall_s`를 보존하면서 전체·종목별 비교표와 두 모드 json·md·이미지 zip을 만든다.
+
+```bash
+python -m eval.m1_compare --mp /path/to/baseline_mp \
+  --rtm eval_out/baseline_rtm --report eval/M1_NOTES.md
+```
+
+`invariance.json`은 69개 영상의 원판 프레임 기록을 gzip 해제 후 바이트로
+대조하고 원판 결과 JSON의 모든 값(측정 실행 시간 두 필드 제외)을 대조한다.
+CFR 사본이 필요한 영상의 `pose_plate/`도 별도로 대조한다. 횟수 61개는
+영상별 전체 count 레코드도 비교한다. 원본 영상·원판 모델·지표 코드 SHA256과 확인 이미지의 프레임 목록도 같아야 한다. 다르면 비교 명령은 실패한다.
+
+
+### 원판 core 합성 회귀 비교
+
+동일한 스크립트로 M0/M1 각각의 실제 core를 import해 90조건(종목 3 × fps 3 × 잡음 5 × seed 2)의 최종·라이브 횟수, 횟수·시간 정확도, rep별 속도와 횟수 표시 시차 원값을 JSON으로 저장한다. 실제 영상의 rep·깊이·속도 전체 값 불변은 앞의 `invariance.json`으로 확인한다. `M0`와 `M1`은 각 worktree의 절대 경로다. 생성 파일은 추적하지 않는다.
+
+```bash
+PYTHONPATH="$M0/plate_pipeline" python "$M1/plate_pipeline/eval/m1_sim_regression.py" --out "$M1/plate_pipeline/eval_out/baseline_rtm/sim_m0.json"
+PYTHONPATH="$M1/plate_pipeline" python "$M1/plate_pipeline/eval/m1_sim_regression.py" --out "$M1/plate_pipeline/eval_out/baseline_rtm/sim_m1.json"
+cmp "$M1/plate_pipeline/eval_out/baseline_rtm/sim_m0.json" "$M1/plate_pipeline/eval_out/baseline_rtm/sim_m1.json"
+```
+
+두 JSON이 있으면 `eval.m1_compare`는 바이트 동일성을 확인하고 함께 zip에 넣는다.

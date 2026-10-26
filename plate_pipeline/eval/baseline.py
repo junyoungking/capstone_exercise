@@ -1,4 +1,4 @@
-"""CPU M0 baseline; --videos accepts alternate dataset/team roots, no new split."""
+"""CPU pose baseline; --videos accepts alternate dataset/team roots, no new split."""
 from pathlib import Path
 import argparse
 from contextlib import contextmanager, ExitStack
@@ -116,6 +116,8 @@ def count_result(record,path,result,decoder):
 def run_one(item,args,decoder):
     from server.jobs import process_video
     from feedback.pose import extract_pose
+    from core.config import PoseCfg
+    pose_cfg=PoseCfg(backend=args.backend, mode=args.mode)
     from feedback.plate import prepare_videos
     key,path,exercise,record=item;dest=args.out/'raw'/key;dest.mkdir(parents=True,exist_ok=True)
     external=args.pose_results/key/'pose.npz' if args.pose_results else None
@@ -123,7 +125,11 @@ def run_one(item,args,decoder):
                      pose_model_sha256=sha(ROOT/'pose_landmarker_lite.task'),
                      external_pose_sha256=sha(external) if external else None,
                      evaluator_sha256=sha(__file__),metrics_sha256=sha(Path(__file__).with_name('baseline_metrics.py')),
-                     base='4605cd5',selection='plate-wrist-v2',exercise=exercise)
+                     base='8e5cdb4',selection='plate-wrist-v3',exercise=exercise,
+                     backend=args.backend,mode=args.mode,
+                     producer_sha256=sha(ROOT/'feedback/pose.py'),
+                     adapter_sha256=sha(ROOT/'plate_pipeline/core/recog/pose.py'),
+                     config_sha256=sha(ROOT/'plate_pipeline/core/config.py'))
     saved=dest/'evaluation.json'
     if args.resume and saved.exists():
         cached=json.loads(saved.read_text())
@@ -145,8 +151,12 @@ def run_one(item,args,decoder):
         if external:
             with np.load(external,allow_pickle=False) as data:pose={k:data[k] for k in data.files}
             for k in ('fps','w','h','total'):pose[k]=pose[k].item()
-        else:pose=extract_pose(pose_path,dest/'pose.npz',exercise,no_cache=True,plate_rows=rows)
+        else:pose=extract_pose(pose_path,dest/'pose.npz',exercise,no_cache=True,plate_rows=rows,pose_cfg=pose_cfg)
         inference_done=time.perf_counter()
+    if 'inference_timing' in pose:
+        times.update(pose['inference_timing'])
+    else:
+        times['person_detection']=0.
     stats,segments=measure(pose,rows,result,pose_path,exercise)
     image=args.out/'images'/f'{key.replace("/","__")}.jpg'
     image_frames=contact_sheet(pose_path,pose,segments,rows,image)
@@ -157,7 +167,7 @@ def run_one(item,args,decoder):
     times['prepare']=prepare_s
     if external:times['fps']=None;times['pose']=None
     data=dict(key=key,exercise=exercise,video=str(path),pose_video=str(pose_path),fingerprint=fingerprint,frames=len(rows),counts=counts,
-              **stats,timing=times,wall_s=time.perf_counter()-start,image=str(image.relative_to(args.out)),
+              **stats,score_distribution=pose.get('score_distribution'),timing=times,wall_s=time.perf_counter()-start,image=str(image.relative_to(args.out)),
               image_frames=image_frames,lifter_review='pending',segment_exclusions=segments['excluded_reps'])
     write(dest/'segments.json',segments);write(saved,data)
     print(f'{key}: reps={len(segments["reps"])} coverage={stats["observation"]["coverage"]} {processing:.1f}s',flush=True)
@@ -183,8 +193,8 @@ def summarize(data,v40):
             n=sum(v['observation']['joints'][joint]['visible'] for v in videos)
             d=sum(v['observation']['joints'][joint]['total'] for v in videos)
             joints[joint]=dict(visible=n,total=d,rate=ratio(n,d))
-        times={k:sum(v['timing'][k] for v in videos if v['timing'][k] is not None)
-               for k in ('decode','plate_detection','klt','pose','rest','total')}
+        times={k:sum(v['timing'].get(k,0.) for v in videos if v['timing'].get(k,0.) is not None)
+               for k in ('decode','plate_detection','person_detection','klt','pose','rest','total')}
         times['fps']=sum(v['frames'] for v in videos)/times['total'] if videos and all(v['timing']['fps'] is not None for v in videos) else None
         output[exercise]=dict(videos=len(videos),counts=counts,variation=variation,
                               false_difference=dict(judged=judged,different=different,rate=ratio(different,judged)),
@@ -195,8 +205,8 @@ def summarize(data,v40):
 
 def render(report):
     def fmt(v):return 'N/A' if v is None else f'{v:.3f}'
-    lines=['# M0 MediaPipe baseline','',
-           'Base `4605cd5`; merged local `integ/midterm-eval` (`67e7173`) without conflicts. PLAN.md and main unchanged.',
+    lines=[f'# {report.get("backend", "mediapipe")} {report.get("mode", "")} baseline','',
+           'M1 based on M0 `8e5cdb4` (includes merge `decff40`). PLAN.md and main unchanged.',
            '',f'Command: `{report["command"]}`',f'Invocation wall time: {report["wall_s"]:.1f} s',
            '', 'CPU: '+report['environment']['cpu'], 'Versions: `'+json.dumps(report['environment']['versions'])+'`',
            '',f'Midterm per-video reproduction: **{report["midterm_match"]}** ({report["count_videos"]}/61 videos).',
@@ -219,9 +229,9 @@ def render(report):
     for ex,s in report['summary'].items():
         for c in s['variation']:lines.append(f'|{ex}|{c["position"]}|{c["metric"]}|{c["videos"]}|{fmt(c["sd"])}|{fmt(c["pair_median"])}|')
     lines+=['','## CPU speed','',
-            'Serial, CPUExecutionProvider, ORT/OpenCV one thread. Original PTS plate pass for counts, then current feedback prepared CFR plate/pose passes where conversion is required; otherwise two passes: plate PyAV then feedback OpenCV pose every frame (2 poses, .45 confidence, current EMA/selection). Decode includes both passes; KLT includes tracker association/bookkeeping. Rest includes setup/selection/smoothing/analysis/plate I/O. fps = input frames / combined pass time; excludes CFR preparation and metric/contact-sheet/GT validation. Per-video prepare time is stored separately. External pose replay has no measured pose fps.',
-            '', '|scope|decode s|detector s|KLT s|pose s|rest s|total s|fps|','|---|---:|---:|---:|---:|---:|---:|---:|']
-    for ex,s in report['summary'].items():lines.append('|'+ex+'|'+'|'.join(fmt(s['timing'][k]) for k in ('decode','plate_detection','klt','pose','rest','total','fps'))+'|')
+            'Serial, CPUExecutionProvider, ORT/OpenCV one thread. Original PTS plate pass for counts, then current feedback prepared CFR plate/pose passes where conversion is required; otherwise two passes: plate PyAV then feedback OpenCV pose every frame (RTMPose: all detector boxes, top-down Halpe26; MediaPipe comparison: at most 2 poses, .45 confidence; existing EMA). Decode includes both passes; KLT includes tracker association/bookkeeping. Rest includes setup/selection/smoothing/analysis/plate I/O. fps = input frames / combined pass time; excludes CFR preparation and metric/contact-sheet/GT validation. Per-video prepare time is stored separately. RTMPose person detection and pose are measured separately including preprocessing and postprocessing; MediaPipe does not expose separate detection timing. External pose replay has no measured pose fps.',
+            '', '|scope|decode s|plate detector s|person detector s|KLT s|pose s|rest s|total s|fps|','|---|---:|---:|---:|---:|---:|---:|---:|---:|']
+    for ex,s in report['summary'].items():lines.append('|'+ex+'|'+'|'.join(fmt(s['timing'][k]) for k in ('decode','plate_detection','person_detection','klt','pose','rest','total','fps'))+'|')
     lines+=['','## Per video / lifter review','',
             'Six raw skeleton frames evenly sampled over rep intervals; no completed rep gives a labeled whole-video diagnostic sheet. Sparse sheets cannot prove identity at every frame. Review and jump flags are separate.',
             '', '|video|coverage|jumps|fps|review|image|','|---|---:|---:|---:|---|---|']
@@ -237,13 +247,15 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--out',type=Path,required=True);p.add_argument('--local-root',type=Path,default=local_root())
     p.add_argument('--model',type=Path);p.add_argument('--videos',type=Path,nargs='+')
+    p.add_argument('--backend',choices=('rtmpose','mediapipe'),default='rtmpose')
+    p.add_argument('--mode',choices=('lightweight','balanced'),default='lightweight')
     p.add_argument('--pose-results',type=Path);p.add_argument('--resume',action='store_true')
     args=p.parse_args();args.out=args.out.resolve();args.model=args.model or args.local_root/'plate_pipeline/models/plate_tiny.onnx'
     start=time.perf_counter()
     import cv2,onnxruntime as ort
     cv2.setNumThreads(1);original=ort.InferenceSession
     def session(*a,**kw):
-        options=ort.SessionOptions();options.intra_op_num_threads=1;options.inter_op_num_threads=1
+        options=kw.pop('sess_options',None) or ort.SessionOptions();options.intra_op_num_threads=1;options.inter_op_num_threads=1
         return original(*a,sess_options=options,**kw)
     v40=args.local_root/'new_data/experiments_athlete_pipeline_v40/athlete_yolo_balanced_phase_sameconditions_seed42'
     sys.path.insert(0,str(Path(__file__).parent/'midterm'))
@@ -274,8 +286,8 @@ def main():
             diff={k:[old.loc[v['key'],k],c[k]] for k in ('pred_count','gt_count','tp','fp','fn','abs_error','exact','obo') if old.loc[v['key'],k]!=c[k]}
             if diff:mismatches.append(dict(key=v['key'],differences=diff))
     cpu=next((l.split(':',1)[1].strip() for l in Path('/proc/cpuinfo').read_text().splitlines() if l.startswith('model name')),'unknown')
-    report=dict(schema_version=1,command='python -m eval.baseline '+' '.join(sys.argv[1:]),wall_s=time.perf_counter()-start,
-                environment=dict(cpu=cpu,python=sys.version,versions={k:importlib.metadata.version(k) for k in ('onnxruntime','mediapipe','numpy','av','opencv-python')},
+    report=dict(backend=args.backend, mode=args.mode, schema_version=2,command='python -m eval.baseline '+' '.join(sys.argv[1:]),wall_s=time.perf_counter()-start,
+                environment=dict(cpu=cpu,python=sys.version,versions={k:importlib.metadata.version(k) for k in ('onnxruntime','rtmlib','mediapipe','numpy','av','opencv-python')},
                                  provider='CPUExecutionProvider',ort_threads=1,opencv_threads=1),
                 count_videos=sum(v['counts'] is not None for v in data),midterm_match=not mismatches,
                 midterm_mismatches=mismatches,summary=summarize(data,v40),videos=data)

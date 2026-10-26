@@ -118,7 +118,11 @@ class TextCfg:
 
 @dataclass(frozen=True)
 class PoseCfg:
-    every_n: int = 2
+    backend: str = "rtmpose"
+    mode: str = "lightweight"
+    score_reference: float = 0.6
+    switch_margin: float = 0.5  # plate heights closer, and at least 25% closer
+    every_n: int = 1
     num_poses: int = 2
     min_conf: float = 0.45
     vis_thr: float = 0.3
