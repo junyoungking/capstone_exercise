@@ -171,6 +171,17 @@ def select_lifter(cands, plate_box, prev_center, exercise, *, cfg=DEFAULT.pose, 
     """
     boxes = [(i, person_box(p, cfg.vis_thr)) for i, p in enumerate(cands)]
     boxes = [(i, b) for i, b in boxes if b is not None]
+    # The legacy MediaPipe comparison retains M0 selection exactly.
+    if cfg.backend == 'rtmpose' and _exercise(exercise) == 'benchpress':
+        reclining = []
+        for i, box in boxes:
+            p = cands[i]
+            if np.all(p[[11, 12, 23, 24], 3] >= .3):
+                v = p[[11, 12], :2].mean(axis=0) - p[[23, 24], :2].mean(axis=0)
+                if abs(v[0]) > abs(v[1]):  # >45 degrees from vertical, in pixels
+                    reclining.append((i, box))
+        if reclining:
+            boxes = reclining
     if plate_box is not None:
         x0,y0,x1,y1 = plate_box
         h = y1-y0
@@ -193,7 +204,26 @@ def select_lifter(cands, plate_box, prev_center, exercise, *, cfg=DEFAULT.pose, 
             center = person_center(cands[i], cfg.vis_thr)
             prev_dist = float(np.linalg.norm(center-prev_center)) if center is not None and prev_center is not None else float('inf')
             ranked.append(((distance, prev_dist), i))
-        return min(ranked)[1] if ranked else None
+        if not ranked:
+            return None
+        best = min(ranked)
+        if cfg.backend == 'rtmpose' and prev_center is not None and best[0][1] > h:
+            incumbents = [r for r in ranked if r[0][1] <= h]
+            if incumbents:
+                incumbent = min(incumbents, key=lambda r: (r[0][1], r[0][0], r[1]))
+                new_d, old_d = best[0][0], incumbent[0][0]
+                # A switch needs a visible wrist on BOTH people; box fallback
+                # cannot establish a clearly closer grip.
+                wrists = [near_wrist(cands[r[1]][:, [0, 1, 3]], plate_box,
+                                     frame_h=frame_h, frame_w=frame_w)
+                          for r in (best, incumbent)]
+                if (any(w is None for w in wrists) or old_d-new_d < cfg.switch_margin
+                        or new_d > .75*old_d):
+                    best = incumbent
+            else:
+                # Previous lifter is not observed: cannot prove a closer wrist.
+                return None
+        return best[1]
     if not boxes:
         return None
     if image_size is None:
@@ -213,7 +243,7 @@ def select_lifter(cands, plate_box, prev_center, exercise, *, cfg=DEFAULT.pose, 
     return -max(ranked)[1] if ranked else None
 
 
-class PoseEstimator:
+class MediaPipeEstimator:
     def __init__(self, model_path=None, cfg: PoseCfg = DEFAULT.pose):
         import mediapipe as mp
         from mediapipe.tasks import python
@@ -254,3 +284,89 @@ class PoseEstimator:
 
     def __exit__(self, *args):
         self.close()
+
+
+# Halpe26: COCO17 + head/neck/hip + L/R big toe, small toe, heel.
+HALPE_TO_MP = {0: 0, 2: 1, 5: 2, 7: 3, 8: 4,
+               11: 5, 12: 6, 13: 7, 14: 8, 15: 9, 16: 10,
+               23: 11, 24: 12, 25: 13, 26: 14, 27: 15, 28: 16,
+               29: 24, 30: 25, 31: 20, 32: 21}
+
+
+def score_visibility(scores, reference=.6):
+    """Support score, not probability: .3/.45/.5 map to .18/.27/.30.
+
+    .30 is our fixed localization support gate; scale that to the
+    feedback's .5 observation gate. No claim of MP occlusion calibration.
+    """
+    if not np.isfinite(reference) or reference <= 0:
+        raise ValueError('score_reference must be positive and finite')
+    scores = np.asarray(scores, dtype=float)
+    return np.where(np.isfinite(scores), np.clip(scores/reference, 0, 1), 0.)
+
+
+def halpe_to_mp33(points, scores, reference=.6):
+    points, scores = np.asarray(points), np.asarray(scores)
+    if points.shape != (26, 2) or scores.shape != (26,):
+        raise ValueError('Expected Halpe26 points (26,2) and scores (26,)')
+    result = np.zeros((33, 4), dtype=float)
+    visibility = score_visibility(scores, reference)
+    for mp, halpe in HALPE_TO_MP.items():
+        if np.isfinite(points[halpe]).all():
+            result[mp, :2] = points[halpe]
+            result[mp, 3] = visibility[halpe]
+    # z=0 is an explicit 2D placeholder, never MediaPipe world coordinates.
+    return result
+
+
+class RTMPoseEstimator:
+    """BodyWithFeet detector -> all person crops -> Halpe26, ORT CPU only."""
+
+    def __init__(self, model_path=None, cfg=DEFAULT.pose):
+        from rtmlib import BodyWithFeet
+        if cfg.mode not in ('lightweight', 'balanced'):
+            raise ValueError('RTMPose mode must be lightweight or balanced')
+        if model_path or cfg.model_path:
+            raise ValueError('Use rtmlib BodyWithFeet mode models, not a MediaPipe task')
+        self.cfg, self.every_n = cfg, cfg.every_n
+        self.model = BodyWithFeet(mode=cfg.mode, to_openpose=False,
+                                  backend='onnxruntime', device='cpu')
+        self.timings = dict(person_detection=0., pose=0.)
+        self.scores = []
+
+    def __call__(self, image_bgr, t_s):
+        import time
+        if not np.isfinite(t_s) or t_s < 0:
+            raise ValueError('Pose timestamp must be finite and nonnegative')
+        start = time.perf_counter()
+        boxes = self.model.det_model(image_bgr)
+        detected = time.perf_counter()
+        # RTMPose's empty bboxes default is a whole-image pose; skip it.
+        if len(boxes):
+            points, scores = self.model.pose_model(image_bgr, bboxes=boxes)
+        else:
+            points, scores = [], []
+        self.timings['person_detection'] += detected-start
+        self.timings['pose'] += time.perf_counter()-detected
+        self.scores.extend(np.asarray(scores).reshape(-1).tolist())
+        return [halpe_to_mp33(p, s, self.cfg.score_reference) for p, s in zip(points, scores)]
+
+    def close(self):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()
+
+
+class PoseEstimator(MediaPipeEstimator):
+    """Select a backend explicitly; keep MediaPipe lazy and available for M0."""
+
+    def __new__(cls, model_path=None, cfg=DEFAULT.pose):
+        if cfg.backend == 'rtmpose':
+            return RTMPoseEstimator(model_path=model_path, cfg=cfg)
+        if cfg.backend != 'mediapipe':
+            raise ValueError('Pose backend must be rtmpose or mediapipe')
+        return super().__new__(cls)

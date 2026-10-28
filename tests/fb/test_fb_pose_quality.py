@@ -123,7 +123,7 @@ def test_plate_cache_preserves_raw_landmarks_separately_from_smoothed(monkeypatc
     raw=smooth.copy();raw[25,0]=1.1
     sequence=Sequence([smooth]);sequence.raw_lms=[raw]
     monkeypatch.setattr(export_overlay,'video_info',lambda p:{'fps':30,'w':640,'h':480})
-    monkeypatch.setattr(module,'extract_plate_sequence',lambda *args:sequence)
+    monkeypatch.setattr(module,'extract_backend_sequence',lambda *args:sequence)
     video=tmp_path/'one.mp4';video.touch();cache=tmp_path/'pose.npz'
     first=module.extract_pose(video,cache,'squat',plate_rows=[{'seq':0}])
     second=module.extract_pose(video,cache,'squat',plate_rows=[{'seq':0}])

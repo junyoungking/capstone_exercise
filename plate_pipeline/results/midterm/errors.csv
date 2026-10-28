@@ -1,0 +1,13 @@
+key,reason,timeline
+squat/val1235.mp4,"정답보다 많은 왕복을 rep으로 포함(과계수); 추가 왕복의 실제 동작/검출 identity는 미확인; 추적 100.0%, 높이 범위 41.8 cm, 완료 2/1. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/squat/val1235.mp4/timeline.png
+benchpress/stu10_11.mp4,"추적 프레임 부족으로 유효 왕복 rep을 생성하지 못함; 추적 4.6%, 높이 범위 42.7 cm, 완료 0/20. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/benchpress/stu10_11.mp4/timeline.png
+benchpress/stu8_15.mp4,"내부 trip 5개 중 종료 back 공란 1개를 완료 이벤트에서 제외; 추적 75.4%, 높이 범위 52.9 cm, 완료 4/12. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/benchpress/stu8_15.mp4/timeline.png
+benchpress/stu8_7.mp4,"내부 trip 4개 중 종료 back 공란 2개를 완료 이벤트에서 제외; 추적 76.2%, 높이 범위 57.7 cm, 완료 2/5. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/benchpress/stu8_7.mp4/timeline.png
+benchpress/test153.mp4,"추적 프레임 부족으로 유효 왕복 rep을 생성하지 못함; 추적 6.3%, 높이 범위 6.0 cm, 완료 0/5. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/benchpress/test153.mp4/timeline.png
+deadlift/deadlift_23.mp4,"정면·비스듬 조건에서 신호/가림 확인 필요; 추적 61.1%, 높이 범위 43.4 cm, 완료 0/1. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/deadlift/deadlift_23.mp4/timeline.png
+squat/stu6_11_2.mp4,"관측 원판 높이 변화가 1.0 cm로 최소 rep 진폭 13 cm보다 작아 rep 미생성; 추적 100.0%, 높이 범위 1.0 cm, 완료 0/4. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/squat/stu6_11_2.mp4/timeline.png
+squat/stu6_11_3.mp4,"관측 원판 높이 변화가 1.0 cm로 최소 rep 진폭 13 cm보다 작아 rep 미생성; 추적 100.0%, 높이 범위 1.0 cm, 완료 0/1. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/squat/stu6_11_3.mp4/timeline.png
+squat/val1250.mp4,"추적 프레임 부족으로 유효 왕복 rep을 생성하지 못함; 추적 40.8%, 높이 범위 20.9 cm, 완료 0/3. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/squat/val1250.mp4/timeline.png
+deadlift/LLK_S06_R32.mp4,"검출 대상·세트/rep 분할 확인 필요; 추적 72.4%, 높이 범위 98.2 cm, 완료 0/1. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/deadlift/LLK_S06_R32.mp4/timeline.png
+squat/squat_01.mp4,"내부 trip 1개 중 종료 back 공란 1개를 완료 이벤트에서 제외; 추적 81.3%, 높이 범위 21.3 cm, 완료 0/1. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/squat/squat_01.mp4/timeline.png
+squat/squat_03.mp4,"내부 trip 1개 중 종료 back 공란 1개를 완료 이벤트에서 제외; 추적 95.0%, 높이 범위 52.8 cm, 완료 0/1. 자동 진단 단서이며 물체 정체/분할 오류의 수작업 확정은 안 함",videos/squat/squat_03.mp4/timeline.png
