@@ -119,10 +119,10 @@ class TextCfg:
 @dataclass(frozen=True)
 class PoseCfg:
     backend: str = "rtmpose"
-    mode: str = "lightweight"
-    det_frequency: int = 5
+    mode: str = "tracked"
+    det_frequency: int = 10
     crop_expand: float = 1.25
-    bench_rep_guard: bool = True
+    bench_rep_guard: bool = False
     score_reference: float = 0.6
     switch_margin: float = 0.5  # plate heights closer, and at least 25% closer
     every_n: int = 1
@@ -131,6 +131,20 @@ class PoseCfg:
     vis_thr: float = 0.3
     near_plate: float = 0.5
     model_path: str = None
+
+
+@dataclass(frozen=True)
+class GeometryCfg:
+    focal_long_side: float = 0.77  # Focal length assumption in pixels / long image side.
+    bar_depth_m: float = 0.70  # 바 기하 가정, 지름과 무관 (near plate -> lifter centre).
+    nose_stature_ratio: float = 0.92  # Standing nose-to-floor / full stature assumption.
+
+
+@dataclass(frozen=True)
+class Pose3DCfg:
+    smooth_sigma_s: float = 0.06  # Gaussian time smoothing, radius ceil(3 sigma).
+    max_gap_frames: int = 10  # Same frame-level interpolation/edge hold as track3d.
+    chunk_frames: int = 128  # Context padding preserves the 243-frame receptive field.
 
 
 @dataclass(frozen=True)
@@ -143,6 +157,8 @@ class Config:
     cmp: CmpCfg = field(default_factory=CmpCfg)
     text: TextCfg = field(default_factory=TextCfg)
     pose: PoseCfg = field(default_factory=PoseCfg)
+    geometry: GeometryCfg = field(default_factory=GeometryCfg)
+    pose3d: Pose3DCfg = field(default_factory=Pose3DCfg)
 
 
 DEFAULT = Config()

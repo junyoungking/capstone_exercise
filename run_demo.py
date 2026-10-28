@@ -24,6 +24,8 @@ def build_parser() -> argparse.ArgumentParser:
                         help=config.CLI_HELP["segment"])
     parser.add_argument("--model", type=Path, help="plate 모드 원판 ONNX 모델 (생략하면 plate_box)")
     parser.add_argument("--device", choices=("auto", "cuda", "cpu"), default="auto")
+    parser.add_argument("--pose3d-checkpoint", type=Path, help="M2 VideoPose3D checkpoint; save diagnostic 3D JSON in plate mode")
+    parser.add_argument("--pose3d-threads", type=int, default=1)
     parser.add_argument("--ckpt", type=Path, help=config.CLI_HELP["ckpt"])
     parser.add_argument("--override", type=Path, help=config.CLI_HELP["override"])
     parser.add_argument("--ref-width", type=int, default=config.DEFAULT_REF_WIDTH,
@@ -285,6 +287,8 @@ def main(argv: list[str] | None = None) -> int:
     mode = segment_mode(settings, args.segment)
     if mode == "model" and args.ckpt is None:
         parser.error(config.MODEL_CHECKPOINT_REQUIRED)
+    if args.pose3d_checkpoint and mode != "plate":
+        parser.error("--pose3d-checkpoint requires --segment plate")
     overrides = _read_json(project_path(args.override), parser) if args.override else {}
     from feedback import gate
 
@@ -295,6 +299,16 @@ def main(argv: list[str] | None = None) -> int:
         inputs = gate.check_inputs(settings, mode)
         warnings = list(inputs.get("warnings", []))
         results = _run_segments(settings, args, overrides, mode, validate=True)
+        if args.pose3d_checkpoint:
+            from core.geometry.pose3d import load_model
+            from feedback.pose3d import process
+            lifter_model = load_model(project_path(args.pose3d_checkpoint), args.pose3d_threads)
+            for role, result in results.items():
+                rows, plate_result = result['plate']
+                payload, _, _ = process(result['pose'], rows, plate_result,
+                                        result['segments'], lifter_model,
+                                        plate_result.get('plate_mm', 450))
+                _write_json(project_path(args.out) / f'pose3d_{role}.json', payload)
         angles = {}
         for role, result in results.items():
             angle = gate.observe_angle(role, result["pose"], result["segments"])

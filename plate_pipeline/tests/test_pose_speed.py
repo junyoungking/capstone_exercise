@@ -53,8 +53,9 @@ def test_crop_expansion_clamp_and_loss():
 
 def test_rep_bench_guard_and_mediapipe_invariance():
     plate=(100,100,120,120);standing=person((110,80),(110,110))
+    guard=replace(DEFAULT.pose,bench_rep_guard=True)
     lying=person((130,140),(125,110),True)
-    assert select_lifter([standing],plate,None,'benchpress',in_rep=True) is None
+    assert select_lifter([standing],plate,None,'benchpress',in_rep=True,cfg=guard) is None
     assert select_lifter([standing],plate,None,'benchpress',in_rep=False)==0
     assert select_lifter([standing,lying],plate,None,'benchpress',in_rep=True)==1
     assert select_lifter([standing],plate,None,'squat',in_rep=True)==0

@@ -288,11 +288,15 @@ def main():
     p.add_argument('--out',type=Path,required=True);p.add_argument('--local-root',type=Path,default=local_root())
     p.add_argument('--model',type=Path);p.add_argument('--videos',type=Path,nargs='+')
     p.add_argument('--backend',choices=('rtmpose','mediapipe'),default='rtmpose')
-    p.add_argument('--mode',choices=('lightweight','balanced','tracked','tiny_m'),default='lightweight')
-    p.add_argument('--det-frequency',type=int,default=5)
-    p.add_argument('--no-bench-rep-guard',action='store_true')
+    p.add_argument('--mode',choices=('lightweight','balanced','tracked','tiny_m'),default='tracked')
+    p.add_argument('--det-frequency',type=int,default=10)
+    guard=p.add_mutually_exclusive_group()
+    guard.add_argument('--no-bench-rep-guard',action='store_true',dest='no_bench_rep_guard')
+    guard.add_argument('--bench-rep-guard',action='store_false',dest='no_bench_rep_guard')
+    p.set_defaults(no_bench_rep_guard=True)
     p.add_argument('--ort-threads',type=int,default=1)
     p.add_argument('--exercise-filter',choices=('squat','benchpress','deadlift'))
+    p.add_argument('--keys',nargs='+',help='Exact baseline keys for independent evaluation shards')
     p.add_argument('--prepared-reference',type=Path,help='Reuse this baseline prepared video byte-for-byte, not its plate/pose inference')
     p.add_argument('--reuse-verified-originals',action='store_true',help='Explicit preparation-only cache migration for unchanged original inputs and numerical producers')
     p.add_argument('--pose-results',type=Path);p.add_argument('--resume',action='store_true')
@@ -323,6 +327,10 @@ def main():
         ex='benchpress' if r['exercise']=='bench' else r['exercise'];key=ex+'/'+r['path']
         if key not in set(test.key):items.append(('team9/'+key,resolve(key),ex,None))
     if args.exercise_filter:items=[item for item in items if item[2]==args.exercise_filter]
+    if args.keys:
+        missing=set(args.keys)-{item[0] for item in items}
+        if missing:p.error('Unknown baseline keys: '+str(sorted(missing)))
+        items=[item for item in items if item[0] in args.keys]
     review_path=args.out/'lifter_review.json';reviews=json.loads(review_path.read_text()) if review_path.exists() else {}
     with patch.object(ort,'InferenceSession',session):data=[run_one(item,args,module(v40/'decode.py')) for item in items]
     for v in data:v['lifter_review']=reviews.get(v['key'],'pending')
