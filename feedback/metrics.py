@@ -130,7 +130,8 @@ def build_metrics(pose: dict, segments: dict) -> dict:
             if not valid[frame]:
                 reason = "포즈 미검출"
             elif plate:
-                reason = observation_reason(raw[frame], metric, sides[frame])
+                reason = observation_reason(raw[frame], metric, sides[frame],
+                                            has_fingers=bool(pose.get("has_fingers", True)))
             else:
                 reason = None
             if reason is None and frame_metrics[metric][frame] is None:

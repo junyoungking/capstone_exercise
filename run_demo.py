@@ -70,11 +70,12 @@ def _run_segments(settings: dict, args: argparse.Namespace, overrides: dict,
         plate_data = None
         pose_options = {"no_cache": args.no_cache}
         if mode == "plate":
-            from feedback.plate import analyze_video
+            from feedback.plate import analyze_video, plate_rep_mask
             plate_data = analyze_video(video, settings["exercise"], out / f"plate_{role}",
                                        model=project_path(args.model) if args.model else None,
                                        device=args.device)
             pose_options["plate_rows"] = plate_data[0]
+            pose_options["rep_mask"] = plate_rep_mask(*plate_data)
         shared_pose = next((r["pose"] for r in results.values()
                             if mode == "plate" and r["pose"]["video"] == str(project_path(Path(video["video"])).resolve())
                             and r["plate"][0] == plate_data[0]), None)

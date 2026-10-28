@@ -142,3 +142,40 @@ cmp "$M1/plate_pipeline/eval_out/baseline_rtm/sim_m0.json" "$M1/plate_pipeline/e
 ```
 
 두 JSON이 있으면 `eval.m1_compare`는 바이트 동일성을 확인하고 함께 zip에 넣는다.
+
+## M1b: tracked / tiny_m
+
+M1b에서는 `--mode tracked --det-frequency 3|5|10`과 `--mode tiny_m`
+(YOLOX-tiny + RTMPose-m)을 지원한다. `--mode balanced`는 매 프레임
+YOLOX-m + RTMPose-m이다. 원판 완료 rep mask를 포즈 생산자에 전달해 벤치
+rep 안에서 누운 후보가 없으면 비우며, 대조 실행은 `--no-bench-rep-guard`다.
+MediaPipe의 선택·필요 관절 정책은 유지한다. 손가락이 없는 구조는 NPZ의
+추가 bool `has_fingers=False`로 표시해 proxy의 필요 관절만 손목으로 줄인다.
+기존 NPZ 필수 키/shape/시계는 그대로다. 메타데이터 없는 외부 포즈의 능력은
+평가 CLI에서 지정한 `--backend`로 명시한다.
+
+```bash
+python -m eval.baseline --out eval_out/m1b/n3 --mode tracked --det-frequency 3
+python -m eval.baseline --out eval_out/m1b/n5 --mode tracked --det-frequency 5
+python -m eval.baseline --out eval_out/m1b/n10 --mode tracked --det-frequency 10
+python -m eval.baseline --out eval_out/m1b/tiny_m --mode tiny_m
+python -m eval.baseline --out eval_out/m1b/bench_guard --mode balanced --exercise-filter benchpress
+```
+
+기본 ORT는 1스레드이며 `--ort-threads 6`도 지원한다. 고정 69개 이외의
+정확히 60초/30 fps 영상 한 개의 순차 전체 처리는 `eval.m1b_benchmark`를 쓴다.
+현재 M1b 비교는 관절 지원 정책을 바꿨으므로 M1의 `m1_compare`와 구분한
+`m1b_audit`, `m1b_report`로 원판 불변·같은 표본·모든 검토 완료를 검증한다.
+원판 처리 시간을 재사용해 새 fps를 추정하지 않는다.
+
+구현·명령·측정 조건은 [M1B_NOTES.md](M1B_NOTES.md), 최종 비교는
+[REPORT.md](../results/m1b-pose-speed/REPORT.md)에 있다. zip은
+`eval_out/m1b/m1b-pose-speed.zip`이며 eval_out·모델·영상은 추적하지 않는다.
+
+M0/M1과 엄밀히 비교할 때 위 명령들에 `--prepared-reference M1_BALANCED_DIR`를
+추가한다. 같은 69개 CFR/원본 입력 파일을 직접 사용하고 원판·포즈 추론은 새로
+실행한다. 코어 고정에 따라 ffmpeg 자동 인코더 스레드 수가 달라져 생기는 픽셀
+차이를 피한다. 일반 resume는 평가기 해시까지 정확히 일치해야 재사용한다. 준비 경로만 바꾸는
+검증된 이행은 `--reuse-verified-originals`를 명시해야 하며, 미변환 원본·동일
+모델/생산자/설정/관절 품질/지표 해시인 완료 영상만 검증해 재사용한다. 실제 측정 fingerprint는 유지하고
+별도 cache_fingerprint·reuse_provenance를 남긴다. 다른 CFR 사본은 재사용하지 않는다.

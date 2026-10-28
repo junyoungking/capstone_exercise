@@ -23,6 +23,7 @@ def _read_cache(cache_path: Path, video_path: Path, mtime_ns: int, selection: st
             if saved_selection != selection:
                 return None
             data = {
+                "has_fingers": bool(saved["has_fingers"].item()) if "has_fingers" in saved else True,
                 "lms": saved["lms"].copy(),
                 "valid": saved["valid"].copy(),
                 "fps": float(saved["fps"].item()),
@@ -59,6 +60,7 @@ def extract_pose(
     no_cache: bool = False,
     plate_rows: list | None = None,
     pose_cfg=None,
+    rep_mask=None,
 ) -> dict:
     """extract_sequence의 검출·스무딩을 재사용하고 경로·mtime으로 캐시를 확인한다."""
     video_path = Path(video_path).resolve()
@@ -75,6 +77,8 @@ def extract_pose(
                    sort_keys=True).encode()).hexdigest()
     if plate_rows is not None:
         selection += ":" + json.dumps(asdict(pose_cfg), sort_keys=True)
+        if rep_mask is not None:
+            selection += ":rep:" + hashlib.sha256(np.asarray(rep_mask, dtype=bool).tobytes()).hexdigest()
     if not no_cache:
         cached = _read_cache(cache_path, video_path, mtime_ns, selection)
         if cached is not None:
@@ -87,13 +91,15 @@ def extract_pose(
     sequence = (extract_sequence(video_path, exercise) if plate_rows is None
                 else (extract_plate_sequence(video_path, exercise, plate_rows)
                       if pose_cfg.backend == 'mediapipe' else
-                      extract_backend_sequence(video_path, exercise, plate_rows, pose_cfg)))
+                      extract_backend_sequence(video_path, exercise, plate_rows, pose_cfg,
+                                                    **({"rep_mask": rep_mask} if rep_mask is not None else {}))))
     lms = np.full((len(sequence), 33, 4), np.nan, dtype=np.float32)
     valid = np.array([frame is not None for frame in sequence], dtype=bool)
     for frame_index, frame in enumerate(sequence):
         if frame is not None:
             lms[frame_index] = np.asarray(frame, dtype=np.float32)
     data = {
+        "has_fingers": plate_rows is None or pose_cfg.backend == "mediapipe",
         "lms": lms,
         "valid": valid,
         "fps": float(info["fps"]),
@@ -108,13 +114,14 @@ def extract_pose(
     if hasattr(sequence, 'timings'):
         data['inference_timing'] = sequence.timings
         data['score_distribution'] = sequence.score_distribution
+        data['tracking'] = sequence.tracking
     cache_path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(cache_path, **{k:v for k,v in data.items() if k not in ('inference_timing', 'score_distribution')})
+    np.savez_compressed(cache_path, **{k:v for k,v in data.items() if k not in ('inference_timing', 'score_distribution', 'tracking')})
     data["cache_hit"] = False
     return data
 
 
-def choose_plate_candidate(candidates, row, previous_center, exercise, size, *, cfg=None):
+def choose_plate_candidate(candidates, row, previous_center, exercise, size, *, cfg=None, in_rep=False):
     """select_lifter consumes pixel x/y; feedback smoothing consumes normalized x/y."""
     from feedback import plate  # establish the plate package import path
     from core.recog.pose import select_lifter, person_center
@@ -125,7 +132,7 @@ def choose_plate_candidate(candidates, row, previous_center, exercise, size, *, 
     for candidate in pixel:
         candidate[:, :2] *= np.asarray(size)
     box = row.get("plate", {}).get("box") if row.get("plate", {}).get("used") else None
-    index = select_lifter(pixel, box, previous_center, exercise, cfg=cfg, image_size=size)
+    index = select_lifter(pixel, box, previous_center, exercise, cfg=cfg, image_size=size, in_rep=in_rep)
     if index is None:
         return None, previous_center
     center = person_center(pixel[index])
@@ -172,7 +179,7 @@ def extract_plate_sequence(video_path, exercise, rows):
     return sequence
 
 
-def extract_backend_sequence(video_path, exercise, rows, cfg):
+def extract_backend_sequence(video_path, exercise, rows, cfg, *, rep_mask=None):
     """Route RTMPose through the unchanged feedback EMA and MP33 contract."""
     import cv2
     from core.recog.pose import PoseEstimator
@@ -184,6 +191,10 @@ def extract_backend_sequence(video_path, exercise, rows, cfg):
     fps = capture.get(cv2.CAP_PROP_FPS)
     smoother, sequence, previous = LandmarkSmoother(), _PlateSequence(), None
     sequence.raw_lms = []
+    if rep_mask is None:
+        rep_mask = np.zeros(len(rows), dtype=bool)
+    if len(rep_mask) != len(rows):
+        raise ValueError('Rep mask and plate rows must share the frame clock')
     try:
         with PoseEstimator(cfg=cfg) as estimator:
             while True:
@@ -198,12 +209,19 @@ def extract_backend_sequence(video_path, exercise, rows, cfg):
                 for candidate in candidates:
                     candidate[:, :2] /= [w, h]
                 raw, previous = choose_plate_candidate(candidates, rows[seq], previous,
-                                                        exercise, (w, h), cfg=cfg)
+                                                        exercise, (w, h), cfg=cfg, in_rep=bool(rep_mask[seq]))
+                if hasattr(estimator, "observe"):
+                    pixels = None if raw is None else np.asarray(raw).copy()
+                    if pixels is not None:
+                        pixels[:, :2] *= [w, h]
+                    box = rows[seq].get("plate", {}).get("box") if rows[seq].get("plate", {}).get("used") else None
+                    estimator.observe(pixels, box, (w, h))
                 if raw is None:
                     previous = None  # continuity concerns consecutive observed frames only
                 sequence.append(smoother.update(raw) if valid_lms(raw) else None)
                 sequence.raw_lms.append(np.asarray(raw, dtype=np.float32).copy() if valid_lms(raw)
                                         else np.full((33, 4), np.nan, dtype=np.float32))
+            sequence.tracking = dict(detection_frames=estimator.detection_frames, lost_frames=estimator.lost_frames)
             sequence.timings = estimator.timings.copy()
             scores = np.asarray(estimator.scores)
             sequence.score_distribution = dict(n=len(scores),

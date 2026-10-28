@@ -70,6 +70,19 @@ def _crossing(height, start, end):
     return start + int(crossings[0])
 
 
+def plate_rep_mask(rows, result):
+    """Completed plate rep intervals on the prepared frame clock, no pose dependency."""
+    mask = np.zeros(len(rows), dtype=bool)
+    for group in result['sets']:
+        for value in group['rep_values']:
+            if any(value.get(k) is None for k in ('start', 'far_in', 'far_out', 'back')):
+                continue
+            start, back = nearest_seq(rows, value['start']), nearest_seq(rows, value['back'])
+            if start <= back:
+                mask[start:back+1] = True
+    return mask
+
+
 def build_plate_segments(pose, settings, exercise, rows, result, overrides=None):
     from core.signal.height import height_signal
     from export_overlay import dominant_side

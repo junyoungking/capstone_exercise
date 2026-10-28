@@ -158,7 +158,7 @@ def _fallback_score(lms, prev_center):
     return horizontal, size + continuity
 
 
-def select_lifter(cands, plate_box, prev_center, exercise, *, cfg=DEFAULT.pose, image_size=None):
+def select_lifter(cands, plate_box, prev_center, exercise, *, cfg=DEFAULT.pose, image_size=None, in_rep=False):
     """Return an index, or None if no person qualifies near the current plate.
 
     image_size=(width,height) preserves v4 normalized fallback scoring for pixel
@@ -182,6 +182,8 @@ def select_lifter(cands, plate_box, prev_center, exercise, *, cfg=DEFAULT.pose, 
                     reclining.append((i, box))
         if reclining:
             boxes = reclining
+        elif in_rep and cfg.bench_rep_guard:
+            return None
     if plate_box is not None:
         x0,y0,x1,y1 = plate_box
         h = y1-y0
@@ -319,18 +321,62 @@ def halpe_to_mp33(points, scores, reference=.6):
     return result
 
 
+def lifter_crop(lms, image_size, expand=1.25):
+    """Pixel box from finite, in-frame supported Halpe->MP33 points; expand once."""
+    w, h = image_size
+    visible = (np.isfinite(lms[:, [0, 1, 3]]).all(axis=1) & (lms[:, 3] >= .3)
+               & (lms[:, 0] >= 0) & (lms[:, 0] < w)
+               & (lms[:, 1] >= 0) & (lms[:, 1] < h))
+    pts = lms[visible, :2]
+    if len(pts) < 2:
+        return None
+    lo, hi = pts.min(axis=0), pts.max(axis=0)
+    size = np.maximum(hi-lo, 2.) * expand
+    center = (lo+hi)/2
+    box = np.r_[np.maximum(center-size/2, [0, 0]), np.minimum(center+size/2, [w, h])]
+    return box if np.all(box[2:] > box[:2]) else None
+
+
+def lifter_lost(lms, plate_box, image_size):
+    if lms is None or not np.isfinite(lms[[11, 12, 23, 24], :]).all():
+        return True
+    if np.any(lms[[11, 12, 23, 24], 3] < .3):
+        return True
+    if plate_box is not None:
+        h = plate_box[3]-plate_box[1]
+        wrist = near_wrist(lms[:, [0, 1, 3]], plate_box, vis_thr=.5,
+                           frame_w=image_size[0], frame_h=image_size[1])
+        if h <= 0 or wrist is None:
+            return True
+        center = np.asarray([(plate_box[0]+plate_box[2])/2, (plate_box[1]+plate_box[3])/2])
+        if np.linalg.norm(wrist[:2]-center)/h > 4.:
+            return True
+    return lifter_crop(lms, image_size) is None
+
+
 class RTMPoseEstimator:
     """BodyWithFeet detector -> all person crops -> Halpe26, ORT CPU only."""
 
     def __init__(self, model_path=None, cfg=DEFAULT.pose):
         from rtmlib import BodyWithFeet
-        if cfg.mode not in ('lightweight', 'balanced'):
-            raise ValueError('RTMPose mode must be lightweight or balanced')
+        if cfg.mode not in ('lightweight', 'balanced', 'tracked', 'tiny_m'):
+            raise ValueError('Unknown RTMPose mode')
+        if cfg.det_frequency < 1 or cfg.crop_expand < 1:
+            raise ValueError('det_frequency >= 1 and crop_expand >= 1 required')
         if model_path or cfg.model_path:
             raise ValueError('Use rtmlib BodyWithFeet mode models, not a MediaPipe task')
         self.cfg, self.every_n = cfg, cfg.every_n
-        self.model = BodyWithFeet(mode=cfg.mode, to_openpose=False,
-                                  backend='onnxruntime', device='cpu')
+        options = {}
+        if cfg.mode == 'tiny_m':
+            options = dict(det=BodyWithFeet.MODE['lightweight']['det'],
+                           det_input_size=BodyWithFeet.MODE['lightweight']['det_input_size'])
+        self.model = BodyWithFeet(mode='balanced' if cfg.mode in ('tracked', 'tiny_m') else cfg.mode,
+                                  to_openpose=False, backend='onnxruntime', device='cpu', **options)
+        self.crop = None
+        self.frame = 0
+        self.last_detection = -cfg.det_frequency
+        self.detection_frames = []
+        self.lost_frames = []
         self.timings = dict(person_detection=0., pose=0.)
         self.scores = []
 
@@ -339,7 +385,14 @@ class RTMPoseEstimator:
         if not np.isfinite(t_s) or t_s < 0:
             raise ValueError('Pose timestamp must be finite and nonnegative')
         start = time.perf_counter()
-        boxes = self.model.det_model(image_bgr)
+        detect = (self.cfg.mode != 'tracked' or self.crop is None or
+                  self.frame - self.last_detection >= self.cfg.det_frequency)
+        if detect:
+            boxes = self.model.det_model(image_bgr)
+            self.last_detection = self.frame
+            self.detection_frames.append(self.frame)
+        else:
+            boxes = np.asarray([self.crop])
         detected = time.perf_counter()
         # RTMPose's empty bboxes default is a whole-image pose; skip it.
         if len(boxes):
@@ -349,7 +402,17 @@ class RTMPoseEstimator:
         self.timings['person_detection'] += detected-start
         self.timings['pose'] += time.perf_counter()-detected
         self.scores.extend(np.asarray(scores).reshape(-1).tolist())
+        self.frame += 1
         return [halpe_to_mp33(p, s, self.cfg.score_reference) for p, s in zip(points, scores)]
+
+    def observe(self, selected, plate_box, image_size):
+        if self.cfg.mode != 'tracked':
+            return
+        if lifter_lost(selected, plate_box, image_size):
+            self.crop = None
+            self.lost_frames.append(self.frame - 1)
+        else:
+            self.crop = lifter_crop(selected, image_size, self.cfg.crop_expand)
 
     def close(self):
         pass
