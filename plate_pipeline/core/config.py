@@ -120,6 +120,9 @@ class TextCfg:
 class PoseCfg:
     backend: str = "rtmpose"
     mode: str = "lightweight"
+    det_frequency: int = 5
+    crop_expand: float = 1.25
+    bench_rep_guard: bool = True
     score_reference: float = 0.6
     switch_margin: float = 0.5  # plate heights closer, and at least 25% closer
     every_n: int = 1

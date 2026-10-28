@@ -17,7 +17,7 @@ JOINT_NAMES = {0: '머리', 11: '어깨', 12: '어깨', 13: '팔꿈치', 14: '�
                29: '뒤꿈치', 30: '뒤꿈치', 31: '발끝', 32: '발끝'}
 
 
-def required_joints(metric, side):
+def required_joints(metric, side, *, has_fingers=True):
     ids = SIDE_IDS[side]
     dependencies = {
         'knee_angle': [ids['hip'], ids['knee'], ids['ankle']],
@@ -32,11 +32,13 @@ def required_joints(metric, side):
         # The proxy combines both grips, each built from wrist/index/thumb.
         'bar_proxy_conf': [15, 16, 19, 20, 21, 22],
     }
+    if metric == 'bar_proxy_conf' and not has_fingers:
+        return [15, 16]
     return dependencies[metric]
 
 
-def observation_reason(lms, metric, side):
-    for joint in required_joints(metric, side):
+def observation_reason(lms, metric, side, *, has_fingers=True):
+    for joint in required_joints(metric, side, has_fingers=has_fingers):
         point = lms[joint]
         name = JOINT_NAMES[joint]
         if not np.isfinite(point[[0, 1, 3]]).all():

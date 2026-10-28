@@ -745,3 +745,9 @@ python -m pytest -q tests/fb
 ```
 
 source의 형제 `observations`, `after` 디렉터리도 S3a 저장 형식으로 필요하다. `stage0_rep_differences.json`은 전체 칸·rep 쌍, `false_findings.json`과 `pair_results.json`은 전후 분모·문장·이유를 남긴다. `out/s3b_share.zip`에는 stage0/false JSON, 네 쌍 findings·sprite 제거 report 데이터·PNG, summary와 sim 증거만 넣는다. 화면은 기존 그대로여서 세트/템포 문장과 보류 사유는 S5 연결 전까지 JSON에서 확인한다. 실제 자세 차이가 있는 독립 평가·새 촬영·추론 변동 검증은 이번 자료로 확인하지 못했다.
+
+M1b는 `--pose-mode tracked --pose-det-frequency 3|5|10`으로 검출 사이에
+이전 리프터 관절 상자만 추론하고, `--pose-mode tiny_m`으로 tiny 검출기와
+RTMPose-m을 조합한다. 매 프레임 포즈는 유지한다. 벤치 rep guard와 손가락
+미지원 정책, 비교 결과는 [eval/M1B_NOTES.md](eval/M1B_NOTES.md)와
+[results/m1b-pose-speed/REPORT.md](results/m1b-pose-speed/REPORT.md)를 참조한다.

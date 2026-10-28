@@ -113,31 +113,68 @@ def count_result(record,path,result,decoder):
                 gt_events=gt,pred_events=pred,delays=delays)
 
 
+def compatible_original_cache(old, new, *, allow_preparation_migration=False):
+    if not allow_preparation_migration:
+        return False
+    ignored={'evaluator_sha256','prepared_sha256'}
+    return ({k:v for k,v in old.items() if k not in ignored}
+            == {k:v for k,v in new.items() if k not in ignored})
+
+
 def run_one(item,args,decoder):
     from server.jobs import process_video
     from feedback.pose import extract_pose
     from core.config import PoseCfg
-    pose_cfg=PoseCfg(backend=args.backend, mode=args.mode)
-    from feedback.plate import prepare_videos
+    pose_cfg=PoseCfg(backend=args.backend, mode=args.mode, det_frequency=args.det_frequency,
+                     bench_rep_guard=not args.no_bench_rep_guard)
+    from feedback.plate import prepare_videos, plate_rep_mask
     key,path,exercise,record=item;dest=args.out/'raw'/key;dest.mkdir(parents=True,exist_ok=True)
     external=args.pose_results/key/'pose.npz' if args.pose_results else None
+    prepared=None
+    if args.prepared_reference:
+        reference=json.loads((args.prepared_reference/'raw'/key/'evaluation.json').read_text())
+        if reference['fingerprint']['video_sha256'] != sha(path):
+            raise ValueError('Prepared reference original video changed: '+key)
+        prepared=Path(reference['pose_video'])
+        if not prepared.is_file():raise FileNotFoundError(prepared)
     fingerprint=dict(video_sha256=sha(path),plate_model_sha256=sha(args.model),
                      pose_model_sha256=sha(ROOT/'pose_landmarker_lite.task'),
                      external_pose_sha256=sha(external) if external else None,
                      evaluator_sha256=sha(__file__),metrics_sha256=sha(Path(__file__).with_name('baseline_metrics.py')),
                      base='8e5cdb4',selection='plate-wrist-v3',exercise=exercise,
-                     backend=args.backend,mode=args.mode,
+                     prepared_sha256=sha(prepared) if prepared else None,
+                     backend=args.backend,mode=args.mode,det_frequency=args.det_frequency,
+                     bench_rep_guard=pose_cfg.bench_rep_guard,ort_threads=args.ort_threads,
                      producer_sha256=sha(ROOT/'feedback/pose.py'),
                      adapter_sha256=sha(ROOT/'plate_pipeline/core/recog/pose.py'),
-                     config_sha256=sha(ROOT/'plate_pipeline/core/config.py'))
+                     config_sha256=sha(ROOT/'plate_pipeline/core/config.py'),
+                     quality_sha256=sha(ROOT/'feedback/quality.py'),
+                     feedback_metrics_sha256=sha(ROOT/'feedback/metrics.py'))
     saved=dest/'evaluation.json'
     if args.resume and saved.exists():
         cached=json.loads(saved.read_text())
-        if cached['fingerprint']==fingerprint:print('resume',key,flush=True);return cached
+        if cached.get('cache_fingerprint',cached['fingerprint'])==fingerprint:
+            print('resume',key,flush=True);return cached
+        # An evaluator-only preparation fix may keep already measured ORIGINAL
+        # inputs. Retain their actual measurement fingerprint; never relabel a
+        # different CFR encoding or reuse its timing/pose/plate output.
+        if (prepared is not None and prepared.resolve()==path.resolve()
+                and Path(cached['pose_video']).resolve()==path.resolve()
+                and sha(path)==fingerprint['prepared_sha256']
+                and compatible_original_cache(cached['fingerprint'],fingerprint,
+                                             allow_preparation_migration=args.reuse_verified_originals)):
+            cached['cache_fingerprint']=fingerprint
+            cached['prepared_input']=dict(path=str(prepared),sha256=sha(prepared))
+            cached['reuse_provenance']='Measured original input unchanged; only evaluator preparation path changed; actual measurement fingerprint and timing retained.'
+            write(saved,cached)
+            print('resume verified original',key,flush=True);return cached
     start=time.perf_counter()
     settings={'user':{'video':str(path)},'ref':{'video':str(path)}}
-    prepare_videos(settings,dest)
-    pose_path=Path(settings['user']['video'])
+    if prepared is None:
+        prepare_videos(settings,dest)
+        pose_path=Path(settings['user']['video'])
+    else:
+        pose_path=prepared
     prepare_s=time.perf_counter()-start
     processing_start=time.perf_counter()
     with timing() as times:
@@ -151,7 +188,9 @@ def run_one(item,args,decoder):
         if external:
             with np.load(external,allow_pickle=False) as data:pose={k:data[k] for k in data.files}
             for k in ('fps','w','h','total'):pose[k]=pose[k].item()
-        else:pose=extract_pose(pose_path,dest/'pose.npz',exercise,no_cache=True,plate_rows=rows,pose_cfg=pose_cfg)
+        else:pose=extract_pose(pose_path,dest/'pose.npz',exercise,no_cache=True,plate_rows=rows,
+                               pose_cfg=pose_cfg,rep_mask=plate_rep_mask(rows,result))
+        pose['has_fingers'] = args.backend == 'mediapipe'
         inference_done=time.perf_counter()
     if 'inference_timing' in pose:
         times.update(pose['inference_timing'])
@@ -166,8 +205,9 @@ def run_one(item,args,decoder):
     times['plate_pass']=plate_done-processing_start;times['fps']=len(rows)/processing
     times['prepare']=prepare_s
     if external:times['fps']=None;times['pose']=None
-    data=dict(key=key,exercise=exercise,video=str(path),pose_video=str(pose_path),fingerprint=fingerprint,frames=len(rows),counts=counts,
-              **stats,score_distribution=pose.get('score_distribution'),timing=times,wall_s=time.perf_counter()-start,image=str(image.relative_to(args.out)),
+    data=dict(key=key,exercise=exercise,video=str(path),pose_video=str(pose_path),fingerprint=fingerprint,
+              prepared_input=dict(path=str(pose_path),sha256=sha(pose_path)),frames=len(rows),counts=counts,
+              **stats,tracking=pose.get('tracking'),score_distribution=pose.get('score_distribution'),timing=times,wall_s=time.perf_counter()-start,image=str(image.relative_to(args.out)),
               image_frames=image_frames,lifter_review='pending',segment_exclusions=segments['excluded_reps'])
     write(dest/'segments.json',segments);write(saved,data)
     print(f'{key}: reps={len(segments["reps"])} coverage={stats["observation"]["coverage"]} {processing:.1f}s',flush=True)
@@ -206,7 +246,7 @@ def summarize(data,v40):
 def render(report):
     def fmt(v):return 'N/A' if v is None else f'{v:.3f}'
     lines=[f'# {report.get("backend", "mediapipe")} {report.get("mode", "")} baseline','',
-           'M1 based on M0 `8e5cdb4` (includes merge `decff40`). PLAN.md and main unchanged.',
+           'M1b based on plate-pipeline `69102a0`. PLAN.md and main unchanged.',
            '',f'Command: `{report["command"]}`',f'Invocation wall time: {report["wall_s"]:.1f} s',
            '', 'CPU: '+report['environment']['cpu'], 'Versions: `'+json.dumps(report['environment']['versions'])+'`',
            '',f'Midterm per-video reproduction: **{report["midterm_match"]}** ({report["count_videos"]}/61 videos).',
@@ -229,7 +269,7 @@ def render(report):
     for ex,s in report['summary'].items():
         for c in s['variation']:lines.append(f'|{ex}|{c["position"]}|{c["metric"]}|{c["videos"]}|{fmt(c["sd"])}|{fmt(c["pair_median"])}|')
     lines+=['','## CPU speed','',
-            'Serial, CPUExecutionProvider, ORT/OpenCV one thread. Original PTS plate pass for counts, then current feedback prepared CFR plate/pose passes where conversion is required; otherwise two passes: plate PyAV then feedback OpenCV pose every frame (RTMPose: all detector boxes, top-down Halpe26; MediaPipe comparison: at most 2 poses, .45 confidence; existing EMA). Decode includes both passes; KLT includes tracker association/bookkeeping. Rest includes setup/selection/smoothing/analysis/plate I/O. fps = input frames / combined pass time; excludes CFR preparation and metric/contact-sheet/GT validation. Per-video prepare time is stored separately. RTMPose person detection and pose are measured separately including preprocessing and postprocessing; MediaPipe does not expose separate detection timing. External pose replay has no measured pose fps.',
+            'Serial videos, CPUExecutionProvider; ORT thread count is recorded in environment (default 1), OpenCV 1 thread. Original PTS plate pass for counts, then current feedback prepared CFR plate/pose passes where conversion is required; otherwise two passes: plate PyAV then feedback OpenCV pose every frame (RTMPose: top-down Halpe26, tracked reuses the selected lifter crop between detections; MediaPipe comparison: at most 2 poses, .45 confidence; existing EMA). Decode includes both passes; KLT includes tracker association/bookkeeping. Rest includes setup/selection/smoothing/analysis/plate I/O. fps = input frames / combined pass time; excludes CFR preparation and metric/contact-sheet/GT validation. Per-video prepare time is stored separately. RTMPose person detection and pose are measured separately including preprocessing and postprocessing; MediaPipe does not expose separate detection timing. External pose replay has no measured pose fps.',
             '', '|scope|decode s|plate detector s|person detector s|KLT s|pose s|rest s|total s|fps|','|---|---:|---:|---:|---:|---:|---:|---:|---:|']
     for ex,s in report['summary'].items():lines.append('|'+ex+'|'+'|'.join(fmt(s['timing'][k]) for k in ('decode','plate_detection','person_detection','klt','pose','rest','total','fps'))+'|')
     lines+=['','## Per video / lifter review','',
@@ -248,14 +288,20 @@ def main():
     p.add_argument('--out',type=Path,required=True);p.add_argument('--local-root',type=Path,default=local_root())
     p.add_argument('--model',type=Path);p.add_argument('--videos',type=Path,nargs='+')
     p.add_argument('--backend',choices=('rtmpose','mediapipe'),default='rtmpose')
-    p.add_argument('--mode',choices=('lightweight','balanced'),default='lightweight')
+    p.add_argument('--mode',choices=('lightweight','balanced','tracked','tiny_m'),default='lightweight')
+    p.add_argument('--det-frequency',type=int,default=5)
+    p.add_argument('--no-bench-rep-guard',action='store_true')
+    p.add_argument('--ort-threads',type=int,default=1)
+    p.add_argument('--exercise-filter',choices=('squat','benchpress','deadlift'))
+    p.add_argument('--prepared-reference',type=Path,help='Reuse this baseline prepared video byte-for-byte, not its plate/pose inference')
+    p.add_argument('--reuse-verified-originals',action='store_true',help='Explicit preparation-only cache migration for unchanged original inputs and numerical producers')
     p.add_argument('--pose-results',type=Path);p.add_argument('--resume',action='store_true')
     args=p.parse_args();args.out=args.out.resolve();args.model=args.model or args.local_root/'plate_pipeline/models/plate_tiny.onnx'
     start=time.perf_counter()
     import cv2,onnxruntime as ort
     cv2.setNumThreads(1);original=ort.InferenceSession
     def session(*a,**kw):
-        options=kw.pop('sess_options',None) or ort.SessionOptions();options.intra_op_num_threads=1;options.inter_op_num_threads=1
+        options=kw.pop('sess_options',None) or ort.SessionOptions();options.intra_op_num_threads=args.ort_threads;options.inter_op_num_threads=1
         return original(*a,sess_options=options,**kw)
     v40=args.local_root/'new_data/experiments_athlete_pipeline_v40/athlete_yolo_balanced_phase_sameconditions_seed42'
     sys.path.insert(0,str(Path(__file__).parent/'midterm'))
@@ -276,6 +322,7 @@ def main():
     for r in csv.DictReader((Path(__file__).parent/'lists/team9.csv').open()):
         ex='benchpress' if r['exercise']=='bench' else r['exercise'];key=ex+'/'+r['path']
         if key not in set(test.key):items.append(('team9/'+key,resolve(key),ex,None))
+    if args.exercise_filter:items=[item for item in items if item[2]==args.exercise_filter]
     review_path=args.out/'lifter_review.json';reviews=json.loads(review_path.read_text()) if review_path.exists() else {}
     with patch.object(ort,'InferenceSession',session):data=[run_one(item,args,module(v40/'decode.py')) for item in items]
     for v in data:v['lifter_review']=reviews.get(v['key'],'pending')
@@ -286,9 +333,10 @@ def main():
             diff={k:[old.loc[v['key'],k],c[k]] for k in ('pred_count','gt_count','tp','fp','fn','abs_error','exact','obo') if old.loc[v['key'],k]!=c[k]}
             if diff:mismatches.append(dict(key=v['key'],differences=diff))
     cpu=next((l.split(':',1)[1].strip() for l in Path('/proc/cpuinfo').read_text().splitlines() if l.startswith('model name')),'unknown')
-    report=dict(backend=args.backend, mode=args.mode, schema_version=2,command='python -m eval.baseline '+' '.join(sys.argv[1:]),wall_s=time.perf_counter()-start,
+    report=dict(backend=args.backend, mode=args.mode, det_frequency=args.det_frequency,
+                bench_rep_guard=not args.no_bench_rep_guard, schema_version=3,command='python -m eval.baseline '+' '.join(sys.argv[1:]),wall_s=time.perf_counter()-start,
                 environment=dict(cpu=cpu,python=sys.version,versions={k:importlib.metadata.version(k) for k in ('onnxruntime','rtmlib','mediapipe','numpy','av','opencv-python')},
-                                 provider='CPUExecutionProvider',ort_threads=1,opencv_threads=1),
+                                 provider='CPUExecutionProvider',ort_threads=args.ort_threads,opencv_threads=1),
                 count_videos=sum(v['counts'] is not None for v in data),midterm_match=not mismatches,
                 midterm_mismatches=mismatches,summary=summarize(data,v40),videos=data)
     write(args.out/'baseline.json',report);markdown=render(report)

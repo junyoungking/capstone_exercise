@@ -96,6 +96,9 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
             index = select_lifter(candidates, st.box if st is not None else None,
                                   prev_center, exercise, cfg=pose_cfg,
                                   image_size=(img.shape[1], img.shape[0]))
+            if hasattr(pose, "observe"):
+                pose.observe(candidates[index] if index is not None else None,
+                             st.box if st is not None else None, (img.shape[1], img.shape[0]))
             if index is not None:
                 lms = candidates[index]
                 row["person"] = {
@@ -193,11 +196,12 @@ def main():
     ap.add_argument("--device", choices=("auto", "cuda", "cpu"), default="auto")
     ap.add_argument("--pose", action="store_true", help="record optional pose observations (RTMPose by default)")
     ap.add_argument("--pose-backend", choices=("rtmpose", "mediapipe"), default=DEFAULT.pose.backend)
-    ap.add_argument("--pose-mode", choices=("lightweight", "balanced"), default=DEFAULT.pose.mode)
+    ap.add_argument("--pose-mode", choices=("lightweight", "balanced", "tracked", "tiny_m"), default=DEFAULT.pose.mode)
+    ap.add_argument("--pose-det-frequency", type=int, default=DEFAULT.pose.det_frequency)
     ap.add_argument("--out", default="out")
     a = ap.parse_args()
     box = tuple(float(v) for v in a.box.split(",")) if a.box else None
-    estimator = PoseEstimator(cfg=replace(DEFAULT.pose, backend=a.pose_backend, mode=a.pose_mode)) if a.pose else None
+    estimator = PoseEstimator(cfg=replace(DEFAULT.pose, backend=a.pose_backend, mode=a.pose_mode, det_frequency=a.pose_det_frequency)) if a.pose else None
     try:
         res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out,
                                   pose=estimator, device=a.device)

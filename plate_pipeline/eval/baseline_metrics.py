@@ -127,6 +127,9 @@ def measure(pose, rows, result, video, exercise):
     else:
         segments = build_plate_segments(pose,dict(video=str(video),view='side'),exercise,rows,result)
     native = build_metrics(pose,segments)
+    from feedback.set_judge import _eligible
+    legacy = build_metrics(dict(pose, has_fingers=True),segments) if not pose.get("has_fingers",True) else native
+    eligibility = dict(before=sorted(_eligible(legacy)),after=sorted(_eligible(native)))
     audit = deepcopy(native)
     sides = _frame_sides(pose['lms'],pose['valid'],segments)
     frames = _frame_metrics(pose['lms'],pose['valid'],exercise,ANGLES,sides)
@@ -138,6 +141,6 @@ def measure(pose, rows, result, video, exercise):
         for position in POSITIONS:
             p = rep['positions'][position]
             p['values'].update(_position_values(frames,p['frame']))
-    return dict(variation=rep_variation(audit),
+    return dict(reference_eligibility=eligibility,variation=rep_variation(audit),
                 false_difference=odd_even(native,plate_summaries(rows,result)),
                 observation=observation_stats(pose,rep_mask(segments),rows,VISIBILITY_MIN)), segments
