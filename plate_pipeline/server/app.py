@@ -82,8 +82,9 @@ class Store:
 
 
 class Worker:
-    def __init__(self,store,pipeline,posture_cards):
+    def __init__(self,store,pipeline,posture_cards,recover_early_back=None):
         self.store,self.pipeline,self.posture_cards=store,pipeline,posture_cards
+        self.recover_early_back=recover_early_back
         self.queue=queue.Queue();self.lock=threading.RLock();self.live={}
         self.thread=threading.Thread(target=self.run,name='analysis-queue',daemon=True)
         # Interrupted jobs fail explicitly; no silent loss or fake completion.
@@ -129,6 +130,7 @@ class Worker:
                     if now-last_save>.2 or value in (0,1):self.store.put('jobs',id,job);last_save=now
             try:
                 args=job['inputs'].copy();args.update(out=dest,progress=progress,ref_cache=self.store.root/'ref_cache',posture_cards=self.posture_cards)
+                if self.recover_early_back is not None:args['recover_early_back']=self.recover_early_back
                 bundle=self.pipeline(**args)
                 now=time.monotonic()
                 with self.lock:
@@ -154,12 +156,12 @@ class Worker:
             self.queue.task_done()
 
 
-def create_app(data_dir=None,pipeline=None,posture_cards=False,upload_limit=LIMIT):
+def create_app(data_dir=None,pipeline=None,posture_cards=False,upload_limit=LIMIT,recover_early_back=None):
     if pipeline is None:
         from server.compare import compare
         pipeline=compare
     store=Store(data_dir or Path(__file__).resolve().parents[1]/'data')
-    worker=Worker(store,pipeline,posture_cards)
+    worker=Worker(store,pipeline,posture_cards,recover_early_back)
     @asynccontextmanager
     async def lifespan(app):
         worker.start()
@@ -285,7 +287,8 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--port',type=int,default=8000);ap.add_argument('--data',type=Path)
     ap.add_argument('--posture-cards',action='store_true')
+    ap.add_argument('--recover-early-back',action=argparse.BooleanOptionalAction,default=None)
     args=ap.parse_args()
-    uvicorn.run(create_app(args.data,posture_cards=args.posture_cards),host='127.0.0.1',port=args.port,workers=1)
+    uvicorn.run(create_app(args.data,posture_cards=args.posture_cards,recover_early_back=args.recover_early_back),host='127.0.0.1',port=args.port,workers=1)
 
 if __name__=='__main__':main()

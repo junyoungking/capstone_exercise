@@ -1,10 +1,12 @@
 """Recompute a saved session from immutable observations, without model inference."""
 import json,time
 from copy import deepcopy
+from dataclasses import replace
 from pathlib import Path
 import numpy as np
 from core.io.rows import read_rows
 from core.geometry import standing_frames
+from core.config import DEFAULT
 from core.compare.summary import summarize
 from server.compare import build_video,finalize_bundle,clean
 from server.schema import validate_result
@@ -30,7 +32,8 @@ def rescale_bundle(session_dir, previous, plate_mm_user=None, plate_mm_ref=None)
         raw=np.asarray(pose['raw_lms'],float).copy();raw[:,:,:2]*=[pose['w'],pose['h']]
         stand=standing_frames(raw)
         video,trips,vals=build_video(rows,result,pose,None,raw,stand,diameters[role],inputs.get('height_cm'),False,
-            b.get('scale_source','box'),b.get('position_source','box'),is_reference=role=='ref',reuse_video=old)
+            b.get('scale_source','box'),b.get('position_source','box'),is_reference=role=='ref',reuse_video=old,
+            speed_cfg=replace(DEFAULT.speed,recover_early_back=b.get('recover_early_back',DEFAULT.speed.recover_early_back)))
         for key in ('pose3d_warnings','pose3d_height_cm'):
             if key in old:video[key]=old[key]
         b[role]=video

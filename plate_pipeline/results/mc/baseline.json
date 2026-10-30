@@ -1,0 +1,4555 @@
+[
+  {
+    "key": "squat/squat_11.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/squat_11.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/squat_11.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.671333333333333
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.52599469547246
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.9114937499999999,
+        "far": 2.526825,
+        "end": 4.0179,
+        "amp_cm": 55.90131124098091,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "squat/stu4_69.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/stu4_69.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/stu4_69.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.3,
+      7.566666666666666
+    ],
+    "gt_count": 2,
+    "pred": [
+      3.04487276545545,
+      7.148651222150905
+    ],
+    "tp": 2,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.9766666666666667,
+      "det_low": 0.02,
+      "klt": 0.0033333333333333335
+    },
+    "moving_candidates": 3,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.9967476666666666,
+        "far": 2.126307,
+        "end": 2.8571983333333333,
+        "amp_cm": 78.44602153398912,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 5.083094666666666,
+        "far": 6.179431666666666,
+        "end": 6.877100666666666,
+        "amp_cm": 77.15957073744988,
+        "counted": true
+      },
+      {
+        "kind": "failed",
+        "flags": [],
+        "entry": 9.036552333333333,
+        "far": 9.900333,
+        "end": 9.900333,
+        "amp_cm": 76.41076341155097,
+        "counted": false
+      }
+    ]
+  },
+  {
+    "key": "squat/val1235.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/val1235.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/val1235.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      9.8
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.351857787523849,
+      9.466428695991452
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [
+      4.351857787523849
+    ],
+    "pairs": [
+      [
+        0,
+        1
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 1,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.5648573333333333,
+        "far": 2.6910866666666666,
+        "end": 3.3555333333333333,
+        "amp_cm": 24.486208257410365,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 5.548207333333333,
+        "far": 7.707659,
+        "end": 8.671106666666667,
+        "amp_cm": 37.78455563171958,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "squat/val1256.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/val1256.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/val1256.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      5.566666666666666,
+      9.8
+    ],
+    "gt_count": 2,
+    "pred": [
+      5.334434379530906,
+      9.625128783568957
+    ],
+    "tp": 2,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.94,
+      "det_low": 0.06
+    },
+    "moving_candidates": 1,
+    "jumps": 3,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 2.6910866666666666,
+        "far": 3.521645,
+        "end": 5.016649999999999,
+        "amp_cm": 53.50268119803797,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.910322999999999,
+        "far": 7.674436666666666,
+        "end": 9.235886333333333,
+        "amp_cm": 54.39520126113655,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/bench press_31.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/bench press_31.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/bench press_31.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "상자 비율 기준 60° 초과/미측정",
+    "gt": [
+      2.9166666666666665
+    ],
+    "gt_count": 1,
+    "pred": [
+      2.8527118118448413
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.987012987012987,
+    "source_share": {
+      "det": 0.4025974025974026,
+      "det_low": 0.38961038961038963,
+      "klt": 0.19480519480519481,
+      "klt_drift": 0.012987012987012988
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.9875974025974026,
+        "far": 1.7278649350649353,
+        "end": 2.3858805194805197,
+        "amp_cm": 25.918452090049193,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/bench press_40.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/bench press_40.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/bench press_40.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "영상 상단 문자 오버레이",
+    "gt": [
+      3.32,
+      5.84,
+      8.68
+    ],
+    "gt_count": 3,
+    "pred": [
+      3.2710505215319907,
+      5.742169139220766,
+      8.710757586255744
+    ],
+    "tp": 3,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        2
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.9866666666666667,
+      "det_low": 0.013333333333333334
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.35857777777777783,
+        "far": 1.1152000000000002,
+        "end": 2.708088888888889,
+        "amp_cm": 28.437472988003854,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 3.703644444444445,
+        "far": 4.340800000000001,
+        "end": 5.376177777777778,
+        "amp_cm": 29.601073878150803,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.172622222222223,
+        "far": 6.8496000000000015,
+        "end": 8.2832,
+        "amp_cm": 33.311472689858945,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/stu10_11.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu10_11.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/stu10_11.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "상자 비율 기준 60° 초과/미측정",
+    "gt": [
+      15.44878211544878,
+      16.916916916916918,
+      18.385051718385053,
+      19.886553219886554,
+      21.32132132132132,
+      22.75608942275609,
+      24.190857524190857,
+      25.59225892559226,
+      27.127127127127128,
+      28.695362028695364,
+      30.1634968301635,
+      31.73173173173173,
+      33.33333333333333,
+      34.90156823490157,
+      36.67000333667,
+      38.40507173840507,
+      40.20687354020687,
+      42.1755088421755,
+      45.111778445111774,
+      51.15115115115115
+    ],
+    "gt_count": 20,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      15.44878211544878,
+      16.916916916916918,
+      18.385051718385053,
+      19.886553219886554,
+      21.32132132132132,
+      22.75608942275609,
+      24.190857524190857,
+      25.59225892559226,
+      27.127127127127128,
+      28.695362028695364,
+      30.1634968301635,
+      31.73173173173173,
+      33.33333333333333,
+      34.90156823490157,
+      36.67000333667,
+      38.40507173840507,
+      40.20687354020687,
+      42.1755088421755,
+      45.111778445111774,
+      51.15115115115115
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.03303303303303303,
+    "count_error": -20,
+    "tracked": 0.046162402669632924,
+    "source_share": {
+      "det": 0.027252502780867632,
+      "det_low": 0.01835372636262514,
+      "klt": 0.0005561735261401557,
+      "lost": 0.9532814238042269,
+      "none": 0.0005561735261401557
+    },
+    "moving_candidates": 5,
+    "jumps": 3,
+    "trips": [
+      {
+        "kind": "failed",
+        "flags": [],
+        "entry": 56.455929810901004,
+        "far": 57.9243,
+        "end": 58.05769265850946,
+        "amp_cm": 42.737328454348614,
+        "counted": false
+      }
+    ]
+  },
+  {
+    "key": "benchpress/stu8_15.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu8_15.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/stu8_15.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "무게 자막·화면 전환으로 이어 붙임",
+    "gt": [
+      5.033333333333333,
+      6.666666666666667,
+      11.133333333333333,
+      12.766666666666667,
+      14.366666666666667,
+      17.666666666666668,
+      19.433333333333334,
+      29.666666666666668,
+      31.566666666666666,
+      33.36666666666667,
+      35.2,
+      37.266666666666666
+    ],
+    "gt_count": 12,
+    "pred": [
+      5.0113885561634905,
+      6.622022070238364,
+      17.60150532310762,
+      19.411127604987826
+    ],
+    "tp": 4,
+    "fn": [
+      11.133333333333333,
+      12.766666666666667,
+      14.366666666666667,
+      29.666666666666668,
+      31.566666666666666,
+      33.36666666666667,
+      35.2,
+      37.266666666666666
+    ],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        6,
+        3
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": -8,
+    "tracked": 0.7535087719298246,
+    "source_share": {
+      "det": 0.7280701754385965,
+      "det_low": 0.016666666666666666,
+      "klt": 0.008771929824561403,
+      "lost": 0.20087719298245615,
+      "none": 0.0456140350877193
+    },
+    "moving_candidates": 6,
+    "jumps": 2,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 3.5651226315789475,
+        "far": 4.5642463157894735,
+        "end": 4.897287543859649,
+        "amp_cm": 30.284515333864647,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 5.463457631578947,
+        "far": 6.2294524561403515,
+        "end": 6.495885438596492,
+        "amp_cm": 28.932277094468667,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 7.028751403508773,
+        "far": 7.261880263157895,
+        "end": 15.0,
+        "amp_cm": 21.806060095666773,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 15.999123684210526,
+        "far": 17.06485561403509,
+        "end": 17.431200964912282,
+        "amp_cm": 27.66057971484565,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 18.09728342105263,
+        "far": 18.863278245614037,
+        "end": 19.22962359649123,
+        "amp_cm": 27.741593226221333,
+        "counted": true
+      },
+      {
+        "kind": "failed",
+        "flags": [],
+        "entry": 19.995618421052633,
+        "far": 36.51446333333334,
+        "end": 37.913236491228076,
+        "amp_cm": 52.651786182096096,
+        "counted": false
+      }
+    ]
+  },
+  {
+    "key": "benchpress/stu8_7.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu8_7.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/stu8_7.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "자막으로 원판이 가려짐",
+    "gt": [
+      2.1021,
+      4.9049,
+      8.008,
+      11.4114,
+      17.650966666666665
+    ],
+    "gt_count": 5,
+    "pred": [
+      11.44731226546514,
+      17.77410723916329
+    ],
+    "tp": 2,
+    "fn": [
+      2.1021,
+      4.9049,
+      8.008
+    ],
+    "fp": [],
+    "pairs": [
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": -3,
+    "tracked": 0.7621212121212121,
+    "source_share": {
+      "det": 0.5348484848484848,
+      "det_low": 0.21363636363636362,
+      "klt": 0.013636363636363636,
+      "lost": 0.23787878787878788
+    },
+    "moving_candidates": 1,
+    "jumps": 2,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.19998030303030306,
+        "far": 1.3013,
+        "end": 1.7677248484848485,
+        "amp_cm": 38.92536432691334,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 2.7005745454545456,
+        "far": 7.0404,
+        "end": 8.10651393939394,
+        "amp_cm": 47.27774667583857,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 9.175428484848483,
+        "far": 10.041646060606059,
+        "end": 10.64133515151515,
+        "amp_cm": 37.12347198121536,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 14.672578484848485,
+        "far": 15.505479999999999,
+        "end": 17.471127575757578,
+        "amp_cm": 52.78790910959034,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/test153.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/test153.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/test153.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "상자 비율 기준 60° 초과/미측정",
+    "gt": [
+      1.6333333333333333,
+      3.3333333333333335,
+      5.4,
+      7.166666666666667,
+      9.966666666666667
+    ],
+    "gt_count": 5,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      1.6333333333333333,
+      3.3333333333333335,
+      5.4,
+      7.166666666666667,
+      9.966666666666667
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -5,
+    "tracked": 0.06333333333333334,
+    "source_share": {
+      "det": 0.043333333333333335,
+      "det_low": 0.02,
+      "lost": 0.93,
+      "none": 0.006666666666666667
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": []
+  },
+  {
+    "key": "deadlift/deadlift_7.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/deadlift_7.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/deadlift_7.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.8371666666666666
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.3069773909672047
+    ],
+    "tp": 0,
+    "fn": [
+      3.8371666666666666
+    ],
+    "fp": [
+      3.3069773909672047
+    ],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.46427199999999996,
+        "far": 1.19344,
+        "end": 2.9832159999999996,
+        "amp_cm": 44.12235396827748,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/deadlift_23.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/deadlift_23.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/deadlift_23.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "상자 비율 기준 60° 초과/미측정",
+    "gt": [
+      2.3690333333333333
+    ],
+    "gt_count": 1,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      2.3690333333333333
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -1,
+    "tracked": 0.6111111111111112,
+    "source_share": {
+      "det": 0.25,
+      "det_low": 0.1388888888888889,
+      "klt": 0.2222222222222222,
+      "none": 0.3888888888888889
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": []
+  },
+  {
+    "key": "deadlift/deadlift_30.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/deadlift_30.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/deadlift_30.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "영상 위 텍스트/편집",
+    "gt": [
+      3.2916666666666665,
+      7.666666666666667
+    ],
+    "gt_count": 2,
+    "pred": [
+      3.2009914584362686,
+      7.537447090133606
+    ],
+    "tp": 2,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.6756756756756757,
+      "det_low": 0.31351351351351353,
+      "klt": 0.010810810810810811
+    },
+    "moving_candidates": 2,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.2903497297297297,
+        "far": 1.8236897297297296,
+        "end": 2.9011718918918916,
+        "amp_cm": 43.7923733796937,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 4.766044864864864,
+        "far": 5.719202162162161,
+        "end": 7.376867027027026,
+        "amp_cm": 48.839567757174,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "squat/stu6_11_2.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/stu6_11_2.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/stu6_11_2.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "무게 자막",
+    "gt": [
+      1.2,
+      2.433333333333333,
+      3.6333333333333333,
+      5.2
+    ],
+    "gt_count": 4,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      1.2,
+      2.433333333333333,
+      3.6333333333333333,
+      5.2
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -4,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 2,
+    "jumps": 0,
+    "trips": []
+  },
+  {
+    "key": "squat/stu6_11_3.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/stu6_11_3.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/stu6_11_3.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "무게 자막",
+    "gt": [
+      1.1666666666666667
+    ],
+    "gt_count": 1,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      1.1666666666666667
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -1,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": []
+  },
+  {
+    "key": "squat/val1250.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/val1250.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/val1250.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "상자 비율 기준 60° 초과/미측정",
+    "gt": [
+      2.2666666666666666,
+      4.866666666666666,
+      7.366666666666666
+    ],
+    "gt_count": 3,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      2.2666666666666666,
+      4.866666666666666,
+      7.366666666666666
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -3,
+    "tracked": 0.40789473684210525,
+    "source_share": {
+      "det": 0.37280701754385964,
+      "det_low": 0.021929824561403508,
+      "klt": 0.013157894736842105,
+      "lost": 0.5921052631578947
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": []
+  },
+  {
+    "key": "benchpress/bench press_61.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/bench press_61.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/bench press_61.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      1.4347666666666667,
+      3.036366666666667
+    ],
+    "gt_count": 2,
+    "pred": [
+      1.4063565540219376,
+      2.9613679082076008
+    ],
+    "tp": 2,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.15217391304347827,
+      "det_low": 0.15217391304347827,
+      "klt": 0.6956521739130435
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.13241304347826088,
+        "far": 0.8585086956521739,
+        "end": 1.2875652173913046,
+        "amp_cm": 30.332237312219966,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 1.617608695652174,
+        "far": 2.376708695652174,
+        "end": 2.7727608695652175,
+        "amp_cm": 30.548732958481633,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/stu1_6_4.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu1_6_4.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/stu1_6_4.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.3666666666666667
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.3449427934858784
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9827586206896551,
+    "source_share": {
+      "det": 0.7758620689655172,
+      "det_low": 0.14655172413793102,
+      "klt": 0.0603448275862069,
+      "lost": 0.017241379310344827
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.4959396551724138,
+        "far": 2.5117267241379313,
+        "end": 3.0735034482758623,
+        "amp_cm": 42.5393580328663,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/stu7_12_2.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu7_12_2.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/stu7_12_2.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "화면 아래 자막",
+    "gt": [
+      3.966666666666667,
+      6.266666666666667,
+      8.566666666666666,
+      10.966666666666667,
+      13.233333333333333
+    ],
+    "gt_count": 5,
+    "pred": [
+      3.9181801340536273,
+      6.195931008591314,
+      8.505390082123334,
+      10.781996857788391,
+      13.262490851575853
+    ],
+    "tp": 5,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9913232104121475,
+    "source_share": {
+      "det": 0.5748373101952278,
+      "det_low": 0.32537960954446854,
+      "klt": 0.0911062906724512,
+      "lost": 0.008676789587852495
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 2.195262039045553,
+        "far": 3.1598297180043384,
+        "end": 3.7252659436008675,
+        "amp_cm": 33.27359669424613,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 4.689833622559652,
+        "far": 5.421574620390455,
+        "end": 6.0202718004338385,
+        "amp_cm": 34.616045267711854,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.984839479392623,
+        "far": 7.683319522776571,
+        "end": 8.282016702819956,
+        "amp_cm": 33.70363635217647,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 9.279845336225597,
+        "far": 9.911803470715835,
+        "end": 10.543761605206074,
+        "amp_cm": 31.051794715704574,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 11.574851193058567,
+        "far": 12.173548373101951,
+        "end": 12.8720284164859,
+        "amp_cm": 30.627271537678634,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/stu7_7.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu7_7.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/stu7_7.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      2.3,
+      4.933333333333334
+    ],
+    "gt_count": 2,
+    "pred": [
+      2.168368361317495,
+      4.845604436790331
+    ],
+    "tp": 2,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.9139072847682119,
+      "det_low": 0.08609271523178808
+    },
+    "moving_candidates": 0,
+    "jumps": 7,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.5962139072847682,
+        "far": 1.4240284768211922,
+        "end": 1.9869423841059604,
+        "amp_cm": 49.407017135058496,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 3.1789953642384106,
+        "far": 3.808134437086093,
+        "end": 4.503498675496688,
+        "amp_cm": 51.35796434204751,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/stu8_6_2.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu8_6_2.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/stu8_6_2.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      2.066666666666667,
+      4.066666666666666,
+      6.3
+    ],
+    "gt_count": 3,
+    "pred": [
+      2.1340814995378006,
+      4.169477898512384,
+      6.517556921137861
+    ],
+    "tp": 3,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        2
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.9134615384615384,
+      "det_low": 0.07692307692307693,
+      "klt": 0.009615384615384616
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.3318576923076923,
+        "far": 0.8294538461538462,
+        "end": 1.6587807692307694,
+        "amp_cm": 19.647541145399877,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 2.3222423076923078,
+        "far": 2.819838461538462,
+        "end": 3.7486846153846156,
+        "amp_cm": 19.965746279279614,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 4.378973076923077,
+        "far": 4.843396153846154,
+        "end": 5.838588461538461,
+        "amp_cm": 20.68536063726357,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/deadlift_sihoo02.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/deadlift_sihoo02.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/deadlift_sihoo02.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "앱 화면 녹화 및 화면 자막",
+    "gt": [
+      5.5
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.872005672384058
+    ],
+    "tp": 0,
+    "fn": [
+      5.5
+    ],
+    "fp": [
+      4.872005672384058
+    ],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.9102661764705882,
+        "far": 2.3165161764705884,
+        "end": 4.053648529411764,
+        "amp_cm": 39.46546350162439,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/PB_S01_R10.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/PB_S01_R10.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/PB_S01_R10.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      5.1883333333333335
+    ],
+    "gt_count": 1,
+    "pred": [
+      5.11559637580116
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9872611464968153,
+    "source_share": {
+      "det": 0.20382165605095542,
+      "det_low": 0.5222929936305732,
+      "klt": 0.2611464968152866,
+      "none": 0.012738853503184714
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.2552324840764331,
+        "far": 1.7753713375796178,
+        "end": 4.220812101910828,
+        "amp_cm": 75.90854592405633,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/PB_S03_R13.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/PB_S03_R13.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/PB_S03_R13.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      2.8333333333333335
+    ],
+    "gt_count": 1,
+    "pred": [
+      2.814645463041413
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.3956988372093023,
+        "far": 1.5158406976744185,
+        "end": 2.5042011627906975,
+        "amp_cm": 47.37436434737058,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/PB_S03_R14.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/PB_S03_R14.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/PB_S03_R14.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.3666666666666667
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.3654889785178614
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.7924578431372549,
+        "far": 1.9146911764705883,
+        "end": 2.9709107843137255,
+        "amp_cm": 47.941803876235944,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/PB_S04_R03.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/PB_S04_R03.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/PB_S04_R03.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.433333333333334
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.9984238522837634
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9716312056737588,
+    "source_share": {
+      "det": 0.1347517730496454,
+      "det_low": 0.7092198581560284,
+      "klt": 0.1276595744680851,
+      "none": 0.028368794326241134
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.3652829787234042,
+        "far": 1.1596148936170212,
+        "end": 3.2116390070921983,
+        "amp_cm": 92.75006142940947,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/PB_S05_R22.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/PB_S05_R22.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/PB_S05_R22.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.033333333333333
+    ],
+    "gt_count": 1,
+    "pred": [
+      2.9740780919057084
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9782608695652174,
+    "source_share": {
+      "det": 0.75,
+      "det_low": 0.1956521739130435,
+      "klt": 0.03260869565217391,
+      "lost": 0.021739130434782608
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.13221195652173914,
+        "far": 1.2202434782608698,
+        "end": 2.5060989130434783,
+        "amp_cm": 86.17069553181513,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/PB_S06_R25.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/PB_S06_R25.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/PB_S06_R25.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.7
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.4588052771321025
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9285714285714286,
+    "source_share": {
+      "det": 0.25892857142857145,
+      "det_low": 0.42857142857142855,
+      "klt": 0.24107142857142858,
+      "none": 0.07142857142857142
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.43214285714285716,
+        "far": 1.7205357142857143,
+        "end": 2.876785714285714,
+        "amp_cm": 71.15465395076141,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/PB_S07_R19.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/PB_S07_R19.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/PB_S07_R19.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.533333333333333
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.325625335342583
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.852112676056338,
+    "source_share": {
+      "det": 0.02112676056338028,
+      "det_low": 0.08450704225352113,
+      "klt": 0.7464788732394366,
+      "lost": 0.04929577464788732,
+      "none": 0.09859154929577464
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.5992957746478873,
+        "far": 1.7908450704225352,
+        "end": 2.9492957746478874,
+        "amp_cm": 56.44477908472909,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R01.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S01_R01.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S01_R01.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.933333333333333
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.937147554978655
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9916666666666667,
+    "source_share": {
+      "det": 0.7916666666666666,
+      "det_low": 0.18333333333333332,
+      "klt": 0.016666666666666666,
+      "none": 0.008333333333333333
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.13281166666666666,
+        "far": 1.2897658333333333,
+        "end": 3.041725,
+        "amp_cm": 79.32448745852092,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R07.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S01_R07.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S01_R07.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.7
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.73230641875799
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9647887323943662,
+    "source_share": {
+      "det": 0.4647887323943662,
+      "det_low": 0.38028169014084506,
+      "klt": 0.11971830985915492,
+      "none": 0.035211267605633804
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.2992957746478873,
+        "far": 1.9873239436619718,
+        "end": 4.03943661971831,
+        "amp_cm": 85.58959383509537,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R11.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S01_R11.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S01_R11.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.5
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.5217066976654205
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9779411764705882,
+    "source_share": {
+      "det": 0.8823529411764706,
+      "det_low": 0.08823529411764706,
+      "klt": 0.007352941176470588,
+      "none": 0.022058823529411766
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.2656529411764706,
+        "far": 1.3244764705882353,
+        "end": 3.739917647058824,
+        "amp_cm": 79.84867136084712,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R16.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S01_R16.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S01_R16.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      5.0
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.876860145038128
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9801324503311258,
+    "source_share": {
+      "det": 0.7748344370860927,
+      "det_low": 0.152317880794702,
+      "klt": 0.052980132450331126,
+      "klt_drift": 0.019867549668874173
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.29820066225165565,
+        "far": 2.0200549668874173,
+        "end": 4.073035099337748,
+        "amp_cm": 84.24229721936958,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R18.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S01_R18.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S01_R18.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.466666666666667
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.490952389126878
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9481481481481482,
+    "source_share": {
+      "det": 0.7703703703703704,
+      "det_low": 0.14814814814814814,
+      "klt": 0.02962962962962963,
+      "none": 0.05185185185185185
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.33287333333333335,
+        "far": 1.85486,
+        "end": 3.575366666666667,
+        "amp_cm": 71.14912014638873,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S04_R03.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S04_R03.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S04_R03.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      2.9
+    ],
+    "gt_count": 1,
+    "pred": [
+      2.8553513037868252
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.9545454545454546,
+      "det_low": 0.045454545454545456
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.3958,
+        "far": 1.186709090909091,
+        "end": 2.3071636363636365,
+        "amp_cm": 54.386659878821206,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S04_R04.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S04_R04.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S04_R04.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.1333333333333333
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.051758341743777
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.2641747368421053,
+        "far": 0.989781052631579,
+        "end": 2.70485052631579,
+        "amp_cm": 53.21546340361867,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S04_R07.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S04_R07.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S04_R07.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      2.966666666666667
+    ],
+    "gt_count": 1,
+    "pred": [
+      2.9089215560421495
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.26404333333333335,
+        "far": 1.0881266666666667,
+        "end": 2.571476666666667,
+        "amp_cm": 59.29656840707603,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S05_R47.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S05_R47.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S05_R47.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      2.6666666666666665
+    ],
+    "gt_count": 1,
+    "pred": [
+      2.581004977202354
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.23083333333333333,
+        "far": 1.5148000000000001,
+        "end": 2.4037,
+        "amp_cm": 59.00744919002815,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S06_R63.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S06_R63.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S06_R63.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.1666666666666665
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.201487457661143
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.4291762886597938,
+        "far": 1.055980412371134,
+        "end": 2.60649587628866,
+        "amp_cm": 52.95208054748861,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S07_R12.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S07_R12.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S07_R12.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.741666666666666
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.684424354076242
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.8561643835616438,
+    "source_share": {
+      "det": 0.3219178082191781,
+      "det_low": 0.3013698630136986,
+      "klt": 0.2328767123287671,
+      "lost": 0.11643835616438356,
+      "none": 0.0273972602739726
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.9083,
+        "far": 1.007100684931507,
+        "end": 3.3783171232876716,
+        "amp_cm": 95.46985543974712,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S07_R14.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S07_R14.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S07_R14.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.7716666666666665
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.8254185869688335
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.8278145695364238,
+    "source_share": {
+      "det": 0.32450331125827814,
+      "det_low": 0.2847682119205298,
+      "klt": 0.2185430463576159,
+      "lost": 0.13245033112582782,
+      "none": 0.039735099337748346
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 1.0067,
+        "far": 1.1054754966887417,
+        "end": 3.6407132450331128,
+        "amp_cm": 90.8818041920915,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/GB_S07_R20.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/GB_S07_R20.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/GB_S07_R20.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.5616666666666665
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.2366375796407856
+    ],
+    "tp": 0,
+    "fn": [
+      4.5616666666666665
+    ],
+    "fp": [
+      3.2366375796407856
+    ],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.7785714285714286,
+    "source_share": {
+      "det": 0.2785714285714286,
+      "det_low": 0.3,
+      "klt": 0.2,
+      "lost": 0.22142857142857142
+    },
+    "moving_candidates": 0,
+    "jumps": 2,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.2266557142857143,
+        "far": 1.0531378571428571,
+        "end": 3.995,
+        "amp_cm": 87.37484640185986,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S01_R02.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S01_R02.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S01_R02.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.286666666666667
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.346180911255934
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.7076923076923077,
+      "det_low": 0.27692307692307694,
+      "klt": 0.015384615384615385
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.18487307692307692,
+        "far": 1.569806923076923,
+        "end": 3.383410769230769,
+        "amp_cm": 88.2051494299006,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S01_R03.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S01_R03.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S01_R03.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.871666666666667
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.909769128296012
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9864864864864865,
+    "source_share": {
+      "det": 0.5337837837837838,
+      "det_low": 0.3918918918918919,
+      "klt": 0.060810810810810814,
+      "klt_drift": 0.013513513513513514
+    },
+    "moving_candidates": 0,
+    "jumps": 2,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.16958445945945946,
+        "far": 1.5520939189189187,
+        "end": 3.527107432432432,
+        "amp_cm": 85.880198614605,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S01_R04.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S01_R04.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S01_R04.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.503333333333333
+    ],
+    "gt_count": 1,
+    "pred": [
+      4.676269633851039
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.6934306569343066,
+      "det_low": 0.26277372262773724,
+      "klt": 0.043795620437956206
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.16765401459854015,
+        "far": 1.942677372262774,
+        "end": 3.553346715328467,
+        "amp_cm": 90.24323644007339,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S01_R06.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S01_R06.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S01_R06.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.36
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.946718808817514
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.8787878787878788,
+    "source_share": {
+      "det": 0.7575757575757576,
+      "det_low": 0.08333333333333333,
+      "klt": 0.03787878787878788,
+      "lost": 0.08333333333333333,
+      "none": 0.03787878787878788
+    },
+    "moving_candidates": 0,
+    "jumps": 3,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.29409090909090907,
+        "far": 1.7143939393939396,
+        "end": 3.2007575757575757,
+        "amp_cm": 72.87653039648416,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S03_R11.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S03_R11.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S03_R11.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.4
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.2096131272930797
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.8264692307692307,
+        "far": 1.7187846153846154,
+        "end": 2.8754897435897435,
+        "amp_cm": 43.20160344434937,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S04_R05.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S04_R05.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S04_R05.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.2666666666666666
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.4356885977773723
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.2727272727272727,
+      "det_low": 0.5656565656565656,
+      "klt": 0.16161616161616163
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.2642787878787879,
+        "far": 1.0892030303030305,
+        "end": 2.2440969696969697,
+        "amp_cm": 95.53709306979323,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S05_R15.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S05_R15.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S05_R15.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      2.966666666666667
+    ],
+    "gt_count": 1,
+    "pred": [
+      2.9003461400758233
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.6555555555555556,
+      "det_low": 0.16666666666666666,
+      "klt": 0.17777777777777778
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.32997,
+        "far": 1.31887,
+        "end": 2.50555,
+        "amp_cm": 103.09386641238274,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S05_R17.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S05_R17.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S05_R17.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      2.6333333333333333
+    ],
+    "gt_count": 1,
+    "pred": [
+      2.589735501931216
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.6375,
+      "det_low": 0.1875,
+      "klt": 0.175
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.23079750000000002,
+        "far": 1.0537037500000002,
+        "end": 2.13994,
+        "amp_cm": 94.08595466590593,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S06_R31.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S06_R31.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S06_R31.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.4
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.34394756858832
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.912621359223301,
+    "source_share": {
+      "det": 0.27184466019417475,
+      "det_low": 0.3883495145631068,
+      "klt": 0.2524271844660194,
+      "none": 0.08737864077669903
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.4653388349514563,
+        "far": 1.191552427184466,
+        "end": 2.6439796116504852,
+        "amp_cm": 83.7774110511351,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S06_R32.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/LLK_S06_R32.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/LLK_S06_R32.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      3.3
+    ],
+    "gt_count": 1,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      3.3
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -1,
+    "tracked": 0.7238095238095238,
+    "source_share": {
+      "det": 0.2857142857142857,
+      "det_low": 0.2571428571428571,
+      "klt": 0.18095238095238095,
+      "klt_drift": 0.06666666666666667,
+      "none": 0.20952380952380953
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": []
+  },
+  {
+    "key": "deadlift/deadlift_01.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/deadlift_01.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/deadlift_01.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      8.166666666666666
+    ],
+    "gt_count": 1,
+    "pred": [
+      8.223249552973758
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.9852216748768473,
+      "det_low": 0.014778325123152709
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 4.063472906403941,
+        "far": 5.8463206896551725,
+        "end": 6.758475369458129,
+        "amp_cm": 39.28623659402511,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/deadlift_02.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/deadlift_02.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/deadlift_02.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.5
+    ],
+    "gt_count": 1,
+    "pred": [
+      3.8922433964205534
+    ],
+    "tp": 0,
+    "fn": [
+      4.5
+    ],
+    "fp": [
+      3.8922433964205534
+    ],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.8165137614678899,
+    "source_share": {
+      "det": 0.8073394495412844,
+      "det_low": 0.009174311926605505,
+      "none": 0.1834862385321101
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 1.1227064220183487,
+        "far": 3.228211009174312,
+        "end": 3.7236238532110093,
+        "amp_cm": 31.369877417080982,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "deadlift/deadlift_03.mp4",
+    "dataset": "midterm",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/deadlift/deadlift_03.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/deadlift/deadlift_03.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      4.291666666666667,
+      20.333333333333332
+    ],
+    "gt_count": 2,
+    "pred": [
+      3.4683532279950517,
+      19.71352424939951
+    ],
+    "tp": 0,
+    "fn": [
+      4.291666666666667,
+      20.333333333333332
+    ],
+    "fp": [
+      3.4683532279950517,
+      19.71352424939951
+    ],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.9611451942740287,
+    "source_share": {
+      "det": 0.5357873210633947,
+      "det_low": 0.4233128834355828,
+      "klt": 0.002044989775051125,
+      "lost": 0.00408997955010225,
+      "none": 0.034764826175869123
+    },
+    "moving_candidates": 2,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.9994883435582822,
+        "far": 2.1221858895705523,
+        "end": 2.99539509202454,
+        "amp_cm": 35.91453762055406,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 16.675672597137016,
+        "far": 19.045811860940695,
+        "end": 19.627951329243356,
+        "amp_cm": 39.32334551126012,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/bench_01.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/bench_01.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/bench_01.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      12.208333333333334,
+      19.333333333333332,
+      26.0
+    ],
+    "gt_count": 3,
+    "pred": [
+      11.85728113769019,
+      18.448284212997237,
+      26.81137624447225
+    ],
+    "tp": 1,
+    "fn": [
+      19.333333333333332,
+      26.0
+    ],
+    "fp": [
+      18.448284212997237,
+      26.81137624447225
+    ],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 8.611899387442573,
+        "far": 10.858456508422664,
+        "end": 11.648911791730475,
+        "amp_cm": 18.160768462900265,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 15.393173660030628,
+        "far": 17.182098774885144,
+        "end": 18.138965696784073,
+        "amp_cm": 15.34802906835152,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 21.50880137825421,
+        "far": 22.881697396630933,
+        "end": 25.29466615620214,
+        "amp_cm": 16.29089367451059,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/bench_02.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/bench_02.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/bench_02.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      14.0
+    ],
+    "gt_count": 1,
+    "pred": [
+      13.959932854646825
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 10.0139,
+        "far": 11.094221666666666,
+        "end": 13.504169999999998,
+        "amp_cm": 16.87058274512536,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "benchpress/bench_03.mp4",
+    "dataset": "midterm",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/bench_03.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/bench_03.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      11.291666666666666
+    ],
+    "gt_count": 1,
+    "pred": [
+      11.299206818339435
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 8.181916181229774,
+        "far": 9.303272491909386,
+        "end": 10.673819093851133,
+        "amp_cm": 15.43491228570053,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "squat/squat_01.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/squat_01.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/squat_01.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      11.041666666666666
+    ],
+    "gt_count": 1,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      11.041666666666666
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -1,
+    "tracked": 0.8134110787172012,
+    "source_share": {
+      "det": 0.4868804664723032,
+      "det_low": 0.26822157434402333,
+      "klt": 0.05830903790087463,
+      "klt_drift": 0.15743440233236153,
+      "lost": 0.029154518950437316
+    },
+    "moving_candidates": 1,
+    "jumps": 2,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 9.7083,
+        "far": 9.7083,
+        "end": 10.5,
+        "amp_cm": 20.050011118690346,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "squat/squat_02.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/squat_02.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/squat_02.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      10.166666666666666
+    ],
+    "gt_count": 1,
+    "pred": [
+      9.996132284172722
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 0.916030534351145,
+    "source_share": {
+      "det": 0.22900763358778625,
+      "det_low": 0.5572519083969466,
+      "klt": 0.1297709923664122,
+      "none": 0.08396946564885496
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.437307633587786,
+        "far": 7.807059541984733,
+        "end": 9.508872519083969,
+        "amp_cm": 56.17278679143399,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "squat/squat_03.mp4",
+    "dataset": "midterm",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/new_data/new_dataset/squat/squat_03.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/squat/squat_03.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "view_tags 0.5 이상; 편집 미확인",
+    "gt": [
+      11.708333333333334
+    ],
+    "gt_count": 1,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      11.708333333333334
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -1,
+    "tracked": 0.9498327759197325,
+    "source_share": {
+      "det": 0.411371237458194,
+      "det_low": 0.3377926421404682,
+      "klt": 0.20066889632107024,
+      "klt_drift": 0.05016722408026756
+    },
+    "moving_candidates": 0,
+    "jumps": 9,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.686087959866221,
+        "far": 8.454958193979934,
+        "end": 10.822021404682275,
+        "amp_cm": 52.52018416452654,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "team9/squat/stu10_70.mp4",
+    "dataset": "team9",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/squat/stu10_70.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/team9/squat/stu10_70.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "side-view review pending",
+    "gt": [
+      3.375,
+      6.916666666666667,
+      12.958333333333334,
+      15.166666666666666,
+      18.791666666666668
+    ],
+    "gt_count": 5,
+    "pred": [
+      3.142666158161014,
+      6.7548403054613075,
+      11.69028637160672,
+      15.08559531394553,
+      18.576949220863717
+    ],
+    "tp": 4,
+    "fn": [
+      12.958333333333334
+    ],
+    "fp": [
+      11.69028637160672
+    ],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.9605263157894737,
+      "det_low": 0.03289473684210526,
+      "klt": 0.006578947368421052
+    },
+    "moving_candidates": 5,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 1.579983114035088,
+        "far": 2.3699122807017545,
+        "end": 2.9103901315789478,
+        "amp_cm": 58.85437133989792,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 5.113876754385966,
+        "far": 5.82065548245614,
+        "end": 6.402708552631579,
+        "amp_cm": 60.89457250770587,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 10.186053508771932,
+        "far": 10.809681798245617,
+        "end": 11.391734868421054,
+        "amp_cm": 62.97047712285775,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 13.553646271929827,
+        "far": 14.177274561403511,
+        "end": 14.800902850877195,
+        "amp_cm": 61.62008439418282,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 17.045964692982455,
+        "far": 17.66959298245614,
+        "end": 18.25164605263158,
+        "amp_cm": 62.208490554180344,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "team9/squat/stu3_64.mp4",
+    "dataset": "team9",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/squat/stu3_64.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/team9/squat/stu3_64.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "큰 자막·편집",
+    "gt": null,
+    "gt_count": 19,
+    "pred": [
+      4.593428858394457,
+      6.862044022758301,
+      9.241940731647148,
+      11.694645723645388,
+      14.025984500019018,
+      16.4764654128849,
+      19.034148733403487,
+      21.528867636489625,
+      23.974429180815843,
+      29.845111634075238,
+      33.0292674922024,
+      35.87280635956158,
+      38.96677771899804,
+      42.16640616986423,
+      45.48274699231201,
+      48.68515106366676,
+      51.456011730637535
+    ],
+    "tp": null,
+    "fn": null,
+    "fp": null,
+    "pairs": [],
+    "origin": 0,
+    "count_error": -2,
+    "tracked": 0.9851851851851852,
+    "source_share": {
+      "det": 0.9654320987654321,
+      "det_low": 0.008641975308641974,
+      "klt": 0.011111111111111112,
+      "klt_drift": 0.0006172839506172839,
+      "lost": 0.014197530864197531
+    },
+    "moving_candidates": 14,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.29980222222222225,
+        "far": 1.1326216666666669,
+        "end": 2.2664405555555556,
+        "amp_cm": 43.713888851395296,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 2.999321666666667,
+        "far": 3.732202777777778,
+        "end": 4.365145555555555,
+        "amp_cm": 36.32095108685669,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 5.164652222222223,
+        "far": 5.964158888888889,
+        "end": 6.597101666666667,
+        "amp_cm": 49.088036256525086,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 7.496546666666667,
+        "far": 8.296053333333333,
+        "end": 8.928996111111111,
+        "amp_cm": 47.099597339894586,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 9.828441111111111,
+        "far": 10.661260555555558,
+        "end": 11.327516111111112,
+        "amp_cm": 52.284752117169894,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 12.360212222222223,
+        "far": 13.093093333333336,
+        "end": 13.75934888888889,
+        "amp_cm": 47.107383237329394,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 14.692106666666668,
+        "far": 15.55823888888889,
+        "end": 16.29112,
+        "amp_cm": 50.155097048835785,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 17.157252222222223,
+        "far": 18.09001,
+        "end": 18.756265555555554,
+        "amp_cm": 47.42063175903022,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 19.72233611111111,
+        "far": 20.588468333333335,
+        "end": 21.25472388888889,
+        "amp_cm": 48.28079364298027,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 22.254107222222224,
+        "far": 23.020301111111113,
+        "end": 23.65324388888889,
+        "amp_cm": 41.73343864551021,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 26.384891666666668,
+        "far": 28.683473333333335,
+        "end": 29.54960555555556,
+        "amp_cm": 57.30279083001827,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 30.648927222222223,
+        "far": 31.71493611111111,
+        "end": 32.581068333333334,
+        "amp_cm": 43.5882015792285,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 33.946892222222225,
+        "far": 34.813024444444444,
+        "end": 35.61253111111111,
+        "amp_cm": 43.54326702789017,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 36.878416666666666,
+        "far": 37.81117444444445,
+        "end": 38.64399388888889,
+        "amp_cm": 41.61638693659825,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 39.976505,
+        "far": 40.90926277777778,
+        "end": 41.775395,
+        "amp_cm": 48.13110907996357,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 43.10790611111111,
+        "far": 44.14060222222223,
+        "end": 45.13998555555556,
+        "amp_cm": 48.96101992480345,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 46.40587111111111,
+        "far": 47.37194166666667,
+        "end": 48.23807388888889,
+        "amp_cm": 42.73028686185279,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 49.40402111111111,
+        "far": 50.23684055555556,
+        "end": 50.96972166666667,
+        "amp_cm": 40.20710399104823,
+        "counted": true
+      },
+      {
+        "kind": "failed",
+        "flags": [],
+        "entry": 52.33554555555556,
+        "far": 53.23499055555556,
+        "end": 53.901246111111114,
+        "amp_cm": 43.989127158301656,
+        "counted": false
+      }
+    ]
+  },
+  {
+    "key": "team9/squat/stu8_67.mp4",
+    "dataset": "team9",
+    "exercise": "squat",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/squat/stu8_67.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/team9/squat/stu8_67.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "side-view review pending",
+    "gt": [
+      3.8333333333333335,
+      7.266666666666667,
+      10.966666666666667
+    ],
+    "gt_count": 3,
+    "pred": [
+      3.625918092261576,
+      7.105768046884215,
+      10.819916671835623
+    ],
+    "tp": 3,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        2
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.9333333333333333,
+      "det_low": 0.06666666666666667
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 1.2296672727272728,
+        "far": 2.22664,
+        "end": 3.290077575757576,
+        "amp_cm": 55.797752041470204,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 4.752304242424242,
+        "far": 5.6828121212121205,
+        "end": 6.779482121212121,
+        "amp_cm": 55.05437804863319,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 8.274941212121213,
+        "far": 9.205449090909092,
+        "end": 10.468281212121212,
+        "amp_cm": 56.53567631897709,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "team9/benchpress/stu8_7.mp4",
+    "dataset": "team9",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/benchpress/stu8_7.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/benchpress/stu8_7.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "자막 가림",
+    "gt": [
+      2.1021,
+      4.9049,
+      8.008,
+      11.4114,
+      17.650966666666665
+    ],
+    "gt_count": 5,
+    "pred": [
+      11.44731226546514,
+      17.77410723916329
+    ],
+    "tp": 2,
+    "fn": [
+      2.1021,
+      4.9049,
+      8.008
+    ],
+    "fp": [],
+    "pairs": [
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": -3,
+    "tracked": 0.7621212121212121,
+    "source_share": {
+      "det": 0.5348484848484848,
+      "det_low": 0.21363636363636362,
+      "klt": 0.013636363636363636,
+      "lost": 0.23787878787878788
+    },
+    "moving_candidates": 1,
+    "jumps": 2,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.19998030303030306,
+        "far": 1.3013,
+        "end": 1.7677248484848485,
+        "amp_cm": 38.92536432691334,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 2.7005745454545456,
+        "far": 7.0404,
+        "end": 8.10651393939394,
+        "amp_cm": 47.27774667583857,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 9.175428484848483,
+        "far": 10.041646060606059,
+        "end": 10.64133515151515,
+        "amp_cm": 37.12347198121536,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 14.672578484848485,
+        "far": 15.505479999999999,
+        "end": 17.471127575757578,
+        "amp_cm": 52.78790910959034,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "team9/benchpress/stu9_10.mp4",
+    "dataset": "team9",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/benchpress/stu9_10.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/team9/benchpress/stu9_10.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "아이콘·인터넷 편집",
+    "gt": [
+      9.40940940940941,
+      10.643977310643978,
+      11.911911911911911,
+      13.113113113113114,
+      14.347681014347682,
+      15.548882215548883,
+      16.816816816816818,
+      18.11811811811812,
+      19.452786119452785,
+      20.987654320987655,
+      23.25658992325659,
+      25.158491825158492,
+      27.127127127127128,
+      30.13013013013013,
+      33.80046713380047,
+      38.17150483817151,
+      44.07741074407741
+    ],
+    "gt_count": 17,
+    "pred": [
+      9.437274423910445,
+      10.680651254621175,
+      11.946484519621002,
+      13.138592012972804,
+      14.384594764704653,
+      15.586304224080655,
+      16.8708381554423,
+      18.154706246752852,
+      19.505455622287204,
+      21.12156515442229,
+      23.383708935881977,
+      25.29981612310776,
+      28.87854508219631,
+      30.195657915269848,
+      34.07810277212209,
+      36.20630968688495
+    ],
+    "tp": 14,
+    "fn": [
+      27.127127127127128,
+      38.17150483817151,
+      44.07741074407741
+    ],
+    "fp": [
+      28.87854508219631,
+      36.20630968688495
+    ],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        7
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        9,
+        9
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        11,
+        11
+      ],
+      [
+        13,
+        13
+      ],
+      [
+        14,
+        14
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": -1,
+    "tracked": 0.7533009034051424,
+    "source_share": {
+      "det": 0.27658095899930507,
+      "det_low": 0.31549687282835304,
+      "klt": 0.16122307157748436,
+      "klt_drift": 0.006254343293954135,
+      "lost": 0.23974982626824184,
+      "none": 0.0006949270326615705
+    },
+    "moving_candidates": 5,
+    "jumps": 4,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 8.208130507296735,
+        "far": 8.774970048644892,
+        "end": 9.341809589993051,
+        "amp_cm": 34.31966386693998,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 9.575214107018763,
+        "far": 10.042023141070189,
+        "end": 10.508832175121613,
+        "amp_cm": 29.190167945848987,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 10.875610701876303,
+        "far": 11.275732731063238,
+        "end": 11.742541765114662,
+        "amp_cm": 27.778575852645183,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 12.07597678943711,
+        "far": 12.509442321056289,
+        "end": 13.042938359972204,
+        "amp_cm": 31.934414914960247,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 13.309686379430161,
+        "far": 13.709808408617096,
+        "end": 14.209960945100764,
+        "amp_cm": 28.553190367834446,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 14.54339596942321,
+        "far": 14.943517998610147,
+        "end": 15.41032703266157,
+        "amp_cm": 33.81993606866493,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 15.743762056984018,
+        "far": 16.143884086170953,
+        "end": 16.677380125086867,
+        "amp_cm": 34.38368819819454,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 17.01081514940931,
+        "far": 17.310906671299513,
+        "end": 18.044463724808896,
+        "amp_cm": 30.312213592995608,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 18.311211744266853,
+        "far": 18.711333773453788,
+        "end": 19.278173314801947,
+        "amp_cm": 34.5089081573854,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 19.644951841556637,
+        "far": 20.045073870743572,
+        "end": 20.61191341209173,
+        "amp_cm": 33.93232461667534,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 21.945653509381515,
+        "far": 22.379119041000695,
+        "end": 23.045989089645587,
+        "amp_cm": 36.76530846357854,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 23.71285913829048,
+        "far": 24.179668172341906,
+        "end": 24.779851216122307,
+        "amp_cm": 36.716867484463265,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 25.680125781792913,
+        "far": 26.11359131341209,
+        "end": 26.88049186935372,
+        "amp_cm": 37.737651070263944,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 28.647697498262684,
+        "far": 29.04781952744962,
+        "end": 29.4812850590688,
+        "amp_cm": 22.672985944761255,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 32.2487957609451,
+        "far": 32.68226129256428,
+        "end": 33.5158488533704,
+        "amp_cm": 39.47696575358983,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 35.082993467685895,
+        "far": 35.54980250173732,
+        "end": 37.75047366226546,
+        "amp_cm": 36.996214219698835,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 40.75138888116748,
+        "far": 41.31822842251564,
+        "end": 43.71896059763725,
+        "amp_cm": 34.80066577717389,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "team9/benchpress/stu2_10_edited.mp4",
+    "dataset": "team9",
+    "exercise": "bench",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/benchpress/stu2_10_edited.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/team9/benchpress/stu2_10_edited.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "편집",
+    "gt": [
+      2.4,
+      4.166666666666667,
+      6.133333333333334,
+      8.2,
+      10.733333333333333,
+      14.733333333333333
+    ],
+    "gt_count": 6,
+    "pred": [
+      2.4247628070692606,
+      4.1932168622346255,
+      6.2283652621437255,
+      8.265405372132065,
+      10.785581919632047,
+      14.880759742339285
+    ],
+    "tp": 6,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 0.5403050108932462,
+      "det_low": 0.3093681917211329,
+      "klt": 0.1503267973856209
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.6985156862745098,
+        "far": 1.4635137254901962,
+        "end": 2.195250980392157,
+        "amp_cm": 32.553881007892386,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 2.5943803921568627,
+        "far": 3.2263352941176473,
+        "end": 3.825029411764706,
+        "amp_cm": 30.609500914765036,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 4.390462745098039,
+        "far": 5.055678431372549,
+        "end": 5.654372549019607,
+        "amp_cm": 30.614553134890894,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.419370588235294,
+        "far": 7.117847058823529,
+        "end": 7.84958431372549,
+        "amp_cm": 32.816751455424225,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 8.415017647058825,
+        "far": 9.18001568627451,
+        "end": 9.778709803921569,
+        "amp_cm": 27.506083447316605,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 12.20674705882353,
+        "far": 12.87196274509804,
+        "end": 13.703482352941178,
+        "amp_cm": 29.332867610455533,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "team9/deadlift/stu7_1_1.mp4",
+    "dataset": "team9",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/deadlift/stu7_1_1.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/team9/deadlift/stu7_1_1.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "side-view review pending",
+    "gt": [
+      2.2333333333333334,
+      5.866666666666666,
+      8.8,
+      12.7,
+      16.533333333333335
+    ],
+    "gt_count": 5,
+    "pred": [
+      2.2877213294110317,
+      5.206096952455077,
+      8.561281843312743,
+      12.35475512424525,
+      16.39110350818827
+    ],
+    "tp": 4,
+    "fn": [
+      5.866666666666666
+    ],
+    "fp": [
+      5.206096952455077
+    ],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 0,
+    "jumps": 1,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 0.4657605633802817,
+        "far": 1.031285915492958,
+        "end": 1.9294732394366199,
+        "amp_cm": 52.683667834177506,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 3.7258478873239436,
+        "far": 4.324639436619718,
+        "end": 4.98996338028169,
+        "amp_cm": 53.135372739646115,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 7.285330985915492,
+        "far": 7.9173887323943655,
+        "end": 8.416381690140845,
+        "amp_cm": 52.2237695234727,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 10.977878873239437,
+        "far": 11.476871830985916,
+        "end": 12.042397183098592,
+        "amp_cm": 50.747305328858126,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 15.069621126760564,
+        "far": 15.568614084507043,
+        "end": 16.33373661971831,
+        "amp_cm": 50.066040971589466,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "team9/deadlift/stu4_2_-1.mp4",
+    "dataset": "team9",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/deadlift/stu4_2_-1.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/team9/deadlift/stu4_2_-1.mp4/plate",
+    "scope": "outside",
+    "scope_reason": "정면·자막",
+    "gt": [
+      3.7916666666666665,
+      5.125,
+      6.375,
+      7.75,
+      9.125,
+      10.375,
+      11.75,
+      13.083333333333334,
+      14.375,
+      15.791666666666666
+    ],
+    "gt_count": 10,
+    "pred": [],
+    "tp": 0,
+    "fn": [
+      3.7916666666666665,
+      5.125,
+      6.375,
+      7.75,
+      9.125,
+      10.375,
+      11.75,
+      13.083333333333334,
+      14.375,
+      15.791666666666666
+    ],
+    "fp": [],
+    "pairs": [],
+    "origin": 0.0,
+    "count_error": -10,
+    "tracked": 0.0024752475247524753,
+    "source_share": {
+      "det": 0.0024752475247524753,
+      "lost": 0.9282178217821783,
+      "none": 0.06930693069306931
+    },
+    "moving_candidates": 2,
+    "jumps": 0,
+    "trips": []
+  },
+  {
+    "key": "team9/deadlift/deadlift_08.mp4",
+    "dataset": "team9",
+    "exercise": "deadlift",
+    "video": "/home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/deadlift/deadlift_08.mp4",
+    "result_path": "/home/kojy1009/work/m0-baseline/plate_pipeline/eval_out/baseline_mp/raw/team9/deadlift/deadlift_08.mp4/plate",
+    "scope": "inside",
+    "scope_reason": "side-view review pending",
+    "gt": [
+      6.083333333333333,
+      9.125,
+      12.875
+    ],
+    "gt_count": 3,
+    "pred": [
+      6.008529999067753,
+      8.09653929284277,
+      12.760759839804763
+    ],
+    "tp": 2,
+    "fn": [
+      9.125
+    ],
+    "fp": [
+      8.09653929284277
+    ],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        2
+      ]
+    ],
+    "origin": 0.0,
+    "count_error": 0,
+    "tracked": 1.0,
+    "source_share": {
+      "det": 1.0
+    },
+    "moving_candidates": 1,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 3.4058740384615387,
+        "far": 4.195001282051281,
+        "end": 4.6933974358974355,
+        "amp_cm": 44.539375893857205,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.603916025641025,
+        "far": 7.393043269230769,
+        "end": 7.974505448717948,
+        "amp_cm": 41.90172271738202,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 9.718891987179488,
+        "far": 10.674151282051282,
+        "end": 11.920141666666668,
+        "amp_cm": 43.21861156493587,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "user_clip_1",
+    "dataset": "user_clip",
+    "exercise": "squat",
+    "video": "/home/kojy1009/work/mc-count/plate_pipeline/eval_out/mc/inputs/user_clip_1.mp4",
+    "result_path": "/home/kojy1009/work/mc-count/plate_pipeline/eval_out/mc/baseline_user/user_clip_1",
+    "scope": "inside",
+    "scope_reason": "분리한 옆 영상",
+    "gt": [
+      10.0
+    ],
+    "gt_count": 1,
+    "pred": [
+      10.04308619085567
+    ],
+    "tp": 1,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "origin": 0,
+    "count_error": 0,
+    "tracked": 0.8935361216730038,
+    "source_share": {
+      "det": 0.22813688212927757,
+      "det_low": 0.5817490494296578,
+      "klt": 0.08365019011406843,
+      "klt_drift": 0.0076045627376425855,
+      "lost": 0.011406844106463879,
+      "none": 0.08745247148288973
+    },
+    "moving_candidates": 0,
+    "jumps": 2,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.437595817490495,
+        "far": 7.848880228136883,
+        "end": 9.550723193916351,
+        "amp_cm": 57.04614717296299,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "user_clip_2",
+    "dataset": "user_clip",
+    "exercise": "squat",
+    "video": "/home/kojy1009/work/mc-count/plate_pipeline/eval_out/mc/inputs/user_clip_2.mp4",
+    "result_path": "/home/kojy1009/work/mc-count/plate_pipeline/eval_out/mc/baseline_user/user_clip_2",
+    "scope": "inside",
+    "scope_reason": "분리한 옆 영상",
+    "gt": [
+      11.21
+    ],
+    "gt_count": 1,
+    "pred": [
+      9.43472854101441
+    ],
+    "tp": 0,
+    "fn": [
+      11.21
+    ],
+    "fp": [
+      9.43472854101441
+    ],
+    "pairs": [],
+    "origin": 0,
+    "count_error": 0,
+    "tracked": 0.9899665551839465,
+    "source_share": {
+      "det": 0.38461538461538464,
+      "det_low": 0.3377926421404682,
+      "klt": 0.26755852842809363,
+      "klt_drift": 0.010033444816053512
+    },
+    "moving_candidates": 0,
+    "jumps": 7,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.727615384615384,
+        "far": 7.807328428093645,
+        "end": 10.797303010033446,
+        "amp_cm": 49.70081618060775,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "user_clip_3",
+    "dataset": "user_clip",
+    "exercise": "squat",
+    "video": "/home/kojy1009/work/mc-count/plate_pipeline/eval_out/mc/inputs/user_clip_3.mp4",
+    "result_path": "/home/kojy1009/work/mc-count/plate_pipeline/eval_out/mc/baseline_user/user_clip_3",
+    "scope": "inside",
+    "scope_reason": "분리한 옆 영상",
+    "gt": [
+      6.27,
+      13.73
+    ],
+    "gt_count": 2,
+    "pred": [
+      13.763731677937681
+    ],
+    "tp": 1,
+    "fn": [
+      6.27
+    ],
+    "fp": [],
+    "pairs": [
+      [
+        1,
+        0
+      ]
+    ],
+    "origin": 0,
+    "count_error": -1,
+    "tracked": 0.6773255813953488,
+    "source_share": {
+      "det": 0.005813953488372093,
+      "det_low": 0.07848837209302326,
+      "klt": 0.5930232558139535,
+      "none": 0.3226744186046512
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 10.275361337209302,
+        "far": 11.438639244186046,
+        "end": 13.100464825581394,
+        "amp_cm": 56.98574639650277,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "user_clip_4",
+    "dataset": "user_clip",
+    "exercise": "squat",
+    "video": "/home/kojy1009/work/mc-count/plate_pipeline/eval_out/mc/inputs/user_clip_4.mp4",
+    "result_path": "/home/kojy1009/work/mc-count/plate_pipeline/eval_out/mc/baseline_user/user_clip_4",
+    "scope": "inside",
+    "scope_reason": "분리한 옆 영상",
+    "gt": [
+      14.75,
+      22.21
+    ],
+    "gt_count": 2,
+    "pred": [
+      14.795755262163656,
+      22.26682975895356
+    ],
+    "tp": 2,
+    "fn": [],
+    "fp": [],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "origin": 0,
+    "count_error": 0,
+    "tracked": 0.7377622377622378,
+    "source_share": {
+      "det": 0.013986013986013986,
+      "det_low": 0.06293706293706294,
+      "klt": 0.6608391608391608,
+      "none": 0.26223776223776224
+    },
+    "moving_candidates": 0,
+    "jumps": 0,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 11.782092307692306,
+        "far": 12.905127097902097,
+        "end": 14.402506818181816,
+        "amp_cm": 57.16094259428516,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 18.728270454545452,
+        "far": 19.934493006993005,
+        "end": 21.59824825174825,
+        "amp_cm": 57.9629565338884,
+        "counted": true
+      }
+    ]
+  },
+  {
+    "key": "squat_user_set",
+    "dataset": "edited",
+    "exercise": "squat",
+    "video": "/home/kojy1009/Downloads/squat_user_set.mp4",
+    "result_path": "/home/kojy1009/work/m3a-result/plate_pipeline/eval_out/m3a/concatenated/analysis/user/plate",
+    "scope": "outside",
+    "scope_reason": "이어 붙인 영상",
+    "gt": [
+      10.0,
+      22.127000000000002,
+      29.645,
+      37.105000000000004,
+      52.417,
+      59.877
+    ],
+    "gt_count": 6,
+    "pred": [
+      10.035104346360887,
+      20.435505652457774,
+      52.460542838621734,
+      59.928486236816745
+    ],
+    "tp": 3,
+    "fn": [
+      22.127000000000002,
+      29.645,
+      37.105000000000004
+    ],
+    "fp": [
+      20.435505652457774
+    ],
+    "pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        3
+      ]
+    ],
+    "origin": 0,
+    "count_error": -2,
+    "tracked": 0.6513202437373053,
+    "source_share": {
+      "det": 0.12457684495599188,
+      "det_low": 0.1997291807718348,
+      "klt": 0.32701421800947866,
+      "lost": 0.33852403520649965,
+      "none": 0.010155721056194989
+    },
+    "moving_candidates": 1,
+    "jumps": 11,
+    "trips": [
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 6.454445429925524,
+        "far": 7.828514488828707,
+        "end": 9.535691198375085,
+        "amp_cm": 56.82937188641355,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 17.65519018280298,
+        "far": 19.487282261340553,
+        "end": 21.777397359512523,
+        "amp_cm": 51.50568230822587,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 49.45457623561273,
+        "far": 50.578814556533516,
+        "end": 52.07779898442789,
+        "amp_cm": 57.05702344218855,
+        "counted": true
+      },
+      {
+        "kind": "rep",
+        "flags": [],
+        "entry": 56.44983689911984,
+        "far": 57.61571367637102,
+        "end": 59.281251929587,
+        "amp_cm": 56.33314639635838,
+        "counted": true
+      }
+    ]
+  }
+]

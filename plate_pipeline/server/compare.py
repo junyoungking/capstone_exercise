@@ -5,6 +5,7 @@ Run from plate_pipeline: python -m server.compare --user a.mp4 --ref b.mp4
 are stored outside their standard local locations. No model/video is bundled.
 """
 import argparse
+from dataclasses import replace
 import json
 import os
 from pathlib import Path
@@ -85,7 +86,7 @@ def aligned_3d(pose, rows, result, model, target_height_cm, native=None):
     return raw,stand,final,actual_height,reason is None,warnings
 
 
-def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, scaled, scale_source="box", position_source="box", is_reference=False, reuse_video=None):
+def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, scaled, scale_source="box", position_source="box", is_reference=False, reuse_video=None, speed_cfg=DEFAULT.speed):
     t = np.asarray([r['t'] for r in rows])
     fps,w,h = pose['fps'],pose['w'],pose['h']
     ex = result['exercise']
@@ -93,7 +94,7 @@ def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, sca
     fr = clean_final(st,sy,sx,result['fps'],DEFAULT.final)
     sets = run_session(fr.sig.t,fr.sig.y,fr.sig.x,fr.sig.gap_before,ex,'final',cfg=DEFAULT)
     trips = [r for s in sets for r in s.reps]
-    vals = all_rep_values(fr.sig,fr.raw_t,trips,REST[ex],DEFAULT.speed)
+    vals = all_rep_values(fr.sig,fr.raw_t,trips,REST[ex],speed_cfg)
     good = [(trip,v) for trip,v in zip(trips,vals) if all(getattr(v,k) is not None for k in ('start','far_in','far_out','back','down','up'))]
     if not good and reuse_video is None:
         raise ValueError('완료 rep이 없습니다: '+result['video'])
@@ -181,7 +182,7 @@ def write_report(bundle, dest):
 
 
 def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,threads=6,model=None,checkpoint=None,
-            progress=None,ref_cache=None,posture_cards=False,scale_source="box",position_source="box"):
+            progress=None,ref_cache=None,posture_cards=False,scale_source="box",position_source="box",recover_early_back=None):
     """The M3a calculations, with observation callbacks and optional reference reuse.
 
     progress(stage, fraction, **details) reports work actually completed. Cached
@@ -199,6 +200,8 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     for name,value in (('plate_mm',plate_mm),('load_kg',load_kg),('height_cm',height_cm)):
         if value is not None and (not np.isfinite(value) or value<=0): raise ValueError(name+' must be positive and finite')
     if scale_source not in ('box','ellipse') or position_source not in ('box','ellipse'): raise ValueError('invalid source')
+    recover_early_back = DEFAULT.speed.recover_early_back if recover_early_back is None else bool(recover_early_back)
+    cfg = replace(DEFAULT, speed=replace(DEFAULT.speed,recover_early_back=recover_early_back))
     # Legacy caches do not contain rim fits; never reuse them for an ellipse run.
     if scale_source == 'ellipse' or position_source == 'ellipse': ref_cache = None
     started=time.perf_counter()
@@ -218,7 +221,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     emit('prepare',0)
     cached=None;provenance={};hit=False
     if ref is not None and ref_cache is not None:
-        key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint)
+        key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint,recover_early_back)
         cached=Path(ref_cache)/key;hit=available(cached)
     settings=prepare(user,None if hit else ref,out)
     if hit:
@@ -234,7 +237,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     b=dict(schema_version=SCHEMA_VERSION,exercise=exercise,inputs=dict(plate_mm=plate_mm,load_kg=load_kg,height_cm=height_cm),
            show_3d=exercise!='benchpress',pose3d_scale='input_height' if height_cm is not None else 'model_native',
            posture_cards=bool(posture_cards),has_ref=ref is not None,ref=None,
-           scale_source=scale_source,position_source=position_source)
+           scale_source=scale_source,position_source=position_source,recover_early_back=recover_early_back)
     observations={};timing={};stats={}
     with patch.object(ort,'InferenceSession',session):
         for role in roles:
@@ -250,7 +253,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
                     emit(stage,min((seq+1)/max(1,total),1),processed=seq+1,total=total)
                 result,rows,_=process_video(settings[role]['video'],'bench' if exercise=='benchpress' else exercise,
                     plate_mm=plate_mm,model=str(model),device='cpu',pose=False,out_dir=dest/'plate',on_frame=frame,
-                    scale_source=scale_source,position_source=position_source)
+                    scale_source=scale_source,position_source=position_source,cfg=cfg)
             if not any(r.get('plate',{}).get('ellipse') for r in rows):
                 from core.recog.ellipse import annotate_video
                 annotate_video(settings[role]['video'],rows)
@@ -278,14 +281,14 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
         else: native,_,_=lift(vp3d,selected_coco(pose),pose['w'],pose['h'])
         np.save(dest/'native.npy',native)
         raw,stand,frames,actual,scaled,warnings=aligned_3d(pose,o['rows'],o['result'],vp3d,ref_height,native=native)
-        b[role],trips,vals=build_video(o['rows'],o['result'],pose,frames,raw,stand,plate_mm,height_cm,scaled and height_cm is not None,scale_source,position_source,is_reference=(role=='ref'))
+        b[role],trips,vals=build_video(o['rows'],o['result'],pose,frames,raw,stand,plate_mm,height_cm,scaled and height_cm is not None,scale_source,position_source,is_reference=(role=='ref'),speed_cfg=cfg.speed)
         b[role]['pose3d_warnings']=warnings;b[role]['pose3d_height_cm']=actual
         if role=='user': ref_height=height_cm if height_cm is not None else actual
         stats[role]=(trips,vals,summarize(o['result']['exercise'],o['result']['fps'],trips,vals))
         timing[role]=time.perf_counter()-start
         if role=='ref' and cached is not None and not hit:
             # RTMPose may have populated its model cache during the first run.
-            key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint)
+            key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint,recover_early_back)
             publish(Path(ref_cache)/key,dest,out/'ref.mp4',provenance)
         emit('3d',(index+1)/len(roles),processed=index+1,total=len(roles),ref_cached=hit)
     emit('judge',0)
@@ -330,6 +333,7 @@ def main():
     ap.add_argument('--posture-cards',action='store_true')
     ap.add_argument('--scale-source',choices=('box','ellipse'),default='box')
     ap.add_argument('--position-source',choices=('box','ellipse'),default='box')
+    ap.add_argument('--recover-early-back',action=argparse.BooleanOptionalAction,default=None)
     a = ap.parse_args()
     b = compare(**vars(a))
     print(json.dumps(dict(reps={r:len(b[r]['reps']) for r in ('user','ref') if b[r] is not None},timing=b['timing']),ensure_ascii=False))

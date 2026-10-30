@@ -1,0 +1,338 @@
+{
+  "전체(중복 제거)": {
+    "off": {
+      "videos": 73,
+      "exact_count": 57,
+      "gt_count": 194,
+      "pred_count": 133,
+      "event_labeled_videos": 72,
+      "tp": 101,
+      "fp": 15,
+      "fn": 74,
+      "precision": 0.8706896551724138,
+      "recall": 0.5771428571428572,
+      "f1": 0.6941580756013745
+    },
+    "on": {
+      "videos": 73,
+      "exact_count": 58,
+      "gt_count": 194,
+      "pred_count": 134,
+      "event_labeled_videos": 72,
+      "tp": 104,
+      "fp": 13,
+      "fn": 71,
+      "precision": 0.8888888888888888,
+      "recall": 0.5942857142857143,
+      "f1": 0.7123287671232876
+    }
+  },
+  "조건 안": {
+    "off": {
+      "videos": 56,
+      "exact_count": 51,
+      "gt_count": 79,
+      "pred_count": 76,
+      "event_labeled_videos": 56,
+      "tp": 64,
+      "fp": 12,
+      "fn": 15,
+      "precision": 0.8421052631578947,
+      "recall": 0.810126582278481,
+      "f1": 0.8258064516129032
+    },
+    "on": {
+      "videos": 56,
+      "exact_count": 51,
+      "gt_count": 79,
+      "pred_count": 76,
+      "event_labeled_videos": 56,
+      "tp": 65,
+      "fp": 11,
+      "fn": 14,
+      "precision": 0.8552631578947368,
+      "recall": 0.8227848101265823,
+      "f1": 0.8387096774193549
+    }
+  },
+  "조건 밖": {
+    "off": {
+      "videos": 17,
+      "exact_count": 6,
+      "gt_count": 115,
+      "pred_count": 57,
+      "event_labeled_videos": 16,
+      "tp": 37,
+      "fp": 3,
+      "fn": 59,
+      "precision": 0.925,
+      "recall": 0.3854166666666667,
+      "f1": 0.5441176470588235
+    },
+    "on": {
+      "videos": 17,
+      "exact_count": 7,
+      "gt_count": 115,
+      "pred_count": 58,
+      "event_labeled_videos": 16,
+      "tp": 39,
+      "fp": 2,
+      "fn": 57,
+      "precision": 0.9512195121951219,
+      "recall": 0.40625,
+      "f1": 0.5693430656934306
+    }
+  },
+  "squat": {
+    "off": {
+      "videos": 17,
+      "exact_count": 9,
+      "gt_count": 50,
+      "pred_count": 38,
+      "event_labeled_videos": 16,
+      "tp": 18,
+      "fp": 3,
+      "fn": 13,
+      "precision": 0.8571428571428571,
+      "recall": 0.5806451612903226,
+      "f1": 0.6923076923076923
+    },
+    "on": {
+      "videos": 17,
+      "exact_count": 9,
+      "gt_count": 50,
+      "pred_count": 38,
+      "event_labeled_videos": 16,
+      "tp": 19,
+      "fp": 2,
+      "fn": 12,
+      "precision": 0.9047619047619048,
+      "recall": 0.6129032258064516,
+      "f1": 0.7307692307692307
+    }
+  },
+  "bench": {
+    "off": {
+      "videos": 16,
+      "exact_count": 11,
+      "gt_count": 87,
+      "pred_count": 50,
+      "event_labeled_videos": 16,
+      "tp": 46,
+      "fp": 4,
+      "fn": 41,
+      "precision": 0.92,
+      "recall": 0.5287356321839081,
+      "f1": 0.6715328467153284
+    },
+    "on": {
+      "videos": 16,
+      "exact_count": 12,
+      "gt_count": 87,
+      "pred_count": 51,
+      "event_labeled_videos": 16,
+      "tp": 48,
+      "fp": 3,
+      "fn": 39,
+      "precision": 0.9411764705882353,
+      "recall": 0.5517241379310345,
+      "f1": 0.6956521739130435
+    }
+  },
+  "deadlift": {
+    "off": {
+      "videos": 40,
+      "exact_count": 37,
+      "gt_count": 57,
+      "pred_count": 45,
+      "event_labeled_videos": 40,
+      "tp": 37,
+      "fp": 8,
+      "fn": 20,
+      "precision": 0.8222222222222222,
+      "recall": 0.6491228070175439,
+      "f1": 0.7254901960784313
+    },
+    "on": {
+      "videos": 40,
+      "exact_count": 37,
+      "gt_count": 57,
+      "pred_count": 45,
+      "event_labeled_videos": 40,
+      "tp": 37,
+      "fp": 8,
+      "fn": 20,
+      "precision": 0.8222222222222222,
+      "recall": 0.6491228070175439,
+      "f1": 0.7254901960784313
+    }
+  },
+  "1회 영상": {
+    "off": {
+      "videos": 47,
+      "exact_count": 41,
+      "gt_count": 47,
+      "pred_count": 43,
+      "event_labeled_videos": 47,
+      "tp": 37,
+      "fp": 6,
+      "fn": 10,
+      "precision": 0.8604651162790697,
+      "recall": 0.7872340425531915,
+      "f1": 0.8222222222222222
+    },
+    "on": {
+      "videos": 47,
+      "exact_count": 41,
+      "gt_count": 47,
+      "pred_count": 43,
+      "event_labeled_videos": 47,
+      "tp": 38,
+      "fp": 5,
+      "fn": 9,
+      "precision": 0.8837209302325582,
+      "recall": 0.8085106382978723,
+      "f1": 0.8444444444444444
+    }
+  },
+  "여러 rep": {
+    "off": {
+      "videos": 26,
+      "exact_count": 16,
+      "gt_count": 147,
+      "pred_count": 90,
+      "event_labeled_videos": 25,
+      "tp": 64,
+      "fp": 9,
+      "fn": 64,
+      "precision": 0.8767123287671232,
+      "recall": 0.5,
+      "f1": 0.6368159203980099
+    },
+    "on": {
+      "videos": 26,
+      "exact_count": 17,
+      "gt_count": 147,
+      "pred_count": 91,
+      "event_labeled_videos": 25,
+      "tp": 66,
+      "fp": 8,
+      "fn": 62,
+      "precision": 0.8918918918918919,
+      "recall": 0.515625,
+      "f1": 0.6534653465346535
+    }
+  },
+  "midterm": {
+    "off": {
+      "videos": 61,
+      "exact_count": 49,
+      "gt_count": 120,
+      "pred_count": 73,
+      "event_labeled_videos": 61,
+      "tp": 64,
+      "fp": 9,
+      "fn": 56,
+      "precision": 0.8767123287671232,
+      "recall": 0.5333333333333333,
+      "f1": 0.6632124352331606
+    },
+    "on": {
+      "videos": 61,
+      "exact_count": 49,
+      "gt_count": 120,
+      "pred_count": 73,
+      "event_labeled_videos": 61,
+      "tp": 64,
+      "fp": 9,
+      "fn": 56,
+      "precision": 0.8767123287671232,
+      "recall": 0.5333333333333333,
+      "f1": 0.6632124352331606
+    }
+  },
+  "team9": {
+    "off": {
+      "videos": 9,
+      "exact_count": 5,
+      "gt_count": 73,
+      "pred_count": 57,
+      "event_labeled_videos": 8,
+      "tp": 35,
+      "fp": 5,
+      "fn": 19,
+      "precision": 0.875,
+      "recall": 0.6481481481481481,
+      "f1": 0.7446808510638298
+    },
+    "on": {
+      "videos": 9,
+      "exact_count": 6,
+      "gt_count": 73,
+      "pred_count": 58,
+      "event_labeled_videos": 8,
+      "tp": 37,
+      "fp": 4,
+      "fn": 17,
+      "precision": 0.9024390243902439,
+      "recall": 0.6851851851851852,
+      "f1": 0.7789473684210526
+    }
+  },
+  "user_clip": {
+    "off": {
+      "videos": 4,
+      "exact_count": 3,
+      "gt_count": 6,
+      "pred_count": 5,
+      "event_labeled_videos": 4,
+      "tp": 4,
+      "fp": 1,
+      "fn": 2,
+      "precision": 0.8,
+      "recall": 0.6666666666666666,
+      "f1": 0.7272727272727273
+    },
+    "on": {
+      "videos": 4,
+      "exact_count": 3,
+      "gt_count": 6,
+      "pred_count": 5,
+      "event_labeled_videos": 4,
+      "tp": 5,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "f1": 0.9090909090909091
+    }
+  },
+  "edited": {
+    "off": {
+      "videos": 1,
+      "exact_count": 0,
+      "gt_count": 6,
+      "pred_count": 4,
+      "event_labeled_videos": 1,
+      "tp": 3,
+      "fp": 1,
+      "fn": 3,
+      "precision": 0.75,
+      "recall": 0.5,
+      "f1": 0.6
+    },
+    "on": {
+      "videos": 1,
+      "exact_count": 0,
+      "gt_count": 6,
+      "pred_count": 4,
+      "event_labeled_videos": 1,
+      "tp": 4,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1": 0.8
+    }
+  }
+}

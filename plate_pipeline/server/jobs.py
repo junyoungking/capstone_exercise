@@ -164,7 +164,7 @@ def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT, scale_so
 
 
 def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None,
-                  pose=False, device="auto", on_frame=None, scale_source="box", position_source="box", ellipse=False):
+                  pose=False, device="auto", on_frame=None, scale_source="box", position_source="box", ellipse=False, cfg=DEFAULT):
     """rim: look for the plate rim when the detector gives nothing (default: only without a model)."""
     info = video.info(path)
     det = OnnxPlateDetector(model, device=device) if model else (BoxFileDetector(boxes) if boxes else None)
@@ -178,7 +178,7 @@ def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, mod
             estimator.close()
     took = time.time() - t0
     fps = len(rows) / max(rows[-1]["t"] - rows[0]["t"], 1e-6) if len(rows) > 1 else info.fps
-    sets, sig = analyse(rows, exercise, fps, plate_mm, scale_source=scale_source, position_source=position_source)
+    sets, sig = analyse(rows, exercise, fps, plate_mm, cfg=cfg, scale_source=scale_source, position_source=position_source)
     used = sum(1 for r in rows if r.get("plate", {}).get("used"))
     res = dict(video=os.path.basename(str(path)), exercise=exercise, plate_mm=plate_mm, fps=fps,
                width=info.width, height=info.height, frames=len(rows), plate_frames=used,
@@ -210,12 +210,14 @@ def main():
     ap.add_argument("--pose-mode", choices=("lightweight", "balanced", "tracked", "tiny_m"), default=DEFAULT.pose.mode)
     ap.add_argument("--pose-det-frequency", type=int, default=DEFAULT.pose.det_frequency)
     ap.add_argument("--out", default="out")
+    ap.add_argument("--recover-early-back", action=argparse.BooleanOptionalAction, default=None)
     a = ap.parse_args()
     box = tuple(float(v) for v in a.box.split(",")) if a.box else None
     estimator = PoseEstimator(cfg=replace(DEFAULT.pose, backend=a.pose_backend, mode=a.pose_mode, det_frequency=a.pose_det_frequency)) if a.pose else None
     try:
+        cfg = DEFAULT if a.recover_early_back is None else replace(DEFAULT, speed=replace(DEFAULT.speed,recover_early_back=a.recover_early_back))
         res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out,
-                                  pose=estimator, device=a.device)
+                                  pose=estimator, device=a.device, cfg=cfg)
     finally:
         if estimator is not None:
             estimator.close()
