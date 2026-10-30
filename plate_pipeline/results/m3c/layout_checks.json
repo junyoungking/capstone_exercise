@@ -1,0 +1,306 @@
+[
+  {
+    "screen": "01_empty",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "01_empty",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "02_upload",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "02_upload",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "03_squat_input",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "03_squat_input",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "03_squat_processing",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "03_squat_processing",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "03_squat_report",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "03_squat_report",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "03_squat_cards",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "03_squat_cards",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "06_history_one",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "06_history_one",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "07_day_selected",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "07_day_selected",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "08_reopened",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "08_reopened",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "09_deadlift_input",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "09_deadlift_input",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "09_deadlift_processing",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "09_deadlift_processing",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "09_deadlift_report",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "09_deadlift_report",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "12_record_media",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "12_record_media",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "13_record_details",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "13_record_details",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "14_saved_ref_input",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "14_saved_ref_input",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "14_saved_ref_processing",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "14_saved_ref_processing",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "14_saved_ref_report",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "14_saved_ref_report",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "14_saved_ref_cards",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "14_saved_ref_cards",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "17_history_three",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "horizontal_overflow": false
+  },
+  {
+    "screen": "17_history_three",
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontal_overflow": false
+  }
+]

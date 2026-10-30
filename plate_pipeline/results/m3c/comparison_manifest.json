@@ -1,0 +1,110 @@
+[
+  {
+    "file": "upload_1920x1080.png",
+    "reference": "reference/v3_upload.png",
+    "product": "product/02_upload_1920x1080.png",
+    "viewport": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "upload_1440x900.png",
+    "reference": "reference/v3_upload_1440x900.png",
+    "product": "product/02_upload_1440x900.png",
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "file": "selected_1920x1080.png",
+    "reference": "reference/v3_upload_selected.png",
+    "product": "product/03_squat_input_1920x1080.png",
+    "viewport": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "selected_1440x900.png",
+    "reference": "reference/v3_upload_selected_1440x900.png",
+    "product": "product/03_squat_input_1440x900.png",
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "file": "processing_1920x1080.png",
+    "reference": "reference/v3_processing.png",
+    "product": "product/03_squat_processing_1920x1080.png",
+    "viewport": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "processing_1440x900.png",
+    "reference": "reference/v3_processing_1440x900.png",
+    "product": "product/03_squat_processing_1440x900.png",
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "file": "comparison_report_1920x1080.png",
+    "reference": "reference/v3_report.png",
+    "product": "product/03_squat_report_1920x1080.png",
+    "viewport": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "comparison_report_1440x900.png",
+    "reference": "reference/v3_report_1440x900.png",
+    "product": "product/03_squat_report_1440x900.png",
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "file": "history_1920x1080.png",
+    "reference": "reference/v3_history.png",
+    "product": "product/17_history_three_1920x1080.png",
+    "viewport": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "history_1440x900.png",
+    "reference": "reference/v3_history_1440x900.png",
+    "product": "product/17_history_three_1440x900.png",
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "file": "record_report_1920x1080.png",
+    "reference": "reference/v3_past.png",
+    "product": "product/09_deadlift_report_1920x1080.png",
+    "viewport": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "record_report_1440x900.png",
+    "reference": "reference/v3_past_1440x900.png",
+    "product": "product/09_deadlift_report_1440x900.png",
+    "viewport": [
+      1440,
+      900
+    ]
+  }
+]

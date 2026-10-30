@@ -1,4 +1,5 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>운동 기록</title><style>
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>운동 기록</title><style>
 :root{
   --ground:#0E1116;--surface:#161B22;--raised:#1E2530;--line:#2A3340;
   --text-1:#E8EDF3;--text-2:#A9B4C2;--text-3:#8A97A8;
@@ -238,44 +239,184 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
 .setgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
 .setcard{background:var(--raised);border-radius:12px;padding:14px 16px}
 @media (max-width:1100px){.logwrap{grid-template-columns:1fr}.monthk{grid-template-columns:1fr 1fr}.geo{grid-template-columns:1fr 1fr 1fr}}
-.record .sgrid{grid-template-columns:var(--cu,1fr) 1.2fr}.record .geo{grid-template-columns:1.2fr 1fr}a.btn{text-decoration:none;display:inline-flex;align-items:center}.record .sgrid .three{grid-column:auto}@media(max-width:700px){.record .sgrid{grid-template-columns:1fr}}
-[hidden]{display:none!important}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.field{display:flex;flex-direction:column;gap:8px}.field input,.field select,select{background:var(--raised);color:var(--text-1);padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;min-height:44px}.primary{background:var(--mine);color:var(--ground);border:0;font-weight:700}.upload-box{display:block;padding:30px 16px;border:1px dashed var(--text-3);border-radius:12px;margin-top:20px}.upload-box input{display:block;margin-top:16px;max-width:100%}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day-btn{min-height:64px;color:var(--text-3);background:transparent;border:1px solid var(--line);border-radius:10px}.day-btn.has{color:var(--mine);background:var(--raised);font-weight:700}.session-link{display:flex;flex-direction:column;gap:8px;padding:20px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--text-1)}.stage-row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:20px 0;border-bottom:1px solid var(--line)}progress{grid-column:1/-1;width:100%;height:12px;accent-color:var(--mine)}.error{color:var(--warn-text)}@media(max-width:700px){.form-grid{grid-template-columns:1fr 1fr}}</style></head><body><div class="wrap">
-<header class="topbar"><div class="brand"><i></i>세트 리포트</div><div class="sp"></div><button id="nav-log" class="btn">운동 기록</button><button id="nav-new" class="btn primary">새 기록</button></header>
-<section id="log"><div class="rhead"><div><div class="label">내 세트</div><h1>운동 기록</h1></div><div class="chips"><button class="btn" id="prev-month">이전 달</button><span id="month-title"></span><button class="btn" id="next-month">다음 달</button></div></div>
-<div id="empty" class="card" hidden><h2>아직 운동 기록이 없습니다</h2><p class="quiet">영상을 올려 첫 세트를 기록해 보세요.</p><button class="btn primary" id="empty-new">새 기록</button></div>
-<div class="row2" id="history"><div class="card"><div class="calendar" id="calendar"></div></div><div class="card"><h2 id="list-title">기록 목록</h2><div id="sessions"></div></div></div></section>
-<section id="new" hidden><div class="rhead"><div><div class="label">영상으로 기록하기</div><h1>새 기록</h1></div></div>
-<form id="upload-form"><div class="row2"><div class="card"><h2>내 영상</h2><label class="upload-box">영상 선택 <input id="user" name="user" type="file" accept="video/*" required></label><p class="quiet">영상 하나당 최대 512 MiB</p></div>
-<div class="card"><h2>기준 영상 <span class="label">선택</span></h2><div class="field"><label for="ref-mode">비교 방법</label><select id="ref-mode"><option value="none">기준 없이 기록만</option><option value="upload">새 기준 영상 올리기</option><option value="saved">저장된 기준 영상 고르기</option></select></div><label id="ref-upload" class="upload-box" hidden>기준 영상 선택 <input id="ref" type="file" accept="video/*"></label><div id="ref-saved" class="field" hidden><label for="ref-id">저장된 기준</label><select id="ref-id"></select><p id="no-refs" class="quiet" hidden>저장된 기준 영상이 없습니다. 새 영상을 올려 주세요.</p></div></div></div>
-<div class="card" style="margin-top:16px"><h2>세트 입력</h2><div class="form-grid"><div class="field"><label for="exercise">종목</label><select id="exercise" name="exercise"><option value="squat">스쿼트</option><option value="benchpress">벤치프레스</option><option value="deadlift">데드리프트</option></select></div><div class="field"><label for="plate-mm">원판 지름 · mm</label><input id="plate-mm" name="plate_mm" type="number" min="1" value="450" required></div><div class="field"><label for="load-kg">바 무게 · kg (선택)</label><input id="load-kg" name="load_kg" type="number" min="0.1" step="0.1"></div><div class="field"><label for="height-cm">키 · cm (선택)</label><input id="height-cm" name="height_cm" type="number" min="1" step="0.1"></div></div><p class="quiet">키를 넣으면 입력 키에 맞춘 3D의 분절 길이를 표시합니다.</p><p class="quiet error" id="upload-error" role="alert"></p><button class="btn primary" id="submit" type="submit">분석하고 기록하기</button><span id="sending" class="label" hidden>영상 업로드 중…</span></div></form></section>
-<section id="processing" hidden><div class="rhead"><div><div class="label" id="job-state">대기 중</div><h1>세트 분석</h1></div><span class="label" id="job-elapsed"></span></div><div class="card"><p class="quiet">처리한 프레임과 완료한 단계가 표시됩니다.</p><div id="stages"></div><p class="error" id="job-error" role="alert"></p><button class="btn primary" id="retry" hidden>다시 시도</button></div></section>
-</div><script>
-const $=s=>document.querySelector(s), EX={squat:"스쿼트",benchpress:"벤치프레스",deadlift:"데드리프트"};
-const STAGES={prepare:"영상 준비",plate_user:"원판 · 내 영상",plate_ref:"원판 · 기준 영상",pose:"포즈",'3d':"3D",judge:"판정",report:"리포트"};
-let sessions=[],refs=[],month=new Date(new Date().getFullYear(),new Date().getMonth(),1),pollTimer=null,currentJob=null,submitting=false;
+[hidden]{display:none!important}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--text-1);outline-offset:4px}button:disabled{cursor:default}.primary:disabled{opacity:.4}.nav button,.nav a{min-height:44px}.month-controls,.list-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.month-controls{flex-wrap:wrap}.month-controls .ghost{height:44px}.empty-state{text-align:center;padding:64px 24px}.empty-icon{display:inline-grid;place-items:center;width:64px;height:64px;background:var(--raised);border-radius:16px;color:var(--mine);font-size:32px;margin-bottom:16px}.empty-state .primary{margin-top:24px}.monthk{margin:16px 0 24px;grid-template-columns:1fr 1fr 1fr 1.55fr}.monthk .v{font:700 40px/1.2 var(--mono);margin-top:6px}.monthk .cmp{font-size:13px;color:var(--text-2)}.exercise-max{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}.exercise-max .num{font-size:20px;display:block}.exercise-max small{display:block;font:400 12px var(--sans);color:var(--text-2)}.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:20px}.calendar>.dow{text-align:center;padding-bottom:8px}.day-btn{background:var(--raised);border:1px solid transparent;border-radius:12px;min-height:80px;text-align:left;padding:8px;display:flex;flex-direction:column;gap:3px;min-width:0}.day-btn .dn{font:500 13px var(--mono);color:var(--text-2)}.day-btn.empty{background:transparent;pointer-events:none}.day-btn.today{border-color:var(--mine)}.day-btn.today .dn:after{content:"오늘";font:400 10px var(--sans);color:var(--mine);margin-left:4px}.day-btn.selected{background:var(--surface);border-color:var(--text-1)}.day-btn .exercise-day{font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap}.exercise-day i{width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--text-2)}.exercise-day.cmp i{background:var(--ref)}.day-btn small{font-size:10px;color:var(--text-3)}.session-link{display:grid;grid-template-columns:76px minmax(0,1fr) auto 14px;gap:14px;align-items:center;text-decoration:none;color:var(--text-1);padding:16px;background:var(--raised);border:1px solid transparent;border-radius:12px;min-width:0}.session-link:hover,.session-link:focus-visible{border-color:var(--text-3)}.session-link.selected{border-color:var(--line)}.session-link .date{font:500 14px var(--mono)}.session-link small{display:block;color:var(--text-3);font:400 12px var(--sans)}.session-link .speed{text-align:right;font:500 16px var(--mono)}.session-link .detail{font-size:13px;color:var(--text-2)}.session-link .chev{color:var(--text-3)}.list-head .ghost{font-size:12px;height:32px}.drop{min-width:0;height:360px;border-color:var(--line);padding-top:58px}.drop.mine{border-color:rgba(198,244,50,.45)}.drop.refd{border-color:rgba(79,140,255,.55);cursor:default;padding-top:64px;gap:8px}.drop.over{border-color:var(--text-1);background:var(--raised)}.drop-content{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%;flex:1;min-height:0}.ref-pick{cursor:pointer}.upload-icon{width:56px;height:56px;background:var(--raised);border-radius:16px;display:grid;place-items:center;color:var(--mine);font-size:32px;line-height:1}.refd .upload-icon{color:var(--ref)}.file-input{position:absolute;width:1px!important;height:1px!important;opacity:0;overflow:hidden;clip-path:inset(50%);pointer-events:none}.drop video{display:block;width:100%;height:226px;object-fit:contain;border-radius:12px;background:#000}.drop .meta{display:flex;align-items:center;gap:12px;width:100%;min-width:0;font-size:13px;margin-top:4px}.filename{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}.drop .meta .label{white-space:nowrap}.change-file{height:30px;font-size:12px;flex-shrink:0}.drop.selected .upload-icon,.drop.selected .drop-content>.big,.drop.selected .hint{display:none}.drop.selected{border-style:solid}.drop.refd.selected{border-style:dashed}.ref-tabs{position:absolute;right:16px;top:16px;display:flex;gap:3px;background:var(--ground);border:1px solid var(--line);padding:3px;border-radius:10px}.ref-tabs button{background:none;border:0;font-size:12px;color:var(--text-2);height:30px;padding:0 10px;border-radius:7px}.ref-tabs button.on{background:var(--raised);color:var(--ref)}.saved-picker{width:100%;display:flex;align-items:center;gap:10px}.saved-picker select{flex:1;min-width:0;height:38px;font-size:13px}.saved-picker .label{white-space:nowrap}.without-ref{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}.preview-note{margin:0;text-align:center}.drop.refd:has(.saved-picker:not([hidden])) video{height:176px}#ref-preview-area{width:100%;min-height:0}.opts{align-items:flex-start;gap:20px}.inputs{gap:24px;align-items:flex-start}.field{min-width:0}.field input{width:120px}.field select{max-width:100%;height:48px}.field input{height:48px}.field input,.field select{background:var(--surface);color:var(--text-1);border:1px solid var(--line);border-radius:10px;padding:0 14px;font:500 14px var(--mono)}.field .seg{white-space:nowrap}.plate-inputs{display:flex;gap:8px}.plate-inputs input{width:96px}.opts>.primary{margin-top:22px;min-width:136px}.submit-notice{min-height:30px}.error{color:var(--warn-text);font-size:14px}.refd:has(#ref-none:not([hidden])){border-color:var(--line)}.proc{align-items:stretch}.proc .card{min-width:0}.scan{margin-top:20px}.scan.single{grid-template-columns:1fr}.scan.single .scanbox{height:420px}.scanbox .beam{background:var(--mine);box-shadow:none;animation:scan-line 2.4s ease-in-out infinite alternate}.scanbox.refb .beam{background:var(--ref);box-shadow:none}.scanbox .scan-note{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center}.proc.failed .beam{display:none}.steps li{grid-template-columns:24px minmax(0,1fr) auto;padding:12px 0;gap:12px}.steps li .dot{width:20px;height:20px}.steps li .d{min-height:0}.steps li .ms{font-size:12px;white-space:nowrap}.steps .frame-progress{display:block;width:100%;height:3px;margin-top:8px;accent-color:var(--mine)}.total-progress{width:100%;height:6px;display:block;margin:22px 0 8px;accent-color:var(--mine)}progress{border:0;border-radius:10px;background:var(--raised)}progress::-webkit-progress-bar{background:var(--raised);border-radius:10px}progress::-webkit-progress-value{background:var(--mine);border-radius:10px}#pct{font-size:24px}.failure-panel{margin-top:16px;padding:16px;background:var(--warn-bg);border-radius:12px}.failure-panel p{margin:0 0 12px}.failure-panel .primary{height:44px}.hero{margin:24px 0 32px}@keyframes scan-line{from{top:5%}to{top:95%}}@media(min-width:1101px) and (max-width:1500px){.inputs{gap:16px}.seg button{padding:0 14px}.drop{height:340px}.drop video{height:206px}.drop.refd:has(.saved-picker:not([hidden])) video{height:156px}.ref-tabs button{padding:0 8px;font-size:11px}.day-btn{min-height:76px}.session-link{gap:10px;padding:12px;grid-template-columns:68px minmax(0,1fr) auto 12px}.proc .scanbox{height:400px}.field input{width:106px}}@media(max-width:1100px){.opts{flex-direction:column}.opts>.primary{margin-top:0;align-self:flex-end}.monthk{grid-template-columns:1fr 1fr}.inputs{width:100%}.logwrap{grid-template-columns:1fr}.proc{grid-template-columns:1fr}}@media(max-width:700px){.drops{grid-template-columns:1fr}.month-controls{gap:6px}.month-controls .primary{font-size:13px;padding:0 12px}.day-btn .exercise-day{font-size:9px}.day-btn{padding:5px}.session-link{grid-template-columns:56px minmax(0,1fr) auto 10px;gap:8px}.scanbox{height:340px}.brand{font-size:16px}.nav button{padding:0 12px}.inputs{gap:16px}.hero h1{font-size:26px}.drop .meta{flex-wrap:wrap}.drop .meta .filename{flex-basis:50%}.ref-tabs{right:10px}.ref-tabs button{font-size:10px;padding:0 6px}.drop>.tag{font-size:11px;padding:0 10px}.day-btn.today .dn:after{content:"·"}.exercise-max{gap:8px}.exercise-max .num{font-size:16px}}@media(prefers-reduced-motion:reduce){.beam,.steps li.run .dot{animation:none}}
+.field{display:flex;flex-direction:column;gap:8px}.field>.label{margin:0}#height-note{font-size:12px;white-space:nowrap}.inputs{align-items:flex-start}.saved-picker select{background:var(--raised);color:var(--text-1);border:1px solid var(--line);border-radius:10px;padding:0 12px;font:400 13px var(--sans)}</style></head><body><div class="wrap">
+<header class="topbar"><div class="brand"><i></i>세트 리포트</div><div class="sp"></div><nav class="nav" aria-label="주 메뉴"><button id="nav-log" class="on">운동 기록</button><button id="nav-new">새 기록</button></nav></header>
+<section id="log"><div class="rhead"><div><div class="label" id="month-title"></div><h1>운동 기록</h1></div><div class="month-controls"><button class="ghost" id="prev-month" aria-label="이전 달">←</button><button class="ghost" id="today-month">이번 달</button><button class="ghost" id="next-month" aria-label="다음 달">→</button><button class="primary" id="log-new">새 세트 기록</button></div></div>
+<div id="empty" class="card empty-state" hidden><span class="empty-icon" aria-hidden="true">＋</span><h2>첫 세트를 기록해 보세요</h2><p class="sub">영상을 올리면 rep별 깊이·템포·속도가 여기에 쌓입니다.</p><button class="primary" id="empty-new">새 기록</button></div>
+<div id="history" hidden><div class="monthk" id="month-summary"></div><div class="logwrap"><div class="card"><h2>달력</h2><div class="calendar" id="calendar"></div></div><div class="card"><div class="list-head"><h2 id="list-title">이 달의 기록</h2><button class="ghost" id="all-days" hidden>이 달 전체</button></div><div class="loglist" id="sessions"></div></div></div></div></section>
+<section id="new" hidden><div class="hero"><h1>내 세트를 영상으로 기록하기</h1><p class="sub">rep별 깊이·템포·속도를 기록하고, 기준 영상을 고르면 함께 비교합니다.</p></div>
+<form id="upload-form"><div class="drops">
+<div class="drop mine" id="drop-user" role="button" tabindex="0" aria-label="내 영상 끌어 놓기 또는 선택"><span class="tag chip"><b></b>내 영상</span><div class="drop-content"><span class="upload-icon" aria-hidden="true">↥</span><span class="big">내 세트 영상 올리기</span><span class="hint label">끌어다 놓거나 눌러서 고르기 · 최대 512 MiB</span><video id="preview-user" muted playsinline loop controls hidden></video><div class="meta" hidden><span class="filename" id="user-name"></span><span class="label" id="user-meta"></span><button type="button" class="ghost change-file" data-role="user">다시 고르기</button></div><p class="preview-note label" id="user-note" hidden></p></div><input id="user" name="user" type="file" accept="video/*" class="file-input" tabindex="-1"></div>
+<div class="drop refd" id="drop-ref"><span class="tag chip ref"><b></b>기준 영상</span><div class="ref-tabs" role="group" aria-label="기준 영상 선택"><button type="button" data-mode="upload" class="on">새로 올리기</button><button type="button" data-mode="saved">저장된 영상</button><button type="button" data-mode="none">없이 기록만</button></div><select id="ref-mode" hidden><option value="upload">새로 올리기</option><option value="saved">저장된 영상</option><option value="none">없이 기록만</option></select>
+<div id="ref-upload" class="drop-content ref-pick" role="button" tabindex="0" aria-label="기준 영상 끌어 놓기 또는 선택"><span class="upload-icon" aria-hidden="true">↥</span><span class="big">기준 영상 올리기</span><span class="hint label">끌어다 놓거나 눌러서 고르기 · 최대 512 MiB</span></div>
+<div id="ref-saved" class="saved-picker" hidden><label for="ref-id" class="label">저장된 기준</label><select id="ref-id"></select><p class="label" id="no-refs" hidden>저장된 기준 영상이 없습니다. 새 영상을 올려 주세요.</p></div>
+<div id="ref-none" class="without-ref" hidden><span class="upload-icon" aria-hidden="true">↗</span><span class="big">내 세트만 기록합니다</span><span class="label">횟수·깊이·속도·템포를 보여 줍니다.</span></div>
+<div id="ref-preview-area" hidden><video id="preview-ref" muted playsinline loop controls></video><div class="meta"><span class="filename" id="ref-name"></span><span class="label" id="ref-meta"></span><button type="button" class="ghost change-file" data-role="ref">다시 고르기</button></div><p class="preview-note label" id="ref-note" hidden></p></div><input id="ref" type="file" accept="video/*" class="file-input" tabindex="-1"></div></div>
+<div class="opts"><div class="inputs"><div class="field"><span class="label" id="exercise-label">종목</span><div class="seg" role="group" aria-labelledby="exercise-label"><button type="button" data-ex="squat">스쿼트</button><button type="button" data-ex="benchpress">벤치프레스</button><button type="button" data-ex="deadlift">데드리프트</button></div><input id="exercise" name="exercise" type="hidden" value=""></div><div class="field"><label class="label" for="plate-preset">원판 지름</label><div class="plate-inputs"><select id="plate-preset"><option value="450">450 mm · 표준 원판</option><option value="400">400 mm</option><option value="350">350 mm</option><option value="custom">직접 입력</option></select><input id="plate-mm" name="plate_mm" type="number" min="1" value="450" aria-label="원판 지름 mm" hidden></div></div><div class="field"><label class="label" for="load-kg">바 무게 (선택)</label><input id="load-kg" name="load_kg" type="number" min="0.1" step="0.1" placeholder="kg"></div><div class="field"><label class="label" for="height-cm">키 (선택)</label><input id="height-cm" name="height_cm" type="number" min="1" step="0.1" placeholder="cm" aria-describedby="height-note"><span class="label" id="height-note">넣으면 분절 길이를 보여 줍니다.</span></div></div><button class="primary" id="submit" type="submit" disabled>분석 시작</button></div><div class="submit-notice" aria-live="polite"><p class="error" id="upload-error" role="alert"></p><span id="sending" class="label" hidden>영상 업로드 중…</span></div></form></section>
+<section id="processing" hidden><div class="proc"><div class="card"><h2 id="job-state">영상 분석 중</h2><p class="sub">올린 영상에서 바와 자세를 따라 세트 기록을 만듭니다.</p><div class="scan" id="scan"><div class="scanbox"><video id="process-user" muted playsinline loop></video><div class="beam" aria-hidden="true"></div><span class="chip cap"><b></b>내 영상</span><span class="scan-note label" id="process-user-note" hidden>미리보기를 불러올 수 없습니다.</span></div><div class="scanbox refb" id="process-ref-box"><video id="process-ref" muted playsinline loop></video><div class="beam" aria-hidden="true"></div><span class="chip ref cap"><b></b>기준 영상</span><span class="scan-note label" id="process-ref-note" hidden>미리보기를 불러올 수 없습니다.</span></div></div><p class="quiet" id="job-elapsed"></p></div><div class="card progress-card"><div class="list-head"><h2>진행 단계</h2><span class="num" id="pct">0%</span></div><progress class="total-progress" id="total-progress" max="1" value="0" aria-label="전체 진행률"></progress><ol class="steps" id="stages"></ol><div class="failure-panel" id="failure-panel" hidden><p class="error" id="job-error" role="alert"></p><button class="primary" id="retry">다시 시도</button></div></div></div></section>
+</div>
+<script>const $=s=>document.querySelector(s);
+const EX={squat:"스쿼트",benchpress:"벤치프레스",deadlift:"데드리프트"};
+const STAGES={prepare:"영상 준비",plate_user:"원판 · 내 영상",plate_ref:"원판 · 기준 영상",pose:"포즈","3d":"3D",judge:"판정",report:"리포트"};
+const LIMIT=512*1024*1024;
+let sessions=[],refs=[],month=new Date(new Date().getFullYear(),new Date().getMonth(),1),selectedDay=null,pollTimer=null,currentJob=null,submitting=false;
+const files={user:null,ref:null},urls={user:null,ref:null},blobURLs={user:null,ref:null};
 async function api(path,options){const response=await fetch(path,options);const data=await response.json();if(!response.ok)throw Error(typeof data.detail==="string"?data.detail:"입력값을 확인해 주세요.");return data;}
-function show(id){["log","new","processing"].forEach(x=>$("#"+x).hidden=x!==id);window.scrollTo(0,0);}
-function dayKey(date){const d=new Date(date);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
-function displaySessions(items){const list=$("#sessions");list.replaceChildren();if(!items.length){const p=document.createElement("p");p.className="quiet";p.textContent="이 날짜에는 기록이 없습니다.";list.append(p);return;}
-items.forEach(s=>{const a=document.createElement("a");a.className="session-link";a.href=s.report_url;const title=document.createElement("b");title.textContent=`${dayKey(s.date)} · ${EX[s.exercise]} · ${s.reps}회`;const detail=document.createElement("span");detail.className="quiet";detail.textContent=`${s.has_ref?"기준 비교":"기록"} · 최고 속도 ${s.vmax==null?"—":s.vmax.toFixed(2)+" m/s"}`;a.append(title,detail);list.append(a);});}
-function renderHistory(){ $("#empty").hidden=sessions.length>0;$("#history").hidden=!sessions.length;$("#month-title").textContent=`${month.getFullYear()}년 ${month.getMonth()+1}월`;
-const calendar=$("#calendar");calendar.replaceChildren();["일","월","화","수","목","금","토"].forEach(s=>{const el=document.createElement("span");el.className="label";el.textContent=s;calendar.append(el);});
-for(let i=0;i<month.getDay();i++)calendar.append(document.createElement("span"));
-const last=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();for(let n=1;n<=last;n++){const date=new Date(month.getFullYear(),month.getMonth(),n),items=sessions.filter(s=>dayKey(s.date)===dayKey(date));const el=document.createElement("button");el.className="day-btn"+(items.length?" has":"");el.textContent=n;el.disabled=!items.length;el.title=items.length?`${items.length}개 세트`:"기록 없음";el.onclick=()=>{if(items.length===1)location.href=items[0].report_url;else {$("#list-title").textContent=dayKey(date)+" 기록";displaySessions(items);}};calendar.append(el);}displaySessions(sessions.filter(s=>{const d=new Date(s.date);return d.getFullYear()===month.getFullYear()&&d.getMonth()===month.getMonth();}));}
+function notice(text){$("#upload-error").textContent=text;}
+function show(id){
+  ["log","new","processing"].forEach(x=>$("#"+x).hidden=x!==id);
+  $("#nav-log").classList.toggle("on",id==="log");$("#nav-new").classList.toggle("on",id!=="log");
+  $("#nav-log").setAttribute("aria-current",id==="log"?"page":"false");$("#nav-new").setAttribute("aria-current",id!=="log"?"page":"false");
+  document.querySelectorAll("#processing video").forEach(v=>{if(id!=="processing")v.pause();});
+  window.scrollTo(0,0);
+}
+function dayKey(date){const d=new Date(date);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function monthSessions(){return sessions.filter(s=>{const d=new Date(s.date);return d.getFullYear()===month.getFullYear()&&d.getMonth()===month.getMonth();});}
+function element(tag,cls,text){const el=document.createElement(tag);if(cls)el.className=cls;if(text!=null)el.textContent=text;return el;}
+function summaryCard(label,value,unit,detail){const card=element("div","kpi");card.append(element("div","label",label));const v=element("div","v",value);v.append(element("span","unit",unit));card.append(v);if(detail)card.append(element("div","cmp",detail));return card;}
+function renderSummary(items){
+  const host=$("#month-summary");host.replaceChildren();
+  host.append(summaryCard("운동한 날",new Set(items.map(s=>dayKey(s.date))).size,"일"),summaryCard("세트",items.length,"세트",items.filter(s=>s.has_ref).length+"세트 · 기준 비교"),summaryCard("총 횟수",items.reduce((n,s)=>n+s.reps,0),"회"));
+  const maxima=element("div","kpi");maxima.append(element("div","label","종목별 최고 속도"));const grid=element("div","exercise-max");
+  for(const [ex,label]of Object.entries(EX)){const vals=items.filter(s=>s.exercise===ex&&Number.isFinite(s.vmax)).map(s=>s.vmax);const cell=element("div");cell.append(element("small","",label),element("span","num",vals.length?Math.max(...vals).toFixed(2):"—"),element("small","","m/s"));grid.append(cell);}
+  maxima.append(grid);host.append(maxima);
+}
+function displaySessions(items){
+  const list=$("#sessions");list.replaceChildren();if(!items.length){list.append(element("p","quiet","이 달에는 기록이 없습니다."));return;}
+  const ordered=[...items].sort((a,b)=>(dayKey(b.date)===selectedDay)-(dayKey(a.date)===selectedDay)||new Date(b.date)-new Date(a.date));
+  ordered.forEach(s=>{
+    const a=element("a","session-link"+(selectedDay===dayKey(s.date)?" selected":""));a.href=s.report_url;
+    const d=new Date(s.date),date=element("span","date",(d.getMonth()+1)+"."+String(d.getDate()).padStart(2,"0"));
+    date.append(element("small","",["일","월","화","수","목","금","토"][d.getDay()]));
+    const main=element("span");main.append(element("strong","",EX[s.exercise]),element("div","detail",s.reps+"회 · "+(s.has_ref?"기준 비교":"기록")));
+    const speed=element("span","speed",s.vmax==null?"—":s.vmax.toFixed(2));speed.append(element("small","","최고 m/s"));
+    a.append(date,main,speed,element("span","chev","›"));list.append(a);
+  });
+}
+function renderHistory(){
+  const items=monthSessions();$("#empty").hidden=sessions.length>0;$("#history").hidden=!sessions.length;
+  $("#month-title").textContent=month.getFullYear()+"년 "+(month.getMonth()+1)+"월";
+  renderSummary(items);$("#list-title").textContent=selectedDay?selectedDay+" 기록 먼저":"이 달의 기록";$("#all-days").hidden=!selectedDay;
+  const calendar=$("#calendar");calendar.replaceChildren();
+  ["월","화","수","목","금","토","일"].forEach(s=>calendar.append(element("span","label dow",s)));
+  for(let i=0;i<(month.getDay()+6)%7;i++)calendar.append(element("span","day-btn empty"));
+  const last=new Date(month.getFullYear(),month.getMonth()+1,0).getDate(),today=dayKey(new Date());
+  for(let n=1;n<=last;n++){
+    const key=dayKey(new Date(month.getFullYear(),month.getMonth(),n)),dayItems=items.filter(s=>dayKey(s.date)===key);
+    const el=element("button","day-btn"+(key===today?" today":"")+(key===selectedDay?" selected":""));
+    el.setAttribute("aria-label",key+" · "+dayItems.length+"세트");el.setAttribute("aria-pressed",String(key===selectedDay));el.append(element("span","dn",n));
+    [...new Set(dayItems.map(s=>s.exercise))].forEach(ex=>{const label=element("span","exercise-day"+(dayItems.some(s=>s.exercise===ex&&s.has_ref)?" cmp":""));const dot=element("i");dot.setAttribute("aria-hidden","true");label.append(dot,document.createTextNode(EX[ex]));el.append(label);});
+    if(dayItems.length)el.append(element("small","",dayItems.length+"세트"));
+    el.onclick=()=>{selectedDay=key;renderHistory();};calendar.append(el);
+  }
+  displaySessions(items);
+}
 async function openLog(){clearTimeout(pollTimer);currentJob=null;localStorage.removeItem("plate-job");sessions=await api("/api/sessions");show("log");renderHistory();}
-async function openNew(){refs=await api("/api/refs");const sel=$("#ref-id");sel.replaceChildren();refs.forEach(r=>{const o=document.createElement("option");o.value=r.id;o.textContent=r.name;sel.append(o);});$("#no-refs").hidden=refs.length>0;show("new");location.hash="new";}
-$("#ref-mode").onchange=()=>{$("#ref-upload").hidden=$("#ref-mode").value!=="upload";$("#ref-saved").hidden=$("#ref-mode").value!=="saved";};
-async function poll(id){try{const job=await api("/api/jobs/"+id);if(currentJob!==id)return;$("#job-state").textContent=job.status==="queued"?"대기열에서 기다리는 중":job.status==="failed"?"분석 실패":job.status==="completed"?"완료":"분석 중";
-const host=$("#stages");host.replaceChildren();let elapsed=0;for(const [key,label]of Object.entries(STAGES)){const s=job.stages[key];elapsed+=s.elapsed_s;const row=document.createElement("div");row.className="stage-row";const title=document.createElement("div");title.textContent=label;const note=document.createElement("span");note.className="label";note.textContent=`${Math.round(s.progress*100)}% · ${s.elapsed_s.toFixed(1)}초`+(s.cached||s.status==="cached"?" · 캐시 재사용":s.status==="skipped"?" · 해당 없음":s.processed!=null?` · ${s.processed}/${s.total}`:"");const bar=document.createElement("progress");bar.max=1;bar.value=s.progress;row.append(title,note,bar);host.append(row);}$("#job-elapsed").textContent=`처리 ${elapsed.toFixed(1)}초`;$("#job-error").textContent=job.error||"";$("#retry").hidden=job.status!=="failed";
-if(job.status==="completed"){localStorage.removeItem("plate-job");location.href=job.report_url;return;}if(job.status!=="failed")pollTimer=setTimeout(()=>poll(id),300);
-}catch(e){$("#job-error").textContent=e.message;$("#retry").hidden=false;}}
-$("#upload-form").onsubmit=async e=>{e.preventDefault();if(submitting)return;const mode=$("#ref-mode").value;if(mode==="upload"&&!$("#ref").files[0]){$("#upload-error").textContent="기준 영상을 선택해 주세요.";return;}if(mode==="saved"&&!$("#ref-id").value){$("#upload-error").textContent="저장된 기준 영상을 선택해 주세요.";return;}
-const form=new FormData(e.target);["load_kg","height_cm"].forEach(k=>{if(!form.get(k))form.delete(k);});if(mode==="upload")form.set("ref",$("#ref").files[0]);if(mode==="saved")form.set("ref_id",$("#ref-id").value);
-submitting=true;$("#submit").disabled=true;$("#sending").hidden=false;$("#upload-error").textContent="";
-try{const result=await api("/api/jobs",{method:"POST",body:form});currentJob=result.id;localStorage.setItem("plate-job",currentJob);show("processing");$("#retry").hidden=true;poll(currentJob);}catch(e){$("#upload-error").textContent=e.message;}finally{submitting=false;$("#submit").disabled=false;$("#sending").hidden=true;}};
-$("#retry").onclick=()=>{clearTimeout(pollTimer);show("new");$("#upload-error").textContent="입력과 영상 파일을 확인한 뒤 다시 분석해 주세요.";};
-$("#nav-log").onclick=()=>{location.hash="";openLog().catch(e=>$("#upload-error").textContent=e.message);};
-$("#nav-new").onclick=$("#empty-new").onclick=()=>openNew().catch(e=>$("#upload-error").textContent=e.message);
-$("#prev-month").onclick=()=>{month.setMonth(month.getMonth()-1);renderHistory();};$("#next-month").onclick=()=>{month.setMonth(month.getMonth()+1);renderHistory();};
-const savedJob=localStorage.getItem("plate-job");if(location.hash==="#new")openNew();else if(savedJob){currentJob=savedJob;show("processing");poll(savedJob);}else openLog().catch(e=>{$("#empty").hidden=false;$("#empty").textContent=e.message;});
+function updateSubmit(){$("#submit").disabled=submitting||!files.user||!$("#exercise").value;}
+function preview(role,source,name){
+  const video=$("#preview-"+role),meta=$("#"+role+"-meta"),note=$("#"+role+"-note");
+  urls[role]=source;meta.textContent="";note.hidden=true;$("#"+role+"-name").textContent=name||"";
+  if(role==="user"){video.hidden=!source;video.parentElement.querySelector(".meta").hidden=!source;$("#drop-user").classList.toggle("selected",!!source);}
+  else{$("#ref-preview-area").hidden=!source;$("#ref-upload").hidden=$("#ref-mode").value!=="upload"||!!source;$("#drop-ref").classList.toggle("selected",!!source);$(".change-file[data-role='ref']").hidden=$("#ref-mode").value!=="upload";}
+  video.pause();video.removeAttribute("src");
+  if(!source){video.load();return;}
+  video.onloadedmetadata=()=>{meta.textContent=video.videoWidth+"×"+video.videoHeight+" · "+video.duration.toFixed(1)+"초";video.play().catch(()=>{});};
+  video.onerror=()=>{note.hidden=false;note.textContent="브라우저에서 미리보기를 열 수 없습니다. 분석을 시도할 수 있습니다.";};
+  video.src=source;video.load();
+}
+function takeFile(role,file){
+  if(!file)return;
+  if(file.size>LIMIT){notice((role==="user"?"내 영상":"기준 영상")+"은 512 MiB까지 올릴 수 있습니다.");return;}
+  if(!file.size){notice("빈 파일입니다. 영상 파일을 선택해 주세요.");return;}
+  if(blobURLs[role])URL.revokeObjectURL(blobURLs[role]);
+  files[role]=file;blobURLs[role]=URL.createObjectURL(file);
+  notice("");if(role==="ref")$("#ref-mode").value="upload";
+  if(role==="ref")setRefMode("upload");else preview(role,blobURLs[role],file.name);
+  updateSubmit();
+}
+function savedPreview(){
+  const id=$("#ref-id").value,ref=refs.find(r=>r.id===id),entry=sessions.find(s=>s.ref_id===id&&s.has_ref);
+  if(!ref){preview("ref",null,"");return;}
+  if(entry){preview("ref",entry.report_url.replace(/\/$/,"")+"/ref.mp4",ref.name);}
+  else{preview("ref",null,"");$("#ref-note").hidden=false;$("#ref-note").textContent="이 기준의 완료된 비교 기록이 없어 미리보기를 표시할 수 없습니다.";$("#ref-preview-area").hidden=false;$("#preview-ref").hidden=true;$("#ref-name").textContent=ref.name;}
+}
+function setRefMode(mode){
+  $("#ref-mode").value=mode;document.querySelectorAll("[data-mode]").forEach(b=>{b.classList.toggle("on",b.dataset.mode===mode);b.setAttribute("aria-pressed",String(b.dataset.mode===mode));});
+  $("#ref-saved").hidden=mode!=="saved";$("#ref-none").hidden=mode!=="none";$("#preview-ref").hidden=false;
+  if(mode==="saved")savedPreview();else if(mode==="upload")preview("ref",blobURLs.ref,files.ref?.name);else preview("ref",null,"");
+  $("#ref-upload").hidden=mode!=="upload"||!!urls.ref;
+}
+async function openNew(){
+  [refs,sessions]=await Promise.all([api("/api/refs"),api("/api/sessions")]);
+  const select=$("#ref-id"),previous=select.value;select.replaceChildren();refs.forEach(r=>{const option=element("option","",r.name);option.value=r.id;select.append(option);});
+  if(refs.some(r=>r.id===previous))select.value=previous;
+  $("#no-refs").hidden=!!refs.length;setRefMode($("#ref-mode").value);show("new");location.hash="new";updateSubmit();
+}
+function picker(host,role){
+  const node=$(host);
+  node.addEventListener("click",e=>{if(e.target.closest("video,button,select,input"))return;$("#"+role).click();});
+  node.addEventListener("keydown",e=>{if(e.target!==node)return;if(e.key==="Enter"||e.key===" "){e.preventDefault();$("#"+role).click();}});
+  node.addEventListener("dragover",e=>{e.preventDefault();node.classList.add("over");});
+  node.addEventListener("dragleave",()=>node.classList.remove("over"));
+  node.addEventListener("drop",e=>{e.preventDefault();node.classList.remove("over");takeFile(role,e.dataTransfer.files[0]);});
+}
+picker("#drop-user","user");picker("#ref-upload","ref");
+$("#drop-ref").addEventListener("dragover",e=>{if($("#ref-mode").value==="upload"){e.preventDefault();$("#drop-ref").classList.add("over");}});
+$("#drop-ref").addEventListener("dragleave",()=>$("#drop-ref").classList.remove("over"));
+$("#drop-ref").addEventListener("drop",e=>{e.preventDefault();$("#drop-ref").classList.remove("over");if($("#ref-mode").value==="upload"&&!e.target.closest("#ref-upload"))takeFile("ref",e.dataTransfer.files[0]);});
+["user","ref"].forEach(role=>$("#"+role).onchange=()=>takeFile(role,$("#"+role).files[0]));
+document.querySelectorAll(".change-file").forEach(b=>b.onclick=()=>$("#"+b.dataset.role).click());
+document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>setRefMode(b.dataset.mode));
+$("#ref-id").onchange=savedPreview;$("#ref-mode").onchange=()=>setRefMode($("#ref-mode").value);
+document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#exercise").value=b.dataset.ex;document.querySelectorAll("[data-ex]").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",String(x===b));});updateSubmit();});
+$("#plate-preset").onchange=()=>{const custom=$("#plate-preset").value==="custom";$("#plate-mm").hidden=!custom;if(!custom)$("#plate-mm").value=$("#plate-preset").value;else $("#plate-mm").focus();};
+function processingPreviews(){
+  const withRef=$("#ref-mode").value!=="none";$("#process-ref-box").hidden=!withRef;$("#scan").classList.toggle("single",!withRef);
+  ["user","ref"].forEach(role=>{const v=$("#process-"+role);v.pause();v.removeAttribute("src");const source=urls[role];$("#process-"+role+"-note").hidden=!!source;v.onerror=()=>$("#process-"+role+"-note").hidden=false;if(source&&(role==="user"||withRef)){v.src=source;v.play().catch(()=>{});}else v.load();});
+}
+function renderProgress(job){
+  $("#job-state").textContent=job.status==="queued"?"대기열에서 기다리는 중":job.status==="failed"?"분석을 마치지 못했습니다":job.status==="completed"?"분석 완료":"영상 분석 중";
+  $("#pct").textContent=Math.round(job.progress*100)+"%";$("#total-progress").value=job.progress;
+  const host=$("#stages");host.replaceChildren();let elapsed=0;
+  for(const [key,label] of Object.entries(STAGES)){
+    const s=job.stages[key];elapsed+=s.elapsed_s;const done=["completed","cached","skipped"].includes(s.status),row=element("li",done?"done":s.status==="running"?"run":"");
+    const dot=element("span","dot");dot.setAttribute("aria-hidden","true");
+    const content=element("div"),title=element("div","t",label),detail=element("div","d",s.status==="skipped"?"해당 없음":s.cached||s.status==="cached"?"저장된 기준 재사용":s.processed!=null?s.processed+"/"+s.total+" 프레임":"");
+    const bar=element("progress","frame-progress");bar.max=1;bar.value=s.progress;bar.setAttribute("aria-label",label+" 진행률");content.append(title,detail,bar);
+    row.append(dot,content,element("span","ms",Math.round(s.progress*100)+"% · "+s.elapsed_s.toFixed(1)+"초"));host.append(row);
+  }
+  $("#job-elapsed").textContent="처리 "+elapsed.toFixed(1)+"초";$("#job-error").textContent=job.error||"";$("#failure-panel").hidden=job.status!=="failed";$("#processing .proc").classList.toggle("failed",job.status==="failed");
+  if(job.status==="failed")document.querySelectorAll("#processing video").forEach(v=>v.pause());
+}
+async function poll(id){
+  try{const job=await api("/api/jobs/"+id);if(currentJob!==id)return;renderProgress(job);
+    if(job.status==="completed"){localStorage.removeItem("plate-job");location.href=job.report_url;return;}
+    if(job.status!=="failed")pollTimer=setTimeout(()=>poll(id),300);
+  }catch(e){$("#job-error").textContent=e.message;$("#failure-panel").hidden=false;}
+}
+$("#upload-form").onsubmit=async e=>{
+  e.preventDefault();if(submitting||!files.user||!$("#exercise").value)return;
+  const mode=$("#ref-mode").value;if(mode==="upload"&&!files.ref){notice("기준 영상을 고르거나 ‘없이 기록만’을 선택해 주세요.");return;}
+  if(mode==="saved"&&!$("#ref-id").value){notice("저장된 기준 영상을 선택해 주세요.");return;}
+  if([files.user,mode==="upload"?files.ref:null].filter(Boolean).some(f=>f.size>LIMIT)){notice("영상 하나는 512 MiB까지 올릴 수 있습니다.");return;}
+  const form=new FormData(e.target);form.set("user",files.user);
+  ["load_kg","height_cm"].forEach(k=>{if(!form.get(k))form.delete(k);});
+  if(mode==="upload")form.set("ref",files.ref);if(mode==="saved")form.set("ref_id",$("#ref-id").value);
+  submitting=true;updateSubmit();$("#sending").hidden=false;notice("");
+  try{const result=await api("/api/jobs",{method:"POST",body:form});currentJob=result.id;localStorage.setItem("plate-job",currentJob);$("#stages").replaceChildren();$("#pct").textContent="0%";$("#total-progress").value=0;$("#failure-panel").hidden=true;$("#processing .proc").classList.remove("failed");show("processing");processingPreviews();poll(currentJob);}
+  catch(e){notice(e.message);}finally{submitting=false;updateSubmit();$("#sending").hidden=true;}
+};
+$("#retry").onclick=()=>{clearTimeout(pollTimer);show("new");notice("입력과 영상 파일을 확인한 뒤 다시 분석해 주세요.");};
+$("#nav-log").onclick=()=>{location.hash="";openLog().catch(e=>notice(e.message));};
+$("#nav-new").onclick=$("#empty-new").onclick=$("#log-new").onclick=()=>openNew().catch(e=>notice(e.message));
+$("#prev-month").onclick=()=>{month.setMonth(month.getMonth()-1);selectedDay=null;renderHistory();};
+$("#next-month").onclick=()=>{month.setMonth(month.getMonth()+1);selectedDay=null;renderHistory();};
+$("#today-month").onclick=()=>{month=new Date(new Date().getFullYear(),new Date().getMonth(),1);selectedDay=null;renderHistory();};
+$("#all-days").onclick=()=>{selectedDay=null;renderHistory();};
+window.addEventListener("beforeunload",()=>Object.values(blobURLs).filter(Boolean).forEach(URL.revokeObjectURL));
+const savedJob=localStorage.getItem("plate-job");
+if(location.hash==="#new")openNew().catch(e=>notice(e.message));
+else if(savedJob){currentJob=savedJob;show("processing");processingPreviews();poll(savedJob);}
+else openLog().catch(e=>{$("#empty").hidden=false;$("#empty").textContent=e.message;});
 </script></body></html>

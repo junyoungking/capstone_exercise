@@ -1,0 +1,7 @@
+{
+  "changed_product_files": [
+    "plate_pipeline/server/web/app.html",
+    "plate_pipeline/server/web/template3.html"
+  ],
+  "api_analysis_storage_unchanged": true
+}
