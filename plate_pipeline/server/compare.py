@@ -20,7 +20,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from core.config import DEFAULT
-from core.geometry import plate_geometry, standing_frames, stature, retake_warning
+from core.geometry import (plate_geometry, standing_frames, stature, retake_warning,
+    box_angle_reliable, implied_plate_diameter, plate_suggestion)
 from core.geometry.pose3d import (load_model, selected_coco, lift, smooth, fixed_bones,
     body_basis, scale_floor, to_mp33, segments_cm, MP_FROM_H36M)
 from core.signal.height import corrected_height_signal
@@ -84,7 +85,7 @@ def aligned_3d(pose, rows, result, model, target_height_cm, native=None):
     return raw,stand,final,actual_height,reason is None,warnings
 
 
-def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, scaled, scale_source="box", position_source="box"):
+def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, scaled, scale_source="box", position_source="box", is_reference=False, reuse_video=None):
     t = np.asarray([r['t'] for r in rows])
     fps,w,h = pose['fps'],pose['w'],pose['h']
     ex = result['exercise']
@@ -94,7 +95,7 @@ def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, sca
     trips = [r for s in sets for r in s.reps]
     vals = all_rep_values(fr.sig,fr.raw_t,trips,REST[ex],DEFAULT.speed)
     good = [(trip,v) for trip,v in zip(trips,vals) if all(getattr(v,k) is not None for k in ('start','far_in','far_out','back','down','up'))]
-    if not good:
+    if not good and reuse_video is None:
         raise ValueError('완료 rep이 없습니다: '+result['video'])
     reps = []
     for _,v in good:
@@ -107,21 +108,29 @@ def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, sca
                          pause=round(v.far_pause or 0,2),up=round(v.up,2)))
     heights = np.interp(t,fr.sig.t,fr.sig.y)*100
     knots = sorted((r[k],float(np.interp(r[k],t,heights))) for r in reps for k in ('start','back'))
-    baseline = np.interp(t,[x[0] for x in knots],[x[1] for x in knots])
+    baseline = np.interp(t,[x[0] for x in knots],[x[1] for x in knots]) if knots else np.full_like(heights,heights[0])
     depth = np.maximum(0,(heights-baseline) if REST[ex]=='bottom' else (baseline-heights))
     boxes = np.array([r['plate']['box'] if r.get('plate',{}).get('used') else [np.nan]*4 for r in rows])
-    g = plate_geometry(boxes,(w,h),diameter,ellipses=[r.get("plate",{}).get("ellipse") for r in rows])
+    g = plate_geometry(boxes,(w,h),diameter)
+    ellipse_g = plate_geometry(boxes,(w,h),diameter,ellipses=[r.get("plate",{}).get("ellipse") for r in rows])
+    reliable = box_angle_reliable(boxes,(w,h))
     measured_height,_ = stature(raw,g,stand)
     geo = dict(cam_angle=g['angle_deg'],box_ratio=g['ratio'],dist_m=float(np.median(g['distance_m'])),
                kd=float(np.median(g['kd'])),focal_px=g['focal_px'],cm_per_px=float(np.median(g['plate_m_per_px']))*100,
-               stature_cm=height_cm,angle_source=g["angle_source"],ellipse_stats=dict(count=g["ellipse_count"],
-               fraction=g["ellipse_used_fraction"],major_px=g["ellipse_major_px"],minor_px=g["ellipse_minor_px"],tilt_deg=g["ellipse_tilt_deg"]),
-               retake_warn=retake_warning(g["angle_deg"]))
-    seg = segments_cm(frames) if scaled else {}
+               stature_cm=height_cm,angle_source="box",angle_reliable=reliable,ellipse_stats=dict(count=ellipse_g["ellipse_count"],
+               fraction=ellipse_g["ellipse_used_fraction"],major_px=ellipse_g["ellipse_major_px"],minor_px=ellipse_g["ellipse_minor_px"],tilt_deg=ellipse_g["ellipse_tilt_deg"]),
+               retake_warn=reliable and retake_warning(g["angle_deg"]))
+    seg = segments_cm(frames) if scaled and reuse_video is None else {}
     for dst,src in (('thigh_cm','thigh'),('shin_cm','shin'),('torso_cm','torso'),('upper_cm','upper_arm'),('fore_cm','forearm')):
-        geo[dst] = seg.get(src)
+        geo[dst] = reuse_video["geo"].get(dst) if reuse_video is not None else seg.get(src)
+    basis = "input_height" if height_cm is not None and not is_reference else "prior_170"
+    assumed_height = height_cm if basis == "input_height" else 170.
+    implied = implied_plate_diameter(raw,boxes,(w,h),stand,assumed_height,reliable)
+    bounds = [implied_plate_diameter(raw,boxes,(w,h),stand,x,reliable) for x in (160.,180.)]
     checks = dict(stature_plate_cm=None if measured_height is None else measured_height*100,
-                  warn=bool(height_cm is not None and measured_height is not None and abs(measured_height*100-height_cm)/height_cm>.15))
+                  warn=bool(height_cm is not None and not is_reference and measured_height is not None and abs(measured_height*100-height_cm)/height_cm>.15),
+                  plate_mm_implied=implied,plate_mm_range=bounds,plate_mm_basis=basis,
+                  plate_suggest=plate_suggestion(implied,diameter))
     plate = [[round(p['center'][0],1),round(p['center'][1],1),round(sum(p['size_px'])/4,1)] if (p:=r.get('plate',{})).get('used') else None for r in rows]
     # Smoothed selected-lifter 2D; visibility comes from the original observations.
     kp = np.asarray(pose['lms'],float).copy()
@@ -145,9 +154,12 @@ def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, sca
     y0,y1 = min(y0,good_boxes[:,1].min()),max(y1,good_boxes[:,3].max())
     padx,pady = .1*(x1-x0),.06*(y1-y0)
     crop = [int(np.floor(x0-padx)),int(np.floor(y0-pady)),int(np.ceil(x1+padx)),int(np.ceil(y1+pady))]
-    mp = to_mp33(frames)
     names = list(MP_FROM_H36M)
-    j3 = [q[names].tolist() if np.isfinite(q[names]).all() else None for q in mp]
+    if reuse_video is None:
+        mp = to_mp33(frames)
+        j3 = [q[names].tolist() if np.isfinite(q[names]).all() else None for q in mp]
+    else:
+        names = reuse_video["j3names"]; j3 = reuse_video["j3"]
     data = dict(fps=fps,width=w,height=h,duration=len(t)/fps,t=t.tolist(),plate=plate,
                 depth=np.round(depth,1).tolist(),reps=reps,plate_used=100*sum(p is not None for p in plate)/len(plate),
                 crop=crop,geo=geo,geo_check=checks,j2=J2,kp2=kp2,j3names=names,j3=j3,clips=[],
@@ -266,7 +278,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
         else: native,_,_=lift(vp3d,selected_coco(pose),pose['w'],pose['h'])
         np.save(dest/'native.npy',native)
         raw,stand,frames,actual,scaled,warnings=aligned_3d(pose,o['rows'],o['result'],vp3d,ref_height,native=native)
-        b[role],trips,vals=build_video(o['rows'],o['result'],pose,frames,raw,stand,plate_mm,height_cm,scaled and height_cm is not None,scale_source,position_source)
+        b[role],trips,vals=build_video(o['rows'],o['result'],pose,frames,raw,stand,plate_mm,height_cm,scaled and height_cm is not None,scale_source,position_source,is_reference=(role=='ref'))
         b[role]['pose3d_warnings']=warnings;b[role]['pose3d_height_cm']=actual
         if role=='user': ref_height=height_cm if height_cm is not None else actual
         stats[role]=(trips,vals,summarize(o['result']['exercise'],o['result']['fps'],trips,vals))
@@ -277,15 +289,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
             publish(Path(ref_cache)/key,dest,out/'ref.mp4',provenance)
         emit('3d',(index+1)/len(roles),processed=index+1,total=len(roles),ref_cached=hit)
     emit('judge',0)
-    ex='bench' if exercise=='benchpress' else exercise
-    b['sentences']=[dict(kind=s.kind,text=s.text,key=s.key,shown=s.shown) for s in render(run_compare(stats['user'][2],stats['ref'][2] if ref is not None else None),ex)]
-    b['set_median']={role:{key:round(median,5) for key,attr in (('down','down'),('pause','far_pause'),('up','up'))
-        if np.isfinite(median:=float(np.median([getattr(v,attr) or 0 for v in stats[role][1]])))} for role in roles}
-    vs=[r['v'] for r in b['user']['reps']];valid_speeds=[v for v in vs if v is not None]
-    b['v_loss']=round(100*(max(valid_speeds)-vs[-1])/max(valid_speeds),1) if valid_speeds and max(valid_speeds)>0 and vs[-1] is not None else None
-    b['summary']=summary_sentence(ex,len(vs),vs,b['v_loss']).text
-    b['findings'],b['angle_judgments']=calculate(b,posture_cards=posture_cards)
-    b['kpi']=b['angle_judgments']['FAR']['knee']
+    finalize_bundle(b,stats)
     b['ref_cache']=dict(hit=hit,**provenance)
     emit('judge',1)
     emit('report',0)
@@ -299,6 +303,21 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     b['timing']['stages']=dict(stages);b['timing']['total_s']=time.perf_counter()-started
     (out/'result_v3.json').write_text(json.dumps(b,ensure_ascii=False,allow_nan=False,separators=(',',':')))
     write_report(b,out)
+    return b
+
+
+def finalize_bundle(b, stats):
+    exercise=b['exercise']; posture_cards=b.get('posture_cards',False); ref=b.get('ref')
+    roles=list(stats)
+    ex='bench' if exercise=='benchpress' else exercise
+    b['sentences']=[dict(kind=s.kind,text=s.text,key=s.key,shown=s.shown) for s in render(run_compare(stats['user'][2],stats['ref'][2] if ref is not None else None),ex)]
+    b['set_median']={role:{key:round(median,5) for key,attr in (('down','down'),('pause','far_pause'),('up','up'))
+        if stats[role][1] and np.isfinite(median:=float(np.median([getattr(v,attr) or 0 for v in stats[role][1]])))} for role in roles}
+    vs=[r['v'] for r in b['user']['reps']];valid_speeds=[v for v in vs if v is not None]
+    b['v_loss']=round(100*(max(valid_speeds)-vs[-1])/max(valid_speeds),1) if valid_speeds and max(valid_speeds)>0 and vs[-1] is not None else None
+    b['summary']=summary_sentence(ex,len(vs),vs,b['v_loss']).text
+    b['findings'],b['angle_judgments']=calculate(b,posture_cards=posture_cards)
+    b['kpi']=b['angle_judgments']['FAR']['knee']
     return b
 
 

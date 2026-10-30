@@ -12,15 +12,22 @@ import shutil
 import sqlite3
 import threading
 import time
+import tempfile
 import uuid
 
 from fastapi import FastAPI,File,Form,HTTPException,Request,UploadFile
 from fastapi.responses import FileResponse,HTMLResponse,JSONResponse,RedirectResponse
+from pydantic import BaseModel, Field
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 STAGES=('prepare','plate_user','plate_ref','pose','3d','judge','report')
 LIMIT=512*1024*1024
 WEB=Path(__file__).parent/'web'
+
+
+class RescaleInput(BaseModel):
+    plate_mm_user: float | None = Field(default=None, gt=0, le=1000, allow_inf_nan=False)
+    plate_mm_ref: float | None = Field(default=None, gt=0, le=1000, allow_inf_nan=False)
 
 
 class BodyLimit:
@@ -160,6 +167,7 @@ def create_app(data_dir=None,pipeline=None,posture_cards=False,upload_limit=LIMI
         await asyncio.to_thread(worker.close)
     app=FastAPI(lifespan=lifespan,docs_url=None,redoc_url=None)
     app.state.store=store;app.state.worker=worker
+    rescale_lock=threading.RLock()
     app.add_middleware(BodyLimit,limit=2*upload_limit+1024*1024)
     app.add_middleware(TrustedHostMiddleware,allowed_hosts=['127.0.0.1','localhost','testserver'])
     @app.middleware('http')
@@ -181,6 +189,35 @@ def create_app(data_dir=None,pipeline=None,posture_cards=False,upload_limit=LIMI
     def sessions():return store.all('sessions')
     @app.get('/api/refs')
     def refs():return [{k:v for k,v in r.items() if k!='path'} for r in store.all('refs')]
+    @app.post('/api/sessions/{id}/rescale')
+    def rescale(id:str, values:RescaleInput):
+        started=time.perf_counter()
+        if values.plate_mm_user is None and values.plate_mm_ref is None:
+            raise HTTPException(422,'바꿀 원판 지름을 입력해 주세요.')
+        from server.rescale import rescale_bundle
+        from server.compare import write_report
+        with rescale_lock:
+            session=store.get('sessions',id)
+            if session is None:raise HTTPException(404,'기록을 찾을 수 없습니다.')
+            dest=store.root/'sessions'/id;result=dest/'result_v3.json';report=dest/'report.html'
+            try:
+                old=json.loads(result.read_text())
+                fresh=rescale_bundle(dest,old,values.plate_mm_user,values.plate_mm_ref)
+                with tempfile.TemporaryDirectory(prefix='.rescale-',dir=dest) as tmp:
+                    tmp=Path(tmp)
+                    (tmp/'result_v3.json').write_text(json.dumps(fresh,ensure_ascii=False,allow_nan=False,separators=(',',':')))
+                    write_report(fresh,tmp)
+                    archive=dest/'history'/uuid.uuid4().hex;archive.mkdir(parents=True)
+                    shutil.copy2(result,archive/'result_v3.json');shutil.copy2(report,archive/'report.html')
+                    os.replace(tmp/'result_v3.json',result);os.replace(tmp/'report.html',report)
+                speeds=[r['v'] for r in fresh['user']['reps'] if r['v'] is not None]
+                session.update(reps=len(fresh['user']['reps']),vmax=max(speeds) if speeds else None)
+                store.put('sessions',id,session)
+                return {'id':id,'report_url':f'/sessions/{id}/','elapsed_s':time.perf_counter()-started,
+                        'compute_s':fresh['timing']['rescale_s'],
+                        'reps':session['reps'],'version':archive.name}
+            except ValueError as exc:raise HTTPException(422,str(exc)) from exc
+            except FileNotFoundError as exc:raise HTTPException(409,'저장된 분석 자료가 없어 다시 계산할 수 없습니다.') from exc
     @app.get('/api/jobs/{id}')
     def job_status(id):
         result=worker.status(id)

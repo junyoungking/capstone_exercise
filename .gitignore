@@ -68,3 +68,6 @@ plate_pipeline/models/
 plate_pipeline/eval_out/
 plate_pipeline/train/plate/work/
 plate_pipeline/out/
+
+# Do not commit generated archives in results.
+plate_pipeline/results/**/*.zip
