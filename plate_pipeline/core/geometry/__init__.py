@@ -3,7 +3,11 @@ import numpy as np
 from core.config import DEFAULT
 
 
-def plate_geometry(boxes, image_size, diameter_mm=450., cfg=None):
+def retake_warning(angle_deg):
+    return bool(angle_deg > 60.)
+
+
+def plate_geometry(boxes, image_size, diameter_mm=450., cfg=None, ellipses=None):
     cfg = cfg or DEFAULT.geometry
     if diameter_mm <= 0:
         raise ValueError('Plate diameter must be positive')
@@ -16,11 +20,22 @@ def plate_geometry(boxes, image_size, diameter_mm=450., cfg=None):
     angle = float(np.arccos(np.clip(ratio, 0, 1)))
     focal = cfg.focal_long_side * max(image_size)
     h = np.interp(np.arange(len(boxes)), np.flatnonzero(good), heights[good])
+    ellipse_valid = [(i,e) for i,e in enumerate(ellipses or []) if e and e.get("source") == "ellipse"]
+    source = "ellipse" if ellipse_valid else "box"
+    if ellipse_valid:
+        ratios = [e.get("smooth_minor",e["minor"])/e.get("smooth_major",e["major"]) for _,e in ellipse_valid]
+        ratio = float(np.median(ratios))
+        angle = float(np.arccos(np.clip(ratio,0,1)))
+        for i,e in ellipse_valid: h[i] = e.get("smooth_major",e["major"])
     distance = focal * (diameter_mm/1000) / h
     kd = (distance + cfg.bar_depth_m*np.cos(angle)) / distance
     return dict(angle_deg=float(np.degrees(angle)), ratio=ratio, focal_px=focal,
                 distance_m=distance, kd=kd, plate_m_per_px=(diameter_mm/1000)/h,
-                lifter_m_per_px=(diameter_mm/1000)/h*kd, observed=good)
+                lifter_m_per_px=(diameter_mm/1000)/h*kd, observed=good, angle_source=source,
+                ellipse_count=len(ellipse_valid), ellipse_used_fraction=len(ellipse_valid)/int(good.sum()),
+                ellipse_major_px=float(np.median([e.get("smooth_major",e["major"]) for _,e in ellipse_valid])) if ellipse_valid else None,
+                ellipse_minor_px=float(np.median([e.get("smooth_minor",e["minor"]) for _,e in ellipse_valid])) if ellipse_valid else None,
+                ellipse_tilt_deg=float(np.degrees(.5*np.arctan2(np.median([np.sin(2*e.get("smooth_angle",e["angle"])) for _,e in ellipse_valid]),np.median([np.cos(2*e.get("smooth_angle",e["angle"])) for _,e in ellipse_valid])))) if ellipse_valid else None)
 
 
 def angle(a,b,c):
