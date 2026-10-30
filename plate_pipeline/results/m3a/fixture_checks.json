@@ -1,0 +1,9 @@
+{
+  "cards_exact_fields": true,
+  "extra_exact_fields": true,
+  "outliers_exact": true,
+  "per_rep_angles_exact": true,
+  "pos_times_exact": true,
+  "max_score_error": 4.117388803104305e-05,
+  "tolerance": 0.001
+}

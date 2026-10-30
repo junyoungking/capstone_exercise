@@ -1,0 +1,78 @@
+[
+  {
+    "command": "python -m server.compare --user /home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/squat/stu8_67.mp4 --ref /home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/squat/stu10_70.mp4 --exercise squat --out eval_out/m3a/squat --height-cm 175.0",
+    "exercise": "squat",
+    "user": "plate_pipeline/data/team/test9/squat/stu8_67.mp4",
+    "ref": "plate_pipeline/data/team/test9/squat/stu10_70.mp4",
+    "inputs": {
+      "plate_mm": 450.0,
+      "load_kg": null,
+      "height_cm": 175.0
+    },
+    "reps": {
+      "user": 3,
+      "ref": 5
+    },
+    "timing": {
+      "user": 19.00756856099906,
+      "ref": 32.76831248900271,
+      "total_s": 52.627016833997914,
+      "threads": 6
+    },
+    "sha256": {
+      "user": "ce3af66d536ac949c85b4d8f1cc3bd7a347179840ef8aead67d4141c7a90043d",
+      "ref": "1fe19fa4af085a400a611adf3073b3142720839815afccfe3f2aa9f5bd1f814f"
+    }
+  },
+  {
+    "command": "python -m server.compare --user /home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu7_12_2.mp4 --ref /home/kojy1009/capstone_exercise/new_data/new_dataset/benchpress/stu8_6_2.mp4 --exercise benchpress --out eval_out/m3a/benchpress",
+    "exercise": "benchpress",
+    "user": "new_data/new_dataset/benchpress/stu7_12_2.mp4",
+    "ref": "new_data/new_dataset/benchpress/stu8_6_2.mp4",
+    "inputs": {
+      "plate_mm": 450.0,
+      "load_kg": null,
+      "height_cm": null
+    },
+    "reps": {
+      "user": 5,
+      "ref": 3
+    },
+    "timing": {
+      "user": 26.006589846998395,
+      "ref": 33.16615968399856,
+      "total_s": 60.004483373995754,
+      "threads": 6,
+      "scope": "preparation, model loading, inference, analysis and judgments; excludes JSON/HTML serialization"
+    },
+    "sha256": {
+      "user": "72249036d9971129fa83f71797ff26b66ba4ed67613ce583735a6af86668c702",
+      "ref": "b950bd290eca968154aea0f2824df4695ef4131a10b3d46d0d047465ecf9c010"
+    }
+  },
+  {
+    "command": "python -m server.compare --user /home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/deadlift/deadlift_08.mp4 --ref /home/kojy1009/capstone_exercise/plate_pipeline/data/team/test9/deadlift/stu7_1_1.mp4 --exercise deadlift --out eval_out/m3a/deadlift --height-cm 175.0",
+    "exercise": "deadlift",
+    "user": "plate_pipeline/data/team/test9/deadlift/deadlift_08.mp4",
+    "ref": "plate_pipeline/data/team/test9/deadlift/stu7_1_1.mp4",
+    "inputs": {
+      "plate_mm": 450.0,
+      "load_kg": null,
+      "height_cm": 175.0
+    },
+    "reps": {
+      "user": 3,
+      "ref": 5
+    },
+    "timing": {
+      "user": 19.38909423599398,
+      "ref": 28.23078964099841,
+      "total_s": 49.85928281299857,
+      "threads": 6
+    },
+    "sha256": {
+      "user": "98c06221b677e9cb5e1b294aa84d1c8e80ac42916a4ed35853a8bfb898b281fe",
+      "ref": "08676f1c364a858aa5beee7ae552d0ff5887f277deb5b3337421adfa074f7f34"
+    }
+  }
+]
