@@ -68,3 +68,6 @@ plate_pipeline/models/
 plate_pipeline/eval_out/
 plate_pipeline/train/plate/work/
 plate_pipeline/out/
+
+# stage packages are kept outside the repo (REPORT.md and small JSON stay)
+plate_pipeline/results/**/*.zip
