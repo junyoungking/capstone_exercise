@@ -751,3 +751,14 @@ M1b는 `--pose-mode tracked --pose-det-frequency 3|5|10`으로 검출 사이에
 RTMPose-m을 조합한다. 매 프레임 포즈는 유지한다. 벤치 rep guard와 손가락
 미지원 정책, 비교 결과는 [eval/M1B_NOTES.md](eval/M1B_NOTES.md)와
 [results/m1b-pose-speed/REPORT.md](results/m1b-pose-speed/REPORT.md)를 참조한다.
+
+### M2: selected-lifter 3D and plate geometry
+
+Default pose is `tracked`, detector interval 10, bench rep guard off. Optional
+`run_demo.py --segment plate --pose3d-checkpoint PATH` writes diagnostic
+`pose3d_user.json` / `pose3d_ref.json`; the 3D angles do not enter judgments.
+See [M2 notes](eval/M2_NOTES.md) for assumptions, mappings and evaluation.
+VideoPose3D (including its pretrained weights) is licensed **CC BY-NC 4.0**:
+[upstream](https://github.com/facebookresearch/VideoPose3D),
+[vendor license](../track3d/vendor/videopose3d/LICENSE). Keep the checkpoint
+outside git. Missing standing observations and ambiguous heading are recorded.
