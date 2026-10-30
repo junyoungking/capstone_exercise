@@ -1,0 +1,53 @@
+[
+  {
+    "exercise": "squat",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "errors": [],
+    "network_requests": [],
+    "diameter_ratio": 0.8,
+    "plate_values_scale": true,
+    "geo_and_3d_unchanged": true,
+    "captures": [
+      "squat_top.png",
+      "squat_cards.png",
+      "squat_pose.png"
+    ]
+  },
+  {
+    "exercise": "benchpress",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "errors": [],
+    "network_requests": [],
+    "diameter_ratio": 0.8,
+    "plate_values_scale": true,
+    "geo_and_3d_unchanged": true,
+    "captures": [
+      "benchpress_top.png",
+      "benchpress_cards.png",
+      "benchpress_pose.png"
+    ]
+  },
+  {
+    "exercise": "deadlift",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "errors": [],
+    "network_requests": [],
+    "diameter_ratio": 0.8,
+    "plate_values_scale": true,
+    "geo_and_3d_unchanged": true,
+    "captures": [
+      "deadlift_top.png",
+      "deadlift_cards.png",
+      "deadlift_pose.png"
+    ]
+  }
+]
