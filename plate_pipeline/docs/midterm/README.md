@@ -42,3 +42,10 @@
   - 원판을 잡을 때 squat_03과 squat_04는 첫 프레임에 앞쪽 원판 상자를 손으로 지정했다. 검출기만 쓰면 반대편 원판을 잡거나 바닥에서 흔들렸다.
 - `squat_compare_demo.html`: 첫 버전 (stu10_70 대 공개 표본).
 - `src/`: 만든 스크립트 (`prep3.py` 번들, `pose_all.py` 포즈, `template3.html` 페이지 (v3), `figs.py` 그림). 경로는 작업 세션 기준이다.
+
+## M3 기준 자료 (2026-10-30)
+- `src/bundle3.json.gz`: 데모 v3에 들어간 번들 (내 세트 6 rep, 기준 stu10_70 5 rep). 영상은 들어 있지 않다.
+- `src/findings_v3_expected.json`: v3 페이지 JS(`template3.html`의 FINDINGS, OUTLIERS)가 이 번들로 낸 결과.
+  - 카드 4개: ① 바닥 무릎 모든 rep, ② 내리는 시간 rep 1·2·4·6, ③ 상승 중간 상체 rep 1·2·5, ④ 속도 저하 rep 6.
+  - 그 밖에 2개, 튀는 rep 1개, 포지션 시각, rep별 관절각.
+  - M3에서 판정·북마크를 파이프라인(Python)으로 옮길 때 같은 입력에서 같은 결과가 나와야 한다.
