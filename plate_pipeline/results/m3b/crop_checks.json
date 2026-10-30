@@ -1,0 +1,58 @@
+[
+  [
+    {
+      "crop": [
+        -69,
+        4,
+        459,
+        767
+      ],
+      "frames": 330,
+      "all_plate_circles_inside": true
+    },
+    {
+      "crop": [
+        555,
+        -59,
+        1185,
+        755
+      ],
+      "frames": 456,
+      "all_plate_circles_inside": true
+    }
+  ],
+  [
+    {
+      "crop": [
+        142,
+        385,
+        741,
+        1114
+      ],
+      "frames": 312,
+      "all_plate_circles_inside": true
+    }
+  ],
+  [
+    {
+      "crop": [
+        -69,
+        4,
+        459,
+        767
+      ],
+      "frames": 330,
+      "all_plate_circles_inside": true
+    },
+    {
+      "crop": [
+        555,
+        -59,
+        1185,
+        755
+      ],
+      "frames": 456,
+      "all_plate_circles_inside": true
+    }
+  ]
+]

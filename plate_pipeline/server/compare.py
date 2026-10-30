@@ -40,8 +40,11 @@ SCHEMA_VERSION = 3
 def prepare(user, ref, out):
     from feedback.plate import prepare_videos
     from tools.check_video import ffprobe, fix
-    settings = {role: dict(video=str(Path(path).resolve())) for role,path in (('user',user),('ref',ref))}
-    prepare_videos(settings,out/'prepared')
+    settings = {role: dict(video=str(Path(path).resolve())) for role,path in (('user',user),('ref',ref)) if path is not None}
+    for role,item in settings.items():
+        pair = {'user':item.copy(),'ref':item.copy()}
+        prepare_videos(pair,out/'prepared'/role)
+        settings[role] = pair['user']
     for role,item in settings.items():
         source = Path(item['video'])
         # Existing preparation accepts VP9/AV1; this command promises H.264.
@@ -54,11 +57,12 @@ def prepare(user, ref, out):
     return settings
 
 
-def aligned_3d(pose, rows, result, model, target_height_cm):
+def aligned_3d(pose, rows, result, model, target_height_cm, native=None):
     raw = np.asarray(pose['raw_lms'],float).copy()
     raw[:,:,:2] *= [pose['w'],pose['h']]
     stand = standing_frames(raw)
-    native,_,_ = lift(model,selected_coco(pose),pose['w'],pose['h'])
+    if native is None:
+        native,_,_ = lift(model,selected_coco(pose),pose['w'],pose['h'])
     fixed,_ = fixed_bones(smooth(native,pose['fps']),set_groups(rows,result)[0])
     basis,warnings = body_basis(fixed,stand,raw)
     oriented = np.einsum('ij,tkj->tki',basis,fixed)
@@ -134,8 +138,11 @@ def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, sca
     y0,y1 = (np.percentile(ys,.5),np.percentile(ys,99.5)) if ys else (0,h)
     x0,x1 = min(x0,np.min(pp[:,0]-pp[:,2])),max(x1,np.max(pp[:,0]+pp[:,2]))
     y0,y1 = min(y0,np.min(pp[:,1]-pp[:,2])),max(y1,np.max(pp[:,1]+pp[:,2]))
+    good_boxes = boxes[np.isfinite(boxes).all(axis=1)]
+    x0,x1 = min(x0,good_boxes[:,0].min()),max(x1,good_boxes[:,2].max())
+    y0,y1 = min(y0,good_boxes[:,1].min()),max(y1,good_boxes[:,3].max())
     padx,pady = .1*(x1-x0),.06*(y1-y0)
-    crop = [round(max(0,x0-padx)),round(max(0,y0-pady)),round(min(w,x1+padx)),round(min(h,y1+pady))]
+    crop = [int(np.floor(x0-padx)),int(np.floor(y0-pady)),int(np.ceil(x1+padx)),int(np.ceil(y1+pady))]
     mp = to_mp33(frames)
     names = list(MP_FROM_H36M)
     j3 = [q[names].tolist() if np.isfinite(q[names]).all() else None for q in mp]
@@ -158,59 +165,127 @@ def write_report(bundle, dest):
     (Path(dest)/'report.html').write_text(template.replace('/*__BUNDLE__*/null',encoded))
 
 
-def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,threads=6,model=None,checkpoint=None):
+def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,threads=6,model=None,checkpoint=None,
+            progress=None,ref_cache=None,posture_cards=False):
+    """The M3a calculations, with observation callbacks and optional reference reuse.
+
+    progress(stage, fraction, **details) reports work actually completed. Cached
+    observations bypass inference, while height-dependent display transforms run.
+    """
     import cv2
     import onnxruntime as ort
     from feedback.pose import extract_pose
     from feedback.plate import plate_rep_mask
+    from core.io.rows import read_rows
+    from core.io import video
     from server.jobs import process_video
-    out = Path(out).resolve();out.mkdir(parents=True,exist_ok=True)
+    from server.cache import cache_key,available,publish
+    out=Path(out).resolve();out.mkdir(parents=True,exist_ok=True)
     for name,value in (('plate_mm',plate_mm),('load_kg',load_kg),('height_cm',height_cm)):
-        if value is not None and (not np.isfinite(value) or value<=0):
-            raise ValueError(name+' must be positive and finite')
-    started = time.perf_counter()
-    model = Path(model or os.environ.get('PLATE_MODEL',ROOT/'plate_pipeline/models/plate_tiny.onnx'))
-    checkpoint = Path(checkpoint or os.environ.get('POSE3D_CHECKPOINT',Path.home()/'.cache/videopose3d/pretrained_h36m_detectron_coco.bin'))
+        if value is not None and (not np.isfinite(value) or value<=0): raise ValueError(name+' must be positive and finite')
+    started=time.perf_counter()
+    model=Path(model or os.environ.get('PLATE_MODEL',ROOT/'plate_pipeline/models/plate_tiny.onnx'))
+    checkpoint=Path(checkpoint or os.environ.get('POSE3D_CHECKPOINT',Path.home()/'.cache/videopose3d/pretrained_h36m_detectron_coco.bin'))
     if not model.is_file(): raise FileNotFoundError(f'원판 모델이 없습니다: {model} (PLATE_MODEL로 지정)')
     if not checkpoint.is_file(): raise FileNotFoundError(checkpoint)
+    stages={};active=None;stage_start=0
+    def emit(stage,fraction,**details):
+        nonlocal active,stage_start
+        now=time.perf_counter()
+        if active!=stage:
+            if active is not None: stages[active]=now-stage_start
+            active,stage_start=stage,now
+        if progress is not None: progress(stage,float(fraction),**details)
+        if fraction==1: stages[stage]=time.perf_counter()-stage_start
+    emit('prepare',0)
+    cached=None;provenance={};hit=False
+    if ref is not None and ref_cache is not None:
+        key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint)
+        cached=Path(ref_cache)/key;hit=available(cached)
+    settings=prepare(user,None if hit else ref,out)
+    if hit:
+        shutil.copy2(cached/'ref.mp4',out/'ref.mp4');settings['ref']=dict(video=str(out/'ref.mp4'))
+    roles=list(settings)
+    emit('prepare',1,ref_cache_hit=hit)
     cv2.setNumThreads(1)
-    original = ort.InferenceSession
+    original=ort.InferenceSession
     def session(*args,**kwargs):
-        opts = kwargs.pop('sess_options',None) or ort.SessionOptions()
+        opts=kwargs.pop('sess_options',None) or ort.SessionOptions()
         opts.intra_op_num_threads=threads;opts.inter_op_num_threads=1
         return original(*args,sess_options=opts,**kwargs)
-    settings = prepare(user,ref,out)
-    vp3d = load_model(checkpoint,threads)
-    b = dict(schema_version=SCHEMA_VERSION,exercise=exercise,inputs=dict(plate_mm=plate_mm,load_kg=load_kg,height_cm=height_cm),
-             show_3d=exercise!='benchpress',pose3d_scale='input_height' if height_cm is not None else 'model_native')
-    stats,timing = {},{}
-    ref_height = height_cm
+    b=dict(schema_version=SCHEMA_VERSION,exercise=exercise,inputs=dict(plate_mm=plate_mm,load_kg=load_kg,height_cm=height_cm),
+           show_3d=exercise!='benchpress',pose3d_scale='input_height' if height_cm is not None else 'model_native',
+           posture_cards=bool(posture_cards),has_ref=ref is not None,ref=None)
+    observations={};timing={};stats={}
     with patch.object(ort,'InferenceSession',session):
-        for role in ('user','ref'):
-            start = time.perf_counter();dest = out/'analysis'/role
-            result,rows,_ = process_video(settings[role]['video'],'bench' if exercise=='benchpress' else exercise,
-                                          plate_mm=plate_mm,model=str(model),device='cpu',pose=False,out_dir=dest/'plate')
-            pose = extract_pose(settings[role]['video'],dest/'pose.npz',exercise,no_cache=True,plate_rows=rows,
-                                rep_mask=plate_rep_mask(rows,result),pose_cfg=DEFAULT.pose)
-            raw,stand,frames,actual,scaled,warnings = aligned_3d(pose,rows,result,vp3d,ref_height)
-            b[role],trips,vals = build_video(rows,result,pose,frames,raw,stand,plate_mm,height_cm,scaled and height_cm is not None)
-            b[role]['pose3d_warnings'] = warnings
-            b[role]['pose3d_height_cm'] = actual
-            if role=='user': ref_height = height_cm if height_cm is not None else actual
-            stats[role] = (trips,vals,summarize(result['exercise'],result['fps'],trips,vals))
-            timing[role] = time.perf_counter()-start
-    b['sentences'] = [dict(kind=s.kind,text=s.text,key=s.key,shown=s.shown) for s in render(run_compare(stats['user'][2],stats['ref'][2]),'bench' if exercise=='benchpress' else exercise)]
-    b['set_median'] = {role:{key:round(median,5) for key,attr in (('down','down'),('pause','far_pause'),('up','up')) if np.isfinite(median:=float(np.median([getattr(v,attr) or 0 for v in stats[role][1]])))} for role in ('user','ref')}
-    vs = [r['v'] for r in b['user']['reps']]
-    valid_speeds = [v for v in vs if v is not None]
-    b['v_loss'] = round(100*(max(valid_speeds)-vs[-1])/max(valid_speeds),1) if valid_speeds and max(valid_speeds)>0 and vs[-1] is not None else None
-    b['summary'] = summary_sentence('bench' if exercise=='benchpress' else exercise,len(vs),vs,b['v_loss']).text
-    b['findings'],b['angle_judgments'] = calculate(b)
-    b['kpi'] = b['angle_judgments']['FAR']['knee']
-    b['timing'] = dict(**timing,total_s=time.perf_counter()-started,threads=threads,scope='preparation, model loading, inference, analysis and judgments; excludes JSON/HTML serialization')
-    b = clean(b)
+        for role in roles:
+            stage='plate_'+role;emit(stage,0)
+            dest=out/'analysis'/role;dest.mkdir(parents=True,exist_ok=True)
+            total=video.info(settings[role]['video']).frames
+            if total<=0: total=sum(1 for _ in video.frames(settings[role]['video']))
+            if role=='ref' and hit:
+                shutil.copytree(cached/'plate',dest/'plate',dirs_exist_ok=True)
+                result=json.loads((dest/'plate/result.json').read_text());rows=read_rows(dest/'plate/rows.jsonl.gz')
+            else:
+                def frame(seq,t,img,st,stage=stage,total=total):
+                    emit(stage,min((seq+1)/max(1,total),1),processed=seq+1,total=total)
+                result,rows,_=process_video(settings[role]['video'],'bench' if exercise=='benchpress' else exercise,
+                    plate_mm=plate_mm,model=str(model),device='cpu',pose=False,out_dir=dest/'plate',on_frame=frame)
+            observations[role]=dict(result=result,rows=rows)
+            emit(stage,1,processed=len(rows),total=len(rows),cached=role=='ref' and hit)
+        emit('pose',0)
+        total=sum(len(observations[r]['rows']) for r in roles);done=0
+        for role in roles:
+            o=observations[role];dest=out/'analysis'/role
+            if role=='ref' and hit:
+                shutil.copy2(cached/'pose.npz',dest/'pose.npz')
+                with np.load(dest/'pose.npz',allow_pickle=False) as f: pose={k:f[k] for k in f.files}
+                for k in ('fps','w','h','total'): pose[k]=pose[k].item()
+            else:
+                def frame(n,_,offset=done):emit('pose',(offset+n)/total,processed=offset+n,total=total)
+                pose=extract_pose(settings[role]['video'],dest/'pose.npz',exercise,no_cache=True,plate_rows=o['rows'],
+                    rep_mask=plate_rep_mask(o['rows'],o['result']),pose_cfg=DEFAULT.pose,on_frame=frame)
+            o['pose']=pose;done+=len(o['rows']);emit('pose',done/total,processed=done,total=total,ref_cached=hit)
+    emit('3d',0)
+    # Loading the exact same model and doing the same postprocessing as M3a.
+    vp3d=load_model(checkpoint,threads);ref_height=height_cm
+    for index,role in enumerate(roles):
+        start=time.perf_counter();o=observations[role];dest=out/'analysis'/role;pose=o['pose']
+        if role=='ref' and hit: native=np.load(cached/'native.npy',allow_pickle=False)
+        else: native,_,_=lift(vp3d,selected_coco(pose),pose['w'],pose['h'])
+        np.save(dest/'native.npy',native)
+        raw,stand,frames,actual,scaled,warnings=aligned_3d(pose,o['rows'],o['result'],vp3d,ref_height,native=native)
+        b[role],trips,vals=build_video(o['rows'],o['result'],pose,frames,raw,stand,plate_mm,height_cm,scaled and height_cm is not None)
+        b[role]['pose3d_warnings']=warnings;b[role]['pose3d_height_cm']=actual
+        if role=='user': ref_height=height_cm if height_cm is not None else actual
+        stats[role]=(trips,vals,summarize(o['result']['exercise'],o['result']['fps'],trips,vals))
+        timing[role]=time.perf_counter()-start
+        if role=='ref' and cached is not None and not hit:
+            # RTMPose may have populated its model cache during the first run.
+            key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint)
+            publish(Path(ref_cache)/key,dest,out/'ref.mp4',provenance)
+        emit('3d',(index+1)/len(roles),processed=index+1,total=len(roles),ref_cached=hit)
+    emit('judge',0)
+    ex='bench' if exercise=='benchpress' else exercise
+    b['sentences']=[dict(kind=s.kind,text=s.text,key=s.key,shown=s.shown) for s in render(run_compare(stats['user'][2],stats['ref'][2] if ref is not None else None),ex)]
+    b['set_median']={role:{key:round(median,5) for key,attr in (('down','down'),('pause','far_pause'),('up','up'))
+        if np.isfinite(median:=float(np.median([getattr(v,attr) or 0 for v in stats[role][1]])))} for role in roles}
+    vs=[r['v'] for r in b['user']['reps']];valid_speeds=[v for v in vs if v is not None]
+    b['v_loss']=round(100*(max(valid_speeds)-vs[-1])/max(valid_speeds),1) if valid_speeds and max(valid_speeds)>0 and vs[-1] is not None else None
+    b['summary']=summary_sentence(ex,len(vs),vs,b['v_loss']).text
+    b['findings'],b['angle_judgments']=calculate(b,posture_cards=posture_cards)
+    b['kpi']=b['angle_judgments']['FAR']['knee']
+    b['ref_cache']=dict(hit=hit,**provenance)
+    emit('judge',1)
+    emit('report',0)
+    b['timing']=dict(**timing,total_s=time.perf_counter()-started,threads=threads,stages=stages)
+    b=clean(b)
     from server.schema import validate_result
     validate_result(b)
+    (out/'result_v3.json').write_text(json.dumps(b,ensure_ascii=False,allow_nan=False,separators=(',',':')))
+    write_report(b,out);emit('report',1)
+    # Persist final stage durations without fabricating a report duration.
+    b['timing']['stages']=dict(stages);b['timing']['total_s']=time.perf_counter()-started
     (out/'result_v3.json').write_text(json.dumps(b,ensure_ascii=False,allow_nan=False,separators=(',',':')))
     write_report(b,out)
     return b
@@ -218,12 +293,13 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('--user',required=True,type=Path);ap.add_argument('--ref',required=True,type=Path)
+    ap.add_argument('--user',required=True,type=Path);ap.add_argument('--ref',type=Path)
     ap.add_argument('--exercise',required=True,choices=('squat','benchpress','deadlift'))
     ap.add_argument('--plate-mm',type=float,default=450.);ap.add_argument('--load-kg',type=float);ap.add_argument('--height-cm',type=float)
     ap.add_argument('--out',required=True,type=Path)
+    ap.add_argument('--posture-cards',action='store_true')
     a = ap.parse_args()
     b = compare(**vars(a))
-    print(json.dumps(dict(reps={r:len(b[r]['reps']) for r in ('user','ref')},timing=b['timing']),ensure_ascii=False))
+    print(json.dumps(dict(reps={r:len(b[r]['reps']) for r in ('user','ref') if b[r] is not None},timing=b['timing']),ensure_ascii=False))
 
 if __name__=='__main__': main()

@@ -153,7 +153,7 @@ def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT):
 
 
 def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None,
-                  pose=False, device="auto"):
+                  pose=False, device="auto", on_frame=None):
     """rim: look for the plate rim when the detector gives nothing (default: only without a model)."""
     info = video.info(path)
     det = OnnxPlateDetector(model, device=device) if model else (BoxFileDetector(boxes) if boxes else None)
@@ -161,7 +161,7 @@ def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, mod
     t0 = time.time()
     try:
         rows = recognize(path, det, init_box, rim=(model is None) if rim is None else rim,
-                         pose=estimator, exercise=exercise)
+                         pose=estimator, exercise=exercise, on_frame=on_frame)
     finally:
         if pose is True:
             estimator.close()

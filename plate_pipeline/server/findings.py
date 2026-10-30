@@ -123,19 +123,23 @@ def largest_rep(a, b, sign):
     return bi+1
 
 
-def calculate(bundle):
-    u, r = bundle['user'], bundle['ref']
-    for v in (u,r):
+def calculate(bundle, posture_cards=False):
+    u = bundle['user']
+    r = bundle.get('ref')
+    has_ref = r is not None
+    # Empty reference observations are not manufactured for single-set reports.
+    videos = [('user',u)] + ([('ref',r)] if has_ref else [])
+    for _,v in videos:
         prep_reps(v)
-    judgments = {p: {k: judge(per_rep(u,p,k),per_rep(r,p,k),mn) for k,_,mn in METRICS} for p in POS}
-    angles = {f'{p}.{k}': {role: [round(x,2) if math.isfinite(x) else None for x in per_rep(v,p,k)] for role,v in (('user',u),('ref',r))} for p in ('MID_DOWN','FAR','MID_UP') for k,_,_ in METRICS}
-    times = {role: [dict(n=rep['n'], **{p:pos_time(rep,p) for p in ('MID_DOWN','FAR','MID_UP')}) for rep in v['reps']] for role,v in (('user',u),('ref',r))}
+    judgments = {p: {k: judge(per_rep(u,p,k),per_rep(r,p,k) if has_ref else [],mn) for k,_,mn in METRICS} for p in POS}
+    angles = {f'{p}.{k}': {role: [round(x,2) if math.isfinite(x) else None for x in per_rep(v,p,k)] for role,v in videos} for p in ('MID_DOWN','FAR','MID_UP') for k,_,_ in METRICS}
+    times = {role: [dict(n=rep['n'], **{p:pos_time(rep,p) for p in ('MID_DOWN','FAR','MID_UP')}) for rep in v['reps']] for role,v in videos}
     deadlift = bundle.get('exercise') == 'deadlift'
     all_findings = []
     def add(a,b,sign,j,**fields):
         all_findings.append(dict(no=None,key=None,all=None,**fields,reps=reps_showing(u['reps'],a,b,sign,j['lim']),best=largest_rep(a,b,sign),score=j['k']))
     for s in bundle['sentences']:
-        if s['kind']!='finding' or not s['key'].startswith('vs_ref'):
+        if not has_ref or s['kind']!='finding' or not s['key'].startswith('vs_ref'):
             continue
         k = s['key'].split('.')[1]
         f, pos = ('pause','FAR') if k=='far_pause' else (k,'MID_DOWN' if k=='down' else 'MID_UP')
@@ -146,6 +150,7 @@ def calculate(bundle):
         add(a,b,1 if median(a)>median(b) else -1,judge(a,b,.25,.05),kind='ref',text=re.sub(r' \(.*\)\.$','',s['text']),val=match[1] if match else '',pos=pos)
     for pos,where in (('FAR','정점에서' if deadlift else '바닥에서'),('MID_UP','내려오는 중간에' if deadlift else '올라오는 중간에')):
         for k,_,mn in METRICS:
+            if not posture_cards or not has_ref: continue
             a,b = per_rep(u,pos,k),per_rep(r,pos,k)
             j = judgments[pos][k]
             if not j['hit']:
