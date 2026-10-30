@@ -19,12 +19,13 @@ def validate_result(b):
         req(k in b['inputs'] and (b['inputs'][k] is None and k!='plate_mm' or num(b['inputs'][k]) and b['inputs'][k]>0),'inputs.'+k)
     for role in ('user','ref'):
         v=b.get(role)
+        if role=='ref' and v is None and b.get('has_ref') is False: continue
         req(isinstance(v,dict) and all(k in v for k in VIDEO_KEYS),role+' keys')
         for k in ('fps','width','height','duration'): req(num(v[k]) and v[k]>0,role+'.'+k)
         req(nums(v['t']) and len(v['t'])>0 and all(a<c for a,c in zip(v['t'],v['t'][1:])),role+'.t')
         n=len(v['t'])
         req(nums(v['depth'],n) and min(v['depth'])>=0,role+'.depth')
-        req(nums(v['crop'],4) and 0<=v['crop'][0]<v['crop'][2]<=v['width'] and 0<=v['crop'][1]<v['crop'][3]<=v['height'],role+'.crop')
+        req(nums(v['crop'],4) and v['crop'][0]<v['crop'][2] and v['crop'][1]<v['crop'][3] and v['crop'][0]<v['width'] and v['crop'][2]>0 and v['crop'][1]<v['height'] and v['crop'][3]>0,role+'.crop')
         for k in ('plate','kp2','j3'): req(isinstance(v[k],list) and len(v[k])==n,role+'.'+k)
         req(all(q is None or nums(q,3) for q in v['plate']),role+'.plate points')
         for k,names in (('kp2','j2'),('j3','j3names')):

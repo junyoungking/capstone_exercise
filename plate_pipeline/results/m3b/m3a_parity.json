@@ -1,0 +1,52 @@
+{
+  "user": {
+    "fps": true,
+    "width": true,
+    "height": true,
+    "duration": true,
+    "t": true,
+    "plate": true,
+    "depth": true,
+    "plate_used": true,
+    "geo": true,
+    "geo_check": true,
+    "j2": true,
+    "kp2": true,
+    "j3names": true,
+    "j3": true,
+    "pose3d_height_cm": true,
+    "rep_values": true
+  },
+  "ref": {
+    "fps": true,
+    "width": true,
+    "height": true,
+    "duration": true,
+    "t": true,
+    "plate": true,
+    "depth": true,
+    "plate_used": true,
+    "geo": true,
+    "geo_check": true,
+    "j2": true,
+    "kp2": true,
+    "j3names": true,
+    "j3": true,
+    "pose3d_height_cm": true,
+    "rep_values": true
+  },
+  "common": {
+    "sentences": true,
+    "set_median": true,
+    "v_loss": true,
+    "summary": true,
+    "angle_judgments": true,
+    "kpi": true
+  },
+  "reference_cache_bytes": {
+    "plate/rows.jsonl.gz": true,
+    "plate/result.json": true,
+    "pose.npz": true,
+    "native.npy": true
+  }
+}

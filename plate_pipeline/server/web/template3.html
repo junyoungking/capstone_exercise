@@ -245,13 +245,14 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
 .setgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
 .setcard{background:var(--raised);border-radius:12px;padding:14px 16px}
 @media (max-width:1100px){.logwrap{grid-template-columns:1fr}.monthk{grid-template-columns:1fr 1fr}.geo{grid-template-columns:1fr 1fr 1fr}}
+.sgrid>.vbox{max-height:580px}.record .sgrid{grid-template-columns:var(--cu,1fr) 1.2fr}.record .geo{grid-template-columns:1.2fr 1fr}a.btn{text-decoration:none;display:inline-flex;align-items:center}.record .sgrid .three{grid-column:auto}@media(max-width:700px){.sgrid>.vbox{max-height:580px}.record .sgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
     <div class="brand"><i></i>세트 리포트</div>
-    <div class="sp"></div>
+    <div class="sp"></div><a class="btn" href="/">운동 기록</a><a class="btn" href="/#new">새 기록</a>
 
   </div>
 
@@ -355,7 +356,7 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
 </div>
 <script>
 const B = /*__BUNDLE__*/null;
-const U = B.user, R = B.ref;
+const U = B.user, R = B.ref, HAS_REF = R != null;
 // ---------- helpers
 const $ = s => document.querySelector(s);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -409,11 +410,11 @@ function show(id) { document.querySelectorAll(".screen").forEach(x => x.classLis
 function openReport() {
   S.analyzed = true;
   show("#s-report");
-  $("#r-date").textContent = `내 세트 ${U.reps.length} rep · 기준 영상 ${R.reps.length} rep`;
-  $("#c-track").textContent = Math.round(Math.min(U.plate_used, R.plate_used)) + "%";
-  $("#c-angle").textContent = `${Math.round(U.geo.cam_angle)}° / ${Math.round(R.geo.cam_angle)}°`;
+  $("#r-date").textContent = `내 세트 ${U.reps.length} rep${HAS_REF ? " · 기준 영상 " + R.reps.length + " rep" : ""}`;
+  $("#c-track").textContent = Math.round(HAS_REF ? Math.min(U.plate_used, R.plate_used) : U.plate_used) + "%";
+  $("#c-angle").textContent = `${Math.round(U.geo.cam_angle)}°${HAS_REF ? " / " + Math.round(R.geo.cam_angle) + "°" : ""}`;
   const vu = $("#v-user"), vr = $("#v-ref");
-  if (!vu.src) { vu.src = "user.mp4"; vr.src = "ref.mp4"; }
+  if (!vu.src) { vu.src = "user.mp4"; if (HAS_REF) vr.src = "ref.mp4"; }
   vu.onloadeddata = () => { vu.currentTime = Math.max(0, U.reps[0].start - .6); syncNow(); };
   vr.onloadeddata = () => syncNow();
   $("#r-plate").value = S.plateMM;
@@ -443,9 +444,9 @@ function buildReport() {
   const pb = $("#posbtns"); pb.innerHTML = '<span class="label" style="margin-right:4px">포지션</span>';
   POS.forEach((p, i) => { const b = document.createElement("button"); b.className = "btn"; b.textContent = `${i + 1} ${POS_LABEL[p]}`; b.onclick = () => seekPos(p); pb.appendChild(b); });
   const sel = document.createElement("select"); sel.className = "btn"; sel.style.marginLeft = "auto"; sel.setAttribute("aria-label", "기준 rep");
-  R.reps.forEach(r => { const o = document.createElement("option"); o.value = r.n; o.textContent = `기준 rep ${r.n}`; if (r.n === S.refRep) o.selected = true; sel.appendChild(o); });
+  if (HAS_REF) R.reps.forEach(r => { const o = document.createElement("option"); o.value = r.n; o.textContent = `기준 rep ${r.n}`; if (r.n === S.refRep) o.selected = true; sel.appendChild(o); });
   sel.onchange = () => { S.refRep = +sel.value; $("#c-refrep").textContent = S.refRep; $("#cnt-ref").innerHTML = '<small style="margin:0 4px 0 0">기준</small>rep ' + S.refRep; drawHeight(); syncNow(); };
-  pb.appendChild(sel);
+  if (HAS_REF) pb.appendChild(sel);
   $("#c-refrep").textContent = S.refRep; $("#cnt-ref").innerHTML = '<small style="margin:0 4px 0 0">기준</small>rep ' + S.refRep;
   buildTimeline(cards); buildTempo(); refreshNumbers(); init3D();
   $("#r-plate").onchange = () => { S.plateMM = clamp(+$("#r-plate").value || 450, 150, 500); refreshNumbers(); };
@@ -462,12 +463,12 @@ function refreshNumbers() {
   buildKpis(); buildTables(); buildGeo(); drawHeight(); $("#foot").textContent = `원판 지름 ${S.plateMM} mm 기준`; }
 function setStats(V) { const roms = V.reps.map(rom), vs = V.reps.map(vel).filter(isFinite); return { rom: avg(roms), vmin: Math.min(...vs), vmax: Math.max(...vs), ...(B.set_median ? B.set_median[V === U ? "user" : "ref"] : { down: median(V.reps.map(r => r.down)), up: median(V.reps.map(r => r.up)), pause: median(V.reps.map(r => r.pause)) }) }; }
 function buildKpis() {
-  const su = setStats(U), sr = setStats(R), kn = B.kpi;
+  const su = setStats(U), sr = HAS_REF ? setStats(R) : null, kn = B.kpi;
   $("#kpis").innerHTML = `
-    <div class="kpi herok"><div><div class="label">횟수</div><div class="v hero">${U.reps.length}<span class="unit" style="font-size:16px">회</span></div></div><div class="cmp" style="text-align:right">기준 영상 <span class="num">${R.reps.length}</span>회</div></div>
-    <div class="kpi"><div class="label">평균 깊이 (바 이동)</div><div class="v">${su.rom.toFixed(1)}<span class="unit">cm</span></div><div class="cmp"><span class="dash"></span>기준 <span class="num">${sr.rom.toFixed(1)}</span> cm</div></div>
-    <div class="kpi"><div class="label">올리는 평균 속도</div><div class="v">${fmt(su.vmin, 2)}–${fmt(su.vmax, 2)}<span class="unit">m/s</span></div><div class="cmp"><span class="dash"></span>기준 <span class="num">${fmt(sr.vmin, 2)}–${fmt(sr.vmax, 2)}</span> m/s</div></div>
-    <div class="kpi"><div class="label">${B.exercise === "deadlift" ? "정점" : "바닥"} 무릎 각도 (평균)</div><div class="v">${kn.mu == null ? "—" : Math.round(kn.mu) + "°"}</div><div class="cmp"><span class="dash"></span>기준 <span class="num">${kn.mr == null ? "—" : Math.round(kn.mr) + "°"}</span> · 작을수록 깊게 굽힘</div></div>`;
+    <div class="kpi herok"><div><div class="label">횟수</div><div class="v hero">${U.reps.length}<span class="unit" style="font-size:16px">회</span></div></div><div class="cmp" style="text-align:right">${HAS_REF ? `기준 영상 <span class="num">${R.reps.length}</span>회` : "내 세트"}</div></div>
+    <div class="kpi"><div class="label">평균 깊이 (바 이동)</div><div class="v">${su.rom.toFixed(1)}<span class="unit">cm</span></div><div class="cmp">${HAS_REF ? `<span class="dash"></span>기준 <span class="num">${sr.rom.toFixed(1)}</span> cm` : "바 이동 거리"}</div></div>
+    <div class="kpi"><div class="label">올리는 평균 속도</div><div class="v">${fmt(su.vmin, 2)}–${fmt(su.vmax, 2)}<span class="unit">m/s</span></div><div class="cmp">${HAS_REF ? `<span class="dash"></span>기준 <span class="num">${fmt(sr.vmin, 2)}–${fmt(sr.vmax, 2)}</span> m/s` : "완료 rep별 평균"}</div></div>
+    ${B.posture_cards ? `    <div class="kpi"><div class="label">${B.exercise === "deadlift" ? "정점" : "바닥"} 무릎 각도 (평균)</div><div class="v">${kn.mu == null ? "—" : Math.round(kn.mu) + "°"}</div><div class="cmp"><span class="dash"></span>기준 <span class="num">${kn.mr == null ? "—" : Math.round(kn.mr) + "°"}</span> · 작을수록 깊게 굽힘</div></div>` : `<div class="kpi"><div class="label">속도 저하 (마지막 rep)</div><div class="v">${fmt(B.v_loss, 1)}<span class="unit">%</span></div><div class="cmp">가장 빠른 rep 대비</div></div>`}`;
 }
 function buildTimeline(cards) {
   const tl = $("#tline"), D = U.duration; tl.innerHTML = "";
@@ -512,8 +513,8 @@ function buildTimeline(cards) {
 }
 function flashCard(no) { const el = $("#fc" + no); if (!el) return; el.classList.add("hl"); setTimeout(() => el.classList.remove("hl"), 1600); }
 function buildTempo() {
-  const el = $("#tempo"), sr = setStats(R); el.innerHTML = "";
-  const maxT = Math.max(...U.reps.map(r => r.down + r.pause + r.up), sr.down + sr.pause + sr.up);
+  const el = $("#tempo"), sr = HAS_REF ? setStats(R) : null; el.innerHTML = "";
+  const maxT = Math.max(...U.reps.map(r => r.down + r.pause + r.up), HAS_REF ? sr.down + sr.pause + sr.up : 0);
   const row = (label, d, p, u, cls = "") => {
     const w = x => (100 * x / maxT).toFixed(2) + "%";
     const div = document.createElement("div"); div.className = "trow " + cls;
@@ -521,7 +522,7 @@ function buildTempo() {
     el.appendChild(div);
   };
   U.reps.forEach(r => row("rep " + r.n, r.down, r.pause, r.up));
-  row("기준 영상", sr.down, sr.pause, sr.up, "refrow");
+  if (HAS_REF) row("기준 영상", sr.down, sr.pause, sr.up, "refrow");
 }
 function buildTables() {
   let h = "<tr><th>지표</th>" + POS.map(p => `<th>${POS_LABEL[p]}</th>`).join("") + "</tr>";
@@ -529,8 +530,8 @@ function buildTables() {
     h += `<tr><td>${name}</td>`;
     POS.forEach(p => {
       const j = B.angle_judgments[p][key];
-      const v = j.mu != null && isFinite(j.mu) ? Math.round(j.mu) + "°" : "—", cls = j.k > 1.5 ? "k2" : j.k > 1 ? "k1" : "";
-      h += `<td>${cls ? `<span class="${cls}">${v}</span>` : v}<span class="rv">${j.mr != null && isFinite(j.mr) ? Math.round(j.mr) + "°" : "—"}</span></td>`;
+      const v = j.mu != null && isFinite(j.mu) ? Math.round(j.mu) + "°" : "—", cls = B.posture_cards ? (j.k > 1.5 ? "k2" : j.k > 1 ? "k1" : "") : "";
+      h += `<td>${cls ? `<span class="${cls}">${v}</span>` : v}${HAS_REF ? `<span class="rv">${j.mr != null && isFinite(j.mr) ? Math.round(j.mr) + "°" : "—"}</span>` : ""}</td>`;
     });
     h += "</tr>";
   });
@@ -549,10 +550,10 @@ function buildGeo() {
     ["넙다리 / 정강이", V => g(V).thigh_cm == null ? "—" : `${Math.round(g(V).thigh_cm)} / ${Math.round(g(V).shin_cm)}<small>cm</small>`],
     ["몸통 (어깨–엉덩이)", V => g(V).torso_cm == null ? "—" : `${Math.round(g(V).torso_cm)}<small>cm</small>`],
   ];
-  let h = '<div class="h"></div><div class="hdr">내 영상</div><div class="hdr">기준 영상</div>';
-  rows.forEach(([n, f]) => { h += `<div class="h">${n}</div><div class="v">${f(U)}</div><div class="v">${f(R)}</div>`; });
+  let h = '<div class="h"></div><div class="hdr">내 영상</div>' + (HAS_REF ? '<div class="hdr">기준 영상</div>' : "");
+  rows.forEach(([n, f]) => { h += `<div class="h">${n}</div><div class="v">${f(U)}</div>${HAS_REF ? `<div class="v">${f(R)}</div>` : ""}`; });
   $("#geo").innerHTML = h;
-  $("#geo-warn").textContent = [U, R].some(V => V.geo_check.warn) ? "입력 키와 원판으로 잰 키가 15% 넘게 다릅니다. 원판 지름 입력이나 촬영을 확인해 주세요." : "";
+  $("#geo-warn").textContent = [U, R].filter(Boolean).some(V => V.geo_check.warn) ? "입력 키와 원판으로 잰 키가 15% 넘게 다릅니다. 원판 지름 입력이나 촬영을 확인해 주세요." : "";
   const kg = S.load, vs = U.reps.map(vel).filter(isFinite);
   if (kg && vs.length) {
     const P = vs.map(v => kg * 9.81 * v), work = U.reps.reduce((a, r) => a + kg * 9.81 * rom(r) / 100, 0);
@@ -565,7 +566,7 @@ function buildGeo() {
 function drawHeight() {
   const c = $("#ch-h"), dpr = window.devicePixelRatio || 1, W = c.clientWidth, H = c.clientHeight;
   c.width = W * dpr; c.height = H * dpr; const g = c.getContext("2d"); g.scale(dpr, dpr);
-  const all = [...U.reps, ...R.reps], maxT = Math.max(...all.map(r => r.back - r.start)) + .2;
+  const all = [...U.reps, ...(HAS_REF ? R.reps : [])], maxT = Math.max(...all.map(r => r.back - r.start)) + .2;
   const maxD = Math.ceil(Math.max(...all.map(r => r.dmax * SC())) / 10) * 10 + 5;
   const L = 44, Rr = 12, T = 12, Bm = 28;
   const X = s => L + (s / maxT) * (W - L - Rr), Y = d => T + (d / maxD) * (H - T - Bm);
@@ -578,7 +579,7 @@ function drawHeight() {
     g.stroke(); g.globalAlpha = 1; g.setLineDash([]);
   };
   U.reps.forEach(r => { if (r.n !== S.rep) curve(U, r, "#C6F432", 1.5, false, .3); });
-  curve(R, refRep(), "#4F8CFF", 2.5, true, 1);
+  if (HAS_REF) curve(R, refRep(), "#4F8CFF", 2.5, true, 1);
   curve(U, U.reps[S.rep - 1], "#C6F432", 3, false, 1);
 }
 function selectRep(n, jump) { S.rep = n; document.querySelectorAll(".reptab").forEach((b, i) => b.classList.toggle("on", i === n - 1)); drawHeight(); if (jump) seek(U.reps[n - 1].start - .4); }
@@ -587,6 +588,7 @@ function seekPos(p) { pause(); const r = U.reps[S.rep - 1]; seek(posTime(r, p));
 // ---------- playback & sync (user video is the master; the reference follows at the same bar-height fraction)
 const vu = () => $("#v-user"), vr = () => $("#v-ref");
 function mapRef(t) {
+  if (!HAS_REF) return 0;
   const rr = refRep();
   if (!S.sync) { const ur = U.reps[S.rep - 1]; return clamp(rr.start + (t - ur.start), 0, R.duration); }
   const reps = U.reps;
@@ -603,10 +605,10 @@ function mapRef(t) {
 }
 function slopeAt(t) { const e = .05; return (mapRef(t + e) - mapRef(t - e)) / (2 * e); }
 let playing = false;
-function play() { if (vu().ended || vu().currentTime >= U.duration - .05) seek(Math.max(0, U.reps[0].start - .6)); playing = true; vu().playbackRate = S.speed; vu().play(); vr().play().catch(() => {}); $("#ppi").innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>'; }
+function play() { if (vu().ended || vu().currentTime >= U.duration - .05) seek(Math.max(0, U.reps[0].start - .6)); playing = true; vu().playbackRate = S.speed; vu().play(); if (HAS_REF) vr().play().catch(() => {}); $("#ppi").innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>'; }
 function pause() { playing = false; vu().pause(); vr().pause(); $("#ppi").innerHTML = '<path d="M7 4l13 8-13 8z"/>'; syncNow(); }
 function seek(t) { vu().currentTime = clamp(t, 0, U.duration); syncNow(); }
-function syncNow() { if (vr().readyState) vr().currentTime = mapRef(vu().currentTime); }
+function syncNow() { if (HAS_REF && vr().readyState) vr().currentTime = mapRef(vu().currentTime); }
 $("#pp").onclick = () => (playing ? pause() : play());
 $("#fb").onclick = () => { pause(); seek(vu().currentTime - 1 / U.fps); };
 $("#ff").onclick = () => { pause(); seek(vu().currentTime + 1 / U.fps); };
@@ -624,8 +626,8 @@ document.addEventListener("keydown", e => {
 // ---------- video boxes and overlays
 function setupBoxes() {
   const ar = V => (V.crop[2] - V.crop[0]) / (V.crop[3] - V.crop[1]);
-  const pr = $("#sgrid"); pr.style.setProperty("--cu", ar(U) + "fr"); pr.style.setProperty("--cr", ar(R) + "fr");
-  $("#vb-user").style.setProperty("--ar", ar(U)); $("#vb-ref").style.setProperty("--ar", ar(R));
+  const pr = $("#sgrid"); pr.style.setProperty("--cu", ar(U) + "fr"); if (HAS_REF) pr.style.setProperty("--cr", ar(R) + "fr");
+  $("#vb-user").style.setProperty("--ar", ar(U)); if (HAS_REF) $("#vb-ref").style.setProperty("--ar", ar(R));
 }
 setupBoxes();
 window.addEventListener("resize", () => { document.querySelectorAll(".vbox video").forEach(v => v._s = null); drawHeight(); });
@@ -634,7 +636,7 @@ function drawOverlay(V, video, canvas, t, color, who) {
   const box = canvas.parentElement, dpr = window.devicePixelRatio || 1, cw = box.clientWidth, ch = box.clientHeight;
   if (canvas.width !== Math.round(cw * dpr)) { canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr); }
   const g = canvas.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, cw, ch);
-  const c = V.crop, s = ch / (c[3] - c[1]), ox = -c[0] * s, oy = -c[1] * s;
+  const c = V.crop, s = Math.min(cw / (c[2] - c[0]), ch / (c[3] - c[1])), ox = (cw - (c[2] - c[0]) * s) / 2 - c[0] * s, oy = (ch - (c[3] - c[1]) * s) / 2 - c[1] * s;
   if (video._s !== s) { video.style.width = V.width * s + "px"; video.style.height = V.height * s + "px"; video.style.left = ox + "px"; video.style.top = oy + "px"; video._s = s; }
   const P = (x, y) => [ox + x * s, oy + y * s];
   const i = idxAt(V, t);
@@ -722,7 +724,7 @@ function draw3D(tu, tr) {
   if (!T3) return;
   const dx = T3.overlay ? 0 : .45, y = T3.yaw(), ox = Math.sin(y) * dx, oz = -Math.cos(y) * dx, s = 1;
   T3.apply(T3.mine, U.j3[idxAt(U, tu)]); T3.mine.g.position.set(-ox, 0, -oz); T3.mine.g.scale.setScalar(s);
-  T3.apply(T3.ref, R.j3[idxAt(R, tr)]); T3.ref.g.position.set(ox, 0, oz); T3.ref.g.scale.setScalar(s);
+  if (HAS_REF) { T3.apply(T3.ref, R.j3[idxAt(R, tr)]); T3.ref.g.position.set(ox, 0, oz); T3.ref.g.scale.setScalar(s); } else T3.ref.g.visible = false;
   T3.cam(); T3.renderer.render(T3.scene, T3.camera);
 }
 
@@ -743,11 +745,11 @@ function loop() {
   }
   const tr = playing ? b.currentTime : target;
   drawOverlay(U, a, $("#o-user"), tu, "#C6F432", "user");
-  drawOverlay(R, b, $("#o-ref"), tr, "#4F8CFF", "ref");
+  if (HAS_REF) drawOverlay(R, b, $("#o-ref"), tr, "#4F8CFF", "ref");
   const n = U.reps.filter(r => r.back <= tu).length;
   $("#cnt-user").innerHTML = `${n}<small>/ ${U.reps.length} rep</small>`;
-  setPhase($("#ph-user"), phaseAt(U, tu)); setPhase($("#ph-ref"), phaseAt(R, tr));
-  $("#dep-user").textContent = depthAt(U, tu).toFixed(1); $("#dep-ref").textContent = depthAt(R, tr).toFixed(1);
+  setPhase($("#ph-user"), phaseAt(U, tu)); if (HAS_REF) setPhase($("#ph-ref"), phaseAt(R, tr));
+  $("#dep-user").textContent = depthAt(U, tu).toFixed(1); if (HAS_REF) $("#dep-ref").textContent = depthAt(R, tr).toFixed(1);
   const head = $("#head"); if (head) head.style.left = (100 * tu / U.duration) + "%";
   const cur = U.reps.find(r => tu >= r.start && tu <= r.back);
   if (cur && cur.n !== S.rep) selectRep(cur.n, false);
@@ -774,20 +776,31 @@ function draw2D(tu, tr) {
   const c = $("#pose2d"); if (!c) return;
   c.width = c.clientWidth; c.height = c.clientHeight;
   const g = c.getContext("2d");
-  [[U,tu,"#C6F432",0], [R,tr,"#4F8CFF",c.width/2]].forEach(([V,t,col,xoff]) => {
+  [[U,tu,"#C6F432",0], ...(HAS_REF ? [[R,tr,"#4F8CFF",c.width/2]] : [])].forEach(([V,t,col,xoff]) => {
     const q = V.kp2[idxAt(V,t)]; if (!q) return;
     const at = {}; V.j2.forEach((j,k) => at[j] = q[k]);
-    const b = V.crop, sc = Math.min((c.width/2-16)/(b[2]-b[0]),(c.height-90)/(b[3]-b[1]));
+    const b = V.crop, sc = Math.min((c.width/(HAS_REF ? 2 : 1)-16)/(b[2]-b[0]),(c.height-90)/(b[3]-b[1]));
     g.strokeStyle = col; g.lineWidth = 3;
     B2.forEach(([a,bj]) => { const a1=at[a],b1=at[bj]; if (!a1 || !b1 || a1[2]<.3 || b1[2]<.3) return;
       g.beginPath();g.moveTo(xoff+8+(a1[0]-b[0])*sc,60+(a1[1]-b[1])*sc);g.lineTo(xoff+8+(b1[0]-b[0])*sc,60+(b1[1]-b[1])*sc);g.stroke(); });
   });
 }
 const exerciseName = {squat:"스쿼트",benchpress:"벤치프레스",deadlift:"데드리프트"}[B.exercise];
-$("#r-title").textContent = exerciseName + " 비교 리포트";
+$("#r-title").textContent = exerciseName + (HAS_REF ? " 비교 리포트" : " 기록 리포트");
 $("#exercise-chip").textContent = "선택한 종목 · " + exerciseName;
 $("#three-sub").textContent = B.pose3d_scale === "input_height" ? "입력 키 기준" : "모델 자체 크기";
-$("#pose-note").textContent = B.show_3d ? "3D 자세 각도는 표시용 추정값입니다." : "벤치는 2D 골격을 표시합니다. 각도와 자세 문장은 검증되지 않은 3D 추정값이므로 해석에 주의해 주세요.";
+document.body.classList.toggle("record", !HAS_REF);
+if (!HAS_REF) {
+  $("#vb-ref").style.display = "none"; $("#c-refrep").closest(".chip").style.display = "none";
+  $("#t-sync").style.display = "none"; $("#mode3d").style.display = "none";
+  document.querySelectorAll(".legendrow .dash, #three .legend .dash").forEach(x => x.parentElement.style.display = "none");
+  $("#fb-list").previousElementSibling.textContent = "세트에서 찾은 점";
+}
+if (!B.posture_cards) {
+  $("#ptable").previousElementSibling.innerHTML = '포지션별 자세 <span class="label">추정 · 내 세트 평균</span>';
+  $("#ptable").nextElementSibling.textContent = "자세 각도는 표시용 추정값입니다.";
+}
+$("#pose-note").textContent = B.show_3d ? "3D 자세 각도는 표시용 추정값입니다." : "벤치는 2D 골격을 표시합니다. 자세 각도는 표시용 추정값입니다.";
 openReport();
 </script>
 </body>

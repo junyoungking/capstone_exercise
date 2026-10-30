@@ -1,0 +1,182 @@
+[
+  {
+    "name": "02_squat",
+    "id": "e05f1e977fbe4d8b8b15b9799770c605",
+    "reps": 3,
+    "has_ref": true,
+    "ref_cache_hit": false,
+    "stages": {
+      "prepare": {
+        "progress": 1.0,
+        "elapsed_s": 0.36313998499826994,
+        "status": "completed",
+        "ref_cache_hit": false
+      },
+      "plate_user": {
+        "progress": 1.0,
+        "elapsed_s": 9.259529532995657,
+        "status": "completed",
+        "processed": 330,
+        "total": 330,
+        "cached": false
+      },
+      "plate_ref": {
+        "progress": 1.0,
+        "elapsed_s": 14.03857603000506,
+        "status": "completed",
+        "processed": 456,
+        "total": 456,
+        "cached": false
+      },
+      "pose": {
+        "progress": 1.0,
+        "elapsed_s": 29.559143386999494,
+        "status": "completed",
+        "processed": 786,
+        "total": 786,
+        "ref_cached": false
+      },
+      "3d": {
+        "progress": 1.0,
+        "elapsed_s": 1.1538569569966057,
+        "status": "completed",
+        "processed": 2,
+        "total": 2,
+        "ref_cached": false
+      },
+      "judge": {
+        "progress": 1.0,
+        "elapsed_s": 0.02501435600424884,
+        "status": "completed"
+      },
+      "report": {
+        "progress": 1.0,
+        "elapsed_s": 0.15728755099553382,
+        "status": "completed"
+      }
+    },
+    "total_s": 54.562408937003056,
+    "samples": 180,
+    "progress_monotonic": true,
+    "console_errors": []
+  },
+  {
+    "name": "05_deadlift",
+    "id": "e06e1d215b5f485cbff876446c09e120",
+    "reps": 3,
+    "has_ref": false,
+    "ref_cache_hit": false,
+    "stages": {
+      "prepare": {
+        "progress": 1.0,
+        "elapsed_s": 1.4583671369982767,
+        "status": "completed",
+        "ref_cache_hit": false
+      },
+      "plate_user": {
+        "progress": 1.0,
+        "elapsed_s": 9.518529852997744,
+        "status": "completed",
+        "processed": 312,
+        "total": 312,
+        "cached": false
+      },
+      "plate_ref": {
+        "progress": 1.0,
+        "elapsed_s": 0.0,
+        "status": "skipped"
+      },
+      "pose": {
+        "progress": 1.0,
+        "elapsed_s": 10.08463950100122,
+        "status": "completed",
+        "processed": 312,
+        "total": 312,
+        "ref_cached": false
+      },
+      "3d": {
+        "progress": 1.0,
+        "elapsed_s": 0.18871401000069454,
+        "status": "completed",
+        "processed": 1,
+        "total": 1,
+        "ref_cached": false
+      },
+      "judge": {
+        "progress": 1.0,
+        "elapsed_s": 0.013472017999447417,
+        "status": "completed"
+      },
+      "report": {
+        "progress": 1.0,
+        "elapsed_s": 0.06544390100316377,
+        "status": "completed"
+      }
+    },
+    "total_s": 21.332754246999684,
+    "samples": 72,
+    "progress_monotonic": true,
+    "console_errors": []
+  },
+  {
+    "name": "06_cached",
+    "id": "87a4536651334638ab885053730de592",
+    "reps": 3,
+    "has_ref": true,
+    "ref_cache_hit": true,
+    "stages": {
+      "prepare": {
+        "progress": 1.0,
+        "elapsed_s": 0.2718997389965807,
+        "status": "completed",
+        "ref_cache_hit": true
+      },
+      "plate_user": {
+        "progress": 1.0,
+        "elapsed_s": 8.54618745100015,
+        "status": "completed",
+        "processed": 330,
+        "total": 330,
+        "cached": false
+      },
+      "plate_ref": {
+        "progress": 1.0,
+        "elapsed_s": 0.02207613000064157,
+        "status": "completed",
+        "processed": 456,
+        "total": 456,
+        "cached": true
+      },
+      "pose": {
+        "progress": 1.0,
+        "elapsed_s": 9.924538314000529,
+        "status": "completed",
+        "processed": 786,
+        "total": 786,
+        "ref_cached": true
+      },
+      "3d": {
+        "progress": 1.0,
+        "elapsed_s": 0.2274321599979885,
+        "status": "completed",
+        "processed": 2,
+        "total": 2,
+        "ref_cached": true
+      },
+      "judge": {
+        "progress": 1.0,
+        "elapsed_s": 0.02484704599919496,
+        "status": "completed"
+      },
+      "report": {
+        "progress": 1.0,
+        "elapsed_s": 0.15532607299974188,
+        "status": "completed"
+      }
+    },
+    "total_s": 19.17852549700183,
+    "samples": 65,
+    "progress_monotonic": true,
+    "console_errors": []
+  }
+]

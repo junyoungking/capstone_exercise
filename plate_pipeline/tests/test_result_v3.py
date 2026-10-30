@@ -12,7 +12,7 @@ def bundle():
     with gzip.open(SRC/'bundle3.json.gz','rt') as f: return json.load(f)
 
 def test_frozen_js_findings_all_fields(bundle):
-    expected=json.loads((SRC/'findings_v3_expected.json').read_text());got,_=calculate(bundle)
+    expected=json.loads((SRC/'findings_v3_expected.json').read_text());got,_=calculate(bundle,posture_cards=True)
     for group in ('cards','extra'):
         assert len(got[group])==len(expected[group])
         for actual,wanted in zip(got[group],expected[group]):
@@ -36,7 +36,7 @@ def product(bundle,exercise='squat',height=None):
     for role in ('user','ref'):
         bundle[role]['geo_check']=dict(stature_plate_cm=bundle[role]['geo']['stature_cm'],warn=False)
         bundle[role]['geo']['stature_cm']=height
-    bundle['findings'],bundle['angle_judgments']=calculate(bundle)
+    bundle['findings'],bundle['angle_judgments']=calculate(bundle,posture_cards=True)
     bundle['kpi']=bundle['angle_judgments']['FAR']['knee']
     return bundle
 
@@ -66,7 +66,7 @@ def test_offline_report_reads_python_values(bundle,tmp_path):
     assert 'const FINDINGS = () => B.findings' in html and 'kn = B.kpi' in html
     assert 'function judge(' not in html and 'function prepReps(' not in html
     assert '<script src=' not in html and '<link ' not in html
-    assert 'vu.src = "user.mp4"; vr.src = "ref.mp4"' in html
+    assert 'vu.src = "user.mp4"; if (HAS_REF) vr.src = "ref.mp4"' in html
     assert 'id="s-upload"' not in html and 'const SESSIONS' not in html
     assert '종목 자동 인식' not in html and 'B.show_3d' in html
 

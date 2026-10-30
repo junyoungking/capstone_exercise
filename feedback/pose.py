@@ -61,6 +61,7 @@ def extract_pose(
     plate_rows: list | None = None,
     pose_cfg=None,
     rep_mask=None,
+    on_frame=None,
 ) -> dict:
     """extract_sequence의 검출·스무딩을 재사용하고 경로·mtime으로 캐시를 확인한다."""
     video_path = Path(video_path).resolve()
@@ -92,7 +93,8 @@ def extract_pose(
                 else (extract_plate_sequence(video_path, exercise, plate_rows)
                       if pose_cfg.backend == 'mediapipe' else
                       extract_backend_sequence(video_path, exercise, plate_rows, pose_cfg,
-                                                    **({"rep_mask": rep_mask} if rep_mask is not None else {}))))
+                                                    **({"rep_mask": rep_mask} if rep_mask is not None else {}),
+                                                    **({"on_frame": on_frame} if on_frame is not None else {}))))
     lms = np.full((len(sequence), 33, 4), np.nan, dtype=np.float32)
     valid = np.array([frame is not None for frame in sequence], dtype=bool)
     for frame_index, frame in enumerate(sequence):
@@ -179,7 +181,7 @@ def extract_plate_sequence(video_path, exercise, rows):
     return sequence
 
 
-def extract_backend_sequence(video_path, exercise, rows, cfg, *, rep_mask=None):
+def extract_backend_sequence(video_path, exercise, rows, cfg, *, rep_mask=None, on_frame=None):
     """Route RTMPose through the unchanged feedback EMA and MP33 contract."""
     import cv2
     from core.recog.pose import PoseEstimator
@@ -221,6 +223,8 @@ def extract_backend_sequence(video_path, exercise, rows, cfg, *, rep_mask=None):
                 sequence.append(smoother.update(raw) if valid_lms(raw) else None)
                 sequence.raw_lms.append(np.asarray(raw, dtype=np.float32).copy() if valid_lms(raw)
                                         else np.full((33, 4), np.nan, dtype=np.float32))
+                if on_frame is not None:
+                    on_frame(len(sequence), len(rows))
             sequence.tracking = dict(detection_frames=estimator.detection_frames, lost_frames=estimator.lost_frames)
             sequence.timings = estimator.timings.copy()
             scores = np.asarray(estimator.scores)
