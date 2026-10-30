@@ -1,0 +1,29 @@
+[
+  {
+    "name": "03_squat",
+    "old_id": "e05f1e977fbe4d8b8b15b9799770c605",
+    "new_id": "9deee7471cea4b339a7bc8e80ad70d71",
+    "all_analysis_fields_exact": true,
+    "json_sha256": "f0ee3fd490af894d84614f439bf2a5d9382e62aded919c26b4cfde76e6708aef",
+    "has_ref": true,
+    "reps": 3
+  },
+  {
+    "name": "09_deadlift",
+    "old_id": "e06e1d215b5f485cbff876446c09e120",
+    "new_id": "9d19800d7747499bac422d1272ef4e97",
+    "all_analysis_fields_exact": true,
+    "json_sha256": "b7aa480ca8018cf27c3339c7216ca05fd6e9bed70acae89d91e7514bf9b41740",
+    "has_ref": false,
+    "reps": 3
+  },
+  {
+    "name": "14_saved_ref",
+    "old_id": "87a4536651334638ab885053730de592",
+    "new_id": "6770cb0b747444c59c33593d03b600fd",
+    "all_analysis_fields_exact": true,
+    "json_sha256": "b75ccb2d03496d3f32f0d2a02948fc9b19ad35315ec2556f7a8f8e0bfc156b6e",
+    "has_ref": true,
+    "reps": 3
+  }
+]

@@ -246,13 +246,15 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
 .setcard{background:var(--raised);border-radius:12px;padding:14px 16px}
 @media (max-width:1100px){.logwrap{grid-template-columns:1fr}.monthk{grid-template-columns:1fr 1fr}.geo{grid-template-columns:1fr 1fr 1fr}}
 .sgrid>.vbox{max-height:580px}.record .sgrid{grid-template-columns:var(--cu,1fr) 1.2fr}.record .geo{grid-template-columns:1.2fr 1fr}a.btn{text-decoration:none;display:inline-flex;align-items:center}.record .sgrid .three{grid-column:auto}@media(max-width:700px){.sgrid>.vbox{max-height:580px}.record .sgrid{grid-template-columns:1fr}}
-</style>
+
+.nav a{height:44px;display:inline-flex;align-items:center;padding:0 16px;text-decoration:none;border-radius:9px;color:var(--text-2);font-size:16px;font-weight:500}.nav a.on{background:var(--raised);color:var(--mine)}.topbar .nav{padding:4px}.record-overview{margin-top:4px;align-items:stretch}.velocity-bars{display:flex;align-items:flex-end;gap:12px;height:176px;margin:42px 8px 32px;overflow:visible}.velocity-column{height:100%;flex:1;min-width:22px;position:relative;display:flex;align-items:flex-end}.velocity-column i{position:relative;display:block;width:100%;background:var(--pause);border-radius:5px 5px 0 0;min-height:1px;font-style:normal}.velocity-column i.last{background:var(--mine)}.bar-value{position:absolute;top:-27px;left:0;width:100%;text-align:center;font:500 14px var(--mono);color:var(--text-2)}.bar-label{position:absolute;bottom:-28px;left:0;width:100%;text-align:center;font:400 12px var(--mono);color:var(--text-3)}.record-overview .card:has(#record-velocity){overflow-x:auto}.record-overview .card:has(#rtable){overflow-x:auto}.record-overview #rtable{min-width:560px}.record-charts .chart{height:240px}.record-media{margin-bottom:16px}.record-media .vbox{max-height:440px}.record-media .three{min-height:320px;max-height:440px}@media(min-width:1101px) and (max-width:1500px){.record-overview{grid-template-columns:1fr 1.2fr}.record-overview .card{padding:20px}.record-overview #rtable{font-size:14px;min-width:520px}.record-overview #rtable th,.record-overview #rtable td{padding:9px 6px}.velocity-bars{height:150px;margin-top:38px}.record-media .vbox{max-height:400px}.record-media .three{max-height:400px}.ctrl{gap:6px}.ctrl .btn{padding:0 10px}}@media(max-width:700px){.nav a{padding:0 12px;font-size:14px}.velocity-bars{gap:8px}.bar-value{font-size:12px}}
+.record .row2:has(.fb){grid-template-columns:1fr}</style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
     <div class="brand"><i></i>세트 리포트</div>
-    <div class="sp"></div><a class="btn" href="/">운동 기록</a><a class="btn" href="/#new">새 기록</a>
+    <div class="sp"></div><nav class="nav" aria-label="주 메뉴"><a href="/" class="on" aria-current="page">운동 기록</a><a href="/#new">새 기록</a></nav>
 
   </div>
 
@@ -448,7 +450,7 @@ function buildReport() {
   sel.onchange = () => { S.refRep = +sel.value; $("#c-refrep").textContent = S.refRep; $("#cnt-ref").innerHTML = '<small style="margin:0 4px 0 0">기준</small>rep ' + S.refRep; drawHeight(); syncNow(); };
   if (HAS_REF) pb.appendChild(sel);
   $("#c-refrep").textContent = S.refRep; $("#cnt-ref").innerHTML = '<small style="margin:0 4px 0 0">기준</small>rep ' + S.refRep;
-  buildTimeline(cards); buildTempo(); refreshNumbers(); init3D();
+  buildTimeline(cards); buildTempo(); refreshNumbers(); init3D(); arrangeRecord();
   $("#r-plate").onchange = () => { S.plateMM = clamp(+$("#r-plate").value || 450, 150, 500); refreshNumbers(); };
 }
 function goFinding(f) {
@@ -460,7 +462,7 @@ function refreshNumbers() {
   B.findings.cards.forEach(f => { if (f.kind === "inset") { const el = $("#fc" + f.no + " .v"); if (el) el.textContent = "(" + f.val.replace(/\d+\.\d+/g, x => (+x * SC()).toFixed(2)) + ")"; } });
   const quiet = $("#fb-quiet"); if (!quiet.dataset.original) quiet.dataset.original = quiet.innerHTML;
   quiet.innerHTML = quiet.dataset.original.replace(/깊이 ([−+])(\d+\.\d+) cm/g, (_, sign, x) => "깊이 " + sign + (+x * SC()).toFixed(1) + " cm").replace(/속도 (\d+\.\d+) m\/s/g, (_, x) => "속도 " + (+x * SC()).toFixed(2) + " m/s");
-  buildKpis(); buildTables(); buildGeo(); drawHeight(); $("#foot").textContent = `원판 지름 ${S.plateMM} mm 기준`; }
+  buildKpis(); buildTables(); buildGeo(); drawHeight(); buildVelocityBars(); $("#foot").textContent = `원판 지름 ${S.plateMM} mm 기준`; }
 function setStats(V) { const roms = V.reps.map(rom), vs = V.reps.map(vel).filter(isFinite); return { rom: avg(roms), vmin: Math.min(...vs), vmax: Math.max(...vs), ...(B.set_median ? B.set_median[V === U ? "user" : "ref"] : { down: median(V.reps.map(r => r.down)), up: median(V.reps.map(r => r.up)), pause: median(V.reps.map(r => r.pause)) }) }; }
 function buildKpis() {
   const su = setStats(U), sr = HAS_REF ? setStats(R) : null, kn = B.kpi;
@@ -634,7 +636,7 @@ window.addEventListener("resize", () => { document.querySelectorAll(".vbox video
 const B2 = [[11, 12], [11, 23], [12, 24], [23, 24], [11, 13], [13, 15], [12, 14], [14, 16], [23, 25], [25, 27], [24, 26], [26, 28], [27, 31], [28, 32], [27, 29], [28, 30], [29, 31], [30, 32]];
 function drawOverlay(V, video, canvas, t, color, who) {
   const box = canvas.parentElement, dpr = window.devicePixelRatio || 1, cw = box.clientWidth, ch = box.clientHeight;
-  if (canvas.width !== Math.round(cw * dpr)) { canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr); }
+  if (canvas.width !== Math.round(cw * dpr) || canvas.height !== Math.round(ch * dpr)) { canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr); }
   const g = canvas.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, cw, ch);
   const c = V.crop, s = Math.min(cw / (c[2] - c[0]), ch / (c[3] - c[1])), ox = (cw - (c[2] - c[0]) * s) / 2 - c[0] * s, oy = (ch - (c[3] - c[1]) * s) / 2 - c[1] * s;
   if (video._s !== s) { video.style.width = V.width * s + "px"; video.style.height = V.height * s + "px"; video.style.left = ox + "px"; video.style.top = oy + "px"; video._s = s; }
@@ -784,6 +786,36 @@ function draw2D(tu, tr) {
     B2.forEach(([a,bj]) => { const a1=at[a],b1=at[bj]; if (!a1 || !b1 || a1[2]<.3 || b1[2]<.3) return;
       g.beginPath();g.moveTo(xoff+8+(a1[0]-b[0])*sc,60+(a1[1]-b[1])*sc);g.lineTo(xoff+8+(b1[0]-b[0])*sc,60+(b1[1]-b[1])*sc);g.stroke(); });
   });
+}
+
+function buildVelocityBars() {
+  const host = $("#record-velocity"); if (!host) return;
+  host.replaceChildren();
+  const values = U.reps.map(vel), measured = values.filter(Number.isFinite), max = Math.max(...measured, 0);
+  U.reps.forEach((rep, i) => {
+    const column = document.createElement("div"); column.className = "velocity-column";
+    const bar = document.createElement("i"); bar.className = i === U.reps.length - 1 ? "last" : "";
+    bar.style.height = (Number.isFinite(values[i]) && max > 0 ? 100 * values[i] / max : 0) + "%";
+    const value = document.createElement("span"); value.className = "bar-value"; value.textContent = fmt(values[i], 2);
+    const label = document.createElement("span"); label.className = "bar-label"; label.textContent = "rep " + rep.n;
+    bar.appendChild(value); column.append(bar, label); host.appendChild(column);
+  });
+}
+function arrangeRecord() {
+  if (HAS_REF) return;
+  const report = $("#s-report"), kpis = $("#kpis");
+  const overview = document.createElement("div"); overview.className = "row2 record-overview";
+  const velocity = document.createElement("div"); velocity.className = "card";
+  const title = document.createElement("h2"); title.textContent = "rep별 올리는 속도";
+  const hint = document.createElement("span"); hint.className = "label"; hint.textContent = " m/s · 마지막 rep 라임"; title.appendChild(hint);
+  const bars = document.createElement("div"); bars.className = "velocity-bars"; bars.id = "record-velocity";
+  velocity.append(title, bars); overview.append(velocity, $("#rtable").closest(".card")); kpis.after(overview);
+  const charts = document.createElement("div"); charts.className = "row2 record-charts";
+  charts.append($("#ch-h").closest(".card"), $("#tempo").closest(".card")); overview.after(charts);
+  const stage = $("#s-report > .stage"); charts.after(stage); stage.classList.add("record-media");
+  report.querySelectorAll(".row2").forEach(row => { if (!row.children.length) row.remove(); });
+  $("#pose-note").textContent = B.show_3d ? "3D 자세 각도는 표시용 추정값입니다." : "벤치는 2D 골격을 표시합니다.";
+  stage.before($("#pose-note")); buildVelocityBars(); drawHeight();
 }
 const exerciseName = {squat:"스쿼트",benchpress:"벤치프레스",deadlift:"데드리프트"}[B.exercise];
 $("#r-title").textContent = exerciseName + (HAS_REF ? " 비교 리포트" : " 기록 리포트");

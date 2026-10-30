@@ -1,0 +1,171 @@
+{
+  "console_errors": [],
+  "record_velocity_labels": [
+    "0.37",
+    "0.34",
+    "0.30"
+  ],
+  "direct_diameter": true,
+  "bounds": [
+    {
+      "screen": "03_squat_report",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "03_squat_report",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "03_squat_cards",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "03_squat_cards",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "09_deadlift_report",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "09_deadlift_report",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "11_record_charts",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "11_record_charts",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "12_record_media",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "12_record_media",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "13_record_details",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "13_record_details",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "14_saved_ref_report",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "14_saved_ref_report",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "14_saved_ref_cards",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "14_saved_ref_cards",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "14_saved_ref_input",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "14_saved_ref_input",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "18_custom_diameter",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "horizontal_overflow": false
+    },
+    {
+      "screen": "18_custom_diameter",
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontal_overflow": false
+    }
+  ]
+}
