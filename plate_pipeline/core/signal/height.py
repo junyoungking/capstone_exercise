@@ -56,3 +56,67 @@ def height_signal(rows, plate_mm=450.0, win_s=0.5):
     y = np.concatenate([[0.0], np.cumsum(dy)])
     x = np.concatenate([[0.0], np.cumsum(dx)])
     return t, y, x
+
+
+def ellipse_matrix(major, minor, angle, plate_mm=450.0):
+    """Symmetric ellipse-to-circle map in metres per pixel (full diameters)."""
+    if not (0 < minor <= major and plate_mm > 0):
+        raise ValueError('Invalid ellipse or plate diameter')
+    c, s = np.cos(angle), np.sin(angle)
+    rotation = np.array([[c, -s], [s, c]])
+    return rotation @ np.diag([plate_mm / 1000 / major, plate_mm / 1000 / minor]) @ rotation.T
+
+
+def path_axes(points, min_span_m=.03):
+    """Bar-path PCA; image up fixes the sign. Short/isotropic paths use image up."""
+    q = np.asarray(points, float)
+    up = np.array([0., -1.])
+    if len(q) >= 3 and np.isfinite(q).all():
+        centered = q - np.mean(q, axis=0)
+        vals, vecs = np.linalg.eigh(centered.T @ centered)
+        if np.ptp(q @ vecs[:,1]) >= min_span_m and vals[1] > 2*max(vals[0], 1e-12):
+            up = vecs[:,1]
+            if up[1] > 0: up = -up
+    return up, np.array([-up[1], up[0]])
+
+
+def corrected_height_signal(rows, plate_mm=450., scale_source='box', position_source='box'):
+    """Optional D rectification; missing or rejected ellipses use the box.
+
+    The unchanged original function is used verbatim for box/box.
+    """
+    if scale_source not in ('box','ellipse') or position_source not in ('box','ellipse'):
+        raise ValueError('scale_source and position_source must be box or ellipse')
+    if scale_source == position_source == 'box':
+        return height_signal(rows,plate_mm)
+    use = [r for r in rows if r.get('plate',{}).get('used')]
+    if not use:
+        e = np.array([]); return e,e,e
+    t = np.array([r['t'] for r in use],float)
+    center = np.array([r['plate']['center'] for r in use],float)
+    if position_source == 'ellipse':
+        for i,r in enumerate(use):
+            e = r['plate'].get('ellipse') or {}
+            if e.get('source') == 'ellipse': center[i] = e['center']
+    center -= np.array([r.get('cam') or (0.,0.) for r in use])
+    # Same measured-size window as the original box calculation.
+    measured = [r for r in use if r['plate'].get('src') in ('det','det_low','rim')]
+    if measured:
+        mt = np.array([r['t'] for r in measured]); ms = np.array([r['plate']['size_px'] for r in measured],float)
+        half = TrackCfg().measured_half_window_s
+        sizes = np.array([np.median(ms[(mt >= ti-half)&(mt <= ti+half)],axis=0) if np.any((mt >= ti-half)&(mt <= ti+half)) else ms[np.argmin(abs(mt-ti))] for ti in t])
+    else:
+        sizes0 = np.array([r['plate']['size_px'] for r in use],float)
+        sizes = np.column_stack([_rolling_median(t,sizes0[:,i],.5) for i in range(2)])
+    matrices = []
+    for r,size in zip(use,sizes):
+        e = r['plate'].get('ellipse') or {}
+        if scale_source == 'ellipse' and e.get('source') == 'ellipse':
+            matrices.append(ellipse_matrix(e.get('smooth_major',e['major']),e.get('smooth_minor',e['minor']),e.get('smooth_angle',e['angle']),plate_mm))
+        else: matrices.append(np.diag(plate_mm/1000/size))
+    matrices = np.asarray(matrices)
+    delta = np.einsum('nij,nj->ni',(matrices[:-1]+matrices[1:])/2,np.diff(center,axis=0))
+    pts = np.vstack([np.zeros(2),np.cumsum(delta,axis=0)])
+    # A pure box scale uses the old fixed screen axes; D uses the path axis.
+    up, side = path_axes(pts) if scale_source == 'ellipse' else (np.array([0.,-1.]),np.array([1.,0.]))
+    return t, pts@up, pts@side

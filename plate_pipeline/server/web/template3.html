@@ -245,7 +245,7 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
 .setgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
 .setcard{background:var(--raised);border-radius:12px;padding:14px 16px}
 @media (max-width:1100px){.logwrap{grid-template-columns:1fr}.monthk{grid-template-columns:1fr 1fr}.geo{grid-template-columns:1fr 1fr 1fr}}
-.sgrid>.vbox{max-height:580px}.record .sgrid{grid-template-columns:var(--cu,1fr) 1.2fr}.record .geo{grid-template-columns:1.2fr 1fr}a.btn{text-decoration:none;display:inline-flex;align-items:center}.record .sgrid .three{grid-column:auto}@media(max-width:700px){.sgrid>.vbox{max-height:580px}.record .sgrid{grid-template-columns:1fr}}
+.sgrid>.vbox{max-height:580px}.record .sgrid{grid-template-columns:minmax(0,min(45%,calc(440px * var(--record-ar, 1)))) minmax(0,1fr)}.record .geo{grid-template-columns:1.2fr 1fr}a.btn{text-decoration:none;display:inline-flex;align-items:center}.record .sgrid .three{grid-column:auto}@media(max-width:700px){.sgrid>.vbox{max-height:580px}.record .sgrid{grid-template-columns:1fr}}
 
 .nav a{height:44px;display:inline-flex;align-items:center;padding:0 16px;text-decoration:none;border-radius:9px;color:var(--text-2);font-size:16px;font-weight:500}.nav a.on{background:var(--raised);color:var(--mine)}.topbar .nav{padding:4px}.record-overview{margin-top:4px;align-items:stretch}.velocity-bars{display:flex;align-items:flex-end;gap:12px;height:176px;margin:42px 8px 32px;overflow:visible}.velocity-column{height:100%;flex:1;min-width:22px;position:relative;display:flex;align-items:flex-end}.velocity-column i{position:relative;display:block;width:100%;background:var(--pause);border-radius:5px 5px 0 0;min-height:1px;font-style:normal}.velocity-column i.last{background:var(--mine)}.bar-value{position:absolute;top:-27px;left:0;width:100%;text-align:center;font:500 14px var(--mono);color:var(--text-2)}.bar-label{position:absolute;bottom:-28px;left:0;width:100%;text-align:center;font:400 12px var(--mono);color:var(--text-3)}.record-overview .card:has(#record-velocity){overflow-x:auto}.record-overview .card:has(#rtable){overflow-x:auto}.record-overview #rtable{min-width:560px}.record-charts .chart{height:240px}.record-media{margin-bottom:16px}.record-media .vbox{max-height:440px}.record-media .three{min-height:320px;max-height:440px}@media(min-width:1101px) and (max-width:1500px){.record-overview{grid-template-columns:1fr 1.2fr}.record-overview .card{padding:20px}.record-overview #rtable{font-size:14px;min-width:520px}.record-overview #rtable th,.record-overview #rtable td{padding:9px 6px}.velocity-bars{height:150px;margin-top:38px}.record-media .vbox{max-height:400px}.record-media .three{max-height:400px}.ctrl{gap:6px}.ctrl .btn{padding:0 10px}}@media(max-width:700px){.nav a{padding:0 12px;font-size:14px}.velocity-bars{gap:8px}.bar-value{font-size:12px}}
 .record .row2:has(.fb){grid-template-columns:1fr}</style>
@@ -317,7 +317,7 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
         <p class="quiet" id="fb-quiet"></p>
       </div>
       <div class="card">
-        <h2>바 높이 <span class="label">rep 시작부터 초 · cm</span></h2>
+        <h2>바 높이 <span class="label" id="height-label">rep 시작부터 초 · cm</span></h2>
         <canvas class="chart" id="ch-h"></canvas>
         <div class="legendrow"><span><span class="solid"></span>내 rep (선택한 rep 굵게)</span><span><span class="dash"></span>기준 rep</span></div>
       </div>
@@ -327,7 +327,7 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
       <div class="card">
         <h2>템포 <span class="label">초 · 같은 시간 축</span></h2>
         <div class="tempo" id="tempo"></div>
-        <div class="legendrow"><span><b style="background:var(--down)"></b>내림</span><span><b style="background:var(--pause)"></b>바닥에서 멈춤</span><span><b style="background:var(--up)"></b>올림</span><span><span class="dash"></span>기준 영상 (rep 중앙값)</span></div>
+        <div class="legendrow" id="tempo-legend"><span><b style="background:var(--down)"></b>내림</span><span><b style="background:var(--pause)"></b>바닥에서 멈춤</span><span><b style="background:var(--up)"></b>올림</span><span><span class="dash"></span>기준 영상 (rep 중앙값)</span></div>
       </div>
       <div class="card">
         <h2>rep 기록</h2>
@@ -520,7 +520,8 @@ function buildTempo() {
   const row = (label, d, p, u, cls = "") => {
     const w = x => (100 * x / maxT).toFixed(2) + "%";
     const div = document.createElement("div"); div.className = "trow " + cls;
-    div.innerHTML = `<span>${label}</span><div class="tbar" style="width:${w(d + p + u)}"><i style="width:${(100 * d / (d + p + u)).toFixed(1)}%;background:var(--down)"></i><i style="width:${Math.max(.6, 100 * p / (d + p + u)).toFixed(1)}%;background:var(--pause)"></i><i style="flex:1;background:var(--up)"></i></div><span class="nums">${d.toFixed(2)} / ${p.toFixed(2)} / ${u.toFixed(2)}</span>`;
+    const dead = B.exercise === "deadlift", first = dead ? u : d, last = dead ? d : u;
+    div.innerHTML = `<span>${label}</span><div class="tbar" style="width:${w(d + p + u)}"><i style="width:${(100 * first / (d + p + u)).toFixed(1)}%;background:var(--${dead ? "up" : "down"})"></i><i style="width:${Math.max(.6, 100 * p / (d + p + u)).toFixed(1)}%;background:var(--pause)"></i><i style="flex:1;background:var(--${dead ? "down" : "up"})"></i></div><span class="nums">${first.toFixed(2)} / ${p.toFixed(2)} / ${last.toFixed(2)}</span>`;
     el.appendChild(div);
   };
   U.reps.forEach(r => row("rep " + r.n, r.down, r.pause, r.up));
@@ -555,7 +556,7 @@ function buildGeo() {
   let h = '<div class="h"></div><div class="hdr">내 영상</div>' + (HAS_REF ? '<div class="hdr">기준 영상</div>' : "");
   rows.forEach(([n, f]) => { h += `<div class="h">${n}</div><div class="v">${f(U)}</div>${HAS_REF ? `<div class="v">${f(R)}</div>` : ""}`; });
   $("#geo").innerHTML = h;
-  $("#geo-warn").textContent = [U, R].filter(Boolean).some(V => V.geo_check.warn) ? "입력 키와 원판으로 잰 키가 15% 넘게 다릅니다. 원판 지름 입력이나 촬영을 확인해 주세요." : "";
+  $("#geo-warn").textContent = [[U, R].filter(Boolean).some(V => V.geo_check.warn) ? "입력 키와 원판으로 잰 키가 15% 넘게 다릅니다. 원판 지름 입력이나 촬영을 확인해 주세요." : "", [U, R].filter(Boolean).some(V => V.geo.retake_warn) ? "카메라를 더 옆으로 두면 깊이·속도가 더 정확해집니다." : ""].filter(Boolean).join(" ");
   const kg = S.load, vs = U.reps.map(vel).filter(isFinite);
   if (kg && vs.length) {
     const P = vs.map(v => kg * 9.81 * v), work = U.reps.reduce((a, r) => a + kg * 9.81 * rom(r) / 100, 0);
@@ -571,7 +572,7 @@ function drawHeight() {
   const all = [...U.reps, ...(HAS_REF ? R.reps : [])], maxT = Math.max(...all.map(r => r.back - r.start)) + .2;
   const maxD = Math.ceil(Math.max(...all.map(r => r.dmax * SC())) / 10) * 10 + 5;
   const L = 44, Rr = 12, T = 12, Bm = 28;
-  const X = s => L + (s / maxT) * (W - L - Rr), Y = d => T + (d / maxD) * (H - T - Bm);
+  const X = s => L + (s / maxT) * (W - L - Rr), Y = d => T + (B.exercise === "deadlift" ? 1 - d / maxD : d / maxD) * (H - T - Bm);
   g.font = "12px JetBrains Mono, monospace"; g.fillStyle = "#8A97A8"; g.strokeStyle = "#2A3340"; g.lineWidth = 1;
   for (let d = 0; d <= maxD; d += 20) { g.beginPath(); g.moveTo(L, Y(d)); g.lineTo(W - Rr, Y(d)); g.stroke(); g.fillText(d, 8, Y(d) + 4); }
   for (let s = 0; s <= maxT; s += 1) { g.fillText(s + "s", X(s) - 6, H - 8); }
@@ -628,7 +629,7 @@ document.addEventListener("keydown", e => {
 // ---------- video boxes and overlays
 function setupBoxes() {
   const ar = V => (V.crop[2] - V.crop[0]) / (V.crop[3] - V.crop[1]);
-  const pr = $("#sgrid"); pr.style.setProperty("--cu", ar(U) + "fr"); if (HAS_REF) pr.style.setProperty("--cr", ar(R) + "fr");
+  const pr = $("#sgrid"); pr.style.setProperty("--cu", ar(U) + "fr"); pr.style.setProperty("--record-ar", ar(U)); if (HAS_REF) pr.style.setProperty("--cr", ar(R) + "fr");
   $("#vb-user").style.setProperty("--ar", ar(U)); if (HAS_REF) $("#vb-ref").style.setProperty("--ar", ar(R));
 }
 setupBoxes();
@@ -822,6 +823,10 @@ $("#r-title").textContent = exerciseName + (HAS_REF ? " 비교 리포트" : " �
 $("#exercise-chip").textContent = "선택한 종목 · " + exerciseName;
 $("#three-sub").textContent = B.pose3d_scale === "input_height" ? "입력 키 기준" : "모델 자체 크기";
 document.body.classList.toggle("record", !HAS_REF);
+if (B.exercise === "deadlift") {
+  $("#height-label").textContent = "rep 시작부터 초 · 바닥에서 높이 cm";
+  $("#tempo-legend").innerHTML = '<span><b style="background:var(--up)"></b>올림</span><span><b style="background:var(--pause)"></b>정점에서 멈춤</span><span><b style="background:var(--down)"></b>내림</span>' + (HAS_REF ? '<span><span class="dash"></span>기준 영상 (rep 중앙값)</span>' : '');
+}
 if (!HAS_REF) {
   $("#vb-ref").style.display = "none"; $("#c-refrep").closest(".chip").style.display = "none";
   $("#t-sync").style.display = "none"; $("#mode3d").style.display = "none";

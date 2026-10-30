@@ -41,7 +41,7 @@ def pick_detection(dets, box):
     return min(dets, key=lambda d: (d.center[0] - cx) ** 2 + (d.center[1] - cy) ** 2)
 
 
-def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=None, exercise="squat"):
+def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=None, exercise="squat", ellipse=False):
     """Frame rows for a whole video. detector(image, seq) -> [Detection].
     rim enables circle fallback both for initialization and around the tracked box.
     With rim=False, wait for a detection (or an explicit init_box) to initialize.
@@ -54,6 +54,7 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
         raise ValueError("pose.every_n must be positive")
     side_lock = SideLock(exercise) if pose is not None else None
     prev_center = None
+    ellipse_step = max(1, round(video.info(path).fps * .25)) if ellipse else 1
     for seq, (t, img) in enumerate(video.frames(path)):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         dets = detector(img, seq) if detector is not None else []
@@ -87,6 +88,11 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
             row["plate"] = {"box": [round(v, 1) for v in st.box], "score": round(st.score, 3),
                             "used": st.src != "lost", "center": [round(cx, 2), round(cy, 2)],
                             "size_px": [round(x1 - x0, 2), round(y1 - y0, 2)], "src": st.src, "n_pts": st.n_pts}
+        if ellipse and row.get("plate", {}).get("used"):
+            from core.recog.ellipse import fit_plate_ellipse
+            sampled = seq % ellipse_step == 0
+            fit = fit_plate_ellipse(img, row["plate"]["box"]) if sampled else None
+            row["plate"]["ellipse"] = {**fit, "sampled": True} if fit is not None else {"source": "box", "quality": 0.0, "sampled": sampled}
         row["cam"] = [0.0, 0.0]
         if pose is not None and seq % every_n == 0:
             start = time.perf_counter()
@@ -117,11 +123,16 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
         rows.append(row)
         if on_frame is not None:
             on_frame(seq, t, img, st)
+    if ellipse:
+        from core.recog.ellipse import smooth_ellipses, interpolate_ellipses
+        interpolate_ellipses(rows)
+        smooth_ellipses(rows)
     return rows
 
 
-def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT):
-    t, y, x = height_signal(rows, plate_mm)
+def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT, scale_source="box", position_source="box"):
+    from core.signal.height import corrected_height_signal
+    t, y, x = corrected_height_signal(rows, plate_mm, scale_source, position_source)
     fr = clean_final(t, y, x, fps, cfg.final)
     s = fr.sig
     sets = run_session(s.t, s.y, s.x, s.gap_before, exercise, "final", cfg=cfg)
@@ -153,7 +164,7 @@ def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT):
 
 
 def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None,
-                  pose=False, device="auto", on_frame=None):
+                  pose=False, device="auto", on_frame=None, scale_source="box", position_source="box", ellipse=False):
     """rim: look for the plate rim when the detector gives nothing (default: only without a model)."""
     info = video.info(path)
     det = OnnxPlateDetector(model, device=device) if model else (BoxFileDetector(boxes) if boxes else None)
@@ -161,13 +172,13 @@ def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, mod
     t0 = time.time()
     try:
         rows = recognize(path, det, init_box, rim=(model is None) if rim is None else rim,
-                         pose=estimator, exercise=exercise, on_frame=on_frame)
+                         pose=estimator, exercise=exercise, on_frame=on_frame, ellipse=ellipse or scale_source == "ellipse" or position_source == "ellipse")
     finally:
         if pose is True:
             estimator.close()
     took = time.time() - t0
     fps = len(rows) / max(rows[-1]["t"] - rows[0]["t"], 1e-6) if len(rows) > 1 else info.fps
-    sets, sig = analyse(rows, exercise, fps, plate_mm)
+    sets, sig = analyse(rows, exercise, fps, plate_mm, scale_source=scale_source, position_source=position_source)
     used = sum(1 for r in rows if r.get("plate", {}).get("used"))
     res = dict(video=os.path.basename(str(path)), exercise=exercise, plate_mm=plate_mm, fps=fps,
                width=info.width, height=info.height, frames=len(rows), plate_frames=used,

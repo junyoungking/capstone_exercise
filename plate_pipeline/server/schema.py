@@ -37,6 +37,19 @@ def validate_result(b):
             req(r['n']==i and r['start']<=r['far_in']<=r['far_out']<=r['back'],role+'.rep events')
         req(num(v['plate_used']) and 0<=v['plate_used']<=100,role+'.plate_used')
         req(isinstance(v['geo'],dict) and isinstance(v.get('geo_check'),dict),role+'.geo')
+        if 'angle_source' in v['geo']:
+            geo=v['geo']
+            req(geo['angle_source'] in ('box','ellipse') and isinstance(geo.get('retake_warn'),bool)
+                and geo['retake_warn']==(geo['cam_angle']>60),role+'.geo angle')
+            req(isinstance(geo.get('ellipse_stats'),dict),role+'.ellipse stats')
+        if 'ellipse' in v:
+            req(isinstance(v['ellipse'],list) and len(v['ellipse'])==n,role+'.ellipse')
+            for e in v['ellipse']:
+                if e is None: continue
+                req(isinstance(e,dict) and e.get('source') in ('box','ellipse') and num(e.get('quality')),role+'.ellipse observation')
+                if e['source']=='ellipse':
+                    req(nums(e.get('center'),2) and all(num(e.get(k)) for k in ('major','minor','angle'))
+                        and e['major']>0 and 0<e['minor']<=e['major'],role+'.ellipse geometry')
     req(isinstance(b['findings'],dict) and all(isinstance(b['findings'].get(k),list) for k in ('cards','extra','outliers')),'findings')
     req(isinstance(b['kpi'],dict) and all(k in b['kpi'] for k in ('d','se','lim','k','mu','mr','hit')),'kpi')
     req(isinstance(b['sentences'],list) and isinstance(b['set_median'],dict),'sentences / set_median')

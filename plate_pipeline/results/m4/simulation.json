@@ -1,0 +1,189 @@
+{
+  "truth_rom_cm": [
+    55.97672869408312,
+    55.148274685344376,
+    55.86964644582202
+  ],
+  "conditions": [
+    {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 2.220446049250313e-14,
+        "B": 2.220446049250313e-14,
+        "D": 1.4336938286018786
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 8,
+      "rom_error_pct": {
+        "A": 0.7473756312788238,
+        "B": 0.7473756312788238,
+        "D": 1.8162629864225122
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 15,
+      "pitch": 0,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 1.7341078848516656,
+        "B": 0.027841065802003406,
+        "D": 2.007370554961896
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 15,
+      "pitch": 0,
+      "roll": 8,
+      "rom_error_pct": {
+        "A": 1.1211314965714925,
+        "B": 0.7161360924910265,
+        "D": 1.701987399538174
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 30,
+      "pitch": 0,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 7.190422294661936,
+        "B": 0.037256576522892715,
+        "D": 1.4233128767312087
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 30,
+      "pitch": 0,
+      "roll": 8,
+      "rom_error_pct": {
+        "A": 6.417228294553645,
+        "B": 0.5661579418136831,
+        "D": 1.7579278666182807
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 45,
+      "pitch": 0,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 17.18011394715566,
+        "B": 0.03514574362278866,
+        "D": 1.8253931693034353
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 45,
+      "pitch": 0,
+      "roll": 8,
+      "rom_error_pct": {
+        "A": 16.10379840384235,
+        "B": 0.34811150629388,
+        "D": 2.035020528456921
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 60,
+      "pitch": 0,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 33.371714361401985,
+        "B": 0.025555949760114327,
+        "D": 1.364918557248318
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 60,
+      "pitch": 0,
+      "roll": 8,
+      "rom_error_pct": {
+        "A": 31.61796953895568,
+        "B": 0.13357273068153042,
+        "D": 1.5210130163721525
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 0,
+      "pitch": 20,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 2.984767837897284,
+        "B": 0.13220836909115796,
+        "D": 1.479588954217781
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 15,
+      "pitch": 20,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 1.322930140730283,
+        "B": 0.19063579494195126,
+        "D": 2.128101040573438
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 30,
+      "pitch": 20,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 3.8449038763069154,
+        "B": 1.26161477990262,
+        "D": 0.332634927485953
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 45,
+      "pitch": 20,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 12.960262806075695,
+        "B": 2.708273428902319,
+        "D": 0.951353361987195
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    },
+    {
+      "yaw": 60,
+      "pitch": 20,
+      "roll": 0,
+      "rom_error_pct": {
+        "A": 27.788883247065744,
+        "B": 4.102480947737275,
+        "D": 2.4656372834374496
+      },
+      "ellipse_frame_fraction": 0.8666666666666667,
+      "clipped_samples": 4
+    }
+  ]
+}

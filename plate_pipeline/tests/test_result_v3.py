@@ -103,3 +103,16 @@ def test_unavailable_speed_is_not_a_fake_zero_or_dropped_rep(bundle):
     assert len(b['user']['reps'])==count
     assert not any(c['kind']=='inset' for c in b['findings']['cards'])
     assert validate_result(b) is b
+
+
+def test_ellipse_schema_and_retake_boundary(bundle):
+    from core.geometry import retake_warning
+    assert not retake_warning(60.) and retake_warning(60.001)
+    b=product(bundle)
+    v=b['user'];v['geo'].update(cam_angle=61.,angle_source='ellipse',retake_warn=True,
+                               ellipse_stats=dict(count=1,fraction=.1,major_px=100.,minor_px=40.,tilt_deg=0.))
+    v['ellipse']=[None]*len(v['t'])
+    v['ellipse'][0]=dict(source='ellipse',quality=.8,center=[20.,30.],major=100.,minor=40.,angle=0.)
+    assert validate_result(b) is b
+    v['geo']['retake_warn']=False
+    with pytest.raises(ValueError,match='angle'): validate_result(b)

@@ -1,0 +1,3504 @@
+[
+  {
+    "key": "squat/squat_11.mp4",
+    "exercise": "squat",
+    "frames": 144,
+    "used": 144,
+    "ellipse_success": 0.013888888888888888,
+    "sampled_success": 2,
+    "elapsed_s": 0.33477201299683657,
+    "major_to_box_h": 0.8751517227696008,
+    "box_ratio": 0.9966331116195817,
+    "box_angle": 4.7029884990043245,
+    "ellipse_angle": 28.758599574781698,
+    "stature_box_cm": 157.45570935490122,
+    "stature_ellipse_cm": 152.1194676908187,
+    "box_reps": 1,
+    "box_events": [
+      4.52599469547246
+    ],
+    "box_rom_cm": [
+      54.73538937767373
+    ],
+    "box_velocity": [
+      0.26643815907698626
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.527115818914221
+    ],
+    "ellipse_rom_cm": [
+      54.99109706716675
+    ],
+    "ellipse_velocity": [
+      0.26802019785481884
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.527110020765131
+    ],
+    "ellipse_center_rom_cm": [
+      54.98316665165059
+    ],
+    "ellipse_center_velocity": [
+      0.26828593258756184
+    ]
+  },
+  {
+    "key": "squat/stu4_69.mp4",
+    "exercise": "squat",
+    "frames": 300,
+    "used": 300,
+    "ellipse_success": 0.0033333333333333335,
+    "sampled_success": 1,
+    "elapsed_s": 0.6727834060002351,
+    "major_to_box_h": 0.7746191440643974,
+    "box_ratio": 0.9783292803253039,
+    "box_angle": 11.949829851016368,
+    "ellipse_angle": 72.65414774381561,
+    "stature_box_cm": 174.9211241531415,
+    "stature_ellipse_cm": 144.35565407523725,
+    "box_reps": 2,
+    "box_events": [
+      3.04487276545545,
+      7.148651222150905
+    ],
+    "box_rom_cm": [
+      74.83479124126242,
+      76.6399365448701
+    ],
+    "box_velocity": [
+      0.9120946001950638,
+      0.7875890837926591
+    ],
+    "ellipse_reps": 2,
+    "ellipse_events": [
+      3.072862789329379,
+      7.156507882642975
+    ],
+    "ellipse_rom_cm": [
+      77.20106779156643,
+      77.39844912145348
+    ],
+    "ellipse_velocity": [
+      0.9045797427380314,
+      0.7884169412680818
+    ],
+    "ellipse_center_reps": 2,
+    "ellipse_center_events": [
+      3.0730030554145986,
+      7.156665738444399
+    ],
+    "ellipse_center_rom_cm": [
+      77.19519026137083,
+      77.3942059280907
+    ],
+    "ellipse_center_velocity": [
+      0.9045086137285421,
+      0.7882342333709197
+    ]
+  },
+  {
+    "key": "squat/val1235.mp4",
+    "exercise": "squat",
+    "frames": 300,
+    "used": 300,
+    "ellipse_success": 0.99,
+    "sampled_success": 38,
+    "elapsed_s": 0.38186432200018317,
+    "major_to_box_h": 1.1414191842298018,
+    "box_ratio": 1.075445424985281,
+    "box_angle": 0.0,
+    "ellipse_angle": 42.321538696089334,
+    "stature_box_cm": 143.6629927854304,
+    "stature_ellipse_cm": 126.23058374845453,
+    "box_reps": 2,
+    "box_events": [
+      4.351857787523849,
+      9.466428695991452
+    ],
+    "box_rom_cm": [
+      33.33139541423659,
+      41.30702510825935
+    ],
+    "box_velocity": [
+      0.20006913892244846,
+      0.234686197840539
+    ],
+    "ellipse_reps": 2,
+    "ellipse_events": [
+      4.341813203852567,
+      9.435453548962998
+    ],
+    "ellipse_rom_cm": [
+      32.01488341674582,
+      38.757058424081706
+    ],
+    "ellipse_velocity": [
+      0.1932073103144101,
+      0.22608821269500812
+    ],
+    "ellipse_center_reps": 2,
+    "ellipse_center_events": [
+      4.273062623010651,
+      9.135440533474421
+    ],
+    "ellipse_center_rom_cm": [
+      35.80870374955318,
+      37.85536672507935
+    ],
+    "ellipse_center_velocity": [
+      0.21827894570048298,
+      0.2648709292484877
+    ]
+  },
+  {
+    "key": "squat/val1256.mp4",
+    "exercise": "squat",
+    "frames": 300,
+    "used": 300,
+    "ellipse_success": 0.99,
+    "sampled_success": 38,
+    "elapsed_s": 0.31236645900207805,
+    "major_to_box_h": 1.1677035648818475,
+    "box_ratio": 1.0701221141668698,
+    "box_angle": 0.0,
+    "ellipse_angle": 52.41189343587732,
+    "stature_box_cm": 187.48585983942095,
+    "stature_ellipse_cm": 160.6226483339754,
+    "box_reps": 2,
+    "box_events": [
+      5.334434379530906,
+      9.625128783568957
+    ],
+    "box_rom_cm": [
+      57.20658779037816,
+      57.616800756194166
+    ],
+    "box_velocity": [
+      0.29869931251022797,
+      0.2776052825930842
+    ],
+    "ellipse_reps": 2,
+    "ellipse_events": [
+      5.362764044040635,
+      9.760847748265286
+    ],
+    "ellipse_rom_cm": [
+      85.75606516818478,
+      70.11167628557035
+    ],
+    "ellipse_velocity": [
+      0.4062685063357255,
+      0.32214611727740056
+    ],
+    "ellipse_center_reps": 2,
+    "ellipse_center_events": [
+      4.834895670842804,
+      8.265855509236603
+    ],
+    "ellipse_center_rom_cm": [
+      12.143403086319351,
+      16.13688569713727
+    ],
+    "ellipse_center_velocity": [
+      0.08896315090254034,
+      0.3006194528331804
+    ]
+  },
+  {
+    "key": "benchpress/bench press_31.mp4",
+    "exercise": "benchpress",
+    "frames": 77,
+    "used": 76,
+    "ellipse_success": 0.5789473684210527,
+    "sampled_success": 9,
+    "elapsed_s": 0.2323711320059374,
+    "major_to_box_h": 0.7974104674104474,
+    "box_ratio": 0.49008763488440604,
+    "box_angle": 60.653658276206166,
+    "ellipse_angle": 73.86952343469878,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 1,
+    "box_events": [
+      2.8527118118448413
+    ],
+    "box_rom_cm": [
+      25.884179211597697
+    ],
+    "box_velocity": [
+      0.2306644713885728
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      2.889523887892965
+    ],
+    "ellipse_rom_cm": [
+      32.496264548848345
+    ],
+    "ellipse_velocity": [
+      0.30247910928950833
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      2.7170529130913095
+    ],
+    "ellipse_center_rom_cm": [
+      39.42538103804455
+    ],
+    "ellipse_center_velocity": [
+      0.4198639909854718
+    ]
+  },
+  {
+    "key": "benchpress/bench press_40.mp4",
+    "exercise": "benchpress",
+    "frames": 225,
+    "used": 225,
+    "ellipse_success": 0.013333333333333334,
+    "sampled_success": 3,
+    "elapsed_s": 0.4699714980015415,
+    "major_to_box_h": 0.9579626877535455,
+    "box_ratio": 1.0348675034867505,
+    "box_angle": 0.0,
+    "ellipse_angle": 23.199194659999478,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 3,
+    "box_events": [
+      3.2710505215319907,
+      5.742169139220766,
+      8.710757586255744
+    ],
+    "box_rom_cm": [
+      34.66152115401052,
+      30.11987104009605,
+      32.581151623498265
+    ],
+    "box_velocity": [
+      0.1401138524349299,
+      0.21307495690364983,
+      0.1730790229893888
+    ],
+    "ellipse_reps": 3,
+    "ellipse_events": [
+      3.273079274389933,
+      5.786098363852172,
+      8.958068041158818
+    ],
+    "ellipse_rom_cm": [
+      35.08928128332337,
+      35.11122613007491,
+      36.45971415819876
+    ],
+    "ellipse_velocity": [
+      0.1453524550286846,
+      0.2368681440575139,
+      0.16900538722777664
+    ],
+    "ellipse_center_reps": 3,
+    "ellipse_center_events": [
+      3.273097194860446,
+      5.7861117279382315,
+      8.958111099158495
+    ],
+    "ellipse_center_rom_cm": [
+      35.09161747935037,
+      35.111723005208276,
+      36.459943217593086
+    ],
+    "ellipse_center_velocity": [
+      0.14535906126493717,
+      0.23686750708978552,
+      0.16900232525492787
+    ]
+  },
+  {
+    "key": "benchpress/stu10_11.mp4",
+    "exercise": "benchpress",
+    "frames": 1798,
+    "used": 83,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 1.0372769700043136,
+    "major_to_box_h": null,
+    "box_ratio": 0.33486590038314124,
+    "box_angle": 70.43561637514308,
+    "ellipse_angle": null,
+    "stature_box_cm": 108.46240539319167,
+    "stature_ellipse_cm": 108.46240539319167,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "benchpress/stu8_15.mp4",
+    "exercise": "benchpress",
+    "frames": 1140,
+    "used": 859,
+    "ellipse_success": 0.006984866123399301,
+    "sampled_success": 6,
+    "elapsed_s": 1.0850225309986854,
+    "major_to_box_h": 0.9594972448799167,
+    "box_ratio": 1.101781170483461,
+    "box_angle": 0.0,
+    "ellipse_angle": 69.0316736767481,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 4,
+    "box_events": [
+      5.0113885561634905,
+      6.622022070238364,
+      17.60150532310762,
+      19.411127604987826
+    ],
+    "box_rom_cm": [
+      28.070757095604147,
+      28.373156884792937,
+      0.0,
+      26.60952427146068,
+      27.870934968753257
+    ],
+    "box_velocity": [
+      0.6835065188220608,
+      0.7693549523501814,
+      0.5180638071034378,
+      0.5381788825180057
+    ],
+    "ellipse_reps": 4,
+    "ellipse_events": [
+      5.026804814474879,
+      6.626050020135966,
+      17.617725885091865,
+      19.413014936040014
+    ],
+    "ellipse_rom_cm": [
+      28.881174304637774,
+      29.153036462129855,
+      0.0,
+      26.33857428113175,
+      27.802404433549256
+    ],
+    "ellipse_velocity": [
+      0.6495339402934337,
+      0.751075440016583,
+      0.49473105284229657,
+      0.5301197290711563
+    ],
+    "ellipse_center_reps": 4,
+    "ellipse_center_events": [
+      5.0266973794054195,
+      6.625963006030376,
+      17.617607683297962,
+      19.41299566697734
+    ],
+    "ellipse_center_rom_cm": [
+      28.89854632419629,
+      29.16988654799791,
+      0.0,
+      26.36028505140518,
+      27.82232786073555
+    ],
+    "ellipse_center_velocity": [
+      0.6503073554231391,
+      0.7511638040804578,
+      0.49529151309429365,
+      0.5305850160535532
+    ]
+  },
+  {
+    "key": "benchpress/stu8_7.mp4",
+    "exercise": "benchpress",
+    "frames": 660,
+    "used": 503,
+    "ellipse_success": 0.731610337972167,
+    "sampled_success": 65,
+    "elapsed_s": 0.7081350880034734,
+    "major_to_box_h": 1.237416123858525,
+    "box_ratio": 0.9014238773274912,
+    "box_angle": 25.65413464241971,
+    "ellipse_angle": 48.524512163900845,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 2,
+    "box_events": [
+      11.44731226546514,
+      17.77410723916329
+    ],
+    "box_rom_cm": [
+      56.10010751159127,
+      38.66705434991562
+    ],
+    "box_velocity": [
+      0.399242841246582
+    ],
+    "ellipse_reps": 2,
+    "ellipse_events": [
+      11.502522290483524,
+      17.65718142791822
+    ],
+    "ellipse_rom_cm": [
+      70.04556495729497,
+      41.167979000903536
+    ],
+    "ellipse_velocity": [
+      0.49856987093453325
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      16.67896208507592
+    ],
+    "ellipse_center_rom_cm": [
+      0.0,
+      37.045240539677714
+    ],
+    "ellipse_center_velocity": [
+      0.28398420198286756
+    ]
+  },
+  {
+    "key": "benchpress/test153.mp4",
+    "exercise": "benchpress",
+    "frames": 300,
+    "used": 19,
+    "ellipse_success": 0.05263157894736842,
+    "sampled_success": 1,
+    "elapsed_s": 0.149836109005264,
+    "major_to_box_h": 0.7937853424637407,
+    "box_ratio": 0.2412420382165606,
+    "box_angle": 76.04014194742,
+    "ellipse_angle": 76.61721141871794,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "deadlift/deadlift_7.mp4",
+    "exercise": "deadlift",
+    "frames": 150,
+    "used": 150,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.38083713200467173,
+    "major_to_box_h": null,
+    "box_ratio": 1.3815355439918764,
+    "box_angle": 0.0,
+    "ellipse_angle": null,
+    "stature_box_cm": 185.27150119908933,
+    "stature_ellipse_cm": 185.27150119908933,
+    "box_reps": 1,
+    "box_events": [
+      3.3069773909672047
+    ],
+    "box_rom_cm": [
+      43.50747703024035
+    ],
+    "box_velocity": [
+      0.4301075374006038
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.339188251954139
+    ],
+    "ellipse_rom_cm": [
+      44.21918258117243
+    ],
+    "ellipse_velocity": [
+      0.43785678049732973
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.339188251954139
+    ],
+    "ellipse_center_rom_cm": [
+      44.21918258117243
+    ],
+    "ellipse_center_velocity": [
+      0.43785678049732973
+    ]
+  },
+  {
+    "key": "deadlift/deadlift_23.mp4",
+    "exercise": "deadlift",
+    "frames": 72,
+    "used": 44,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.12580825099576032,
+    "major_to_box_h": null,
+    "box_ratio": 0.4976579652114611,
+    "box_angle": 60.15482718670958,
+    "ellipse_angle": null,
+    "stature_box_cm": 143.18025537641952,
+    "stature_ellipse_cm": 143.18025537641952,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "deadlift/deadlift_30.mp4",
+    "exercise": "deadlift",
+    "frames": 185,
+    "used": 185,
+    "ellipse_success": 0.04864864864864865,
+    "sampled_success": 4,
+    "elapsed_s": 0.339631137001561,
+    "major_to_box_h": 0.9104359959352363,
+    "box_ratio": 0.9538850284270372,
+    "box_angle": 17.467946434032157,
+    "ellipse_angle": 27.51155141475228,
+    "stature_box_cm": 218.12126995991164,
+    "stature_ellipse_cm": 215.0315165875386,
+    "box_reps": 2,
+    "box_events": [
+      3.2009914584362686,
+      7.537447090133606
+    ],
+    "box_rom_cm": [
+      42.84458627122569,
+      48.298632833353864
+    ],
+    "box_velocity": [
+      0.4446901032397839,
+      0.46471637930030074
+    ],
+    "ellipse_reps": 2,
+    "ellipse_events": [
+      3.1978600875884946,
+      7.5373038883555905
+    ],
+    "ellipse_rom_cm": [
+      43.068876391133436,
+      48.23034768197924
+    ],
+    "ellipse_velocity": [
+      0.4482124761260163,
+      0.4657036568691541
+    ],
+    "ellipse_center_reps": 2,
+    "ellipse_center_events": [
+      3.1950234009494105,
+      7.537372710339592
+    ],
+    "ellipse_center_rom_cm": [
+      43.09043322301847,
+      48.29935016063599
+    ],
+    "ellipse_center_velocity": [
+      0.4477876458107701,
+      0.46583078594452687
+    ]
+  },
+  {
+    "key": "squat/stu6_11_2.mp4",
+    "exercise": "squat",
+    "frames": 160,
+    "used": 160,
+    "ellipse_success": 0.05625,
+    "sampled_success": 2,
+    "elapsed_s": 0.11316178299603052,
+    "major_to_box_h": 1.1252225751792133,
+    "box_ratio": 1.0043337221701685,
+    "box_angle": 0.0,
+    "ellipse_angle": 50.88616384786417,
+    "stature_box_cm": 160.20326786757485,
+    "stature_ellipse_cm": 141.6729149923077,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "squat/stu6_11_3.mp4",
+    "exercise": "squat",
+    "frames": 39,
+    "used": 39,
+    "ellipse_success": 0.8461538461538461,
+    "sampled_success": 5,
+    "elapsed_s": 0.056216689001303166,
+    "major_to_box_h": 1.2870531539452463,
+    "box_ratio": 1.1075268817204302,
+    "box_angle": 0.0,
+    "ellipse_angle": 42.81333892244565,
+    "stature_box_cm": 157.63727256447078,
+    "stature_ellipse_cm": 137.72903399713542,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "squat/val1250.mp4",
+    "exercise": "squat",
+    "frames": 228,
+    "used": 93,
+    "ellipse_success": 0.8172043010752689,
+    "sampled_success": 13,
+    "elapsed_s": 0.17911685799481347,
+    "major_to_box_h": 1.1197002908856186,
+    "box_ratio": 0.4476635514018689,
+    "box_angle": 63.40612163761023,
+    "ellipse_angle": 53.18194466552506,
+    "stature_box_cm": 164.51893041956887,
+    "stature_ellipse_cm": 162.79999643253257,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [
+      0.0
+    ],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "benchpress/bench press_61.mp4",
+    "exercise": "benchpress",
+    "frames": 92,
+    "used": 92,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.18585712300409796,
+    "major_to_box_h": null,
+    "box_ratio": 0.6498958723274257,
+    "box_angle": 49.466248446373676,
+    "ellipse_angle": null,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 2,
+    "box_events": [
+      1.4063565540219376,
+      2.9613679082076008
+    ],
+    "box_rom_cm": [
+      27.03537787187497,
+      34.22979126192873
+    ],
+    "box_velocity": [
+      0.500370048424413,
+      0.6049316893899578
+    ],
+    "ellipse_reps": 2,
+    "ellipse_events": [
+      1.4163904221330657,
+      2.9553776706293164
+    ],
+    "ellipse_rom_cm": [
+      29.89982342851054,
+      35.93818563320785
+    ],
+    "ellipse_velocity": [
+      0.5379848248454414,
+      0.6235551565977056
+    ],
+    "ellipse_center_reps": 2,
+    "ellipse_center_events": [
+      1.4163904221330657,
+      2.9553776706293164
+    ],
+    "ellipse_center_rom_cm": [
+      29.89982342851054,
+      35.93818563320785
+    ],
+    "ellipse_center_velocity": [
+      0.5379848248454414,
+      0.6235551565977056
+    ]
+  },
+  {
+    "key": "benchpress/stu1_6_4.mp4",
+    "exercise": "benchpress",
+    "frames": 116,
+    "used": 114,
+    "ellipse_success": 0.008771929824561403,
+    "sampled_success": 1,
+    "elapsed_s": 0.13176576200203272,
+    "major_to_box_h": 0.7203115510849029,
+    "box_ratio": 0.5712411149966108,
+    "box_angle": 55.163182102027854,
+    "ellipse_angle": 50.74379798931148,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 1,
+    "box_events": [
+      3.3449427934858784
+    ],
+    "box_rom_cm": [
+      44.15002743603681
+    ],
+    "box_velocity": [
+      0.5413714256224895
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.387608791591245
+    ],
+    "ellipse_rom_cm": [
+      48.3992545036566
+    ],
+    "ellipse_velocity": [
+      0.5503685498627373
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.3527615748626567
+    ],
+    "ellipse_center_rom_cm": [
+      47.1262785866479
+    ],
+    "ellipse_center_velocity": [
+      0.5610278780823276
+    ]
+  },
+  {
+    "key": "benchpress/stu7_12_2.mp4",
+    "exercise": "benchpress",
+    "frames": 461,
+    "used": 457,
+    "ellipse_success": 0.06564551422319474,
+    "sampled_success": 9,
+    "elapsed_s": 0.5170176239989814,
+    "major_to_box_h": 1.0278437949612746,
+    "box_ratio": 0.8406279733587061,
+    "box_angle": 32.79350841800699,
+    "ellipse_angle": 40.19362479340588,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 5,
+    "box_events": [
+      3.9181801340536273,
+      6.195931008591314,
+      8.505390082123334,
+      10.781996857788391,
+      13.262490851575853
+    ],
+    "box_rom_cm": [
+      33.375131524452534,
+      31.189917795699746,
+      31.47585748339839,
+      30.733008789066307,
+      33.20827098824007
+    ],
+    "box_velocity": [
+      0.5237266859234798,
+      0.42090020140697926,
+      0.43490444980880655,
+      0.42230282287470355,
+      0.32579676802751945
+    ],
+    "ellipse_reps": 5,
+    "ellipse_events": [
+      3.9852959519476436,
+      6.299124654486645,
+      8.524521523497615,
+      10.85840443398171,
+      16.344086100866434
+    ],
+    "ellipse_rom_cm": [
+      33.567873110101274,
+      32.47639327164384,
+      32.02084049235553,
+      31.18555258294913,
+      38.97153776166023
+    ],
+    "ellipse_velocity": [
+      0.4791205135410382,
+      0.402977723823193,
+      0.4343200205232641,
+      0.46396646928371515
+    ],
+    "ellipse_center_reps": 5,
+    "ellipse_center_events": [
+      3.9860305387392625,
+      6.299983840160732,
+      8.524804091718442,
+      10.859781726398456,
+      16.345948414881725
+    ],
+    "ellipse_center_rom_cm": [
+      33.808374254464646,
+      32.41566256630093,
+      31.97011126332376,
+      31.137939622961184,
+      39.030239927577945
+    ],
+    "ellipse_center_velocity": [
+      0.47343526693162885,
+      0.4021618398875501,
+      0.43353624343015834,
+      0.463346399721232
+    ]
+  },
+  {
+    "key": "benchpress/stu7_7.mp4",
+    "exercise": "benchpress",
+    "frames": 151,
+    "used": 151,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.1307746419988689,
+    "major_to_box_h": null,
+    "box_ratio": 1.7258953168044084,
+    "box_angle": 0.0,
+    "ellipse_angle": null,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 2,
+    "box_events": [
+      2.168368361317495,
+      4.845604436790331
+    ],
+    "box_rom_cm": [
+      45.45352942500861,
+      52.67127686435901
+    ],
+    "box_velocity": [
+      0.5900862639671393,
+      0.5359737399888722
+    ],
+    "ellipse_reps": 2,
+    "ellipse_events": [
+      2.116947030701393,
+      4.8494180736102
+    ],
+    "ellipse_rom_cm": [
+      45.84668991089285,
+      55.518163792274464
+    ],
+    "ellipse_velocity": [
+      0.6310334468767628,
+      0.5602761106598423
+    ],
+    "ellipse_center_reps": 2,
+    "ellipse_center_events": [
+      2.116947030701393,
+      4.8494180736102
+    ],
+    "ellipse_center_rom_cm": [
+      45.84668991089285,
+      55.518163792274464
+    ],
+    "ellipse_center_velocity": [
+      0.6310334468767628,
+      0.5602761106598423
+    ]
+  },
+  {
+    "key": "benchpress/stu8_6_2.mp4",
+    "exercise": "benchpress",
+    "frames": 208,
+    "used": 208,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.17860749799729092,
+    "major_to_box_h": null,
+    "box_ratio": 1.2038586907851199,
+    "box_angle": 0.0,
+    "ellipse_angle": null,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 3,
+    "box_events": [
+      2.1340814995378006,
+      4.169477898512384,
+      6.517556921137861
+    ],
+    "box_rom_cm": [
+      19.6386407587697,
+      18.48207558066714,
+      21.22716494725908
+    ],
+    "box_velocity": [
+      0.1460325712601994,
+      0.1318271317204237,
+      0.11477941229134302
+    ],
+    "ellipse_reps": 3,
+    "ellipse_events": [
+      2.1274331135354987,
+      4.159388629692629,
+      6.680769388640653
+    ],
+    "ellipse_rom_cm": [
+      20.737361945794582,
+      18.90104909918461,
+      22.947601551160133
+    ],
+    "ellipse_velocity": [
+      0.1536270912841699,
+      0.13587418306843457,
+      0.11412817616361241
+    ],
+    "ellipse_center_reps": 3,
+    "ellipse_center_events": [
+      2.1274331135354987,
+      4.159388629692629,
+      6.680769388640653
+    ],
+    "ellipse_center_rom_cm": [
+      20.737361945794582,
+      18.90104909918461,
+      22.947601551160133
+    ],
+    "ellipse_center_velocity": [
+      0.1536270912841699,
+      0.13587418306843457,
+      0.11412817616361241
+    ]
+  },
+  {
+    "key": "deadlift/deadlift_sihoo02.mp4",
+    "exercise": "deadlift",
+    "frames": 136,
+    "used": 136,
+    "ellipse_success": 0.6911764705882353,
+    "sampled_success": 19,
+    "elapsed_s": 0.1472966430010274,
+    "major_to_box_h": 0.9001339778679704,
+    "box_ratio": 0.8280827935006612,
+    "box_angle": 34.09770469586492,
+    "ellipse_angle": 60.56476641844068,
+    "stature_box_cm": 174.8211449642347,
+    "stature_ellipse_cm": 164.46822205943218,
+    "box_reps": 1,
+    "box_events": [
+      4.872005672384058
+    ],
+    "box_rom_cm": [
+      39.20584264344982
+    ],
+    "box_velocity": [
+      0.19486653751887745
+    ],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "deadlift/PB_S01_R10.mp4",
+    "exercise": "deadlift",
+    "frames": 157,
+    "used": 155,
+    "ellipse_success": 0.8387096774193549,
+    "sampled_success": 18,
+    "elapsed_s": 0.16516911699727643,
+    "major_to_box_h": 0.9409763332599484,
+    "box_ratio": 1.009765625,
+    "box_angle": 0.0,
+    "ellipse_angle": 26.892746962600274,
+    "stature_box_cm": 225.95551710694167,
+    "stature_ellipse_cm": 226.8486037039818,
+    "box_reps": 1,
+    "box_events": [
+      5.11559637580116
+    ],
+    "box_rom_cm": [
+      73.57897465741053
+    ],
+    "box_velocity": [
+      0.4051772410084
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      5.122859008266332
+    ],
+    "ellipse_rom_cm": [
+      92.1598213865106
+    ],
+    "ellipse_velocity": [
+      0.5062877454444181
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      5.349872465271633
+    ],
+    "ellipse_center_rom_cm": [
+      101.1622508911761
+    ],
+    "ellipse_center_velocity": [
+      0.3908709533001435
+    ]
+  },
+  {
+    "key": "deadlift/PB_S03_R13.mp4",
+    "exercise": "deadlift",
+    "frames": 86,
+    "used": 86,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.12466782499541296,
+    "major_to_box_h": null,
+    "box_ratio": 0.9964906083736815,
+    "box_angle": 4.801540969869925,
+    "ellipse_angle": null,
+    "stature_box_cm": 165.50686731423875,
+    "stature_ellipse_cm": 165.50686731423875,
+    "box_reps": 1,
+    "box_events": [
+      2.814645463041413
+    ],
+    "box_rom_cm": [
+      47.30710262091063
+    ],
+    "box_velocity": [
+      0.35997206336486104
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      2.814728980018849
+    ],
+    "ellipse_rom_cm": [
+      47.33840687271462
+    ],
+    "ellipse_velocity": [
+      0.36092334179042973
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      2.814728980018849
+    ],
+    "ellipse_center_rom_cm": [
+      47.33840687271462
+    ],
+    "ellipse_center_velocity": [
+      0.36092334179042973
+    ]
+  },
+  {
+    "key": "deadlift/PB_S03_R14.mp4",
+    "exercise": "deadlift",
+    "frames": 102,
+    "used": 102,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.14440983200620394,
+    "major_to_box_h": null,
+    "box_ratio": 0.9708625969737409,
+    "box_angle": 13.865107698291123,
+    "ellipse_angle": null,
+    "stature_box_cm": 163.79192619138712,
+    "stature_ellipse_cm": 163.79192619138712,
+    "box_reps": 1,
+    "box_events": [
+      3.3654889785178614
+    ],
+    "box_rom_cm": [
+      47.854296017374324
+    ],
+    "box_velocity": [
+      0.35577188227755957
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.3655375226527697
+    ],
+    "ellipse_rom_cm": [
+      47.917966677685904
+    ],
+    "ellipse_velocity": [
+      0.3573876776372382
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.3655375226527697
+    ],
+    "ellipse_center_rom_cm": [
+      47.917966677685904
+    ],
+    "ellipse_center_velocity": [
+      0.3573876776372382
+    ]
+  },
+  {
+    "key": "deadlift/PB_S04_R03.mp4",
+    "exercise": "deadlift",
+    "frames": 141,
+    "used": 137,
+    "ellipse_success": 0.5985401459854015,
+    "sampled_success": 12,
+    "elapsed_s": 0.13266197600023588,
+    "major_to_box_h": 0.9241269502326163,
+    "box_ratio": 0.9859459459459459,
+    "box_angle": 9.617194266237325,
+    "ellipse_angle": 43.84053275350186,
+    "stature_box_cm": 238.13425542144344,
+    "stature_ellipse_cm": 202.05713318068413,
+    "box_reps": 1,
+    "box_events": [
+      3.9984238522837634
+    ],
+    "box_rom_cm": [
+      91.18836761996673
+    ],
+    "box_velocity": [
+      0.9651822818594469
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.9485171978416376
+    ],
+    "ellipse_rom_cm": [
+      93.97964060845383
+    ],
+    "ellipse_velocity": [
+      0.9706297522022722
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.140132675443916
+    ],
+    "ellipse_center_rom_cm": [
+      100.29071712285227
+    ],
+    "ellipse_center_velocity": [
+      0.7838218499624531
+    ]
+  },
+  {
+    "key": "deadlift/PB_S05_R22.mp4",
+    "exercise": "deadlift",
+    "frames": 92,
+    "used": 90,
+    "ellipse_success": 0.6333333333333333,
+    "sampled_success": 8,
+    "elapsed_s": 0.08946846699836897,
+    "major_to_box_h": 0.9966280983432937,
+    "box_ratio": 1.0404312465350105,
+    "box_angle": 0.0,
+    "ellipse_angle": 52.199345855797546,
+    "stature_box_cm": 270.6319318415379,
+    "stature_ellipse_cm": 229.29293153214817,
+    "box_reps": 1,
+    "box_events": [
+      2.9740780919057084
+    ],
+    "box_rom_cm": [
+      82.62815175314273
+    ],
+    "box_velocity": [
+      0.6926856496145508
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      2.975807640671749
+    ],
+    "ellipse_rom_cm": [
+      88.45710177164052
+    ],
+    "ellipse_velocity": [
+      0.7203698336749922
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      2.985105273213175
+    ],
+    "ellipse_center_rom_cm": [
+      99.93827221961665
+    ],
+    "ellipse_center_velocity": [
+      0.6662454903413109
+    ]
+  },
+  {
+    "key": "deadlift/PB_S06_R25.mp4",
+    "exercise": "deadlift",
+    "frames": 112,
+    "used": 104,
+    "ellipse_success": 0.33653846153846156,
+    "sampled_success": 7,
+    "elapsed_s": 0.09908021600131178,
+    "major_to_box_h": 0.8632529090542181,
+    "box_ratio": 0.9910158384378687,
+    "box_angle": 7.686030285392382,
+    "ellipse_angle": 20.7870403103957,
+    "stature_box_cm": 223.76130940692823,
+    "stature_ellipse_cm": 221.36982179448324,
+    "box_reps": 1,
+    "box_events": [
+      3.4588052771321025
+    ],
+    "box_rom_cm": [
+      68.05712817461259
+    ],
+    "box_velocity": [
+      0.4883965444866997
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.4721872961219584
+    ],
+    "ellipse_rom_cm": [
+      71.73431945665808
+    ],
+    "ellipse_velocity": [
+      0.4475510688701224
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.475507150462404
+    ],
+    "ellipse_center_rom_cm": [
+      73.70040899397597
+    ],
+    "ellipse_center_velocity": [
+      0.546312533330274
+    ]
+  },
+  {
+    "key": "deadlift/PB_S07_R19.mp4",
+    "exercise": "deadlift",
+    "frames": 142,
+    "used": 121,
+    "ellipse_success": 0.4380165289256198,
+    "sampled_success": 11,
+    "elapsed_s": 0.12799297000310617,
+    "major_to_box_h": 0.8076154780224675,
+    "box_ratio": 1.0122199592668017,
+    "box_angle": 0.0,
+    "ellipse_angle": 34.985523417710915,
+    "stature_box_cm": 265.55004687556743,
+    "stature_ellipse_cm": 239.69848961985716,
+    "box_reps": 1,
+    "box_events": [
+      4.325625335342583
+    ],
+    "box_rom_cm": [
+      52.71973680443167
+    ],
+    "box_velocity": [
+      0.5429319455860206
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.346805417661553
+    ],
+    "ellipse_rom_cm": [
+      56.60775393303802
+    ],
+    "ellipse_velocity": [
+      0.3837394251173169
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.296959075097286
+    ],
+    "ellipse_center_rom_cm": [
+      60.0237960863935
+    ],
+    "ellipse_center_velocity": [
+      0.4233611509514066
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R01.mp4",
+    "exercise": "deadlift",
+    "frames": 120,
+    "used": 119,
+    "ellipse_success": 0.7563025210084033,
+    "sampled_success": 13,
+    "elapsed_s": 0.12164825600484619,
+    "major_to_box_h": 0.9666712884615847,
+    "box_ratio": 1.096061479346782,
+    "box_angle": 0.0,
+    "ellipse_angle": 48.61836830022624,
+    "stature_box_cm": 247.1892892961458,
+    "stature_ellipse_cm": 210.16851351153747,
+    "box_reps": 1,
+    "box_events": [
+      3.937147554978655
+    ],
+    "box_rom_cm": [
+      74.129717256994
+    ],
+    "box_velocity": [
+      0.7136476213865932
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.950557767296868
+    ],
+    "ellipse_rom_cm": [
+      96.90654043322611
+    ],
+    "ellipse_velocity": [
+      0.8912721448758223
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.9402140502663614
+    ],
+    "ellipse_center_rom_cm": [
+      117.02556175916719
+    ],
+    "ellipse_center_velocity": [
+      1.1768536631283633
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R07.mp4",
+    "exercise": "deadlift",
+    "frames": 142,
+    "used": 137,
+    "ellipse_success": 0.9416058394160584,
+    "sampled_success": 17,
+    "elapsed_s": 0.1551420079995296,
+    "major_to_box_h": 0.9800307882801158,
+    "box_ratio": 1.090818363273454,
+    "box_angle": 0.0,
+    "ellipse_angle": 28.128886280112983,
+    "stature_box_cm": 261.66558227682066,
+    "stature_ellipse_cm": 249.57486440437853,
+    "box_reps": 1,
+    "box_events": [
+      4.73230641875799
+    ],
+    "box_rom_cm": [
+      82.15990913799705
+    ],
+    "box_velocity": [
+      0.6945324565777093
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.730034254494736
+    ],
+    "ellipse_rom_cm": [
+      105.75327056240829
+    ],
+    "ellipse_velocity": [
+      0.8926229432225483
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.789034963003752
+    ],
+    "ellipse_center_rom_cm": [
+      105.783480433153
+    ],
+    "ellipse_center_velocity": [
+      0.909516874998259
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R11.mp4",
+    "exercise": "deadlift",
+    "frames": 136,
+    "used": 133,
+    "ellipse_success": 0.7969924812030075,
+    "sampled_success": 15,
+    "elapsed_s": 0.12685006300307577,
+    "major_to_box_h": 0.9324437406609748,
+    "box_ratio": 0.9585547290116894,
+    "box_angle": 16.553376975467067,
+    "ellipse_angle": 51.25705006741063,
+    "stature_box_cm": 243.41304993264342,
+    "stature_ellipse_cm": 232.19058425925417,
+    "box_reps": 1,
+    "box_events": [
+      4.5217066976654205
+    ],
+    "box_rom_cm": [
+      76.79659548606797
+    ],
+    "box_velocity": [
+      0.6467593953404441
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.47044320115247
+    ],
+    "ellipse_rom_cm": [
+      81.43415518789172
+    ],
+    "ellipse_velocity": [
+      0.6727912253736769
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.628895626808242
+    ],
+    "ellipse_center_rom_cm": [
+      94.56751695982662
+    ],
+    "ellipse_center_velocity": [
+      0.9322219792236421
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R16.mp4",
+    "exercise": "deadlift",
+    "frames": 151,
+    "used": 148,
+    "ellipse_success": 0.8243243243243243,
+    "sampled_success": 17,
+    "elapsed_s": 0.1377038869977696,
+    "major_to_box_h": 0.9608546057946107,
+    "box_ratio": 1.00879813792394,
+    "box_angle": 0.0,
+    "ellipse_angle": 40.44169342849475,
+    "stature_box_cm": 252.63812709580043,
+    "stature_ellipse_cm": 225.0817076988703,
+    "box_reps": 1,
+    "box_events": [
+      4.876860145038128
+    ],
+    "box_rom_cm": [
+      84.04091376458936
+    ],
+    "box_velocity": [
+      0.6805094899868447
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.901970084879815
+    ],
+    "ellipse_rom_cm": [
+      106.39574259386433
+    ],
+    "ellipse_velocity": [
+      0.88282324191017
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.920683032954176
+    ],
+    "ellipse_center_rom_cm": [
+      116.6574543041705
+    ],
+    "ellipse_center_velocity": [
+      0.7294987202152552
+    ]
+  },
+  {
+    "key": "deadlift/GB_S01_R18.mp4",
+    "exercise": "deadlift",
+    "frames": 135,
+    "used": 128,
+    "ellipse_success": 0.46875,
+    "sampled_success": 11,
+    "elapsed_s": 0.1299358110045432,
+    "major_to_box_h": 0.9117956855773256,
+    "box_ratio": 1.0056168947588597,
+    "box_angle": 0.0,
+    "ellipse_angle": 21.34113736824033,
+    "stature_box_cm": 247.7168756385909,
+    "stature_ellipse_cm": 247.03407616213156,
+    "box_reps": 1,
+    "box_events": [
+      4.490952389126878
+    ],
+    "box_rom_cm": [
+      65.60455176861176
+    ],
+    "box_velocity": [
+      0.43463444160890485
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.489210408495981
+    ],
+    "ellipse_rom_cm": [
+      65.58958809263731
+    ],
+    "ellipse_velocity": [
+      0.548230295491695
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.487684658510643
+    ],
+    "ellipse_center_rom_cm": [
+      64.62472622794411
+    ],
+    "ellipse_center_velocity": [
+      0.3345491371021852
+    ]
+  },
+  {
+    "key": "deadlift/GB_S04_R03.mp4",
+    "exercise": "deadlift",
+    "frames": 88,
+    "used": 88,
+    "ellipse_success": 0.11363636363636363,
+    "sampled_success": 3,
+    "elapsed_s": 0.08060804400156485,
+    "major_to_box_h": 0.9724264164791341,
+    "box_ratio": 1.0432846242932081,
+    "box_angle": 0.0,
+    "ellipse_angle": 22.398275170522904,
+    "stature_box_cm": 184.5694637531215,
+    "stature_ellipse_cm": 181.4704255389718,
+    "box_reps": 1,
+    "box_events": [
+      2.8553513037868252
+    ],
+    "box_rom_cm": [
+      53.87407580076836
+    ],
+    "box_velocity": [
+      0.5516282189247389
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      2.8616270355011353
+    ],
+    "ellipse_rom_cm": [
+      56.92915372895849
+    ],
+    "ellipse_velocity": [
+      0.5699261303007527
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      2.8621127200860395
+    ],
+    "ellipse_center_rom_cm": [
+      56.774598392143204
+    ],
+    "ellipse_center_velocity": [
+      0.5899946851871297
+    ]
+  },
+  {
+    "key": "deadlift/GB_S04_R04.mp4",
+    "exercise": "deadlift",
+    "frames": 95,
+    "used": 95,
+    "ellipse_success": 0.2,
+    "sampled_success": 5,
+    "elapsed_s": 0.08808423500158824,
+    "major_to_box_h": 0.9195224585819384,
+    "box_ratio": 0.9991762767710052,
+    "box_angle": 2.3257236164123967,
+    "ellipse_angle": 17.258657559736204,
+    "stature_box_cm": 188.57603877980213,
+    "stature_ellipse_cm": 187.33132370713085,
+    "box_reps": 1,
+    "box_events": [
+      3.051758341743777
+    ],
+    "box_rom_cm": [
+      51.95652495053805
+    ],
+    "box_velocity": [
+      0.5998170712878546
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.0545365690204207
+    ],
+    "ellipse_rom_cm": [
+      52.93886238521445
+    ],
+    "ellipse_velocity": [
+      0.5922874887405508
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.052362709130114
+    ],
+    "ellipse_center_rom_cm": [
+      55.665730109128795
+    ],
+    "ellipse_center_velocity": [
+      0.22423917982760316
+    ]
+  },
+  {
+    "key": "deadlift/GB_S04_R07.mp4",
+    "exercise": "deadlift",
+    "frames": 90,
+    "used": 90,
+    "ellipse_success": 0.3,
+    "sampled_success": 6,
+    "elapsed_s": 0.09603818699542899,
+    "major_to_box_h": 0.880471716649536,
+    "box_ratio": 0.9698366097040108,
+    "box_angle": 14.1083246258442,
+    "ellipse_angle": 37.37442362038608,
+    "stature_box_cm": 189.1542193793263,
+    "stature_ellipse_cm": 182.46742489553412,
+    "box_reps": 1,
+    "box_events": [
+      2.9089215560421495
+    ],
+    "box_rom_cm": [
+      58.78187379173402
+    ],
+    "box_velocity": [
+      0.6095097256186692
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      2.9080027760985425
+    ],
+    "ellipse_rom_cm": [
+      72.30748426419132
+    ],
+    "ellipse_velocity": [
+      0.7775827415486731
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      2.880373216064337
+    ],
+    "ellipse_center_rom_cm": [
+      72.80180076091987
+    ],
+    "ellipse_center_velocity": [
+      0.7903185996008397
+    ]
+  },
+  {
+    "key": "deadlift/GB_S05_R47.mp4",
+    "exercise": "deadlift",
+    "frames": 81,
+    "used": 81,
+    "ellipse_success": 0.13580246913580246,
+    "sampled_success": 4,
+    "elapsed_s": 0.0828095899996697,
+    "major_to_box_h": 0.9339497716340425,
+    "box_ratio": 1.0162361623616238,
+    "box_angle": 0.0,
+    "ellipse_angle": 33.72891351595979,
+    "stature_box_cm": 204.90094350603795,
+    "stature_ellipse_cm": 196.40534254212633,
+    "box_reps": 1,
+    "box_events": [
+      2.581004977202354
+    ],
+    "box_rom_cm": [
+      57.74703814824087
+    ],
+    "box_velocity": [
+      0.5243428162350157
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      2.5726948109479326
+    ],
+    "ellipse_rom_cm": [
+      59.152855093871196
+    ],
+    "ellipse_velocity": [
+      0.5288240122438433
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      2.574084108867554
+    ],
+    "ellipse_center_rom_cm": [
+      59.274918783344035
+    ],
+    "ellipse_center_velocity": [
+      0.5274618497801291
+    ]
+  },
+  {
+    "key": "deadlift/GB_S06_R63.mp4",
+    "exercise": "deadlift",
+    "frames": 97,
+    "used": 97,
+    "ellipse_success": 0.27835051546391754,
+    "sampled_success": 6,
+    "elapsed_s": 0.09073049299331615,
+    "major_to_box_h": 0.8723438708540088,
+    "box_ratio": 1.0591357088703566,
+    "box_angle": 0.0,
+    "ellipse_angle": 25.241841376552212,
+    "stature_box_cm": 186.15707669504974,
+    "stature_ellipse_cm": 181.92185108565056,
+    "box_reps": 1,
+    "box_events": [
+      3.201487457661143
+    ],
+    "box_rom_cm": [
+      52.11695539044724
+    ],
+    "box_velocity": [
+      0.6113474256727792
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.199617064864893
+    ],
+    "ellipse_rom_cm": [
+      54.2071317516698
+    ],
+    "ellipse_velocity": [
+      0.6246882534650539
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.2005759515030676
+    ],
+    "ellipse_center_rom_cm": [
+      53.46827510349078
+    ],
+    "ellipse_center_velocity": [
+      0.6384425766017471
+    ]
+  },
+  {
+    "key": "deadlift/GB_S07_R12.mp4",
+    "exercise": "deadlift",
+    "frames": 146,
+    "used": 125,
+    "ellipse_success": 0.28,
+    "sampled_success": 7,
+    "elapsed_s": 0.10137798999494407,
+    "major_to_box_h": 1.0317781781933018,
+    "box_ratio": 0.9183673469387755,
+    "box_angle": 23.311445681510186,
+    "ellipse_angle": 48.012028049656664,
+    "stature_box_cm": 268.1166404834193,
+    "stature_ellipse_cm": 247.24824679990985,
+    "box_reps": 1,
+    "box_events": [
+      4.684424354076242
+    ],
+    "box_rom_cm": [
+      0.18951686463810624
+    ],
+    "box_velocity": [],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.689415721443948
+    ],
+    "ellipse_rom_cm": [
+      -0.01235780501438466
+    ],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.691308710981573
+    ],
+    "ellipse_center_rom_cm": [
+      8.096852303382452
+    ],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "deadlift/GB_S07_R14.mp4",
+    "exercise": "deadlift",
+    "frames": 151,
+    "used": 125,
+    "ellipse_success": 0.416,
+    "sampled_success": 10,
+    "elapsed_s": 0.11743448999914108,
+    "major_to_box_h": 1.0006853914661529,
+    "box_ratio": 1.0333041191936905,
+    "box_angle": 0.0,
+    "ellipse_angle": 47.03335610739025,
+    "stature_box_cm": 271.5167877417471,
+    "stature_ellipse_cm": 251.30074369013667,
+    "box_reps": 1,
+    "box_events": [
+      4.8254185869688335
+    ],
+    "box_rom_cm": [
+      -0.10903537437721988
+    ],
+    "box_velocity": [],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.825273882387208
+    ],
+    "ellipse_rom_cm": [
+      -0.10599232698620398
+    ],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.8245100653405295
+    ],
+    "ellipse_center_rom_cm": [
+      0.7045014333981525
+    ],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "deadlift/GB_S07_R20.mp4",
+    "exercise": "deadlift",
+    "frames": 140,
+    "used": 109,
+    "ellipse_success": 0.5412844036697247,
+    "sampled_success": 10,
+    "elapsed_s": 0.1016673339981935,
+    "major_to_box_h": 1.0063446515850023,
+    "box_ratio": 0.7746341463414638,
+    "box_angle": 39.22812521313631,
+    "ellipse_angle": 49.76795840870777,
+    "stature_box_cm": 253.70758498247793,
+    "stature_ellipse_cm": 234.39804356774317,
+    "box_reps": 1,
+    "box_events": [
+      3.2366375796407856
+    ],
+    "box_rom_cm": [
+      85.68882951626048
+    ],
+    "box_velocity": [],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.2400026922861396
+    ],
+    "ellipse_rom_cm": [
+      91.73467924000667
+    ],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.252099535310622
+    ],
+    "ellipse_center_rom_cm": [
+      112.3845207996583
+    ],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "deadlift/LLK_S01_R02.mp4",
+    "exercise": "deadlift",
+    "frames": 130,
+    "used": 130,
+    "ellipse_success": 0.5153846153846153,
+    "sampled_success": 11,
+    "elapsed_s": 0.1292459640026209,
+    "major_to_box_h": 0.997507473784667,
+    "box_ratio": 1.0347627392365046,
+    "box_angle": 0.0,
+    "ellipse_angle": 32.417559343431904,
+    "stature_box_cm": 252.89063939387623,
+    "stature_ellipse_cm": 244.40040620729624,
+    "box_reps": 1,
+    "box_events": [
+      4.346180911255934
+    ],
+    "box_rom_cm": [
+      86.53897308142191
+    ],
+    "box_velocity": [
+      0.7078884561904183
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.213664412266336
+    ],
+    "ellipse_rom_cm": [
+      108.5524621209475
+    ],
+    "ellipse_velocity": [
+      0.8894506945047416
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.206472048278088
+    ],
+    "ellipse_center_rom_cm": [
+      103.07827861270795
+    ],
+    "ellipse_center_velocity": [
+      0.831706460939181
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S01_R03.mp4",
+    "exercise": "deadlift",
+    "frames": 148,
+    "used": 146,
+    "ellipse_success": 0.5136986301369864,
+    "sampled_success": 12,
+    "elapsed_s": 0.12311043700174196,
+    "major_to_box_h": 0.9866304812820237,
+    "box_ratio": 1.0029446244626088,
+    "box_angle": 0.0,
+    "ellipse_angle": 39.01176495026486,
+    "stature_box_cm": 238.72571974247347,
+    "stature_ellipse_cm": 213.60749531461786,
+    "box_reps": 1,
+    "box_events": [
+      4.909769128296012
+    ],
+    "box_rom_cm": [
+      84.15073329691944
+    ],
+    "box_velocity": [
+      0.592147735866742
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.652903377439889
+    ],
+    "ellipse_rom_cm": [
+      98.23029421484203
+    ],
+    "ellipse_velocity": [
+      0.7083394146794687
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.529559524841782
+    ],
+    "ellipse_center_rom_cm": [
+      106.34195441989863
+    ],
+    "ellipse_center_velocity": [
+      0.6292688462251964
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S01_R04.mp4",
+    "exercise": "deadlift",
+    "frames": 137,
+    "used": 137,
+    "ellipse_success": 0.5620437956204379,
+    "sampled_success": 14,
+    "elapsed_s": 0.14088482299848692,
+    "major_to_box_h": 1.0873458680877985,
+    "box_ratio": 1.0262206148282098,
+    "box_angle": 0.0,
+    "ellipse_angle": 43.57283418978671,
+    "stature_box_cm": 238.7775485828159,
+    "stature_ellipse_cm": 224.99377140120177,
+    "box_reps": 1,
+    "box_events": [
+      4.676269633851039
+    ],
+    "box_rom_cm": [
+      88.23774219022116
+    ],
+    "box_velocity": [
+      0.615891150988887
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      4.646649546745479
+    ],
+    "ellipse_rom_cm": [
+      97.47412028225315
+    ],
+    "ellipse_velocity": [
+      0.6603187847999602
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      4.540546001520981
+    ],
+    "ellipse_center_rom_cm": [
+      93.05183022665577
+    ],
+    "ellipse_center_velocity": [
+      0.9508997410196824
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S01_R06.mp4",
+    "exercise": "deadlift",
+    "frames": 132,
+    "used": 116,
+    "ellipse_success": 0.5,
+    "sampled_success": 9,
+    "elapsed_s": 0.1065283870048006,
+    "major_to_box_h": 1.0044487819249852,
+    "box_ratio": 1.0468342228181333,
+    "box_angle": 0.0,
+    "ellipse_angle": 24.599659509961615,
+    "stature_box_cm": 251.48537536753315,
+    "stature_ellipse_cm": 240.65679654893736,
+    "box_reps": 1,
+    "box_events": [
+      3.946718808817514
+    ],
+    "box_rom_cm": [
+      68.24460432623084
+    ],
+    "box_velocity": [
+      0.6202881051466758
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.940172279296095
+    ],
+    "ellipse_rom_cm": [
+      71.52615373384153
+    ],
+    "ellipse_velocity": [
+      0.6306782345706553
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.939455251907044
+    ],
+    "ellipse_center_rom_cm": [
+      70.4310899020411
+    ],
+    "ellipse_center_velocity": [
+      0.6139126568428735
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S03_R11.mp4",
+    "exercise": "deadlift",
+    "frames": 117,
+    "used": 117,
+    "ellipse_success": 0.017094017094017096,
+    "sampled_success": 2,
+    "elapsed_s": 0.156842256001255,
+    "major_to_box_h": 1.0360573516852194,
+    "box_ratio": 0.9569420035149386,
+    "box_angle": 16.874670813432534,
+    "ellipse_angle": 49.29344268573854,
+    "stature_box_cm": 163.9111453946179,
+    "stature_ellipse_cm": 146.4807468641479,
+    "box_reps": 1,
+    "box_events": [
+      3.2096131272930797
+    ],
+    "box_rom_cm": [
+      43.04382902050377
+    ],
+    "box_velocity": [
+      0.41470625385104737
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.207280531748933
+    ],
+    "ellipse_rom_cm": [
+      43.10763319966659
+    ],
+    "ellipse_velocity": [
+      0.421621862442407
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.20733591677572
+    ],
+    "ellipse_center_rom_cm": [
+      43.10937119855948
+    ],
+    "ellipse_center_velocity": [
+      0.42158912581480196
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S04_R05.mp4",
+    "exercise": "deadlift",
+    "frames": 99,
+    "used": 99,
+    "ellipse_success": 0.3434343434343434,
+    "sampled_success": 6,
+    "elapsed_s": 0.07644821700523607,
+    "major_to_box_h": 1.336880092620816,
+    "box_ratio": 1.0590200445434292,
+    "box_angle": 0.0,
+    "ellipse_angle": 60.85555378636693,
+    "stature_box_cm": 237.67672185549736,
+    "stature_ellipse_cm": 168.91068852720133,
+    "box_reps": 1,
+    "box_events": [
+      3.4356885977773723
+    ],
+    "box_rom_cm": [
+      94.46126528421736
+    ],
+    "box_velocity": [
+      1.007568269165065
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.4067193096493003
+    ],
+    "ellipse_rom_cm": [
+      94.86290265338907
+    ],
+    "ellipse_velocity": [
+      1.0115168843443154
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.3989083827035755
+    ],
+    "ellipse_center_rom_cm": [
+      94.87168796266104
+    ],
+    "ellipse_center_velocity": [
+      1.0069526932774455
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S05_R15.mp4",
+    "exercise": "deadlift",
+    "frames": 90,
+    "used": 90,
+    "ellipse_success": 0.4666666666666667,
+    "sampled_success": 7,
+    "elapsed_s": 0.07757774600031553,
+    "major_to_box_h": 0.9743252726483076,
+    "box_ratio": 1.0698170362292503,
+    "box_angle": 0.0,
+    "ellipse_angle": 41.27180644581772,
+    "stature_box_cm": 263.9759439531071,
+    "stature_ellipse_cm": 245.2676830223945,
+    "box_reps": 1,
+    "box_events": [
+      2.9003461400758233
+    ],
+    "box_rom_cm": [
+      102.56443664226316
+    ],
+    "box_velocity": [
+      0.8991918535744878
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      2.89523101759286
+    ],
+    "ellipse_rom_cm": [
+      106.27220328701507
+    ],
+    "ellipse_velocity": [
+      0.9127858016354083
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      2.8875305142332928
+    ],
+    "ellipse_center_rom_cm": [
+      112.555340528171
+    ],
+    "ellipse_center_velocity": [
+      1.0628928738573387
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S05_R17.mp4",
+    "exercise": "deadlift",
+    "frames": 80,
+    "used": 80,
+    "ellipse_success": 0.6125,
+    "sampled_success": 7,
+    "elapsed_s": 0.06642608699621633,
+    "major_to_box_h": 1.0366625659604374,
+    "box_ratio": 1.0367616993260214,
+    "box_angle": 0.0,
+    "ellipse_angle": 35.11770212581805,
+    "stature_box_cm": 268.07179676389165,
+    "stature_ellipse_cm": 232.44153247562798,
+    "box_reps": 1,
+    "box_events": [
+      2.589735501931216
+    ],
+    "box_rom_cm": [
+      92.40530757466485
+    ],
+    "box_velocity": [
+      0.957596983863692
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      2.5867980467423073
+    ],
+    "ellipse_rom_cm": [
+      94.84443620618867
+    ],
+    "ellipse_velocity": [
+      0.9788907009788383
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      2.5850448945991658
+    ],
+    "ellipse_center_rom_cm": [
+      95.41846035999319
+    ],
+    "ellipse_center_velocity": [
+      0.9311240442374507
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S06_R31.mp4",
+    "exercise": "deadlift",
+    "frames": 103,
+    "used": 94,
+    "ellipse_success": 0.6914893617021277,
+    "sampled_success": 9,
+    "elapsed_s": 0.09080782299861312,
+    "major_to_box_h": 0.9031722295713429,
+    "box_ratio": 1.0248949649263412,
+    "box_angle": 0.0,
+    "ellipse_angle": 54.654079555111096,
+    "stature_box_cm": 233.87328880846889,
+    "stature_ellipse_cm": 182.47435571400788,
+    "box_reps": 1,
+    "box_events": [
+      3.34394756858832
+    ],
+    "box_rom_cm": [
+      81.86829363581454
+    ],
+    "box_velocity": [
+      1.0288536658432272
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.2653238328606866
+    ],
+    "ellipse_rom_cm": [
+      93.19327411392118
+    ],
+    "ellipse_velocity": [
+      1.1450516232659362
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.2068696987092142
+    ],
+    "ellipse_center_rom_cm": [
+      108.65118486454377
+    ],
+    "ellipse_center_velocity": [
+      1.2392487364757434
+    ]
+  },
+  {
+    "key": "deadlift/LLK_S06_R32.mp4",
+    "exercise": "deadlift",
+    "frames": 105,
+    "used": 76,
+    "ellipse_success": 0.23684210526315788,
+    "sampled_success": 4,
+    "elapsed_s": 0.09064674600085709,
+    "major_to_box_h": 1.0622780792158044,
+    "box_ratio": 1.1130288480797512,
+    "box_angle": 0.0,
+    "ellipse_angle": 37.37895021570051,
+    "stature_box_cm": 236.82581555632152,
+    "stature_ellipse_cm": 225.4768265069245,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "deadlift/deadlift_01.mp4",
+    "exercise": "deadlift",
+    "frames": 203,
+    "used": 203,
+    "ellipse_success": 0.009852216748768473,
+    "sampled_success": 2,
+    "elapsed_s": 1.1230533100024331,
+    "major_to_box_h": 0.999645126714058,
+    "box_ratio": 0.6353149955634427,
+    "box_angle": 50.556648984242386,
+    "ellipse_angle": 66.97090345337641,
+    "stature_box_cm": 153.0022892770465,
+    "stature_ellipse_cm": 142.499910239878,
+    "box_reps": 1,
+    "box_events": [
+      8.223249552973758
+    ],
+    "box_rom_cm": [
+      38.61023533223328
+    ],
+    "box_velocity": [
+      0.1677843280133963
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      8.229699649995355
+    ],
+    "ellipse_rom_cm": [
+      38.49041053349716
+    ],
+    "ellipse_velocity": [
+      0.1690798414563712
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      11.573908860794957
+    ],
+    "ellipse_center_rom_cm": [
+      1.5183550370461223
+    ],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "deadlift/deadlift_02.mp4",
+    "exercise": "deadlift",
+    "frames": 109,
+    "used": 89,
+    "ellipse_success": 0.10112359550561797,
+    "sampled_success": 4,
+    "elapsed_s": 0.59670349299995,
+    "major_to_box_h": 0.8023893924948156,
+    "box_ratio": 0.6250569476082006,
+    "box_angle": 51.31363262152006,
+    "ellipse_angle": 35.79520008320017,
+    "stature_box_cm": 152.17557035089658,
+    "stature_ellipse_cm": 160.20352717653032,
+    "box_reps": 1,
+    "box_events": [
+      3.8922433964205534
+    ],
+    "box_rom_cm": [
+      30.491684416244258
+    ],
+    "box_velocity": [
+      0.2398276238877276
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.882400967325025
+    ],
+    "ellipse_rom_cm": [
+      34.990335750710564
+    ],
+    "ellipse_velocity": [
+      0.28677804448199723
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      3.8890909071559103
+    ],
+    "ellipse_center_rom_cm": [
+      30.921985022183403
+    ],
+    "ellipse_center_velocity": [
+      0.2790717047367312
+    ]
+  },
+  {
+    "key": "deadlift/deadlift_03.mp4",
+    "exercise": "deadlift",
+    "frames": 489,
+    "used": 470,
+    "ellipse_success": 0.28085106382978725,
+    "sampled_success": 37,
+    "elapsed_s": 2.9047482000023592,
+    "major_to_box_h": 0.8486682735060727,
+    "box_ratio": 0.6082015172150135,
+    "box_angle": 52.540425749655085,
+    "ellipse_angle": 67.04548145270978,
+    "stature_box_cm": 140.83220694826912,
+    "stature_ellipse_cm": 134.68416515617577,
+    "box_reps": 2,
+    "box_events": [
+      3.4683532279950517,
+      19.71352424939951
+    ],
+    "box_rom_cm": [
+      34.720374725691414,
+      39.19818200410047
+    ],
+    "box_velocity": [
+      0.2519512293250992,
+      0.2212772743471739
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      3.6746335959682255
+    ],
+    "ellipse_rom_cm": [
+      37.76799800380452
+    ],
+    "ellipse_velocity": [
+      0.2762005964385641
+    ],
+    "ellipse_center_reps": 2,
+    "ellipse_center_events": [
+      3.6697145186666216,
+      19.702629561225155
+    ],
+    "ellipse_center_rom_cm": [
+      40.15967826649189,
+      51.99139750976865
+    ],
+    "ellipse_center_velocity": [
+      0.20119281069548342,
+      0.3231983598905576
+    ]
+  },
+  {
+    "key": "benchpress/bench_01.mp4",
+    "exercise": "benchpress",
+    "frames": 653,
+    "used": 653,
+    "ellipse_success": 0.015313935681470138,
+    "sampled_success": 5,
+    "elapsed_s": 3.1009832179988734,
+    "major_to_box_h": 0.8428405850270717,
+    "box_ratio": 0.7462257368799423,
+    "box_angle": 41.735511256824545,
+    "ellipse_angle": 44.00682300175066,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 3,
+    "box_events": [
+      11.85728113769019,
+      18.448284212997237,
+      26.81137624447225
+    ],
+    "box_rom_cm": [
+      15.912328770845926,
+      15.45735585299243,
+      17.583446748193772
+    ],
+    "box_velocity": [
+      0.1616848579103777,
+      0.11758885234944515,
+      0.057758529689170834
+    ],
+    "ellipse_reps": 3,
+    "ellipse_events": [
+      11.863289441384097,
+      18.45964819239557,
+      26.990415997779454
+    ],
+    "ellipse_rom_cm": [
+      16.687215117042022,
+      16.054827167284515,
+      19.452952099687685
+    ],
+    "ellipse_velocity": [
+      0.16274280904004285,
+      0.11976453425921424,
+      0.06021927893914821
+    ],
+    "ellipse_center_reps": 3,
+    "ellipse_center_events": [
+      12.065973586202649,
+      18.45922561755019,
+      25.986188026762257
+    ],
+    "ellipse_center_rom_cm": [
+      16.701353546821927,
+      16.00693378909841,
+      12.379616001934455
+    ],
+    "ellipse_center_velocity": [
+      0.13574313002753374,
+      0.11929763660012416,
+      0.055603671873740934
+    ]
+  },
+  {
+    "key": "benchpress/bench_02.mp4",
+    "exercise": "benchpress",
+    "frames": 360,
+    "used": 360,
+    "ellipse_success": 0.3138888888888889,
+    "sampled_success": 28,
+    "elapsed_s": 2.134141741997155,
+    "major_to_box_h": 1.0240772695506803,
+    "box_ratio": 0.8216480965559463,
+    "box_angle": 34.749883536571716,
+    "ellipse_angle": 45.664497731494045,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 1,
+    "box_events": [
+      13.959932854646825
+    ],
+    "box_rom_cm": [
+      16.147596999668107
+    ],
+    "box_velocity": [
+      0.04827893094236076
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      15.012898046605756
+    ],
+    "ellipse_rom_cm": [
+      18.852577421998884
+    ],
+    "ellipse_velocity": [
+      0.04135332586712506
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      14.132612338458399
+    ],
+    "ellipse_center_rom_cm": [
+      19.467222348706194
+    ],
+    "ellipse_center_velocity": [
+      0.052372506697219254
+    ]
+  },
+  {
+    "key": "benchpress/bench_03.mp4",
+    "exercise": "benchpress",
+    "frames": 309,
+    "used": 309,
+    "ellipse_success": 0.9935275080906149,
+    "sampled_success": 52,
+    "elapsed_s": 1.94203955699777,
+    "major_to_box_h": 0.874411905459725,
+    "box_ratio": 0.7738376674546888,
+    "box_angle": 39.300229973929824,
+    "ellipse_angle": 47.02682099784825,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 1,
+    "box_events": [
+      11.299206818339435
+    ],
+    "box_rom_cm": [
+      15.797989108898145
+    ],
+    "box_velocity": [
+      0.07864923536454413
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      12.439000196391957
+    ],
+    "ellipse_rom_cm": [
+      26.103989449980176
+    ],
+    "ellipse_velocity": [
+      0.07698948110300892
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      12.268131752995522
+    ],
+    "ellipse_center_rom_cm": [
+      27.296082934493
+    ],
+    "ellipse_center_velocity": [
+      0.07328709228716884
+    ]
+  },
+  {
+    "key": "squat/squat_01.mp4",
+    "exercise": "squat",
+    "frames": 343,
+    "used": 279,
+    "ellipse_success": 0.5913978494623656,
+    "sampled_success": 35,
+    "elapsed_s": 1.4727296240016585,
+    "major_to_box_h": 0.8089030531738921,
+    "box_ratio": 0.6609523809523811,
+    "box_angle": 48.627452719398164,
+    "ellipse_angle": 65.99613314266378,
+    "stature_box_cm": 180.27341335214308,
+    "stature_ellipse_cm": 181.96442398949654,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [
+      5.066287265062155
+    ],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [
+      3.4645862560749863
+    ],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "squat/squat_02.mp4",
+    "exercise": "squat",
+    "frames": 262,
+    "used": 240,
+    "ellipse_success": 0.7708333333333334,
+    "sampled_success": 35,
+    "elapsed_s": 1.6487139689998003,
+    "major_to_box_h": 0.9100386428210708,
+    "box_ratio": 0.5131801632776292,
+    "box_angle": 59.12410803541213,
+    "ellipse_angle": 73.89125980372806,
+    "stature_box_cm": 165.88065464513093,
+    "stature_ellipse_cm": 170.24417901644148,
+    "box_reps": 1,
+    "box_events": [
+      9.996132284172722
+    ],
+    "box_rom_cm": [
+      58.74360429512097
+    ],
+    "box_velocity": [
+      0.25445651753717413
+    ],
+    "ellipse_reps": 1,
+    "ellipse_events": [
+      10.008456465264604
+    ],
+    "ellipse_rom_cm": [
+      63.61590522899662
+    ],
+    "ellipse_velocity": [
+      0.26885635951175396
+    ],
+    "ellipse_center_reps": 1,
+    "ellipse_center_events": [
+      10.038076615084016
+    ],
+    "ellipse_center_rom_cm": [
+      69.29266350448955
+    ],
+    "ellipse_center_velocity": [
+      0.31141251386759017
+    ]
+  },
+  {
+    "key": "squat/squat_03.mp4",
+    "exercise": "squat",
+    "frames": 299,
+    "used": 284,
+    "ellipse_success": 0.7535211267605634,
+    "sampled_success": 39,
+    "elapsed_s": 1.9250609160008025,
+    "major_to_box_h": 0.9454796523531639,
+    "box_ratio": 0.5088918151134958,
+    "box_angle": 59.40995773925747,
+    "ellipse_angle": 60.74949629342691,
+    "stature_box_cm": 155.87542402304783,
+    "stature_ellipse_cm": 165.84403596431196,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "team9/squat/stu10_70.mp4",
+    "exercise": "squat",
+    "frames": 456,
+    "used": 456,
+    "ellipse_success": 0.0043859649122807015,
+    "sampled_success": 2,
+    "elapsed_s": 0.9633641750042443,
+    "major_to_box_h": 0.8601475645770595,
+    "box_ratio": 0.829118972772483,
+    "box_angle": 33.99165870620026,
+    "ellipse_angle": 44.74074766977152,
+    "stature_box_cm": 162.6577680616242,
+    "stature_ellipse_cm": 156.94989137044766,
+    "box_reps": 5,
+    "box_events": [
+      3.142666158161014,
+      6.7548403054613075,
+      11.69028637160672,
+      15.08559531394553,
+      18.576949220863717
+    ],
+    "box_rom_cm": [
+      58.34735899319781,
+      62.74968370715778,
+      61.62750577138046,
+      59.75046631006493,
+      61.777284672264884
+    ],
+    "box_velocity": [
+      0.7860741937547097,
+      0.684457254319052,
+      0.713810349117531,
+      0.6630466704988371,
+      0.6760135001626023
+    ],
+    "ellipse_reps": 5,
+    "ellipse_events": [
+      3.1433111310585375,
+      6.786321360590873,
+      11.691933070246076,
+      15.085564328352502,
+      18.584447663740598
+    ],
+    "ellipse_rom_cm": [
+      58.305901631813015,
+      63.144913028080815,
+      61.68182708232808,
+      60.0513712979083,
+      62.075678948011074
+    ],
+    "ellipse_velocity": [
+      0.7867729349825804,
+      0.6672237867877547,
+      0.7138391983686899,
+      0.6682952105042518,
+      0.676308143239231
+    ],
+    "ellipse_center_reps": 5,
+    "ellipse_center_events": [
+      3.143299720776262,
+      6.806508624939978,
+      11.691905298113594,
+      15.085548936258208,
+      18.584342333421542
+    ],
+    "ellipse_center_rom_cm": [
+      58.30780989113057,
+      63.437937203668135,
+      61.682034931877006,
+      60.04556041499455,
+      62.07302267123398
+    ],
+    "ellipse_center_velocity": [
+      0.7867749351073867,
+      0.6561771883139174,
+      0.7138495280876794,
+      0.6682082660346212,
+      0.6763090981354044
+    ]
+  },
+  {
+    "key": "team9/squat/stu3_64.mp4",
+    "exercise": "squat",
+    "frames": 1620,
+    "used": 1596,
+    "ellipse_success": 0.08646616541353383,
+    "sampled_success": 40,
+    "elapsed_s": 1.7295420380032738,
+    "major_to_box_h": 0.932631914863413,
+    "box_ratio": 0.7492341577377043,
+    "box_angle": 41.47591824622941,
+    "ellipse_angle": 46.40721611894906,
+    "stature_box_cm": 162.07337708794026,
+    "stature_ellipse_cm": 159.60400152395155,
+    "box_reps": 17,
+    "box_events": [
+      4.593428858394457,
+      6.862044022758301,
+      9.241940731647148,
+      11.694645723645388,
+      14.025984500019018,
+      16.4764654128849,
+      19.034148733403487,
+      21.528867636489625,
+      23.974429180815843,
+      29.845111634075238,
+      33.0292674922024,
+      35.87280635956158,
+      38.96677771899804,
+      42.16640616986423,
+      45.48274699231201,
+      48.68515106366676,
+      51.456011730637535
+    ],
+    "box_rom_cm": [
+      0.0,
+      35.429587474000684,
+      47.90855555967241,
+      46.50684167857027,
+      47.143075360744355,
+      44.435831747836126,
+      40.85113100648637,
+      45.563318904875885,
+      46.65460591931056,
+      42.48466642515687,
+      46.20851133440665,
+      45.939724470658646,
+      38.04001542010844,
+      40.67087886411592,
+      44.827873095415534,
+      41.85650933203357,
+      43.01967284559862,
+      43.159069228963354
+    ],
+    "box_velocity": [
+      0.5244854339196765,
+      0.5374958125049656,
+      0.5001038258779794,
+      0.4555158331458423,
+      0.4842333923879442,
+      0.45560423098701475,
+      0.4855528465308964,
+      0.5141936649037169,
+      0.438472221435439,
+      0.39306923857841486,
+      0.3351090524513947,
+      0.3536543125055508,
+      0.3383509272745443,
+      0.35872239977208786,
+      0.2948325772988867,
+      0.33053834108215474,
+      0.34873611905242113
+    ],
+    "ellipse_reps": 17,
+    "ellipse_events": [
+      4.5923685841871515,
+      6.857186032362773,
+      9.244320722407808,
+      11.671024504418968,
+      14.026189415457777,
+      16.474653647777195,
+      19.021233231644953,
+      21.50338492482032,
+      23.970112439927366,
+      29.814149023462402,
+      33.04034904719288,
+      35.87172719150625,
+      38.97507584624339,
+      42.1768242981577,
+      45.475066131735026,
+      48.67471742375547,
+      51.46317528340439
+    ],
+    "ellipse_rom_cm": [
+      0.0,
+      35.04133373454052,
+      46.92134464221665,
+      46.07271773990109,
+      46.0829276884371,
+      43.94362244369821,
+      39.46071416062457,
+      44.223382876288284,
+      44.36328113951254,
+      41.136954795572414,
+      45.70072084235582,
+      46.38956263230947,
+      38.1344436303906,
+      40.696631189349134,
+      44.57662322802096,
+      40.73445452375436,
+      42.201237454967924,
+      46.5653586571073
+    ],
+    "ellipse_velocity": [
+      0.5251446207265694,
+      0.5268745860359463,
+      0.4889456111211933,
+      0.45370887365704937,
+      0.47822143367490105,
+      0.44003145608791283,
+      0.476344427338759,
+      0.5019984969683777,
+      0.4257094461213537,
+      0.39707660050364224,
+      0.33515640897737037,
+      0.3544641670691858,
+      0.33663319107725437,
+      0.3494338656540642,
+      0.28779959371602765,
+      0.32417587877387966,
+      0.3773271633364418
+    ],
+    "ellipse_center_reps": 17,
+    "ellipse_center_events": [
+      4.592395922288561,
+      6.857359664926234,
+      9.245747023014854,
+      11.672688140886098,
+      14.026183635713133,
+      16.47469927168752,
+      19.02144864169017,
+      21.50388008016793,
+      23.970308570256098,
+      29.814609603229695,
+      33.0404329645247,
+      35.87190320252544,
+      38.974975966758265,
+      42.175913749628734,
+      45.47540700815155,
+      48.678196473434184,
+      51.46486136332269
+    ],
+    "ellipse_center_rom_cm": [
+      0.0,
+      35.05843156222668,
+      46.60226712135875,
+      46.126042050606635,
+      45.45828207163157,
+      43.96519977557364,
+      39.50452554435952,
+      44.26358525309945,
+      44.43183857934456,
+      41.387981402343144,
+      45.716623692443356,
+      46.396805724323336,
+      38.12139326117664,
+      40.70652580685395,
+      43.70905173701157,
+      41.473196962732985,
+      42.20496208628911,
+      46.50047792662895
+    ],
+    "ellipse_center_velocity": [
+      0.5252056447654824,
+      0.5304172104830158,
+      0.48888753795721024,
+      0.4597170330673753,
+      0.4784723041248556,
+      0.4405229688953111,
+      0.47670709829978364,
+      0.502519778035536,
+      0.42456528010770095,
+      0.39710614597079436,
+      0.3351977558349503,
+      0.3530395712334798,
+      0.3340252288545141,
+      0.35980358545862295,
+      0.290724352167945,
+      0.32342004912306827,
+      0.40809736434365995
+    ]
+  },
+  {
+    "key": "team9/squat/stu8_67.mp4",
+    "exercise": "squat",
+    "frames": 330,
+    "used": 330,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.23843011199642206,
+    "major_to_box_h": null,
+    "box_ratio": 0.6122219862937517,
+    "box_angle": 52.24965896930271,
+    "ellipse_angle": null,
+    "stature_box_cm": 236.77314564630424,
+    "stature_ellipse_cm": 236.77314564630424,
+    "box_reps": 3,
+    "box_events": [
+      3.625918092261576,
+      7.105768046884215,
+      10.819916671835623
+    ],
+    "box_rom_cm": [
+      54.59117226413903,
+      53.77029456901364,
+      54.6169561016532
+    ],
+    "box_velocity": [
+      0.3770663600285586,
+      0.3685034944100243,
+      0.3295108835842944
+    ],
+    "ellipse_reps": 3,
+    "ellipse_events": [
+      3.625991006011196,
+      7.105899384808856,
+      10.820030178110127
+    ],
+    "ellipse_rom_cm": [
+      54.61619668768737,
+      53.778357017339374,
+      54.6034275965115
+    ],
+    "ellipse_velocity": [
+      0.3771238832489814,
+      0.36849612479673105,
+      0.32941128439773487
+    ],
+    "ellipse_center_reps": 3,
+    "ellipse_center_events": [
+      3.625991006011196,
+      7.105899384808856,
+      10.820030178110127
+    ],
+    "ellipse_center_rom_cm": [
+      54.61619668768737,
+      53.778357017339374,
+      54.6034275965115
+    ],
+    "ellipse_center_velocity": [
+      0.3771238832489814,
+      0.36849612479673105,
+      0.32941128439773487
+    ]
+  },
+  {
+    "key": "team9/benchpress/stu9_10.mp4",
+    "exercise": "benchpress",
+    "frames": 1439,
+    "used": 1084,
+    "ellipse_success": 0.5424354243542435,
+    "sampled_success": 104,
+    "elapsed_s": 1.3568407759958063,
+    "major_to_box_h": 1.0716496299826068,
+    "box_ratio": 0.9585366837767573,
+    "box_angle": 16.557005529214802,
+    "ellipse_angle": 46.70242586617905,
+    "stature_box_cm": 173.08190182570263,
+    "stature_ellipse_cm": 162.6040029929804,
+    "box_reps": 16,
+    "box_events": [
+      9.437274423910445,
+      10.680651254621175,
+      11.946484519621002,
+      13.138592012972804,
+      14.384594764704653,
+      15.586304224080655,
+      16.8708381554423,
+      18.154706246752852,
+      19.505455622287204,
+      21.12156515442229,
+      23.383708935881977,
+      25.29981612310776,
+      28.87854508219631,
+      30.195657915269848,
+      34.07810277212209,
+      36.20630968688495
+    ],
+    "box_rom_cm": [
+      29.294593327374375,
+      25.5447630177852,
+      30.050441428704673,
+      27.001830480836396,
+      29.94763723251547,
+      32.638362238079246,
+      31.40538935370514,
+      29.235693907187944,
+      30.679276844936933,
+      40.80397984417535,
+      35.96575538239147,
+      39.30806002397944,
+      45.5645856280537,
+      33.0434273080051,
+      37.01532880855618,
+      20.320499773038517,
+      14.020229748666868
+    ],
+    "box_velocity": [
+      0.42550919695087347,
+      0.374724247013373,
+      0.47746984375836177,
+      0.40987294430848836,
+      0.4142175182053599,
+      0.5018321538079402,
+      0.41343145287635485,
+      0.3580344177670671,
+      0.36701389072958407,
+      0.3542678073328747,
+      0.34798055873919737,
+      0.16031920791836257,
+      0.28929335326494987,
+      0.30038414172542816
+    ],
+    "ellipse_reps": 17,
+    "ellipse_events": [
+      9.439796075009328,
+      10.674407183500993,
+      11.944568809246762,
+      13.138320308650906,
+      14.383446229776458,
+      15.59105780714329,
+      16.870306459206663,
+      18.15460438366264,
+      19.510668244367324,
+      21.087165445055057,
+      23.51676857581885,
+      25.29595305475036,
+      28.79569844700302,
+      30.26144574107687,
+      34.07846756350655,
+      36.20189038750593,
+      42.146913835422495
+    ],
+    "ellipse_rom_cm": [
+      28.395763153359653,
+      25.65061137567865,
+      30.788198865374603,
+      26.2577173324683,
+      31.181653489387845,
+      32.41175481847064,
+      31.188760268567293,
+      29.643107440086002,
+      35.71123959770345,
+      53.03497294575581,
+      41.47802237095037,
+      40.81944705125877,
+      53.44287375001701,
+      35.60748032466534,
+      40.510887833490116,
+      23.142236945887753,
+      19.09675153674378
+    ],
+    "ellipse_velocity": [
+      0.412403165707153,
+      0.37873775203212057,
+      0.4872697885929454,
+      0.3968999317071296,
+      0.4412054011784887,
+      0.49284864529486433,
+      0.4129408727905478,
+      0.44155813033010893,
+      0.47650074894358513,
+      0.3584206597680923,
+      0.3631536654685885,
+      0.1920778049118519,
+      0.2943747157674305,
+      0.35060196416202927,
+      0.2133863177671672
+    ],
+    "ellipse_center_reps": 16,
+    "ellipse_center_events": [
+      9.443375590791128,
+      10.674035063845478,
+      11.941091688530138,
+      14.411674363618108,
+      15.595027488371244,
+      16.87092312564046,
+      18.154961811842227,
+      20.896954744679572,
+      21.19376488601381,
+      23.22487786862956,
+      25.26681347684097,
+      28.33206237476626,
+      30.00851527576725,
+      35.49357309338213,
+      36.30003062344541,
+      43.335485282177224
+    ],
+    "ellipse_center_rom_cm": [
+      30.090751678878437,
+      29.07992888507469,
+      36.87639381182198,
+      31.15184756599454,
+      31.729227082433486,
+      30.53273108568144,
+      29.4070172753394,
+      6.795885472502788,
+      52.41929219091514,
+      43.792465958476754,
+      40.14912474970943,
+      58.809046269239914,
+      29.582478062989615,
+      48.591762786106415,
+      23.402413746441752,
+      12.357362061028024
+    ],
+    "ellipse_center_velocity": [
+      0.45649229854296275,
+      0.42856238032062727,
+      0.5782099365406557,
+      0.41009338986946975,
+      0.47815311722797743,
+      0.40621099313704984,
+      0.42902105045585504,
+      0.5034364408635232,
+      0.3662586732357496,
+      0.2574666807870902,
+      0.3123552002145927,
+      0.31034728832395914,
+      0.05484402526305993
+    ]
+  },
+  {
+    "key": "team9/benchpress/stu2_10_edited.mp4",
+    "exercise": "benchpress",
+    "frames": 459,
+    "used": 459,
+    "ellipse_success": 0.013071895424836602,
+    "sampled_success": 6,
+    "elapsed_s": 0.4969391619961243,
+    "major_to_box_h": 0.8633161626160404,
+    "box_ratio": 0.7591706539074962,
+    "box_angle": 40.60886097852049,
+    "ellipse_angle": 63.97131542804587,
+    "stature_box_cm": null,
+    "stature_ellipse_cm": null,
+    "box_reps": 6,
+    "box_events": [
+      2.4247628070692606,
+      4.1932168622346255,
+      6.2283652621437255,
+      8.265405372132065,
+      10.785581919632047,
+      14.880759742339285
+    ],
+    "box_rom_cm": [
+      28.726893545656157,
+      30.841508847469417,
+      35.048388026017804,
+      30.07609090509108,
+      31.751061410044123,
+      29.835003667457517
+    ],
+    "box_velocity": [
+      0.29492817268515503,
+      0.32413373055673605,
+      0.31092160773529304,
+      0.2561610892052076,
+      0.19584354388254802,
+      0.14809418201126298
+    ],
+    "ellipse_reps": 6,
+    "ellipse_events": [
+      2.43259406580649,
+      4.161932230099285,
+      6.2268293059656425,
+      8.25491239446837,
+      10.702953578665667,
+      15.000804546608567
+    ],
+    "ellipse_rom_cm": [
+      31.150313889511676,
+      31.73615620885689,
+      33.50692803126678,
+      32.50493778837069,
+      34.784903819012015,
+      28.458845293118795
+    ],
+    "ellipse_velocity": [
+      0.32161435816116835,
+      0.34894661292486745,
+      0.2956481418395651,
+      0.2788193793119233,
+      0.22690206347954098,
+      0.13379269155689433
+    ],
+    "ellipse_center_reps": 6,
+    "ellipse_center_events": [
+      2.4317343816367667,
+      4.161500489362426,
+      6.226826734619918,
+      8.254877043884466,
+      10.70281182201969,
+      15.000560470593571
+    ],
+    "ellipse_center_rom_cm": [
+      30.987067442814308,
+      31.63335086624152,
+      33.5021938307098,
+      32.502108434439485,
+      34.78744106444645,
+      28.448518091150355
+    ],
+    "ellipse_center_velocity": [
+      0.3218139908809468,
+      0.34952741505352675,
+      0.29560333482574835,
+      0.27873986566629,
+      0.22694091024542587,
+      0.13375965134856693
+    ]
+  },
+  {
+    "key": "team9/deadlift/stu7_1_1.mp4",
+    "exercise": "deadlift",
+    "frames": 497,
+    "used": 497,
+    "ellipse_success": 0.2796780684104628,
+    "sampled_success": 27,
+    "elapsed_s": 0.561500256000727,
+    "major_to_box_h": 1.3829295303138347,
+    "box_ratio": 1.0459224069675372,
+    "box_angle": 0.0,
+    "ellipse_angle": 38.34035384626176,
+    "stature_box_cm": 170.33181208461636,
+    "stature_ellipse_cm": 160.84088232289417,
+    "box_reps": 5,
+    "box_events": [
+      2.2877213294110317,
+      5.206096952455077,
+      8.561281843312743,
+      12.35475512424525,
+      16.39110350818827
+    ],
+    "box_rom_cm": [
+      52.06489061317585,
+      53.02037664581981,
+      51.9745281982356,
+      50.49339697968767,
+      49.624730391526505
+    ],
+    "box_velocity": [
+      0.9281176169989607,
+      0.9194530359424082,
+      1.0729572651339951,
+      0.8637934078819329,
+      0.8085608646431567
+    ],
+    "ellipse_reps": 5,
+    "ellipse_events": [
+      2.22686029134933,
+      5.188100308318574,
+      8.544917522256243,
+      12.270978101697853,
+      16.390873503001295
+    ],
+    "ellipse_rom_cm": [
+      48.64312727467216,
+      53.146851068222446,
+      43.87459513260397,
+      50.00562755843474,
+      49.925949247833834
+    ],
+    "ellipse_velocity": [
+      0.8754752827554967,
+      0.9153790896919705,
+      0.8462133918734047,
+      0.8956371737994651,
+      0.8107488846495591
+    ],
+    "ellipse_center_reps": 5,
+    "ellipse_center_events": [
+      3.0781122099412017,
+      6.71029998730227,
+      8.52036412075335,
+      12.272262863595582,
+      16.39086758296551
+    ],
+    "ellipse_center_rom_cm": [
+      49.032966966149914,
+      53.079117188619776,
+      43.806859010348774,
+      49.971709069276464,
+      49.925841389890905
+    ],
+    "ellipse_center_velocity": [
+      0.8022747019663381,
+      0.9859740137850832,
+      0.7738034427098706,
+      0.3231741255942085,
+      0.8106807212289259
+    ]
+  },
+  {
+    "key": "team9/deadlift/stu4_2_-1.mp4",
+    "exercise": "deadlift",
+    "frames": 404,
+    "used": 1,
+    "ellipse_success": 0.0,
+    "sampled_success": 0,
+    "elapsed_s": 0.18010091200267198,
+    "major_to_box_h": null,
+    "box_ratio": 1.511210762331839,
+    "box_angle": 0.0,
+    "ellipse_angle": null,
+    "stature_box_cm": 197.499763112195,
+    "stature_ellipse_cm": 197.499763112195,
+    "box_reps": 0,
+    "box_events": [],
+    "box_rom_cm": [],
+    "box_velocity": [],
+    "ellipse_reps": 0,
+    "ellipse_events": [],
+    "ellipse_rom_cm": [],
+    "ellipse_velocity": [],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  },
+  {
+    "key": "team9/deadlift/deadlift_08.mp4",
+    "exercise": "deadlift",
+    "frames": 312,
+    "used": 312,
+    "ellipse_success": 0.6185897435897436,
+    "sampled_success": 38,
+    "elapsed_s": 1.5742041470002732,
+    "major_to_box_h": 0.844165973655629,
+    "box_ratio": 0.6849494248001119,
+    "box_angle": 46.768370173806055,
+    "ellipse_angle": 61.32377403248752,
+    "stature_box_cm": 158.98520962985302,
+    "stature_ellipse_cm": 153.1877689589469,
+    "box_reps": 3,
+    "box_events": [
+      6.008529999067753,
+      8.09653929284277,
+      12.760759839804763
+    ],
+    "box_rom_cm": [
+      44.13684528319643,
+      41.42958034490214,
+      42.8776294129142
+    ],
+    "box_velocity": [
+      0.37959940477164766,
+      0.3338595152566746,
+      0.29740601665209454
+    ],
+    "ellipse_reps": 3,
+    "ellipse_events": [
+      5.526046810855004,
+      8.774612582769862,
+      13.105463921139192
+    ],
+    "ellipse_rom_cm": [
+      57.9494775483801,
+      48.25875835105711,
+      53.266448556877144
+    ],
+    "ellipse_velocity": [
+      0.5082815962938312,
+      0.38846760196856817,
+      0.3685734690055143
+    ],
+    "ellipse_center_reps": 0,
+    "ellipse_center_events": [],
+    "ellipse_center_rom_cm": [],
+    "ellipse_center_velocity": []
+  }
+]

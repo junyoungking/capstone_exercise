@@ -20,10 +20,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from core.config import DEFAULT
-from core.geometry import plate_geometry, standing_frames, stature
+from core.geometry import plate_geometry, standing_frames, stature, retake_warning
 from core.geometry.pose3d import (load_model, selected_coco, lift, smooth, fixed_bones,
     body_basis, scale_floor, to_mp33, segments_cm, MP_FROM_H36M)
-from core.signal.height import height_signal
+from core.signal.height import corrected_height_signal
 from core.signal.final import clean_final
 from core.judge.session import run_session, REST
 from core.measure.times import all_rep_values
@@ -84,11 +84,11 @@ def aligned_3d(pose, rows, result, model, target_height_cm, native=None):
     return raw,stand,final,actual_height,reason is None,warnings
 
 
-def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, scaled):
+def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, scaled, scale_source="box", position_source="box"):
     t = np.asarray([r['t'] for r in rows])
     fps,w,h = pose['fps'],pose['w'],pose['h']
     ex = result['exercise']
-    st,sy,sx = height_signal(rows,diameter)
+    st,sy,sx = corrected_height_signal(rows,diameter,scale_source,position_source)
     fr = clean_final(st,sy,sx,result['fps'],DEFAULT.final)
     sets = run_session(fr.sig.t,fr.sig.y,fr.sig.x,fr.sig.gap_before,ex,'final',cfg=DEFAULT)
     trips = [r for s in sets for r in s.reps]
@@ -110,11 +110,13 @@ def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, sca
     baseline = np.interp(t,[x[0] for x in knots],[x[1] for x in knots])
     depth = np.maximum(0,(heights-baseline) if REST[ex]=='bottom' else (baseline-heights))
     boxes = np.array([r['plate']['box'] if r.get('plate',{}).get('used') else [np.nan]*4 for r in rows])
-    g = plate_geometry(boxes,(w,h),diameter)
+    g = plate_geometry(boxes,(w,h),diameter,ellipses=[r.get("plate",{}).get("ellipse") for r in rows])
     measured_height,_ = stature(raw,g,stand)
     geo = dict(cam_angle=g['angle_deg'],box_ratio=g['ratio'],dist_m=float(np.median(g['distance_m'])),
                kd=float(np.median(g['kd'])),focal_px=g['focal_px'],cm_per_px=float(np.median(g['plate_m_per_px']))*100,
-               stature_cm=height_cm)
+               stature_cm=height_cm,angle_source=g["angle_source"],ellipse_stats=dict(count=g["ellipse_count"],
+               fraction=g["ellipse_used_fraction"],major_px=g["ellipse_major_px"],minor_px=g["ellipse_minor_px"],tilt_deg=g["ellipse_tilt_deg"]),
+               retake_warn=retake_warning(g["angle_deg"]))
     seg = segments_cm(frames) if scaled else {}
     for dst,src in (('thigh_cm','thigh'),('shin_cm','shin'),('torso_cm','torso'),('upper_cm','upper_arm'),('fore_cm','forearm')):
         geo[dst] = seg.get(src)
@@ -148,7 +150,8 @@ def build_video(rows, result, pose, frames, raw, stand, diameter, height_cm, sca
     j3 = [q[names].tolist() if np.isfinite(q[names]).all() else None for q in mp]
     data = dict(fps=fps,width=w,height=h,duration=len(t)/fps,t=t.tolist(),plate=plate,
                 depth=np.round(depth,1).tolist(),reps=reps,plate_used=100*sum(p is not None for p in plate)/len(plate),
-                crop=crop,geo=geo,geo_check=checks,j2=J2,kp2=kp2,j3names=names,j3=j3,clips=[])
+                crop=crop,geo=geo,geo_check=checks,j2=J2,kp2=kp2,j3names=names,j3=j3,clips=[],
+                ellipse=[r.get('plate',{}).get('ellipse') for r in rows])
     from server.findings import prep_reps,pos_time
     prep_reps(data)
     for rep in reps:
@@ -166,7 +169,7 @@ def write_report(bundle, dest):
 
 
 def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,threads=6,model=None,checkpoint=None,
-            progress=None,ref_cache=None,posture_cards=False):
+            progress=None,ref_cache=None,posture_cards=False,scale_source="box",position_source="box"):
     """The M3a calculations, with observation callbacks and optional reference reuse.
 
     progress(stage, fraction, **details) reports work actually completed. Cached
@@ -183,6 +186,9 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     out=Path(out).resolve();out.mkdir(parents=True,exist_ok=True)
     for name,value in (('plate_mm',plate_mm),('load_kg',load_kg),('height_cm',height_cm)):
         if value is not None and (not np.isfinite(value) or value<=0): raise ValueError(name+' must be positive and finite')
+    if scale_source not in ('box','ellipse') or position_source not in ('box','ellipse'): raise ValueError('invalid source')
+    # Legacy caches do not contain rim fits; never reuse them for an ellipse run.
+    if scale_source == 'ellipse' or position_source == 'ellipse': ref_cache = None
     started=time.perf_counter()
     model=Path(model or os.environ.get('PLATE_MODEL',ROOT/'plate_pipeline/models/plate_tiny.onnx'))
     checkpoint=Path(checkpoint or os.environ.get('POSE3D_CHECKPOINT',Path.home()/'.cache/videopose3d/pretrained_h36m_detectron_coco.bin'))
@@ -215,7 +221,8 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
         return original(*args,sess_options=opts,**kwargs)
     b=dict(schema_version=SCHEMA_VERSION,exercise=exercise,inputs=dict(plate_mm=plate_mm,load_kg=load_kg,height_cm=height_cm),
            show_3d=exercise!='benchpress',pose3d_scale='input_height' if height_cm is not None else 'model_native',
-           posture_cards=bool(posture_cards),has_ref=ref is not None,ref=None)
+           posture_cards=bool(posture_cards),has_ref=ref is not None,ref=None,
+           scale_source=scale_source,position_source=position_source)
     observations={};timing={};stats={}
     with patch.object(ort,'InferenceSession',session):
         for role in roles:
@@ -230,7 +237,11 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
                 def frame(seq,t,img,st,stage=stage,total=total):
                     emit(stage,min((seq+1)/max(1,total),1),processed=seq+1,total=total)
                 result,rows,_=process_video(settings[role]['video'],'bench' if exercise=='benchpress' else exercise,
-                    plate_mm=plate_mm,model=str(model),device='cpu',pose=False,out_dir=dest/'plate',on_frame=frame)
+                    plate_mm=plate_mm,model=str(model),device='cpu',pose=False,out_dir=dest/'plate',on_frame=frame,
+                    scale_source=scale_source,position_source=position_source)
+            if not any(r.get('plate',{}).get('ellipse') for r in rows):
+                from core.recog.ellipse import annotate_video
+                annotate_video(settings[role]['video'],rows)
             observations[role]=dict(result=result,rows=rows)
             emit(stage,1,processed=len(rows),total=len(rows),cached=role=='ref' and hit)
         emit('pose',0)
@@ -255,7 +266,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
         else: native,_,_=lift(vp3d,selected_coco(pose),pose['w'],pose['h'])
         np.save(dest/'native.npy',native)
         raw,stand,frames,actual,scaled,warnings=aligned_3d(pose,o['rows'],o['result'],vp3d,ref_height,native=native)
-        b[role],trips,vals=build_video(o['rows'],o['result'],pose,frames,raw,stand,plate_mm,height_cm,scaled and height_cm is not None)
+        b[role],trips,vals=build_video(o['rows'],o['result'],pose,frames,raw,stand,plate_mm,height_cm,scaled and height_cm is not None,scale_source,position_source)
         b[role]['pose3d_warnings']=warnings;b[role]['pose3d_height_cm']=actual
         if role=='user': ref_height=height_cm if height_cm is not None else actual
         stats[role]=(trips,vals,summarize(o['result']['exercise'],o['result']['fps'],trips,vals))
@@ -298,6 +309,8 @@ def main():
     ap.add_argument('--plate-mm',type=float,default=450.);ap.add_argument('--load-kg',type=float);ap.add_argument('--height-cm',type=float)
     ap.add_argument('--out',required=True,type=Path)
     ap.add_argument('--posture-cards',action='store_true')
+    ap.add_argument('--scale-source',choices=('box','ellipse'),default='box')
+    ap.add_argument('--position-source',choices=('box','ellipse'),default='box')
     a = ap.parse_args()
     b = compare(**vars(a))
     print(json.dumps(dict(reps={r:len(b[r]['reps']) for r in ('user','ref') if b[r] is not None},timing=b['timing']),ensure_ascii=False))
