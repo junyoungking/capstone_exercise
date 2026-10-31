@@ -68,14 +68,20 @@ def stature(raw, geometry, stand, cfg=None):
     return (float(np.median(height[use])) if use.any() else None),use
 
 
+def box_touches_edge(box, image_size):
+    """The shared one-pixel frame-edge rule for a display-coordinate box."""
+    x0,y0,x1,y1=map(float,box);w,h=image_size
+    return bool(x0<=1 or y0<=1 or x1>=w-1 or y1>=h-1)
+
+
 def box_angle_reliable(boxes, image_size):
     """Box width can include the sleeve; a clipped box is not an angle cue."""
     boxes = np.asarray(boxes, float)
     good = np.isfinite(boxes).all(axis=1) & (boxes[:,2]>boxes[:,0]) & (boxes[:,3]>boxes[:,1])
     if not good.any(): return False
-    b=boxes[good]; w,h=image_size
+    b=boxes[good]
     ratio=float(np.median((b[:,2]-b[:,0])/(b[:,3]-b[:,1])))
-    touches=np.any((b[:,0]<=1)|(b[:,1]<=1)|(b[:,2]>=w-1)|(b[:,3]>=h-1))
+    touches=any(box_touches_edge(box,image_size) for box in b)
     return bool(ratio < .95 and not touches)
 
 

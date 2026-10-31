@@ -252,19 +252,24 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
                 shutil.copytree(cached/'plate',dest/'plate',dirs_exist_ok=True)
                 result=json.loads((dest/'plate/result.json').read_text());rows=read_rows(dest/'plate/rows.jsonl.gz')
             else:
+                did_final_pass=[False]
                 def frame(seq,t,img,st,stage=stage,total=total):
-                    fraction=(total+seq+1)/(2*max(1,total)) if plate_pick else (seq+1)/max(1,total)
-                    emit(stage,min(fraction,1),processed=(total+seq+1 if plate_pick else seq+1),total=(2*total if plate_pick else total),pass_name='track' if plate_pick else 'detect_track')
+                    did_final_pass[0]=True
+                    fraction=(2*total+seq+1)/(3*max(1,total)) if plate_pick else (seq+1)/max(1,total)
+                    emit(stage,min(fraction,1),processed=(2*total+seq+1 if plate_pick else seq+1),total=(3*total if plate_pick else total),pass_name='track' if plate_pick else 'detect_track')
                 def detect_frame(seq,t,img,stage=stage,total=total):
-                    emit(stage,min((seq+1)/(2*max(1,total)),.5),processed=seq+1,total=2*total,pass_name='detect')
+                    emit(stage,min((seq+1)/(3*max(1,total)),1/3),processed=seq+1,total=3*total,pass_name='detect')
+                def legacy_frame(seq,t,img,st,stage=stage,total=total):
+                    emit(stage,min((total+seq+1)/(3*max(1,total)),2/3),processed=total+seq+1,total=3*total,pass_name='legacy_track')
                 result,rows,_=process_video(settings[role]['video'],'bench' if exercise=='benchpress' else exercise,
                     plate_mm=plate_mm,model=str(model),device='cpu',pose=False,out_dir=dest/'plate',on_frame=frame,
-                    scale_source=scale_source,position_source=position_source,cfg=cfg,on_detect=detect_frame if plate_pick else None)
+                    scale_source=scale_source,position_source=position_source,cfg=cfg,on_detect=detect_frame if plate_pick else None,
+                    on_legacy=legacy_frame if plate_pick else None)
             if not any(r.get('plate',{}).get('ellipse') for r in rows):
                 from core.recog.ellipse import annotate_video
                 annotate_video(settings[role]['video'],rows)
             observations[role]=dict(result=result,rows=rows)
-            passes=2 if plate_pick and not (role=='ref' and hit) else 1
+            passes=(3 if did_final_pass[0] else 2) if plate_pick and not (role=='ref' and hit) else 1
             emit(stage,1,processed=passes*len(rows),total=passes*len(rows),cached=role=='ref' and hit)
         emit('pose',0)
         total=sum(len(observations[r]['rows']) for r in roles);done=0
