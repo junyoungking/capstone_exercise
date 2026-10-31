@@ -344,9 +344,9 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
           <h2>원판으로 알아낸 값</h2>
-          <div class="field" style="display:flex;gap:8px;align-items:center"><span class="label" style="margin:0">원판 지름</span><input id="r-plate" type="number" min="150" max="500" step="1" value="450" style="width:96px"><span class="label" style="margin:0">mm</span></div>
+          <div class="field" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="label" style="margin:0">내 원판 지름</span><input id="r-plate" type="number" min="1" max="1000" step="1" value="450" style="width:96px"><span class="label" style="margin:0">mm</span><span id="ref-plate-control" style="display:contents"><span class="label" style="margin:0">기준 지름</span><input id="r-ref-plate" type="number" min="1" max="1000" step="1" value="450" style="width:96px"><span class="label" style="margin:0">mm</span></span></div>
         </div>
-        <div class="geo" id="geo"></div><p class="quiet" id="geo-warn"></p>
+        <div class="geo" id="geo"></div><p class="quiet" id="geo-warn"></p><div id="plate-suggestions" aria-live="polite"></div><p class="quiet" id="rescale-status" role="status"></p>
         <div class="loadrow" id="loadrow"></div>
       </div>
     </div>
@@ -412,14 +412,27 @@ function show(id) { document.querySelectorAll(".screen").forEach(x => x.classLis
 function openReport() {
   S.analyzed = true;
   show("#s-report");
+  if (!U.reps.length || (HAS_REF && !R.reps.length)) {
+    const report=$("#s-report");report.innerHTML='<div class="card"><h1>다시 계산한 기록</h1><p id="empty-summary"></p><p class="quiet">이 지름에서는 완료한 rep을 찾지 못한 영상이 있습니다. 원판을 실제로 재서 지름을 다시 입력할 수 있습니다.</p><div id="empty-inputs"></div><p class="quiet" id="rescale-status" role="status"></p></div>';
+    $("#empty-summary").textContent=`내 영상 ${U.reps.length}회`+(HAS_REF ? ` · 기준 영상 ${R.reps.length}회` : "");
+    [["user",B.inputs.plate_mm],["ref",B.inputs.plate_mm_ref ?? B.inputs.plate_mm]].filter(([role])=>role==="user" || HAS_REF).forEach(([role,diameter])=>{
+      const line=document.createElement("p"),input=document.createElement("input"),button=document.createElement("button");
+      line.textContent=role==="user" ? "내 원판 지름 (mm) " : "기준 원판 지름 (mm) ";input.type="number";input.min="1";input.max="1000";input.value=diameter;
+      button.className="btn";button.textContent="다시 계산";button.onclick=()=>rescalePlate(role,+input.value);line.append(input,button);$("#empty-inputs").appendChild(line);
+    });
+    return;
+  }
   $("#r-date").textContent = `내 세트 ${U.reps.length} rep${HAS_REF ? " · 기준 영상 " + R.reps.length + " rep" : ""}`;
   $("#c-track").textContent = Math.round(HAS_REF ? Math.min(U.plate_used, R.plate_used) : U.plate_used) + "%";
-  $("#c-angle").textContent = `${Math.round(U.geo.cam_angle)}°${HAS_REF ? " / " + Math.round(R.geo.cam_angle) + "°" : ""}`;
+  const angleText = V => V.geo.angle_reliable === false ? "측정 어려움" : Math.round(V.geo.cam_angle) + "°";
+  $("#c-angle").textContent = angleText(U) + (HAS_REF ? " / " + angleText(R) : "");
   const vu = $("#v-user"), vr = $("#v-ref");
   if (!vu.src) { vu.src = "user.mp4"; if (HAS_REF) vr.src = "ref.mp4"; }
   vu.onloadeddata = () => { vu.currentTime = Math.max(0, U.reps[0].start - .6); syncNow(); };
   vr.onloadeddata = () => syncNow();
   $("#r-plate").value = S.plateMM;
+  $("#r-ref-plate").value = B.inputs.plate_mm_ref ?? B.inputs.plate_mm;
+  if (!HAS_REF) $("#ref-plate-control").style.display="none";
   if (!built) { buildReport(); built = true; } else refreshNumbers();
   requestAnimationFrame(loop);
 }
@@ -451,7 +464,8 @@ function buildReport() {
   if (HAS_REF) pb.appendChild(sel);
   $("#c-refrep").textContent = S.refRep; $("#cnt-ref").innerHTML = '<small style="margin:0 4px 0 0">기준</small>rep ' + S.refRep;
   buildTimeline(cards); buildTempo(); refreshNumbers(); init3D(); arrangeRecord();
-  $("#r-plate").onchange = () => { S.plateMM = clamp(+$("#r-plate").value || 450, 150, 500); refreshNumbers(); };
+  $("#r-plate").onchange = () => { const v=+$("#r-plate").value; $("#r-plate").value=S.plateMM; if (v>0) rescalePlate("user",v); };
+  $("#r-ref-plate").onchange = () => { const v=+$("#r-ref-plate").value; $("#r-ref-plate").value=B.inputs.plate_mm_ref ?? B.inputs.plate_mm; if (v>0) rescalePlate("ref",v); };
 }
 function goFinding(f) {
   const list = f.all ? [f.best, ...f.reps.filter(n => n !== f.best)] : f.reps;
@@ -462,7 +476,7 @@ function refreshNumbers() {
   B.findings.cards.forEach(f => { if (f.kind === "inset") { const el = $("#fc" + f.no + " .v"); if (el) el.textContent = "(" + f.val.replace(/\d+\.\d+/g, x => (+x * SC()).toFixed(2)) + ")"; } });
   const quiet = $("#fb-quiet"); if (!quiet.dataset.original) quiet.dataset.original = quiet.innerHTML;
   quiet.innerHTML = quiet.dataset.original.replace(/깊이 ([−+])(\d+\.\d+) cm/g, (_, sign, x) => "깊이 " + sign + (+x * SC()).toFixed(1) + " cm").replace(/속도 (\d+\.\d+) m\/s/g, (_, x) => "속도 " + (+x * SC()).toFixed(2) + " m/s");
-  buildKpis(); buildTables(); buildGeo(); drawHeight(); buildVelocityBars(); $("#foot").textContent = `원판 지름 ${S.plateMM} mm 기준`; }
+  buildKpis(); buildTables(); buildGeo(); drawHeight(); buildVelocityBars(); $("#foot").textContent = HAS_REF ? `원판 지름 · 내 영상 ${S.plateMM} mm · 기준 영상 ${B.inputs.plate_mm_ref ?? B.inputs.plate_mm} mm` : `원판 지름 ${S.plateMM} mm 기준`; }
 function setStats(V) { const roms = V.reps.map(rom), vs = V.reps.map(vel).filter(isFinite); return { rom: avg(roms), vmin: Math.min(...vs), vmax: Math.max(...vs), ...(B.set_median ? B.set_median[V === U ? "user" : "ref"] : { down: median(V.reps.map(r => r.down)), up: median(V.reps.map(r => r.up)), pause: median(V.reps.map(r => r.pause)) }) }; }
 function buildKpis() {
   const su = setStats(U), sr = HAS_REF ? setStats(R) : null, kn = B.kpi;
@@ -547,7 +561,7 @@ function buildTables() {
 function buildGeo() {
   const g = V => V.geo, s = SC();
   const rows = [
-    ["카메라가 옆에서 벗어난 각도", V => `${Math.round(g(V).cam_angle)}<small>°</small>`],
+    ["카메라가 옆에서 벗어난 각도", V => g(V).angle_reliable === false ? "측정 어려움" : `${Math.round(g(V).cam_angle)}<small>°</small>`],
     ["카메라까지 거리 (추정)", V => `${g(V).dist_m.toFixed(1)}<small>m</small>`],
     ["입력한 키", V => g(V).stature_cm == null ? "키를 넣으면 분절 길이가 나옵니다" : `${g(V).stature_cm}<small>cm</small>`],
     ["넙다리 / 정강이", V => g(V).thigh_cm == null ? "—" : `${Math.round(g(V).thigh_cm)} / ${Math.round(g(V).shin_cm)}<small>cm</small>`],
@@ -557,6 +571,15 @@ function buildGeo() {
   rows.forEach(([n, f]) => { h += `<div class="h">${n}</div><div class="v">${f(U)}</div>${HAS_REF ? `<div class="v">${f(R)}</div>` : ""}`; });
   $("#geo").innerHTML = h;
   $("#geo-warn").textContent = [[U, R].filter(Boolean).some(V => V.geo_check.warn) ? "입력 키와 원판으로 잰 키가 15% 넘게 다릅니다. 원판 지름 입력이나 촬영을 확인해 주세요." : "", [U, R].filter(Boolean).some(V => V.geo.retake_warn) ? "카메라를 더 옆으로 두면 깊이·속도가 더 정확해집니다." : ""].filter(Boolean).join(" ");
+  const suggestions=$("#plate-suggestions"); suggestions.replaceChildren();
+  [["user",U],["ref",R]].forEach(([role,V]) => {
+    if (!V || !V.geo_check.plate_suggest || !Number.isFinite(V.geo_check.plate_mm_implied)) return;
+    const mm=Math.round(V.geo_check.plate_mm_implied/10)*10, used=role==="user" ? B.inputs.plate_mm : (B.inputs.plate_mm_ref ?? B.inputs.plate_mm);
+    const line=document.createElement("p");line.className="quiet";
+    const basis=V.geo_check.plate_mm_basis === "input_height" ? "입력 키 기준" : "키 170 cm 가정";
+    line.textContent=`${role === "user" ? "내 영상" : "기준 영상"}: 원판이 ${used} mm보다 ${mm<used ? "작아" : "커"} 보입니다 (약 ${mm} mm · ${basis}). `;
+    const button=document.createElement("button");button.type="button";button.className="btn";button.textContent="이 크기로 다시 계산";button.onclick=()=>rescalePlate(role,mm);line.appendChild(button);suggestions.appendChild(line);
+  });
   const kg = S.load, vs = U.reps.map(vel).filter(isFinite);
   if (kg && vs.length) {
     const P = vs.map(v => kg * 9.81 * v), work = U.reps.reduce((a, r) => a + kg * 9.81 * rom(r) / 100, 0);
@@ -565,6 +588,18 @@ function buildGeo() {
     $("#loadrow").innerHTML = `<span class="label">바 무게</span><input id="r-load" type="number" min="0" step="2.5" placeholder="kg" style="height:36px;width:96px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--text-1);padding:0 10px;font:500 14px var(--mono)"><span class="label">넣으면 rep별 파워와 세트 일을 계산합니다</span>`;
     $("#r-load").onchange = e => { const v = parseFloat(e.target.value); S.load = isFinite(v) && v > 0 ? v : null; buildTables(); buildGeo(); };
   }
+}
+async function rescalePlate(role,mm) {
+  const status=$("#rescale-status"), match=location.pathname.match(/^\/sessions\/([^/]+)\/?$/);
+  if (!match) { status.textContent="다시 계산하려면 서버의 운동 기록에서 리포트를 열어 주세요."; return; }
+  status.textContent="저장된 분석 자료로 다시 계산하는 중입니다.";
+  document.querySelectorAll("#plate-suggestions button, #r-plate, #r-ref-plate").forEach(x=>x.disabled=true);
+  try {
+    const body=role==="user" ? {plate_mm_user:mm} : {plate_mm_ref:mm};
+    const response=await fetch(`/api/sessions/${encodeURIComponent(match[1])}/rescale`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const result=await response.json();if (!response.ok) throw new Error(result.detail || "다시 계산하지 못했습니다.");
+    location.reload();
+  } catch(e) { status.textContent=e.message;document.querySelectorAll("#plate-suggestions button, #r-plate, #r-ref-plate").forEach(x=>x.disabled=false); }
 }
 function drawHeight() {
   const c = $("#ch-h"), dpr = window.devicePixelRatio || 1, W = c.clientWidth, H = c.clientHeight;
@@ -619,6 +654,7 @@ document.querySelectorAll(".spd").forEach(b => b.onclick = () => { document.quer
 const toggle = (id, key) => $(id).onclick = () => { S[key] = !S[key]; $(id).classList.toggle("on", S[key]); if (key === "sync") syncNow(); };
 toggle("#t-sync", "sync"); toggle("#t-path", "path"); toggle("#t-skel", "skel");
 document.addEventListener("keydown", e => {
+  if (!U.reps.length || (HAS_REF && !R.reps.length)) return;
   if (!$("#s-report").classList.contains("on") || e.target.tagName === "INPUT") return;
   if (e.code === "Space") { e.preventDefault(); playing ? pause() : play(); }
   else if (e.key === "ArrowRight") { pause(); seek(vu().currentTime + 1 / U.fps); }
@@ -633,7 +669,7 @@ function setupBoxes() {
   $("#vb-user").style.setProperty("--ar", ar(U)); if (HAS_REF) $("#vb-ref").style.setProperty("--ar", ar(R));
 }
 setupBoxes();
-window.addEventListener("resize", () => { document.querySelectorAll(".vbox video").forEach(v => v._s = null); drawHeight(); });
+window.addEventListener("resize", () => { document.querySelectorAll(".vbox video").forEach(v => v._s = null); if ($("#ch-h")) drawHeight(); });
 const B2 = [[11, 12], [11, 23], [12, 24], [23, 24], [11, 13], [13, 15], [12, 14], [14, 16], [23, 25], [25, 27], [24, 26], [26, 28], [27, 31], [28, 32], [27, 29], [28, 30], [29, 31], [30, 32]];
 function drawOverlay(V, video, canvas, t, color, who) {
   const box = canvas.parentElement, dpr = window.devicePixelRatio || 1, cw = box.clientWidth, ch = box.clientHeight;

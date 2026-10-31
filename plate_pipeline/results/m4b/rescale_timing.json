@@ -1,0 +1,42 @@
+[
+  {
+    "plate_mm": 450,
+    "client_s": 0.10595809399092104,
+    "id": "actual",
+    "report_url": "/sessions/actual/",
+    "elapsed_s": 0.10309019600390457,
+    "compute_s": 0.05136423899966758,
+    "reps": 1,
+    "version": "8b9cd6746ed441e79a516f3eae42fa28"
+  },
+  {
+    "plate_mm": 250,
+    "client_s": 0.07116927800234407,
+    "id": "actual",
+    "report_url": "/sessions/actual/",
+    "elapsed_s": 0.06887798800016753,
+    "compute_s": 0.019887278001988307,
+    "reps": 1,
+    "version": "17f712f3becd4bb6852289c5d6ce5ca6"
+  },
+  {
+    "plate_mm": 450,
+    "client_s": 0.07147556600102689,
+    "id": "actual",
+    "report_url": "/sessions/actual/",
+    "elapsed_s": 0.06947620399296284,
+    "compute_s": 0.020142526991548948,
+    "reps": 1,
+    "version": "b561a066032b4946a30b51f1b33f0bee"
+  },
+  {
+    "plate_mm": 250,
+    "client_s": 0.07097906900162343,
+    "id": "actual",
+    "report_url": "/sessions/actual/",
+    "elapsed_s": 0.06889172799128573,
+    "compute_s": 0.019997006995254196,
+    "reps": 1,
+    "version": "fa6d9bf2a6894b0c9ed4d96c997b19db"
+  }
+]

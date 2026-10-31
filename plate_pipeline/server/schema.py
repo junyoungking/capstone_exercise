@@ -31,7 +31,7 @@ def validate_result(b):
         for k,names in (('kp2','j2'),('j3','j3names')):
             req(isinstance(v[names],list) and all(isinstance(j,int) for j in v[names]),role+'.'+names)
             req(all(q is None or isinstance(q,list) and len(q)==len(v[names]) and all(p is None and k=='kp2' or nums(p,3) for p in q) for q in v[k]),role+'.'+k+' points')
-        req(isinstance(v['reps'],list) and len(v['reps'])>0,role+'.reps')
+        req(isinstance(v['reps'],list) and (len(v['reps'])>0 or b.get('allow_empty_reps') is True),role+'.reps')
         for i,r in enumerate(v['reps'],1):
             req(all(k in r and (r[k] is None and k=='v' or num(r[k])) for k in REP_KEYS),role+'.rep values')
             req(r['n']==i and r['start']<=r['far_in']<=r['far_out']<=r['back'],role+'.rep events')
@@ -40,7 +40,7 @@ def validate_result(b):
         if 'angle_source' in v['geo']:
             geo=v['geo']
             req(geo['angle_source'] in ('box','ellipse') and isinstance(geo.get('retake_warn'),bool)
-                and geo['retake_warn']==(geo['cam_angle']>60),role+'.geo angle')
+                and geo['retake_warn']==(geo.get('angle_reliable',True) and geo['cam_angle']>60),role+'.geo angle')
             req(isinstance(geo.get('ellipse_stats'),dict),role+'.ellipse stats')
         if 'ellipse' in v:
             req(isinstance(v['ellipse'],list) and len(v['ellipse'])==n,role+'.ellipse')

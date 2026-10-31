@@ -66,3 +66,52 @@ def stature(raw, geometry, stand, cfg=None):
     height=(floor-nose)*geometry['lifter_m_per_px']/cfg.nose_stature_ratio
     use=stand & np.isfinite(height) & (height>0)
     return (float(np.median(height[use])) if use.any() else None),use
+
+
+def box_angle_reliable(boxes, image_size):
+    """Box width can include the sleeve; a clipped box is not an angle cue."""
+    boxes = np.asarray(boxes, float)
+    good = np.isfinite(boxes).all(axis=1) & (boxes[:,2]>boxes[:,0]) & (boxes[:,3]>boxes[:,1])
+    if not good.any(): return False
+    b=boxes[good]; w,h=image_size
+    ratio=float(np.median((b[:,2]-b[:,0])/(b[:,3]-b[:,1])))
+    touches=np.any((b[:,0]<=1)|(b[:,1]<=1)|(b[:,2]>=w-1)|(b[:,3]>=h-1))
+    return bool(ratio < .95 and not touches)
+
+
+def implied_plate_diameter(raw, boxes, image_size, standing, height_cm=170., reliable=None, cfg=None):
+    """Invert M2's nose/floor height equation per standing frame (mm).
+
+    H*0.92/pixel_height = D/pixel_plate_height + bar_depth*cos(angle)/focal.
+    Unknown box angles use cos=1; no supported positive solution returns None.
+    """
+    cfg=cfg or DEFAULT.geometry
+    if not np.isfinite(height_cm) or height_cm<=0: raise ValueError('height must be positive')
+    p=np.asarray(raw,float);b=np.asarray(boxes,float);stand=np.asarray(standing,bool)
+    if len(p)!=len(b) or len(p)!=len(stand): raise ValueError('frame count mismatch')
+    good=np.isfinite(b).all(axis=1)&(b[:,2]>b[:,0])&(b[:,3]>b[:,1])
+    if not good.any(): return None
+    heights=np.interp(np.arange(len(b)),np.flatnonzero(good),(b[:,3]-b[:,1])[good])
+    feet=p[:,[27,28,29,30,31,32]]
+    visible=(feet[:,:,3]>=.5)&np.isfinite(feet[:,:,:2]).all(axis=2)
+    floor=np.max(np.where(visible,feet[:,:,1],-np.inf),axis=1)
+    pixel_height=floor-p[:,0,1]
+    if reliable is None: reliable=box_angle_reliable(b,image_size)
+    ratio=float(np.median((b[good,2]-b[good,0])/(b[good,3]-b[good,1])))
+    cosine=float(np.clip(ratio,0,1)) if reliable else 1.
+    focal=cfg.focal_long_side*max(image_size)
+    with np.errstate(divide='ignore',invalid='ignore'):
+        diam=1000*heights*(height_cm/100*cfg.nose_stature_ratio/pixel_height-cfg.bar_depth_m*cosine/focal)
+    # An interpolated plate size outside its observations is not evidence for
+    # the same standing person. Require a tracked plate in the standing frame.
+    width,height=image_size
+    complete=(b[:,0]>1)&(b[:,1]>1)&(b[:,2]<width-1)&(b[:,3]<height-1)
+    use=stand & good & complete & np.isfinite(diam)&(diam>0)&np.isfinite(pixel_height)&(pixel_height>0)
+    return float(np.median(diam[use])) if use.any() else None
+
+
+PLATE_SUGGEST_FRACTION = .30
+
+
+def plate_suggestion(implied_mm, used_mm, threshold=PLATE_SUGGEST_FRACTION):
+    return bool(implied_mm is not None and np.isfinite(implied_mm) and used_mm>0 and abs(implied_mm-used_mm)/used_mm>threshold)

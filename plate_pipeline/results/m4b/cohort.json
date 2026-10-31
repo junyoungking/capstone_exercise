@@ -1,0 +1,3876 @@
+[
+  {
+    "key": "squat/squat_11.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 55,
+    "box_ratio": 0.9966331116195817,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 442.1667466931908,
+    "range_mm": [
+      406.56051426738816,
+      477.7729791189934
+    ],
+    "by_height": {
+      "160": 406.56051426738816,
+      "170": 442.1667466931908,
+      "180": 477.7729791189934
+    },
+    "cos_one_mm": 442.1667466931908,
+    "cos_box_ratio_mm": 442.7160181853655,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 157.45570935490122,
+    "stature_after_cm": 157.45570935490122,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.52599469547246
+        ],
+        "rom_cm": [
+          54.73538937767373
+        ],
+        "velocity": [
+          0.26643815907698626
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.52599469547246
+        ],
+        "rom_cm": [
+          54.73538937767373
+        ],
+        "velocity": [
+          0.26643815907698626
+        ]
+      }
+    },
+    "eval_s": 0.011864289990626276
+  },
+  {
+    "key": "squat/stu4_69.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 140,
+    "box_ratio": 0.9783292803253039,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 429.80008429641146,
+    "range_mm": [
+      395.29377441942165,
+      464.0941315206855
+    ],
+    "by_height": {
+      "160": 395.29377441942165,
+      "170": 429.80008429641146,
+      "180": 464.0941315206855
+    },
+    "cos_one_mm": 429.80008429641146,
+    "cos_box_ratio_mm": 433.1393548739262,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 174.9211241531415,
+    "stature_after_cm": 174.9211241531415,
+    "stats": {
+      "before": {
+        "count": 2,
+        "events": [
+          3.04487276545545,
+          7.148651222150905
+        ],
+        "rom_cm": [
+          74.83479124126242,
+          76.6399365448701
+        ],
+        "velocity": [
+          0.9120946001950638,
+          0.7875890837926591
+        ]
+      },
+      "after": {
+        "count": 2,
+        "events": [
+          3.04487276545545,
+          7.148651222150905
+        ],
+        "rom_cm": [
+          74.83479124126242,
+          76.6399365448701
+        ],
+        "velocity": [
+          0.9120946001950638,
+          0.7875890837926591
+        ]
+      }
+    },
+    "eval_s": 0.016711399992345832
+  },
+  {
+    "key": "squat/val1235.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 30,
+    "box_ratio": 1.075445424985281,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 570.2427531647502,
+    "range_mm": [
+      524.6057017308167,
+      615.8798045986839
+    ],
+    "by_height": {
+      "160": 524.6057017308167,
+      "170": 570.2427531647502,
+      "180": 615.8798045986839
+    },
+    "cos_one_mm": 570.2427531647502,
+    "cos_box_ratio_mm": 570.2427531647502,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 143.6629927854304,
+    "stature_after_cm": 143.6629927854304,
+    "stats": {
+      "before": {
+        "count": 2,
+        "events": [
+          4.351857787523849,
+          9.466428695991452
+        ],
+        "rom_cm": [
+          33.33139541423659,
+          41.30702510825935
+        ],
+        "velocity": [
+          0.20006913892244846,
+          0.234686197840539
+        ]
+      },
+      "after": {
+        "count": 2,
+        "events": [
+          4.351857787523849,
+          9.466428695991452
+        ],
+        "rom_cm": [
+          33.33139541423659,
+          41.30702510825935
+        ],
+        "velocity": [
+          0.20006913892244846,
+          0.234686197840539
+        ]
+      }
+    },
+    "eval_s": 0.016777590004494414
+  },
+  {
+    "key": "squat/val1256.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 81,
+    "box_ratio": 1.0701221141668698,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 391.94712247642707,
+    "range_mm": [
+      358.56285819820073,
+      425.16624464442253
+    ],
+    "by_height": {
+      "160": 358.56285819820073,
+      "170": 391.94712247642707,
+      "180": 425.16624464442253
+    },
+    "cos_one_mm": 391.94712247642707,
+    "cos_box_ratio_mm": 391.94712247642707,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 187.48585983942095,
+    "stature_after_cm": 187.48585983942095,
+    "stats": {
+      "before": {
+        "count": 2,
+        "events": [
+          5.334434379530906,
+          9.625128783568957
+        ],
+        "rom_cm": [
+          57.20658779037816,
+          57.616800756194166
+        ],
+        "velocity": [
+          0.29869931251022797,
+          0.2776052825930842
+        ]
+      },
+      "after": {
+        "count": 2,
+        "events": [
+          5.334434379530906,
+          9.625128783568957
+        ],
+        "rom_cm": [
+          57.20658779037816,
+          57.616800756194166
+        ],
+        "velocity": [
+          0.29869931251022797,
+          0.2776052825930842
+        ]
+      }
+    },
+    "eval_s": 0.015810643992153928
+  },
+  {
+    "key": "benchpress/bench press_31.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.49008763488440604,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          2.8527118118448413
+        ],
+        "rom_cm": [
+          25.884179211597697
+        ],
+        "velocity": [
+          0.2306644713885728
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          2.8527118118448413
+        ],
+        "rom_cm": [
+          25.884179211597697
+        ],
+        "velocity": [
+          0.2306644713885728
+        ]
+      }
+    },
+    "eval_s": 0.007661737996386364
+  },
+  {
+    "key": "benchpress/bench press_40.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 1.0348675034867505,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 3,
+        "events": [
+          3.2710505215319907,
+          5.742169139220766,
+          8.710757586255744
+        ],
+        "rom_cm": [
+          34.66152115401052,
+          30.11987104009605,
+          32.581151623498265
+        ],
+        "velocity": [
+          0.1401138524349299,
+          0.21307495690364983,
+          0.1730790229893888
+        ]
+      },
+      "after": {
+        "count": 3,
+        "events": [
+          3.2710505215319907,
+          5.742169139220766,
+          8.710757586255744
+        ],
+        "rom_cm": [
+          34.66152115401052,
+          30.11987104009605,
+          32.581151623498265
+        ],
+        "velocity": [
+          0.1401138524349299,
+          0.21307495690364983,
+          0.1730790229893888
+        ]
+      }
+    },
+    "eval_s": 0.011983250005869195
+  },
+  {
+    "key": "benchpress/stu10_11.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 247,
+    "box_ratio": 0.33486590038314124,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 457.2196767332873,
+    "range_mm": [
+      420.8783789040566,
+      493.56097456251814
+    ],
+    "by_height": {
+      "160": 420.8783789040566,
+      "170": 457.2196767332873,
+      "180": 493.56097456251814
+    },
+    "cos_one_mm": 457.2196767332873,
+    "cos_box_ratio_mm": 564.028497701591,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 108.46240539319167,
+    "stature_after_cm": 108.46240539319167,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.00831095599278342
+  },
+  {
+    "key": "benchpress/stu8_15.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 1.101781170483461,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 4,
+        "events": [
+          5.0113885561634905,
+          6.622022070238364,
+          17.60150532310762,
+          19.411127604987826
+        ],
+        "rom_cm": [
+          28.070757095604147,
+          28.373156884792937,
+          0.0,
+          26.60952427146068,
+          27.870934968753257
+        ],
+        "velocity": [
+          0.6835065188220608,
+          0.7693549523501814,
+          0.5180638071034378,
+          0.5381788825180057
+        ]
+      },
+      "after": {
+        "count": 4,
+        "events": [
+          5.0113885561634905,
+          6.622022070238364,
+          17.60150532310762,
+          19.411127604987826
+        ],
+        "rom_cm": [
+          28.070757095604147,
+          28.373156884792937,
+          0.0,
+          26.60952427146068,
+          27.870934968753257
+        ],
+        "velocity": [
+          0.6835065188220608,
+          0.7693549523501814,
+          0.5180638071034378,
+          0.5381788825180057
+        ]
+      }
+    },
+    "eval_s": 0.03036829299526289
+  },
+  {
+    "key": "benchpress/stu8_7.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.9014238773274912,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 2,
+        "events": [
+          11.44731226546514,
+          17.77410723916329
+        ],
+        "rom_cm": [
+          56.10010751159127,
+          38.66705434991562
+        ],
+        "velocity": [
+          0.399242841246582
+        ]
+      },
+      "after": {
+        "count": 2,
+        "events": [
+          11.44731226546514,
+          17.77410723916329
+        ],
+        "rom_cm": [
+          56.10010751159127,
+          38.66705434991562
+        ],
+        "velocity": [
+          0.399242841246582
+        ]
+      }
+    },
+    "eval_s": 0.021638649006490596
+  },
+  {
+    "key": "benchpress/test153.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.2412420382165606,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.0045648899977095425
+  },
+  {
+    "key": "deadlift/deadlift_7.mp4",
+    "exercise": "deadlift",
+    "group": "other_deadlift",
+    "standing_frames": 49,
+    "box_ratio": 1.3815355439918764,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 400.7034040304424,
+    "range_mm": [
+      368.4232795509334,
+      432.98352850995155
+    ],
+    "by_height": {
+      "160": 368.4232795509334,
+      "170": 400.7034040304424,
+      "180": 432.98352850995155
+    },
+    "cos_one_mm": 400.7034040304424,
+    "cos_box_ratio_mm": 400.7034040304424,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 185.27150119908933,
+    "stature_after_cm": 185.27150119908933,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.3069773909672047
+        ],
+        "rom_cm": [
+          43.50747703024035
+        ],
+        "velocity": [
+          0.4301075374006038
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.3069773909672047
+        ],
+        "rom_cm": [
+          43.50747703024035
+        ],
+        "velocity": [
+          0.4301075374006038
+        ]
+      }
+    },
+    "eval_s": 0.009238670987542719
+  },
+  {
+    "key": "deadlift/deadlift_23.mp4",
+    "exercise": "deadlift",
+    "group": "other_deadlift",
+    "standing_frames": 38,
+    "box_ratio": 0.4976579652114611,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 537.8185652811126,
+    "range_mm": [
+      502.9865729194479,
+      572.6505576427774
+    ],
+    "by_height": {
+      "160": 502.9865729194479,
+      "170": 537.8185652811126,
+      "180": 572.6505576427774
+    },
+    "cos_one_mm": 482.9819383301193,
+    "cos_box_ratio_mm": 537.8185652811126,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 143.18025537641952,
+    "stature_after_cm": 143.18025537641952,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.005796705998363905
+  },
+  {
+    "key": "deadlift/deadlift_30.mp4",
+    "exercise": "deadlift",
+    "group": "other_deadlift",
+    "standing_frames": 97,
+    "box_ratio": 0.9538850284270372,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 320.3208286435787,
+    "range_mm": [
+      294.57251118326127,
+      346.0691461038962
+    ],
+    "by_height": {
+      "160": 294.57251118326127,
+      "170": 320.3208286435787,
+      "180": 346.0691461038962
+    },
+    "cos_one_mm": 320.3208286435787,
+    "cos_box_ratio_mm": 325.7347525079329,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 218.12126995991164,
+    "stature_after_cm": 218.12126995991164,
+    "stats": {
+      "before": {
+        "count": 2,
+        "events": [
+          3.2009914584362686,
+          7.537447090133606
+        ],
+        "rom_cm": [
+          42.84458627122569,
+          48.298632833353864
+        ],
+        "velocity": [
+          0.4446901032397839,
+          0.46471637930030074
+        ]
+      },
+      "after": {
+        "count": 2,
+        "events": [
+          3.2009914584362686,
+          7.537447090133606
+        ],
+        "rom_cm": [
+          42.84458627122569,
+          48.298632833353864
+        ],
+        "velocity": [
+          0.4446901032397839,
+          0.46471637930030074
+        ]
+      }
+    },
+    "eval_s": 0.010377406986663118
+  },
+  {
+    "key": "squat/stu6_11_2.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 59,
+    "box_ratio": 1.0043337221701685,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 493.40317210720036,
+    "range_mm": [
+      453.0325309672047,
+      533.7738132471961
+    ],
+    "by_height": {
+      "160": 453.0325309672047,
+      "170": 493.40317210720036,
+      "180": 533.7738132471961
+    },
+    "cos_one_mm": 493.40317210720036,
+    "cos_box_ratio_mm": 493.40317210720036,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 160.20326786757485,
+    "stature_after_cm": 160.20326786757485,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.009131591999903321
+  },
+  {
+    "key": "squat/stu6_11_3.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 11,
+    "box_ratio": 1.1075268817204302,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 499.1048051016526,
+    "range_mm": [
+      459.38473635235755,
+      538.8248738509476
+    ],
+    "by_height": {
+      "160": 459.38473635235755,
+      "170": 499.1048051016526,
+      "180": 538.8248738509476
+    },
+    "cos_one_mm": 499.1048051016526,
+    "cos_box_ratio_mm": 499.1048051016526,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 157.63727256447078,
+    "stature_after_cm": 157.63727256447078,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.0057566250034142286
+  },
+  {
+    "key": "squat/val1250.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 87,
+    "box_ratio": 0.4476635514018689,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 465.04459173308726,
+    "range_mm": [
+      433.82508659940527,
+      496.2640968667693
+    ],
+    "by_height": {
+      "160": 433.82508659940527,
+      "170": 465.04459173308726,
+      "180": 496.2640968667693
+    },
+    "cos_one_mm": 384.4637961532028,
+    "cos_box_ratio_mm": 465.04459173308726,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 164.51893041956887,
+    "stature_after_cm": 164.51893041956887,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.007946106998133473
+  },
+  {
+    "key": "benchpress/bench press_61.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.6498958723274257,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 2,
+        "events": [
+          1.4063565540219376,
+          2.9613679082076008
+        ],
+        "rom_cm": [
+          27.03537787187497,
+          34.22979126192873
+        ],
+        "velocity": [
+          0.500370048424413,
+          0.6049316893899578
+        ]
+      },
+      "after": {
+        "count": 2,
+        "events": [
+          1.4063565540219376,
+          2.9613679082076008
+        ],
+        "rom_cm": [
+          27.03537787187497,
+          34.22979126192873
+        ],
+        "velocity": [
+          0.500370048424413,
+          0.6049316893899578
+        ]
+      }
+    },
+    "eval_s": 0.007194220001110807
+  },
+  {
+    "key": "benchpress/stu1_6_4.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.5712411149966108,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.3449427934858784
+        ],
+        "rom_cm": [
+          44.15002743603681
+        ],
+        "velocity": [
+          0.5413714256224895
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.3449427934858784
+        ],
+        "rom_cm": [
+          44.15002743603681
+        ],
+        "velocity": [
+          0.5413714256224895
+        ]
+      }
+    },
+    "eval_s": 0.008043156994972378
+  },
+  {
+    "key": "benchpress/stu7_12_2.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.8406279733587061,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 5,
+        "events": [
+          3.9181801340536273,
+          6.195931008591314,
+          8.505390082123334,
+          10.781996857788391,
+          13.262490851575853
+        ],
+        "rom_cm": [
+          33.375131524452534,
+          31.189917795699746,
+          31.47585748339839,
+          30.733008789066307,
+          33.20827098824007
+        ],
+        "velocity": [
+          0.5237266859234798,
+          0.42090020140697926,
+          0.43490444980880655,
+          0.42230282287470355,
+          0.32579676802751945
+        ]
+      },
+      "after": {
+        "count": 5,
+        "events": [
+          3.9181801340536273,
+          6.195931008591314,
+          8.505390082123334,
+          10.781996857788391,
+          13.262490851575853
+        ],
+        "rom_cm": [
+          33.375131524452534,
+          31.189917795699746,
+          31.47585748339839,
+          30.733008789066307,
+          33.20827098824007
+        ],
+        "velocity": [
+          0.5237266859234798,
+          0.42090020140697926,
+          0.43490444980880655,
+          0.42230282287470355,
+          0.32579676802751945
+        ]
+      }
+    },
+    "eval_s": 0.018269072999828495
+  },
+  {
+    "key": "benchpress/stu7_7.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 1.7258953168044084,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 2,
+        "events": [
+          2.168368361317495,
+          4.845604436790331
+        ],
+        "rom_cm": [
+          45.45352942500861,
+          52.67127686435901
+        ],
+        "velocity": [
+          0.5900862639671393,
+          0.5359737399888722
+        ]
+      },
+      "after": {
+        "count": 2,
+        "events": [
+          2.168368361317495,
+          4.845604436790331
+        ],
+        "rom_cm": [
+          45.45352942500861,
+          52.67127686435901
+        ],
+        "velocity": [
+          0.5900862639671393,
+          0.5359737399888722
+        ]
+      }
+    },
+    "eval_s": 0.009245031003956683
+  },
+  {
+    "key": "benchpress/stu8_6_2.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 1.2038586907851199,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 3,
+        "events": [
+          2.1340814995378006,
+          4.169477898512384,
+          6.517556921137861
+        ],
+        "rom_cm": [
+          19.6386407587697,
+          18.48207558066714,
+          21.22716494725908
+        ],
+        "velocity": [
+          0.1460325712601994,
+          0.1318271317204237,
+          0.11477941229134302
+        ]
+      },
+      "after": {
+        "count": 3,
+        "events": [
+          2.1340814995378006,
+          4.169477898512384,
+          6.517556921137861
+        ],
+        "rom_cm": [
+          19.6386407587697,
+          18.48207558066714,
+          21.22716494725908
+        ],
+        "velocity": [
+          0.1460325712601994,
+          0.1318271317204237,
+          0.11477941229134302
+        ]
+      }
+    },
+    "eval_s": 0.011168502998771146
+  },
+  {
+    "key": "deadlift/deadlift_sihoo02.mp4",
+    "exercise": "deadlift",
+    "group": "other_deadlift",
+    "standing_frames": 70,
+    "box_ratio": 0.8280827935006612,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 435.5453232380096,
+    "range_mm": [
+      405.561338522964,
+      465.52930795305537
+    ],
+    "by_height": {
+      "160": 405.561338522964,
+      "170": 435.5453232380096,
+      "180": 465.52930795305537
+    },
+    "cos_one_mm": 420.3844981415022,
+    "cos_box_ratio_mm": 435.5453232380096,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 174.8211449642347,
+    "stature_after_cm": 174.8211449642347,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.872005672384058
+        ],
+        "rom_cm": [
+          39.20584264344982
+        ],
+        "velocity": [
+          0.19486653751887745
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.872005672384058
+        ],
+        "rom_cm": [
+          39.20584264344982
+        ],
+        "velocity": [
+          0.19486653751887745
+        ]
+      }
+    },
+    "eval_s": 0.008877762011252344
+  },
+  {
+    "key": "deadlift/PB_S01_R10.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 66,
+    "box_ratio": 1.009765625,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 312.0315826708645,
+    "range_mm": [
+      287.3747217815459,
+      336.6884435601832
+    ],
+    "by_height": {
+      "160": 287.3747217815459,
+      "170": 312.0315826708645,
+      "180": 336.6884435601832
+    },
+    "cos_one_mm": 312.0315826708645,
+    "cos_box_ratio_mm": 312.0315826708645,
+    "suggested": true,
+    "chosen_mm": 310,
+    "stature_before_cm": 225.95551710694167,
+    "stature_after_cm": 169.17614047383483,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          5.11559637580116
+        ],
+        "rom_cm": [
+          73.57897465741053
+        ],
+        "velocity": [
+          0.4051772410084
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          5.11559637580116
+        ],
+        "rom_cm": [
+          50.68773809732723
+        ],
+        "velocity": [
+          0.2791220993613422
+        ]
+      }
+    },
+    "eval_s": 0.009294900999520905
+  },
+  {
+    "key": "deadlift/PB_S03_R13.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 42,
+    "box_ratio": 0.9964906083736815,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 467.7440733720333,
+    "range_mm": [
+      426.42034209786846,
+      509.0678046461983
+    ],
+    "by_height": {
+      "160": 426.42034209786846,
+      "170": 467.7440733720333,
+      "180": 509.0678046461983
+    },
+    "cos_one_mm": 467.7440733720333,
+    "cos_box_ratio_mm": 468.5679358982118,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 165.50686731423875,
+    "stature_after_cm": 165.50686731423875,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          2.814645463041413
+        ],
+        "rom_cm": [
+          47.30710262091063
+        ],
+        "velocity": [
+          0.35997206336486104
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          2.814645463041413
+        ],
+        "rom_cm": [
+          47.30710262091063
+        ],
+        "velocity": [
+          0.35997206336486104
+        ]
+      }
+    },
+    "eval_s": 0.007359320006798953
+  },
+  {
+    "key": "deadlift/PB_S03_R14.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 42,
+    "box_ratio": 0.9708625969737409,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 468.86933103970887,
+    "range_mm": [
+      427.36616497980776,
+      510.37249709961
+    ],
+    "by_height": {
+      "160": 427.36616497980776,
+      "170": 468.86933103970887,
+      "180": 510.37249709961
+    },
+    "cos_one_mm": 468.86933103970887,
+    "cos_box_ratio_mm": 475.76570247255506,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 163.79192619138712,
+    "stature_after_cm": 163.79192619138712,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.3654889785178614
+        ],
+        "rom_cm": [
+          47.854296017374324
+        ],
+        "velocity": [
+          0.35577188227755957
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.3654889785178614
+        ],
+        "rom_cm": [
+          47.854296017374324
+        ],
+        "velocity": [
+          0.35577188227755957
+        ]
+      }
+    },
+    "eval_s": 0.00786704701022245
+  },
+  {
+    "key": "deadlift/PB_S04_R03.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 52,
+    "box_ratio": 0.9859459459459459,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 292.08388621467213,
+    "range_mm": [
+      269.0664054542041,
+      315.0450065146845
+    ],
+    "by_height": {
+      "160": 269.0664054542041,
+      "170": 292.08388621467213,
+      "180": 315.0450065146845
+    },
+    "cos_one_mm": 292.08388621467213,
+    "cos_box_ratio_mm": 293.47823510902106,
+    "suggested": true,
+    "chosen_mm": 290,
+    "stature_before_cm": 238.13425542144344,
+    "stature_after_cm": 168.48890703210378,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.9984238522837634
+        ],
+        "rom_cm": [
+          91.18836761996673
+        ],
+        "velocity": [
+          0.9651822818594469
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.9984238522837634
+        ],
+        "rom_cm": [
+          58.76583691064524
+        ],
+        "velocity": [
+          0.6220063594205323
+        ]
+      }
+    },
+    "eval_s": 0.008793442990281619
+  },
+  {
+    "key": "deadlift/PB_S05_R22.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 42,
+    "box_ratio": 1.0404312465350105,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 241.98156995018905,
+    "range_mm": [
+      221.39387887537333,
+      262.5692610250047
+    ],
+    "by_height": {
+      "160": 221.39387887537333,
+      "170": 241.98156995018905,
+      "180": 262.5692610250047
+    },
+    "cos_one_mm": 241.98156995018905,
+    "cos_box_ratio_mm": 241.98156995018905,
+    "suggested": true,
+    "chosen_mm": 240,
+    "stature_before_cm": 270.6319318415379,
+    "stature_after_cm": 169.0389393130217,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          2.9740780919057084
+        ],
+        "rom_cm": [
+          82.62815175314273
+        ],
+        "velocity": [
+          0.6926856496145508
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          2.9740780919057084
+        ],
+        "rom_cm": [
+          44.06834760167615
+        ],
+        "velocity": [
+          0.36943234646109413
+        ]
+      }
+    },
+    "eval_s": 0.007442599002388306
+  },
+  {
+    "key": "deadlift/PB_S06_R25.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 41,
+    "box_ratio": 0.9910158384378687,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 315.7749070279319,
+    "range_mm": [
+      290.9846204359968,
+      340.565193619867
+    ],
+    "by_height": {
+      "160": 290.9846204359968,
+      "170": 315.7749070279319,
+      "180": 340.565193619867
+    },
+    "cos_one_mm": 315.7749070279319,
+    "cos_box_ratio_mm": 316.72417322445517,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 223.76130940692823,
+    "stature_after_cm": 223.76130940692823,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.4588052771321025
+        ],
+        "rom_cm": [
+          68.05712817461259
+        ],
+        "velocity": [
+          0.4883965444866997
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.4588052771321025
+        ],
+        "rom_cm": [
+          68.05712817461259
+        ],
+        "velocity": [
+          0.4883965444866997
+        ]
+      }
+    },
+    "eval_s": 0.007721547008259222
+  },
+  {
+    "key": "deadlift/PB_S07_R19.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 57,
+    "box_ratio": 1.0122199592668017,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 251.34876921794924,
+    "range_mm": [
+      230.4856112742513,
+      272.2119271616472
+    ],
+    "by_height": {
+      "160": 230.4856112742513,
+      "170": 251.34876921794924,
+      "180": 272.2119271616472
+    },
+    "cos_one_mm": 251.34876921794924,
+    "cos_box_ratio_mm": 251.34876921794924,
+    "suggested": true,
+    "chosen_mm": 250,
+    "stature_before_cm": 265.55004687556743,
+    "stature_after_cm": 169.3535162694022,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.325625335342583
+        ],
+        "rom_cm": [
+          52.71973680443167
+        ],
+        "velocity": [
+          0.5429319455860206
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.326396018187525
+        ],
+        "rom_cm": [
+          29.288742669128737
+        ],
+        "velocity": [
+          0.3072790143891083
+        ]
+      }
+    },
+    "eval_s": 0.007366678997641429
+  },
+  {
+    "key": "deadlift/GB_S01_R01.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 54,
+    "box_ratio": 1.096061479346782,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 274.51777783022897,
+    "range_mm": [
+      251.75770170521406,
+      297.2625138235543
+    ],
+    "by_height": {
+      "160": 251.75770170521406,
+      "170": 274.51777783022897,
+      "180": 297.2625138235543
+    },
+    "cos_one_mm": 274.51777783022897,
+    "cos_box_ratio_mm": 274.51777783022897,
+    "suggested": true,
+    "chosen_mm": 270,
+    "stature_before_cm": 247.1892892961458,
+    "stature_after_cm": 168.0150516208916,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.937147554978655
+        ],
+        "rom_cm": [
+          74.129717256994
+        ],
+        "velocity": [
+          0.7136476213865932
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.9371475549786545
+        ],
+        "rom_cm": [
+          44.47783035419638
+        ],
+        "velocity": [
+          0.42818857283195605
+        ]
+      }
+    },
+    "eval_s": 0.008189995001885109
+  },
+  {
+    "key": "deadlift/GB_S01_R07.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 61,
+    "box_ratio": 1.090818363273454,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 254.5014412857475,
+    "range_mm": [
+      233.17407349312643,
+      275.8288090783686
+    ],
+    "by_height": {
+      "160": 233.17407349312643,
+      "170": 254.5014412857475,
+      "180": 275.8288090783686
+    },
+    "cos_one_mm": 254.5014412857475,
+    "cos_box_ratio_mm": 254.5014412857475,
+    "suggested": true,
+    "chosen_mm": 250,
+    "stature_before_cm": 261.66558227682066,
+    "stature_after_cm": 167.88935918885178,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.73230641875799
+        ],
+        "rom_cm": [
+          82.15990913799705
+        ],
+        "velocity": [
+          0.6945324565777093
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.73230641875799
+        ],
+        "rom_cm": [
+          45.64439396555392
+        ],
+        "velocity": [
+          0.38585136476539444
+        ]
+      }
+    },
+    "eval_s": 0.008953102995292284
+  },
+  {
+    "key": "deadlift/GB_S01_R11.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 60,
+    "box_ratio": 0.9585547290116894,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 279.67231122647877,
+    "range_mm": [
+      257.05712590957774,
+      302.2874965433799
+    ],
+    "by_height": {
+      "160": 257.05712590957774,
+      "170": 279.67231122647877,
+      "180": 302.2874965433799
+    },
+    "cos_one_mm": 279.67231122647877,
+    "cos_box_ratio_mm": 284.0151887262373,
+    "suggested": true,
+    "chosen_mm": 280,
+    "stature_before_cm": 243.41304993264342,
+    "stature_after_cm": 168.22455789131476,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.5217066976654205
+        ],
+        "rom_cm": [
+          76.79659548606797
+        ],
+        "velocity": [
+          0.6467593953404441
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.5217066976654205
+        ],
+        "rom_cm": [
+          47.784548302442296
+        ],
+        "velocity": [
+          0.4024280682118315
+        ]
+      }
+    },
+    "eval_s": 0.008635153993964195
+  },
+  {
+    "key": "deadlift/GB_S01_R16.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 66,
+    "box_ratio": 1.00879813792394,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 267.8273837916855,
+    "range_mm": [
+      245.68721374552712,
+      289.86586316479924
+    ],
+    "by_height": {
+      "160": 245.68721374552712,
+      "170": 267.8273837916855,
+      "180": 289.86586316479924
+    },
+    "cos_one_mm": 267.8273837916855,
+    "cos_box_ratio_mm": 267.8273837916855,
+    "suggested": true,
+    "chosen_mm": 270,
+    "stature_before_cm": 252.63812709580043,
+    "stature_after_cm": 170.98136276944146,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.876860145038128
+        ],
+        "rom_cm": [
+          84.04091376458936
+        ],
+        "velocity": [
+          0.6805094899868447
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.876860145038128
+        ],
+        "rom_cm": [
+          50.42454825875361
+        ],
+        "velocity": [
+          0.40830569399210664
+        ]
+      }
+    },
+    "eval_s": 0.00913148200197611
+  },
+  {
+    "key": "deadlift/GB_S01_R18.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 63,
+    "box_ratio": 1.0056168947588597,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 275.0342204156311,
+    "range_mm": [
+      252.30622020195972,
+      297.7622206293026
+    ],
+    "by_height": {
+      "160": 252.30622020195972,
+      "170": 275.0342204156311,
+      "180": 297.7622206293026
+    },
+    "cos_one_mm": 275.0342204156311,
+    "cos_box_ratio_mm": 275.0342204156311,
+    "suggested": true,
+    "chosen_mm": 280,
+    "stature_before_cm": 247.7168756385909,
+    "stature_after_cm": 172.18487308064255,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.490952389126878
+        ],
+        "rom_cm": [
+          65.60455176861176
+        ],
+        "velocity": [
+          0.43463444160890485
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.490952389126878
+        ],
+        "rom_cm": [
+          40.820609989358445
+        ],
+        "velocity": [
+          0.27043920811220723
+        ]
+      }
+    },
+    "eval_s": 0.008601403998909518
+  },
+  {
+    "key": "deadlift/GB_S04_R03.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 39,
+    "box_ratio": 1.0432846242932081,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 403.9787245635206,
+    "range_mm": [
+      372.16817021856656,
+      435.66980361925323
+    ],
+    "by_height": {
+      "160": 372.16817021856656,
+      "170": 403.9787245635206,
+      "180": 435.66980361925323
+    },
+    "cos_one_mm": 403.9787245635206,
+    "cos_box_ratio_mm": 403.9787245635206,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 184.5694637531215,
+    "stature_after_cm": 184.5694637531215,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          2.8553513037868252
+        ],
+        "rom_cm": [
+          53.87407580076836
+        ],
+        "velocity": [
+          0.5516282189247389
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          2.8553513037868252
+        ],
+        "rom_cm": [
+          53.87407580076836
+        ],
+        "velocity": [
+          0.5516282189247389
+        ]
+      }
+    },
+    "eval_s": 0.0073263790109194815
+  },
+  {
+    "key": "deadlift/GB_S04_R04.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 54,
+    "box_ratio": 0.9991762767710052,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 392.3943415215657,
+    "range_mm": [
+      361.38734199972953,
+      423.401341043402
+    ],
+    "by_height": {
+      "160": 361.38734199972953,
+      "170": 392.3943415215657,
+      "180": 423.401341043402
+    },
+    "cos_one_mm": 392.3943415215657,
+    "cos_box_ratio_mm": 392.5053173455769,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 188.57603877980213,
+    "stature_after_cm": 188.57603877980213,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.051758341743777
+        ],
+        "rom_cm": [
+          51.95652495053805
+        ],
+        "velocity": [
+          0.5998170712878546
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.051758341743777
+        ],
+        "rom_cm": [
+          51.95652495053805
+        ],
+        "velocity": [
+          0.5998170712878546
+        ]
+      }
+    },
+    "eval_s": 0.007575577998068184
+  },
+  {
+    "key": "deadlift/GB_S04_R07.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 45,
+    "box_ratio": 0.9698366097040108,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 387.64206106251993,
+    "range_mm": [
+      357.14599371083733,
+      418.13812841420247
+    ],
+    "by_height": {
+      "160": 357.14599371083733,
+      "170": 387.64206106251993,
+      "180": 418.13812841420247
+    },
+    "cos_one_mm": 387.64206106251993,
+    "cos_box_ratio_mm": 391.5871635739162,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 189.1542193793263,
+    "stature_after_cm": 189.1542193793263,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          2.9089215560421495
+        ],
+        "rom_cm": [
+          58.78187379173402
+        ],
+        "velocity": [
+          0.6095097256186692
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          2.9089215560421495
+        ],
+        "rom_cm": [
+          58.78187379173402
+        ],
+        "velocity": [
+          0.6095097256186692
+        ]
+      }
+    },
+    "eval_s": 0.007329148997087032
+  },
+  {
+    "key": "deadlift/GB_S05_R47.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 40,
+    "box_ratio": 1.0162361623616238,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 348.3002876928888,
+    "range_mm": [
+      319.16076028026725,
+      377.43981510551043
+    ],
+    "by_height": {
+      "160": 319.16076028026725,
+      "170": 348.3002876928888,
+      "180": 377.43981510551043
+    },
+    "cos_one_mm": 348.3002876928888,
+    "cos_box_ratio_mm": 348.3002876928888,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 204.90094350603795,
+    "stature_after_cm": 204.90094350603795,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          2.581004977202354
+        ],
+        "rom_cm": [
+          57.74703814824087
+        ],
+        "velocity": [
+          0.5243428162350157
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          2.581004977202354
+        ],
+        "rom_cm": [
+          57.74703814824087
+        ],
+        "velocity": [
+          0.5243428162350157
+        ]
+      }
+    },
+    "eval_s": 0.00719694999861531
+  },
+  {
+    "key": "deadlift/GB_S06_R63.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 27,
+    "box_ratio": 1.0591357088703566,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 398.726426500198,
+    "range_mm": [
+      366.99198934455126,
+      430.46086365584483
+    ],
+    "by_height": {
+      "160": 366.99198934455126,
+      "170": 398.726426500198,
+      "180": 430.46086365584483
+    },
+    "cos_one_mm": 398.726426500198,
+    "cos_box_ratio_mm": 398.726426500198,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 186.15707669504974,
+    "stature_after_cm": 186.15707669504974,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.201487457661143
+        ],
+        "rom_cm": [
+          52.11695539044724
+        ],
+        "velocity": [
+          0.6113474256727792
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.201487457661143
+        ],
+        "rom_cm": [
+          52.11695539044724
+        ],
+        "velocity": [
+          0.6113474256727792
+        ]
+      }
+    },
+    "eval_s": 0.007542058010585606
+  },
+  {
+    "key": "deadlift/GB_S07_R12.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 63,
+    "box_ratio": 0.9183673469387755,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 237.5572576783426,
+    "range_mm": [
+      217.03699838257836,
+      258.0775169741069
+    ],
+    "by_height": {
+      "160": 217.03699838257836,
+      "170": 237.5572576783426,
+      "180": 258.0775169741069
+    },
+    "cos_one_mm": 237.5572576783426,
+    "cos_box_ratio_mm": 246.64192301300793,
+    "suggested": true,
+    "chosen_mm": 240,
+    "stature_before_cm": 268.1166404834193,
+    "stature_after_cm": 166.38423177912293,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.684424354076242
+        ],
+        "rom_cm": [
+          0.18951686463810624
+        ],
+        "velocity": []
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.770392626208727
+        ],
+        "rom_cm": [
+          0.10107566114032629
+        ],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.008247035002568737
+  },
+  {
+    "key": "deadlift/GB_S07_R14.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 67,
+    "box_ratio": 1.0333041191936905,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 239.660801023303,
+    "range_mm": [
+      218.97248710560143,
+      260.3870733189701
+    ],
+    "by_height": {
+      "160": 218.97248710560143,
+      "170": 239.660801023303,
+      "180": 260.3870733189701
+    },
+    "cos_one_mm": 239.660801023303,
+    "cos_box_ratio_mm": 239.660801023303,
+    "suggested": true,
+    "chosen_mm": 240,
+    "stature_before_cm": 271.5167877417471,
+    "stature_after_cm": 170.16813934951472,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.8254185869688335
+        ],
+        "rom_cm": [
+          -0.10903537437721988
+        ],
+        "velocity": []
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.85677918415978
+        ],
+        "rom_cm": [
+          -0.058152199667854676
+        ],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.008551403996534646
+  },
+  {
+    "key": "deadlift/GB_S07_R20.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 61,
+    "box_ratio": 0.7746341463414638,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 245.21422496974037,
+    "range_mm": [
+      224.00252847830768,
+      266.42592146117306
+    ],
+    "by_height": {
+      "160": 224.00252847830768,
+      "170": 245.21422496974037,
+      "180": 266.42592146117306
+    },
+    "cos_one_mm": 245.21422496974037,
+    "cos_box_ratio_mm": 271.2179773149561,
+    "suggested": true,
+    "chosen_mm": 250,
+    "stature_before_cm": 253.70758498247793,
+    "stature_after_cm": 159.63395265045892,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.2366375796407856
+        ],
+        "rom_cm": [
+          85.68882951626048
+        ],
+        "velocity": []
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.236637579640786
+        ],
+        "rom_cm": [
+          47.60490528681135
+        ],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.00797532600699924
+  },
+  {
+    "key": "deadlift/LLK_S01_R02.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 41,
+    "box_ratio": 1.0347627392365046,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 263.1904572222033,
+    "range_mm": [
+      240.54176323761595,
+      285.57527227065054
+    ],
+    "by_height": {
+      "160": 240.54176323761595,
+      "170": 263.1904572222033,
+      "180": 285.57527227065054
+    },
+    "cos_one_mm": 263.1904572222033,
+    "cos_box_ratio_mm": 263.1904572222033,
+    "suggested": true,
+    "chosen_mm": 260,
+    "stature_before_cm": 252.89063939387623,
+    "stature_after_cm": 168.57472254503855,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.346180911255934
+        ],
+        "rom_cm": [
+          86.53897308142191
+        ],
+        "velocity": [
+          0.7078884561904183
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.346180911255934
+        ],
+        "rom_cm": [
+          50.000295558154896
+        ],
+        "velocity": [
+          0.40900221913224166
+        ]
+      }
+    },
+    "eval_s": 0.008656852995045483
+  },
+  {
+    "key": "deadlift/LLK_S01_R03.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 43,
+    "box_ratio": 1.0029446244626088,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 287.57987351794316,
+    "range_mm": [
+      263.94678141055283,
+      311.2129656253334
+    ],
+    "by_height": {
+      "160": 263.94678141055283,
+      "170": 287.57987351794316,
+      "180": 311.2129656253334
+    },
+    "cos_one_mm": 287.57987351794316,
+    "cos_box_ratio_mm": 287.57987351794316,
+    "suggested": true,
+    "chosen_mm": 290,
+    "stature_before_cm": 238.72571974247347,
+    "stature_after_cm": 171.02404140391772,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.909769128296012
+        ],
+        "rom_cm": [
+          84.15073329691944
+        ],
+        "velocity": [
+          0.592147735866742
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.909769128296013
+        ],
+        "rom_cm": [
+          54.23047256912588
+        ],
+        "velocity": [
+          0.3816063186696778
+        ]
+      }
+    },
+    "eval_s": 0.009115262000705115
+  },
+  {
+    "key": "deadlift/LLK_S01_R04.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 40,
+    "box_ratio": 1.0262206148282098,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 286.4101476103064,
+    "range_mm": [
+      262.5984081581164,
+      310.2218870624964
+    ],
+    "by_height": {
+      "160": 262.5984081581164,
+      "170": 286.4101476103064,
+      "180": 310.2218870624964
+    },
+    "cos_one_mm": 286.4101476103064,
+    "cos_box_ratio_mm": 286.4101476103064,
+    "suggested": true,
+    "chosen_mm": 290,
+    "stature_before_cm": 238.7775485828159,
+    "stature_after_cm": 171.50763966884753,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          4.676269633851039
+        ],
+        "rom_cm": [
+          88.23774219022116
+        ],
+        "velocity": [
+          0.615891150988887
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          4.676269633851037
+        ],
+        "rom_cm": [
+          56.86432274480923
+        ],
+        "velocity": [
+          0.39690763063728185
+        ]
+      }
+    },
+    "eval_s": 0.00879202299984172
+  },
+  {
+    "key": "deadlift/LLK_S01_R06.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 40,
+    "box_ratio": 1.0468342228181333,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 259.7385607318927,
+    "range_mm": [
+      236.3452342470467,
+      283.13188721673873
+    ],
+    "by_height": {
+      "160": 236.3452342470467,
+      "170": 259.7385607318927,
+      "180": 283.13188721673873
+    },
+    "cos_one_mm": 259.7385607318927,
+    "cos_box_ratio_mm": 259.7385607318927,
+    "suggested": true,
+    "chosen_mm": 260,
+    "stature_before_cm": 251.48537536753315,
+    "stature_after_cm": 170.111606290012,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.946718808817514
+        ],
+        "rom_cm": [
+          68.24460432623084
+        ],
+        "velocity": [
+          0.6202881051466758
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.9467188088175145
+        ],
+        "rom_cm": [
+          39.430215832933385
+        ],
+        "velocity": [
+          0.3583886829736348
+        ]
+      }
+    },
+    "eval_s": 0.008228664999478497
+  },
+  {
+    "key": "deadlift/LLK_S03_R11.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 38,
+    "box_ratio": 0.9569420035149386,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 464.9565943164437,
+    "range_mm": [
+      423.7390992579282,
+      506.1740893749594
+    ],
+    "by_height": {
+      "160": 423.7390992579282,
+      "170": 464.9565943164437,
+      "180": 506.1740893749594
+    },
+    "cos_one_mm": 464.9565943164437,
+    "cos_box_ratio_mm": 475.10712178765436,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 163.9111453946179,
+    "stature_after_cm": 163.9111453946179,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.2096131272930797
+        ],
+        "rom_cm": [
+          43.04382902050377
+        ],
+        "velocity": [
+          0.41470625385104737
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.2096131272930797
+        ],
+        "rom_cm": [
+          43.04382902050377
+        ],
+        "velocity": [
+          0.41470625385104737
+        ]
+      }
+    },
+    "eval_s": 0.00814363599056378
+  },
+  {
+    "key": "deadlift/LLK_S04_R05.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 33,
+    "box_ratio": 1.0590200445434292,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 293.95774082992216,
+    "range_mm": [
+      270.90073468484655,
+      317.0147469749978
+    ],
+    "by_height": {
+      "160": 270.90073468484655,
+      "170": 293.95774082992216,
+      "180": 317.0147469749978
+    },
+    "cos_one_mm": 293.95774082992216,
+    "cos_box_ratio_mm": 293.95774082992216,
+    "suggested": true,
+    "chosen_mm": 290,
+    "stature_before_cm": 237.67672185549736,
+    "stature_after_cm": 168.28349751697172,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.4356885977773723
+        ],
+        "rom_cm": [
+          94.46126528421736
+        ],
+        "velocity": [
+          1.007568269165065
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.435688597777373
+        ],
+        "rom_cm": [
+          60.87503762760675
+        ],
+        "velocity": [
+          0.6493217734619309
+        ]
+      }
+    },
+    "eval_s": 0.007732056998065673
+  },
+  {
+    "key": "deadlift/LLK_S05_R15.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 29,
+    "box_ratio": 1.0698170362292503,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 253.2757310146943,
+    "range_mm": [
+      232.30326925611706,
+      274.24819277327157
+    ],
+    "by_height": {
+      "160": 232.30326925611706,
+      "170": 253.2757310146943,
+      "180": 274.24819277327157
+    },
+    "cos_one_mm": 253.2757310146943,
+    "cos_box_ratio_mm": 253.2757310146943,
+    "suggested": true,
+    "chosen_mm": 250,
+    "stature_before_cm": 263.9759439531071,
+    "stature_after_cm": 168.4380798723571,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          2.9003461400758233
+        ],
+        "rom_cm": [
+          102.56443664226316
+        ],
+        "velocity": [
+          0.8991918535744878
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          2.9003461400758224
+        ],
+        "rom_cm": [
+          56.980242579035114
+        ],
+        "velocity": [
+          0.4995510297636037
+        ]
+      }
+    },
+    "eval_s": 0.007394008993287571
+  },
+  {
+    "key": "deadlift/LLK_S05_R17.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 30,
+    "box_ratio": 1.0367616993260214,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 248.29576840926345,
+    "range_mm": [
+      227.72872505980865,
+      268.8628117587183
+    ],
+    "by_height": {
+      "160": 227.72872505980865,
+      "170": 248.29576840926345,
+      "180": 268.8628117587183
+    },
+    "cos_one_mm": 248.29576840926345,
+    "cos_box_ratio_mm": 248.29576840926345,
+    "suggested": true,
+    "chosen_mm": 250,
+    "stature_before_cm": 268.07179676389165,
+    "stature_after_cm": 170.82873345090437,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          2.589735501931216
+        ],
+        "rom_cm": [
+          92.40530757466485
+        ],
+        "velocity": [
+          0.957596983863692
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          2.589735501931216
+        ],
+        "rom_cm": [
+          51.336281985924906
+        ],
+        "velocity": [
+          0.531998324368718
+        ]
+      }
+    },
+    "eval_s": 0.0071889300015755
+  },
+  {
+    "key": "deadlift/LLK_S06_R31.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 28,
+    "box_ratio": 1.0248949649263412,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 298.3180907526884,
+    "range_mm": [
+      274.57074419668913,
+      322.0654373086878
+    ],
+    "by_height": {
+      "160": 274.57074419668913,
+      "170": 298.3180907526884,
+      "180": 322.0654373086878
+    },
+    "cos_one_mm": 298.3180907526884,
+    "cos_box_ratio_mm": 298.3180907526884,
+    "suggested": true,
+    "chosen_mm": 300,
+    "stature_before_cm": 233.87328880846889,
+    "stature_after_cm": 170.7082859888758,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.34394756858832
+        ],
+        "rom_cm": [
+          81.86829363581454
+        ],
+        "velocity": [
+          1.0288536658432272
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.343947568588321
+        ],
+        "rom_cm": [
+          54.57886242387635
+        ],
+        "velocity": [
+          0.6859024438954845
+        ]
+      }
+    },
+    "eval_s": 0.007550477996119298
+  },
+  {
+    "key": "deadlift/LLK_S06_R32.mp4",
+    "exercise": "deadlift",
+    "group": "GB_LLK_PB",
+    "standing_frames": 28,
+    "box_ratio": 1.1130288480797512,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 292.5096427512759,
+    "range_mm": [
+      268.93011988418294,
+      316.08916561836895
+    ],
+    "by_height": {
+      "160": 268.93011988418294,
+      "170": 292.5096427512759,
+      "180": 316.08916561836895
+    },
+    "cos_one_mm": 292.5096427512759,
+    "cos_box_ratio_mm": 292.5096427512759,
+    "suggested": true,
+    "chosen_mm": 290,
+    "stature_before_cm": 236.82581555632152,
+    "stature_after_cm": 168.94034312730582,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.006804641001508571
+  },
+  {
+    "key": "deadlift/deadlift_01.mp4",
+    "exercise": "deadlift",
+    "group": "other_deadlift",
+    "standing_frames": 51,
+    "box_ratio": 0.6353149955634427,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 510.77000354733417,
+    "range_mm": [
+      475.01812816962763,
+      546.5218789250409
+    ],
+    "by_height": {
+      "160": 475.01812816962763,
+      "170": 510.77000354733417,
+      "180": 546.5218789250409
+    },
+    "cos_one_mm": 454.266275915933,
+    "cos_box_ratio_mm": 510.77000354733417,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 153.0022892770465,
+    "stature_after_cm": 153.0022892770465,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          8.223249552973758
+        ],
+        "rom_cm": [
+          38.61023533223328
+        ],
+        "velocity": [
+          0.1677843280133963
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          8.223249552973758
+        ],
+        "rom_cm": [
+          38.61023533223328
+        ],
+        "velocity": [
+          0.1677843280133963
+        ]
+      }
+    },
+    "eval_s": 0.01088999399507884
+  },
+  {
+    "key": "deadlift/deadlift_02.mp4",
+    "exercise": "deadlift",
+    "group": "other_deadlift",
+    "standing_frames": 60,
+    "box_ratio": 0.6250569476082006,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 514.062654184127,
+    "range_mm": [
+      478.1217533819253,
+      550.0035549863288
+    ],
+    "by_height": {
+      "160": 478.1217533819253,
+      "170": 514.062654184127,
+      "180": 550.0035549863288
+    },
+    "cos_one_mm": 455.91718863743,
+    "cos_box_ratio_mm": 514.062654184127,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 152.17557035089658,
+    "stature_after_cm": 152.17557035089658,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          3.8922433964205534
+        ],
+        "rom_cm": [
+          30.491684416244258
+        ],
+        "velocity": [
+          0.2398276238877276
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          3.8922433964205534
+        ],
+        "rom_cm": [
+          30.491684416244258
+        ],
+        "velocity": [
+          0.2398276238877276
+        ]
+      }
+    },
+    "eval_s": 0.007448628006386571
+  },
+  {
+    "key": "deadlift/deadlift_03.mp4",
+    "exercise": "deadlift",
+    "group": "other_deadlift",
+    "standing_frames": 206,
+    "box_ratio": 0.6082015172150135,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 563.1589445601867,
+    "range_mm": [
+      524.3630909325375,
+      601.9547981878359
+    ],
+    "by_height": {
+      "160": 524.3630909325375,
+      "170": 563.1589445601867,
+      "180": 601.9547981878359
+    },
+    "cos_one_mm": 501.0778071245826,
+    "cos_box_ratio_mm": 563.1589445601867,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 140.83220694826912,
+    "stature_after_cm": 140.83220694826912,
+    "stats": {
+      "before": {
+        "count": 2,
+        "events": [
+          3.4683532279950517,
+          19.71352424939951
+        ],
+        "rom_cm": [
+          34.720374725691414,
+          39.19818200410047
+        ],
+        "velocity": [
+          0.2519512293250992,
+          0.2212772743471739
+        ]
+      },
+      "after": {
+        "count": 2,
+        "events": [
+          3.4683532279950517,
+          19.71352424939951
+        ],
+        "rom_cm": [
+          34.720374725691414,
+          39.19818200410047
+        ],
+        "velocity": [
+          0.2519512293250992,
+          0.2212772743471739
+        ]
+      }
+    },
+    "eval_s": 0.01858622199506499
+  },
+  {
+    "key": "benchpress/bench_01.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.7462257368799423,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 3,
+        "events": [
+          11.85728113769019,
+          18.448284212997237,
+          26.81137624447225
+        ],
+        "rom_cm": [
+          15.912328770845926,
+          15.45735585299243,
+          17.583446748193772
+        ],
+        "velocity": [
+          0.1616848579103777,
+          0.11758885234944515,
+          0.057758529689170834
+        ]
+      },
+      "after": {
+        "count": 3,
+        "events": [
+          11.85728113769019,
+          18.448284212997237,
+          26.81137624447225
+        ],
+        "rom_cm": [
+          15.912328770845926,
+          15.45735585299243,
+          17.583446748193772
+        ],
+        "velocity": [
+          0.1616848579103777,
+          0.11758885234944515,
+          0.057758529689170834
+        ]
+      }
+    },
+    "eval_s": 0.0236376810062211
+  },
+  {
+    "key": "benchpress/bench_02.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.8216480965559463,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          13.959932854646825
+        ],
+        "rom_cm": [
+          16.147596999668107
+        ],
+        "velocity": [
+          0.04827893094236076
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          13.959932854646825
+        ],
+        "rom_cm": [
+          16.147596999668107
+        ],
+        "velocity": [
+          0.04827893094236076
+        ]
+      }
+    },
+    "eval_s": 0.01506894698832184
+  },
+  {
+    "key": "benchpress/bench_03.mp4",
+    "exercise": "benchpress",
+    "group": "benchpress",
+    "standing_frames": 0,
+    "box_ratio": 0.7738376674546888,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          11.299206818339435
+        ],
+        "rom_cm": [
+          15.797989108898145
+        ],
+        "velocity": [
+          0.07864923536454413
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          11.299206818339435
+        ],
+        "rom_cm": [
+          15.797989108898145
+        ],
+        "velocity": [
+          0.07864923536454413
+        ]
+      }
+    },
+    "eval_s": 0.013556312987930141
+  },
+  {
+    "key": "squat/squat_01.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 271,
+    "box_ratio": 0.6609523809523811,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 417.9677021251413,
+    "range_mm": [
+      386.6321046540063,
+      449.3032995962763
+    ],
+    "by_height": {
+      "160": 386.6321046540063,
+      "170": 417.9677021251413,
+      "180": 449.3032995962763
+    },
+    "cos_one_mm": 359.1110249799556,
+    "cos_box_ratio_mm": 417.9677021251413,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 180.27341335214308,
+    "stature_after_cm": 180.27341335214308,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [
+          5.066287265062155
+        ],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [
+          5.066287265062155
+        ],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.01345296300132759
+  },
+  {
+    "key": "squat/squat_02.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 181,
+    "box_ratio": 0.5131801632776292,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 465.228957360234,
+    "range_mm": [
+      434.63373240398323,
+      495.8241823164849
+    ],
+    "by_height": {
+      "160": 434.63373240398323,
+      "170": 465.228957360234,
+      "180": 495.8241823164849
+    },
+    "cos_one_mm": 414.47075560979715,
+    "cos_box_ratio_mm": 465.228957360234,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 165.88065464513093,
+    "stature_after_cm": 165.88065464513093,
+    "stats": {
+      "before": {
+        "count": 1,
+        "events": [
+          9.996132284172722
+        ],
+        "rom_cm": [
+          58.74360429512097
+        ],
+        "velocity": [
+          0.25445651753717413
+        ]
+      },
+      "after": {
+        "count": 1,
+        "events": [
+          9.996132284172722
+        ],
+        "rom_cm": [
+          58.74360429512097
+        ],
+        "velocity": [
+          0.25445651753717413
+        ]
+      }
+    },
+    "eval_s": 0.011677001995849423
+  },
+  {
+    "key": "squat/squat_03.mp4",
+    "exercise": "squat",
+    "group": "squat",
+    "standing_frames": 198,
+    "box_ratio": 0.5088918151134958,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 495.9922035282917,
+    "range_mm": [
+      463.4304536901961,
+      528.5692873546043
+    ],
+    "by_height": {
+      "160": 463.4304536901961,
+      "170": 495.9922035282917,
+      "180": 528.5692873546043
+    },
+    "cos_one_mm": 439.4299436700684,
+    "cos_box_ratio_mm": 495.9922035282917,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 155.87542402304783,
+    "stature_after_cm": 155.87542402304783,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.013237195002147928
+  },
+  {
+    "key": "team9/squat/stu10_70.mp4",
+    "exercise": "squat",
+    "group": "team9",
+    "standing_frames": 267,
+    "box_ratio": 0.829118972772483,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 445.56301918906587,
+    "range_mm": [
+      409.0244043445663,
+      482.0959708525939
+    ],
+    "by_height": {
+      "160": 409.0244043445663,
+      "170": 445.56301918906587,
+      "180": 482.0959708525939
+    },
+    "cos_one_mm": 445.56301918906587,
+    "cos_box_ratio_mm": 475.55215401003136,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 162.6577680616242,
+    "stature_after_cm": 162.6577680616242,
+    "stats": {
+      "before": {
+        "count": 5,
+        "events": [
+          3.142666158161014,
+          6.7548403054613075,
+          11.69028637160672,
+          15.08559531394553,
+          18.576949220863717
+        ],
+        "rom_cm": [
+          58.34735899319781,
+          62.74968370715778,
+          61.62750577138046,
+          59.75046631006493,
+          61.777284672264884
+        ],
+        "velocity": [
+          0.7860741937547097,
+          0.684457254319052,
+          0.713810349117531,
+          0.6630466704988371,
+          0.6760135001626023
+        ]
+      },
+      "after": {
+        "count": 5,
+        "events": [
+          3.142666158161014,
+          6.7548403054613075,
+          11.69028637160672,
+          15.08559531394553,
+          18.576949220863717
+        ],
+        "rom_cm": [
+          58.34735899319781,
+          62.74968370715778,
+          61.62750577138046,
+          59.75046631006493,
+          61.777284672264884
+        ],
+        "velocity": [
+          0.7860741937547097,
+          0.684457254319052,
+          0.713810349117531,
+          0.6630466704988371,
+          0.6760135001626023
+        ]
+      }
+    },
+    "eval_s": 0.01818757300497964
+  },
+  {
+    "key": "team9/squat/stu3_64.mp4",
+    "exercise": "squat",
+    "group": "team9",
+    "standing_frames": 474,
+    "box_ratio": 0.7492341577377043,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 477.84042124118366,
+    "range_mm": [
+      442.7178292027215,
+      512.9630132796459
+    ],
+    "by_height": {
+      "160": 442.7178292027215,
+      "170": 477.84042124118366,
+      "180": 512.9630132796459
+    },
+    "cos_one_mm": 437.93002424981705,
+    "cos_box_ratio_mm": 477.84042124118366,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 162.07337708794026,
+    "stature_after_cm": 162.07337708794026,
+    "stats": {
+      "before": {
+        "count": 17,
+        "events": [
+          4.593428858394457,
+          6.862044022758301,
+          9.241940731647148,
+          11.694645723645388,
+          14.025984500019018,
+          16.4764654128849,
+          19.034148733403487,
+          21.528867636489625,
+          23.974429180815843,
+          29.845111634075238,
+          33.0292674922024,
+          35.87280635956158,
+          38.96677771899804,
+          42.16640616986423,
+          45.48274699231201,
+          48.68515106366676,
+          51.456011730637535
+        ],
+        "rom_cm": [
+          0.0,
+          35.429587474000684,
+          47.90855555967241,
+          46.50684167857027,
+          47.143075360744355,
+          44.435831747836126,
+          40.85113100648637,
+          45.563318904875885,
+          46.65460591931056,
+          42.48466642515687,
+          46.20851133440665,
+          45.939724470658646,
+          38.04001542010844,
+          40.67087886411592,
+          44.827873095415534,
+          41.85650933203357,
+          43.01967284559862,
+          43.159069228963354
+        ],
+        "velocity": [
+          0.5244854339196765,
+          0.5374958125049656,
+          0.5001038258779794,
+          0.4555158331458423,
+          0.4842333923879442,
+          0.45560423098701475,
+          0.4855528465308964,
+          0.5141936649037169,
+          0.438472221435439,
+          0.39306923857841486,
+          0.3351090524513947,
+          0.3536543125055508,
+          0.3383509272745443,
+          0.35872239977208786,
+          0.2948325772988867,
+          0.33053834108215474,
+          0.34873611905242113
+        ]
+      },
+      "after": {
+        "count": 17,
+        "events": [
+          4.593428858394457,
+          6.862044022758301,
+          9.241940731647148,
+          11.694645723645388,
+          14.025984500019018,
+          16.4764654128849,
+          19.034148733403487,
+          21.528867636489625,
+          23.974429180815843,
+          29.845111634075238,
+          33.0292674922024,
+          35.87280635956158,
+          38.96677771899804,
+          42.16640616986423,
+          45.48274699231201,
+          48.68515106366676,
+          51.456011730637535
+        ],
+        "rom_cm": [
+          0.0,
+          35.429587474000684,
+          47.90855555967241,
+          46.50684167857027,
+          47.143075360744355,
+          44.435831747836126,
+          40.85113100648637,
+          45.563318904875885,
+          46.65460591931056,
+          42.48466642515687,
+          46.20851133440665,
+          45.939724470658646,
+          38.04001542010844,
+          40.67087886411592,
+          44.827873095415534,
+          41.85650933203357,
+          43.01967284559862,
+          43.159069228963354
+        ],
+        "velocity": [
+          0.5244854339196765,
+          0.5374958125049656,
+          0.5001038258779794,
+          0.4555158331458423,
+          0.4842333923879442,
+          0.45560423098701475,
+          0.4855528465308964,
+          0.5141936649037169,
+          0.438472221435439,
+          0.39306923857841486,
+          0.3351090524513947,
+          0.3536543125055508,
+          0.3383509272745443,
+          0.35872239977208786,
+          0.2948325772988867,
+          0.33053834108215474,
+          0.34873611905242113
+        ]
+      }
+    },
+    "eval_s": 0.05298110800504219
+  },
+  {
+    "key": "team9/squat/stu8_67.mp4",
+    "exercise": "squat",
+    "group": "team9",
+    "standing_frames": 121,
+    "box_ratio": 0.6122219862937517,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 236.77314564630424,
+    "stature_after_cm": 236.77314564630424,
+    "stats": {
+      "before": {
+        "count": 3,
+        "events": [
+          3.625918092261576,
+          7.105768046884215,
+          10.819916671835623
+        ],
+        "rom_cm": [
+          54.59117226413903,
+          53.77029456901364,
+          54.6169561016532
+        ],
+        "velocity": [
+          0.3770663600285586,
+          0.3685034944100243,
+          0.3295108835842944
+        ]
+      },
+      "after": {
+        "count": 3,
+        "events": [
+          3.625918092261576,
+          7.105768046884215,
+          10.819916671835623
+        ],
+        "rom_cm": [
+          54.59117226413903,
+          53.77029456901364,
+          54.6169561016532
+        ],
+        "velocity": [
+          0.3770663600285586,
+          0.3685034944100243,
+          0.3295108835842944
+        ]
+      }
+    },
+    "eval_s": 0.014577838010154665
+  },
+  {
+    "key": "team9/benchpress/stu9_10.mp4",
+    "exercise": "benchpress",
+    "group": "team9",
+    "standing_frames": 170,
+    "box_ratio": 0.9585366837767573,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 436.207507394081,
+    "range_mm": [
+      404.5656219323971,
+      467.8215510589534
+    ],
+    "by_height": {
+      "160": 404.5656219323971,
+      "170": 436.207507394081,
+      "180": 467.8215510589534
+    },
+    "cos_one_mm": 436.207507394081,
+    "cos_box_ratio_mm": 440.42451512360395,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 173.08190182570263,
+    "stature_after_cm": 173.08190182570263,
+    "stats": {
+      "before": {
+        "count": 16,
+        "events": [
+          9.437274423910445,
+          10.680651254621175,
+          11.946484519621002,
+          13.138592012972804,
+          14.384594764704653,
+          15.586304224080655,
+          16.8708381554423,
+          18.154706246752852,
+          19.505455622287204,
+          21.12156515442229,
+          23.383708935881977,
+          25.29981612310776,
+          28.87854508219631,
+          30.195657915269848,
+          34.07810277212209,
+          36.20630968688495
+        ],
+        "rom_cm": [
+          29.294593327374375,
+          25.5447630177852,
+          30.050441428704673,
+          27.001830480836396,
+          29.94763723251547,
+          32.638362238079246,
+          31.40538935370514,
+          29.235693907187944,
+          30.679276844936933,
+          40.80397984417535,
+          35.96575538239147,
+          39.30806002397944,
+          45.5645856280537,
+          33.0434273080051,
+          37.01532880855618,
+          20.320499773038517,
+          14.020229748666868
+        ],
+        "velocity": [
+          0.42550919695087347,
+          0.374724247013373,
+          0.47746984375836177,
+          0.40987294430848836,
+          0.4142175182053599,
+          0.5018321538079402,
+          0.41343145287635485,
+          0.3580344177670671,
+          0.36701389072958407,
+          0.3542678073328747,
+          0.34798055873919737,
+          0.16031920791836257,
+          0.28929335326494987,
+          0.30038414172542816
+        ]
+      },
+      "after": {
+        "count": 16,
+        "events": [
+          9.437274423910445,
+          10.680651254621175,
+          11.946484519621002,
+          13.138592012972804,
+          14.384594764704653,
+          15.586304224080655,
+          16.8708381554423,
+          18.154706246752852,
+          19.505455622287204,
+          21.12156515442229,
+          23.383708935881977,
+          25.29981612310776,
+          28.87854508219631,
+          30.195657915269848,
+          34.07810277212209,
+          36.20630968688495
+        ],
+        "rom_cm": [
+          29.294593327374375,
+          25.5447630177852,
+          30.050441428704673,
+          27.001830480836396,
+          29.94763723251547,
+          32.638362238079246,
+          31.40538935370514,
+          29.235693907187944,
+          30.679276844936933,
+          40.80397984417535,
+          35.96575538239147,
+          39.30806002397944,
+          45.5645856280537,
+          33.0434273080051,
+          37.01532880855618,
+          20.320499773038517,
+          14.020229748666868
+        ],
+        "velocity": [
+          0.42550919695087347,
+          0.374724247013373,
+          0.47746984375836177,
+          0.40987294430848836,
+          0.4142175182053599,
+          0.5018321538079402,
+          0.41343145287635485,
+          0.3580344177670671,
+          0.36701389072958407,
+          0.3542678073328747,
+          0.34798055873919737,
+          0.16031920791836257,
+          0.28929335326494987,
+          0.30038414172542816
+        ]
+      }
+    },
+    "eval_s": 0.03762196299794596
+  },
+  {
+    "key": "team9/benchpress/stu2_10_edited.mp4",
+    "exercise": "benchpress",
+    "group": "team9",
+    "standing_frames": 0,
+    "box_ratio": 0.7591706539074962,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": null,
+    "stature_after_cm": null,
+    "stats": {
+      "before": {
+        "count": 6,
+        "events": [
+          2.4247628070692606,
+          4.1932168622346255,
+          6.2283652621437255,
+          8.265405372132065,
+          10.785581919632047,
+          14.880759742339285
+        ],
+        "rom_cm": [
+          28.726893545656157,
+          30.841508847469417,
+          35.048388026017804,
+          30.07609090509108,
+          31.751061410044123,
+          29.835003667457517
+        ],
+        "velocity": [
+          0.29492817268515503,
+          0.32413373055673605,
+          0.31092160773529304,
+          0.2561610892052076,
+          0.19584354388254802,
+          0.14809418201126298
+        ]
+      },
+      "after": {
+        "count": 6,
+        "events": [
+          2.4247628070692606,
+          4.1932168622346255,
+          6.2283652621437255,
+          8.265405372132065,
+          10.785581919632047,
+          14.880759742339285
+        ],
+        "rom_cm": [
+          28.726893545656157,
+          30.841508847469417,
+          35.048388026017804,
+          30.07609090509108,
+          31.751061410044123,
+          29.835003667457517
+        ],
+        "velocity": [
+          0.29492817268515503,
+          0.32413373055673605,
+          0.31092160773529304,
+          0.2561610892052076,
+          0.19584354388254802,
+          0.14809418201126298
+        ]
+      }
+    },
+    "eval_s": 0.018391153003904037
+  },
+  {
+    "key": "team9/deadlift/stu7_1_1.mp4",
+    "exercise": "deadlift",
+    "group": "team9",
+    "standing_frames": 108,
+    "box_ratio": 1.0459224069675372,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": 448.8046915084959,
+    "range_mm": [
+      413.0462762905771,
+      484.44016555479544
+    ],
+    "by_height": {
+      "160": 413.0462762905771,
+      "170": 448.8046915084959,
+      "180": 484.44016555479544
+    },
+    "cos_one_mm": 448.8046915084959,
+    "cos_box_ratio_mm": 448.8046915084959,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 170.33181208461636,
+    "stature_after_cm": 170.33181208461636,
+    "stats": {
+      "before": {
+        "count": 5,
+        "events": [
+          2.2877213294110317,
+          5.206096952455077,
+          8.561281843312743,
+          12.35475512424525,
+          16.39110350818827
+        ],
+        "rom_cm": [
+          52.06489061317585,
+          53.02037664581981,
+          51.9745281982356,
+          50.49339697968767,
+          49.624730391526505
+        ],
+        "velocity": [
+          0.9281176169989607,
+          0.9194530359424082,
+          1.0729572651339951,
+          0.8637934078819329,
+          0.8085608646431567
+        ]
+      },
+      "after": {
+        "count": 5,
+        "events": [
+          2.2877213294110317,
+          5.206096952455077,
+          8.561281843312743,
+          12.35475512424525,
+          16.39110350818827
+        ],
+        "rom_cm": [
+          52.06489061317585,
+          53.02037664581981,
+          51.9745281982356,
+          50.49339697968767,
+          49.624730391526505
+        ],
+        "velocity": [
+          0.9281176169989607,
+          0.9194530359424082,
+          1.0729572651339951,
+          0.8637934078819329,
+          0.8085608646431567
+        ]
+      }
+    },
+    "eval_s": 0.019397369003854692
+  },
+  {
+    "key": "team9/deadlift/stu4_2_-1.mp4",
+    "exercise": "deadlift",
+    "group": "team9",
+    "standing_frames": 238,
+    "box_ratio": 1.511210762331839,
+    "angle_reliable": false,
+    "assumed_cos_one": true,
+    "implied_mm": null,
+    "range_mm": [
+      null,
+      null
+    ],
+    "by_height": {
+      "160": null,
+      "170": null,
+      "180": null
+    },
+    "cos_one_mm": null,
+    "cos_box_ratio_mm": null,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 197.499763112195,
+    "stature_after_cm": 197.499763112195,
+    "stats": {
+      "before": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      },
+      "after": {
+        "count": 0,
+        "events": [],
+        "rom_cm": [],
+        "velocity": []
+      }
+    },
+    "eval_s": 0.0017287529917666689
+  },
+  {
+    "key": "team9/deadlift/deadlift_08.mp4",
+    "exercise": "deadlift",
+    "group": "team9",
+    "standing_frames": 77,
+    "box_ratio": 0.6849494248001119,
+    "angle_reliable": true,
+    "assumed_cos_one": false,
+    "implied_mm": 488.2208724482885,
+    "range_mm": [
+      453.5212811134619,
+      522.9204637831153
+    ],
+    "by_height": {
+      "160": 453.5212811134619,
+      "170": 488.2208724482885,
+      "180": 522.9204637831153
+    },
+    "cos_one_mm": 441.45555269205516,
+    "cos_box_ratio_mm": 488.2208724482885,
+    "suggested": false,
+    "chosen_mm": 450,
+    "stature_before_cm": 158.98520962985302,
+    "stature_after_cm": 158.98520962985302,
+    "stats": {
+      "before": {
+        "count": 3,
+        "events": [
+          6.008529999067753,
+          8.09653929284277,
+          12.760759839804763
+        ],
+        "rom_cm": [
+          44.13684528319643,
+          41.42958034490214,
+          42.8776294129142
+        ],
+        "velocity": [
+          0.37959940477164766,
+          0.3338595152566746,
+          0.29740601665209454
+        ]
+      },
+      "after": {
+        "count": 3,
+        "events": [
+          6.008529999067753,
+          8.09653929284277,
+          12.760759839804763
+        ],
+        "rom_cm": [
+          44.13684528319643,
+          41.42958034490214,
+          42.8776294129142
+        ],
+        "velocity": [
+          0.37959940477164766,
+          0.3338595152566746,
+          0.29740601665209454
+        ]
+      }
+    },
+    "eval_s": 0.013963561999844387
+  }
+]
