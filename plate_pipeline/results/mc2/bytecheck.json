@@ -1,0 +1,452 @@
+[
+  {
+    "key": "squat/val1256.mp4",
+    "equal": true,
+    "old_sha256": "ce39d96206f120c892d13a03ff378d2503f6d07b8da223408974f0d41619bf78",
+    "new_sha256": "ce39d96206f120c892d13a03ff378d2503f6d07b8da223408974f0d41619bf78"
+  },
+  {
+    "key": "squat/val1235.mp4",
+    "equal": true,
+    "old_sha256": "05aa41ab5348be7777048548a6705405e8c1ab81e785bf15999dd94c5f9846fb",
+    "new_sha256": "05aa41ab5348be7777048548a6705405e8c1ab81e785bf15999dd94c5f9846fb"
+  },
+  {
+    "key": "benchpress/bench press_31.mp4",
+    "equal": true,
+    "old_sha256": "a1d36c22ce62e7966ea56c5c32486cc1c41ed8aac67aaf35607a7083a3e5b694",
+    "new_sha256": "a1d36c22ce62e7966ea56c5c32486cc1c41ed8aac67aaf35607a7083a3e5b694"
+  },
+  {
+    "key": "squat/squat_11.mp4",
+    "equal": true,
+    "old_sha256": "da5cfa8e12bc01562e43e3dbfed02fe7bdd3872cedebcd9b71d056cd998e7399",
+    "new_sha256": "da5cfa8e12bc01562e43e3dbfed02fe7bdd3872cedebcd9b71d056cd998e7399"
+  },
+  {
+    "key": "benchpress/stu10_11.mp4",
+    "equal": true,
+    "old_sha256": "04d7988f447f4b93bba6eb138123093eed7509880bfb7af0cf0dfadd6d7a9176",
+    "new_sha256": "04d7988f447f4b93bba6eb138123093eed7509880bfb7af0cf0dfadd6d7a9176"
+  },
+  {
+    "key": "benchpress/stu8_7.mp4",
+    "equal": true,
+    "old_sha256": "cf0cf95e923e92de38ff7af3b3ce681486e1e576301a1a3dc0b656c7569fe05f",
+    "new_sha256": "cf0cf95e923e92de38ff7af3b3ce681486e1e576301a1a3dc0b656c7569fe05f"
+  },
+  {
+    "key": "benchpress/test153.mp4",
+    "equal": true,
+    "old_sha256": "d0cc7b35f462a2099f8f2e78176f9bbb2334d6c83a37f8c23e2a99a017b26c5c",
+    "new_sha256": "d0cc7b35f462a2099f8f2e78176f9bbb2334d6c83a37f8c23e2a99a017b26c5c"
+  },
+  {
+    "key": "benchpress/stu8_15.mp4",
+    "equal": true,
+    "old_sha256": "fe2f6eadfb84bb98f934e8386ba9dc35bc9f6afd0dd54baecf7e57fcfcbfe096",
+    "new_sha256": "fe2f6eadfb84bb98f934e8386ba9dc35bc9f6afd0dd54baecf7e57fcfcbfe096"
+  },
+  {
+    "key": "squat/stu4_69.mp4",
+    "equal": true,
+    "old_sha256": "932e9acc163d49fae3cb4b8654ab3a33163f3a67a862deb606607d8fd0a89d02",
+    "new_sha256": "932e9acc163d49fae3cb4b8654ab3a33163f3a67a862deb606607d8fd0a89d02"
+  },
+  {
+    "key": "benchpress/bench press_40.mp4",
+    "equal": true,
+    "old_sha256": "00c5f2b435a8b0de40a4dc316f312f27117cc1f0c6ba8821ae9586e573b43ad7",
+    "new_sha256": "00c5f2b435a8b0de40a4dc316f312f27117cc1f0c6ba8821ae9586e573b43ad7"
+  },
+  {
+    "key": "squat/stu6_11_2.mp4",
+    "equal": true,
+    "old_sha256": "4bd01d7c950869656f840b8fb1a91bccb24a18bff7ba4165290c03cb6ee6e26d",
+    "new_sha256": "4bd01d7c950869656f840b8fb1a91bccb24a18bff7ba4165290c03cb6ee6e26d"
+  },
+  {
+    "key": "squat/stu6_11_3.mp4",
+    "equal": true,
+    "old_sha256": "59c597f2a151571d9db51f09990dbb9cb1d13ce8d5991531848db87699ecd2c8",
+    "new_sha256": "59c597f2a151571d9db51f09990dbb9cb1d13ce8d5991531848db87699ecd2c8"
+  },
+  {
+    "key": "deadlift/deadlift_23.mp4",
+    "equal": true,
+    "old_sha256": "117b0d6855b27bd49dceff379edc095e984498420ac0c5dd0a64104029fe00d1",
+    "new_sha256": "117b0d6855b27bd49dceff379edc095e984498420ac0c5dd0a64104029fe00d1"
+  },
+  {
+    "key": "squat/val1250.mp4",
+    "equal": true,
+    "old_sha256": "e0a94cc2113ac7cdc53c83c473f1c32a6a41d6a6272f162e5630abbf3ae6b064",
+    "new_sha256": "e0a94cc2113ac7cdc53c83c473f1c32a6a41d6a6272f162e5630abbf3ae6b064"
+  },
+  {
+    "key": "benchpress/bench press_61.mp4",
+    "equal": true,
+    "old_sha256": "72b88d512eea28e0d81b9d329f02b8537998f84fec3d7b6fb8a33a2fce3ca749",
+    "new_sha256": "72b88d512eea28e0d81b9d329f02b8537998f84fec3d7b6fb8a33a2fce3ca749"
+  },
+  {
+    "key": "benchpress/stu1_6_4.mp4",
+    "equal": true,
+    "old_sha256": "7a7e727e1e46b4f4e5a2b1b8e8e1a299ce83d63dc30228886793d3856b86d550",
+    "new_sha256": "7a7e727e1e46b4f4e5a2b1b8e8e1a299ce83d63dc30228886793d3856b86d550"
+  },
+  {
+    "key": "benchpress/stu7_7.mp4",
+    "equal": true,
+    "old_sha256": "a19ab8e1fc3547e0d9d64d111a026984666dbca87a14db720edbd3c2db785993",
+    "new_sha256": "a19ab8e1fc3547e0d9d64d111a026984666dbca87a14db720edbd3c2db785993"
+  },
+  {
+    "key": "deadlift/deadlift_30.mp4",
+    "equal": true,
+    "old_sha256": "df28167d0e21993e3ec72af45747e50e294405ed27a1e5b46c45b32f3fc6e8b3",
+    "new_sha256": "df28167d0e21993e3ec72af45747e50e294405ed27a1e5b46c45b32f3fc6e8b3"
+  },
+  {
+    "key": "deadlift/deadlift_sihoo02.mp4",
+    "equal": true,
+    "old_sha256": "127ea8c48545b3aa37c922e62681156354e9ecef7aeeadc8620cdee25002d56c",
+    "new_sha256": "127ea8c48545b3aa37c922e62681156354e9ecef7aeeadc8620cdee25002d56c"
+  },
+  {
+    "key": "benchpress/stu7_12_2.mp4",
+    "equal": true,
+    "old_sha256": "1a035b08306a770360a62e03fd780453b85f751b427471577e0975e7096e82dc",
+    "new_sha256": "1a035b08306a770360a62e03fd780453b85f751b427471577e0975e7096e82dc"
+  },
+  {
+    "key": "deadlift/PB_S01_R10.mp4",
+    "equal": true,
+    "old_sha256": "3655a5e85e437e60a74024bc0a71f5e4e805230c549b6cbd8419b9d8288c61e8",
+    "new_sha256": "3655a5e85e437e60a74024bc0a71f5e4e805230c549b6cbd8419b9d8288c61e8"
+  },
+  {
+    "key": "benchpress/stu8_6_2.mp4",
+    "equal": true,
+    "old_sha256": "2bc2c5c3e8c086779f36640a225986753347f99e0534bdd7db942f24b61d594a",
+    "new_sha256": "2bc2c5c3e8c086779f36640a225986753347f99e0534bdd7db942f24b61d594a"
+  },
+  {
+    "key": "deadlift/PB_S03_R13.mp4",
+    "equal": true,
+    "old_sha256": "f1fe2dedd6ff0fd7d8fc3345709bdbdfd241cd165b62b89cbce582add7ef93ef",
+    "new_sha256": "f1fe2dedd6ff0fd7d8fc3345709bdbdfd241cd165b62b89cbce582add7ef93ef"
+  },
+  {
+    "key": "deadlift/PB_S03_R14.mp4",
+    "equal": true,
+    "old_sha256": "3355af3a60d7a24a982a61d82e09544aadb2a87ff642e8448fa294f1de2cc471",
+    "new_sha256": "3355af3a60d7a24a982a61d82e09544aadb2a87ff642e8448fa294f1de2cc471"
+  },
+  {
+    "key": "deadlift/PB_S04_R03.mp4",
+    "equal": true,
+    "old_sha256": "be8d4499f32ca658ece8fff158ecfb3fd00caf08558d26fa57d6119b70025113",
+    "new_sha256": "be8d4499f32ca658ece8fff158ecfb3fd00caf08558d26fa57d6119b70025113"
+  },
+  {
+    "key": "deadlift/deadlift_7.mp4",
+    "equal": true,
+    "old_sha256": "7eb617c72f16a26d14acbbe70ceb6e1b569793d9218bc1fef69101419de4e34a",
+    "new_sha256": "7eb617c72f16a26d14acbbe70ceb6e1b569793d9218bc1fef69101419de4e34a"
+  },
+  {
+    "key": "deadlift/PB_S05_R22.mp4",
+    "equal": true,
+    "old_sha256": "c21cc5ea8e85f0fc5b6081282a503b81f39190b2dd063aff962bfb8fc9eb1097",
+    "new_sha256": "c21cc5ea8e85f0fc5b6081282a503b81f39190b2dd063aff962bfb8fc9eb1097"
+  },
+  {
+    "key": "deadlift/PB_S07_R19.mp4",
+    "equal": true,
+    "old_sha256": "158e510e516196866fbffc36de85eb18b78001056142a4903541db60baa52b3f",
+    "new_sha256": "158e510e516196866fbffc36de85eb18b78001056142a4903541db60baa52b3f"
+  },
+  {
+    "key": "deadlift/PB_S06_R25.mp4",
+    "equal": true,
+    "old_sha256": "cd570fc51f15047d11c9fa8627f6f0f65d7107fb2ada44fcb6aa9868424d9b56",
+    "new_sha256": "cd570fc51f15047d11c9fa8627f6f0f65d7107fb2ada44fcb6aa9868424d9b56"
+  },
+  {
+    "key": "deadlift/GB_S01_R01.mp4",
+    "equal": true,
+    "old_sha256": "4c3dde39f93b1ba9d491e1c62aa34f634ec61bc1ca6f7b9a3e2853dfd50cb9bb",
+    "new_sha256": "4c3dde39f93b1ba9d491e1c62aa34f634ec61bc1ca6f7b9a3e2853dfd50cb9bb"
+  },
+  {
+    "key": "deadlift/GB_S01_R07.mp4",
+    "equal": true,
+    "old_sha256": "0891bc34c9c72e4578ebc38b00fc8ee4ec687a839977cbbf9ce2b2c01d343398",
+    "new_sha256": "0891bc34c9c72e4578ebc38b00fc8ee4ec687a839977cbbf9ce2b2c01d343398"
+  },
+  {
+    "key": "deadlift/GB_S01_R11.mp4",
+    "equal": true,
+    "old_sha256": "0bfc2f8aee7410202debe17e1b97ff499acc8bd6c2958cfce68fe000baa98039",
+    "new_sha256": "0bfc2f8aee7410202debe17e1b97ff499acc8bd6c2958cfce68fe000baa98039"
+  },
+  {
+    "key": "deadlift/GB_S01_R16.mp4",
+    "equal": true,
+    "old_sha256": "fe4500065b12c3952eb330fe5c40a6fd21743cdda6859c06cb8a23c58eddec2e",
+    "new_sha256": "fe4500065b12c3952eb330fe5c40a6fd21743cdda6859c06cb8a23c58eddec2e"
+  },
+  {
+    "key": "deadlift/GB_S04_R03.mp4",
+    "equal": true,
+    "old_sha256": "41b150499576ec0eff1962a7249119c510aedbc84285297def2c5b71406515b8",
+    "new_sha256": "41b150499576ec0eff1962a7249119c510aedbc84285297def2c5b71406515b8"
+  },
+  {
+    "key": "deadlift/GB_S01_R18.mp4",
+    "equal": true,
+    "old_sha256": "2022c0c83f49af1a2a7871498f7d6bd5bc895fa65c94ec89fd3cbcd60196757b",
+    "new_sha256": "2022c0c83f49af1a2a7871498f7d6bd5bc895fa65c94ec89fd3cbcd60196757b"
+  },
+  {
+    "key": "deadlift/GB_S04_R04.mp4",
+    "equal": true,
+    "old_sha256": "0eee38d25b5a2d916531b91b40d4b9a15012948b4a06c0c1693f0fb6ed79dcc3",
+    "new_sha256": "0eee38d25b5a2d916531b91b40d4b9a15012948b4a06c0c1693f0fb6ed79dcc3"
+  },
+  {
+    "key": "deadlift/GB_S04_R07.mp4",
+    "equal": true,
+    "old_sha256": "9a53aeb86c07107c1151d9770d240bf50f10ea138a1be50c29674dff95731e24",
+    "new_sha256": "9a53aeb86c07107c1151d9770d240bf50f10ea138a1be50c29674dff95731e24"
+  },
+  {
+    "key": "deadlift/GB_S05_R47.mp4",
+    "equal": true,
+    "old_sha256": "ab7e288fb28562004191ff2fd1dd38b702183e75647865af609cedb2045221ce",
+    "new_sha256": "ab7e288fb28562004191ff2fd1dd38b702183e75647865af609cedb2045221ce"
+  },
+  {
+    "key": "deadlift/GB_S06_R63.mp4",
+    "equal": true,
+    "old_sha256": "545216edcb58857679a31df9ba1885e2bc20ef29fdba308fc5288a716b582b6f",
+    "new_sha256": "545216edcb58857679a31df9ba1885e2bc20ef29fdba308fc5288a716b582b6f"
+  },
+  {
+    "key": "deadlift/GB_S07_R12.mp4",
+    "equal": true,
+    "old_sha256": "b5d476b71bf2c4cedb44abdd0484af21bbd530ff1f9059f0b7c158577a30f305",
+    "new_sha256": "b5d476b71bf2c4cedb44abdd0484af21bbd530ff1f9059f0b7c158577a30f305"
+  },
+  {
+    "key": "deadlift/GB_S07_R20.mp4",
+    "equal": true,
+    "old_sha256": "d5be3979ee44f04052633631bdf954071f957f6882ba78d22191ca4487b0c9f9",
+    "new_sha256": "d5be3979ee44f04052633631bdf954071f957f6882ba78d22191ca4487b0c9f9"
+  },
+  {
+    "key": "deadlift/GB_S07_R14.mp4",
+    "equal": true,
+    "old_sha256": "4d10ebec4ae3fb0e37381c562f8357bdae881258793f4e2258147ca4faae86c9",
+    "new_sha256": "4d10ebec4ae3fb0e37381c562f8357bdae881258793f4e2258147ca4faae86c9"
+  },
+  {
+    "key": "deadlift/LLK_S01_R02.mp4",
+    "equal": true,
+    "old_sha256": "010e71b5179507f40d73a00805ab15838004e0e7b681dd415e53b240602231d9",
+    "new_sha256": "010e71b5179507f40d73a00805ab15838004e0e7b681dd415e53b240602231d9"
+  },
+  {
+    "key": "deadlift/LLK_S01_R03.mp4",
+    "equal": true,
+    "old_sha256": "865415356c75bfd51580f074bf571c9e513096d6387a1b70b990efd076598ed8",
+    "new_sha256": "865415356c75bfd51580f074bf571c9e513096d6387a1b70b990efd076598ed8"
+  },
+  {
+    "key": "deadlift/LLK_S01_R06.mp4",
+    "equal": true,
+    "old_sha256": "7ff539324f18ec975c20a76da4ee1fd260083cdbc0c824c6125ab7c9c10495ed",
+    "new_sha256": "7ff539324f18ec975c20a76da4ee1fd260083cdbc0c824c6125ab7c9c10495ed"
+  },
+  {
+    "key": "deadlift/LLK_S01_R04.mp4",
+    "equal": true,
+    "old_sha256": "cbb487c37974ec62f9a7cf56013c568d73351b51b60bdbe058d3f20bfce9e80a",
+    "new_sha256": "cbb487c37974ec62f9a7cf56013c568d73351b51b60bdbe058d3f20bfce9e80a"
+  },
+  {
+    "key": "deadlift/LLK_S04_R05.mp4",
+    "equal": true,
+    "old_sha256": "1f46d8347e6aa51e3deee056fff7bea4ee95738c6236c3e6c39d6d93277869d6",
+    "new_sha256": "1f46d8347e6aa51e3deee056fff7bea4ee95738c6236c3e6c39d6d93277869d6"
+  },
+  {
+    "key": "deadlift/LLK_S05_R17.mp4",
+    "equal": true,
+    "old_sha256": "855fcf534117595da3a64267bbd9eaec5f12d71a0cc505717a8bb8bc1b644d69",
+    "new_sha256": "855fcf534117595da3a64267bbd9eaec5f12d71a0cc505717a8bb8bc1b644d69"
+  },
+  {
+    "key": "deadlift/LLK_S05_R15.mp4",
+    "equal": true,
+    "old_sha256": "c39b948df2979456962f5e92764250ad54ec7915d47155cc5835332971a739ae",
+    "new_sha256": "c39b948df2979456962f5e92764250ad54ec7915d47155cc5835332971a739ae"
+  },
+  {
+    "key": "deadlift/LLK_S03_R11.mp4",
+    "equal": true,
+    "old_sha256": "377c347490de8b56d2098969f0a10700fb63493e54e521cd63d2c065a7d7db3c",
+    "new_sha256": "377c347490de8b56d2098969f0a10700fb63493e54e521cd63d2c065a7d7db3c"
+  },
+  {
+    "key": "deadlift/LLK_S06_R32.mp4",
+    "equal": true,
+    "old_sha256": "25660af7b705e30db8256270d4f91af7ae3518d667379b768920bb803ef5ec1c",
+    "new_sha256": "25660af7b705e30db8256270d4f91af7ae3518d667379b768920bb803ef5ec1c"
+  },
+  {
+    "key": "deadlift/LLK_S06_R31.mp4",
+    "equal": true,
+    "old_sha256": "0d92fc86650147879cc237123eace5aaab85358a253a0aa34cc1fc22ef1f0622",
+    "new_sha256": "0d92fc86650147879cc237123eace5aaab85358a253a0aa34cc1fc22ef1f0622"
+  },
+  {
+    "key": "deadlift/deadlift_02.mp4",
+    "equal": true,
+    "old_sha256": "e3a4853d5d9ba019cb118733499ac2d363c4fe729b5388ca1b4734154feea4b8",
+    "new_sha256": "e3a4853d5d9ba019cb118733499ac2d363c4fe729b5388ca1b4734154feea4b8"
+  },
+  {
+    "key": "deadlift/deadlift_01.mp4",
+    "equal": true,
+    "old_sha256": "3a765b5b636e48107112aa70d0e77542fad8e6d4d23c1f9797ee56167e8d8778",
+    "new_sha256": "3a765b5b636e48107112aa70d0e77542fad8e6d4d23c1f9797ee56167e8d8778"
+  },
+  {
+    "key": "benchpress/bench_02.mp4",
+    "equal": true,
+    "old_sha256": "6adfec12d72475694b1b42e926e350cd15986c9f6c18c34180e10d13346e4921",
+    "new_sha256": "6adfec12d72475694b1b42e926e350cd15986c9f6c18c34180e10d13346e4921"
+  },
+  {
+    "key": "deadlift/deadlift_03.mp4",
+    "equal": true,
+    "old_sha256": "c3b9db2a440414668dad4761e1832aae3d4956bcc8d1f92f90e722156bdaa92a",
+    "new_sha256": "c3b9db2a440414668dad4761e1832aae3d4956bcc8d1f92f90e722156bdaa92a"
+  },
+  {
+    "key": "squat/squat_01.mp4",
+    "equal": true,
+    "old_sha256": "2033807f44f2cf249b15123a1b84d300d1979d12fa1c159b2d04db3aca7d2023",
+    "new_sha256": "2033807f44f2cf249b15123a1b84d300d1979d12fa1c159b2d04db3aca7d2023"
+  },
+  {
+    "key": "squat/squat_02.mp4",
+    "equal": true,
+    "old_sha256": "2218774b1160739ce7c84499e68342e11084a49bae815284123ea34abb6188d7",
+    "new_sha256": "2218774b1160739ce7c84499e68342e11084a49bae815284123ea34abb6188d7"
+  },
+  {
+    "key": "benchpress/bench_03.mp4",
+    "equal": true,
+    "old_sha256": "e3f4975f7f2746c50192c1d1c0e2bfefa665e3906e56dbe9f174cc84b8af3727",
+    "new_sha256": "e3f4975f7f2746c50192c1d1c0e2bfefa665e3906e56dbe9f174cc84b8af3727"
+  },
+  {
+    "key": "squat/squat_03.mp4",
+    "equal": true,
+    "old_sha256": "2b609bef2bcd8dc8d1979ff5978d18b06d8d8287e3d2ab2b6688497fd8c5d9aa",
+    "new_sha256": "2b609bef2bcd8dc8d1979ff5978d18b06d8d8287e3d2ab2b6688497fd8c5d9aa"
+  },
+  {
+    "key": "team9/squat/stu10_70.mp4",
+    "equal": true,
+    "old_sha256": "58a00cc104ab7938846bdde6b4158aa10fe7ab0c7e82f70eb1b44535a38a37e3",
+    "new_sha256": "58a00cc104ab7938846bdde6b4158aa10fe7ab0c7e82f70eb1b44535a38a37e3"
+  },
+  {
+    "key": "team9/squat/stu8_67.mp4",
+    "equal": true,
+    "old_sha256": "03d8a016e0aa294939edc4cc838e1a88fdd1037cef634382099c5714d3812987",
+    "new_sha256": "03d8a016e0aa294939edc4cc838e1a88fdd1037cef634382099c5714d3812987"
+  },
+  {
+    "key": "benchpress/bench_01.mp4",
+    "equal": true,
+    "old_sha256": "f902c4a81702c77e767fe227a87ab6774633bf7c6a0372481d5f275cb18d0302",
+    "new_sha256": "f902c4a81702c77e767fe227a87ab6774633bf7c6a0372481d5f275cb18d0302"
+  },
+  {
+    "key": "team9/benchpress/stu8_7.mp4",
+    "equal": true,
+    "old_sha256": "cf0cf95e923e92de38ff7af3b3ce681486e1e576301a1a3dc0b656c7569fe05f",
+    "new_sha256": "cf0cf95e923e92de38ff7af3b3ce681486e1e576301a1a3dc0b656c7569fe05f"
+  },
+  {
+    "key": "team9/squat/stu3_64.mp4",
+    "equal": true,
+    "old_sha256": "cad8c2c4cb5c2af03d1596ef41615ac385ac7bd9b6943fc71f6fed106b9d4027",
+    "new_sha256": "cad8c2c4cb5c2af03d1596ef41615ac385ac7bd9b6943fc71f6fed106b9d4027"
+  },
+  {
+    "key": "team9/benchpress/stu2_10_edited.mp4",
+    "equal": true,
+    "old_sha256": "e1df43caa44f885c3e527fa0a4656f63543638a2f6ebf09b2b11d1c15b8d7357",
+    "new_sha256": "e1df43caa44f885c3e527fa0a4656f63543638a2f6ebf09b2b11d1c15b8d7357"
+  },
+  {
+    "key": "team9/deadlift/stu4_2_-1.mp4",
+    "equal": true,
+    "old_sha256": "d4266185b5d0357ab9c4ededa058ebae22d651139ff9de0ad35a9b8a72e6615f",
+    "new_sha256": "d4266185b5d0357ab9c4ededa058ebae22d651139ff9de0ad35a9b8a72e6615f"
+  },
+  {
+    "key": "team9/deadlift/stu7_1_1.mp4",
+    "equal": true,
+    "old_sha256": "3a8d1907e8ddcfc133ffa5db852d420efeb1df23155bfadfb6c10216da52df0f",
+    "new_sha256": "3a8d1907e8ddcfc133ffa5db852d420efeb1df23155bfadfb6c10216da52df0f"
+  },
+  {
+    "key": "team9/benchpress/stu9_10.mp4",
+    "equal": true,
+    "old_sha256": "fdab14efeebd525ae398e862884194349aaf7de0182c638b1387bc933f8f3336",
+    "new_sha256": "fdab14efeebd525ae398e862884194349aaf7de0182c638b1387bc933f8f3336"
+  },
+  {
+    "key": "user_clip_3",
+    "equal": true,
+    "old_sha256": "62eecd61549099158233d80e4d2682c5751efb0bd13a6a75b600f03ea596b536",
+    "new_sha256": "62eecd61549099158233d80e4d2682c5751efb0bd13a6a75b600f03ea596b536"
+  },
+  {
+    "key": "user_clip_2",
+    "equal": true,
+    "old_sha256": "91647b474388644c489ac9b1d39efd124ba1952493b5ff9f693c7efb4a701c85",
+    "new_sha256": "91647b474388644c489ac9b1d39efd124ba1952493b5ff9f693c7efb4a701c85"
+  },
+  {
+    "key": "user_clip_1",
+    "equal": true,
+    "old_sha256": "bd9999586a2f6d71b4cba72881768136d80c5d316bcf836e35a7f46557b9b4ce",
+    "new_sha256": "bd9999586a2f6d71b4cba72881768136d80c5d316bcf836e35a7f46557b9b4ce"
+  },
+  {
+    "key": "user_clip_4",
+    "equal": true,
+    "old_sha256": "bf48f0e671bbdc087689806d7b09af072aea0095262072d01350c42698176732",
+    "new_sha256": "bf48f0e671bbdc087689806d7b09af072aea0095262072d01350c42698176732"
+  },
+  {
+    "key": "team9/deadlift/deadlift_08.mp4",
+    "equal": true,
+    "old_sha256": "7db8e0be9a5038e09310ba6a6f022f62c5d0c457d9a90a56dafc268c848e1da7",
+    "new_sha256": "7db8e0be9a5038e09310ba6a6f022f62c5d0c457d9a90a56dafc268c848e1da7"
+  },
+  {
+    "key": "squat_user_set",
+    "equal": true,
+    "old_sha256": "63fe6677687d41b36c1511066186c726400d0ca6df42389de71739729246c17b",
+    "new_sha256": "63fe6677687d41b36c1511066186c726400d0ca6df42389de71739729246c17b"
+  }
+]

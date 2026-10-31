@@ -14,13 +14,14 @@ def file_hash(path):
     return h.hexdigest()
 
 
-def cache_key(video,exercise,plate_mm,model,checkpoint,recover_early_back=None):
+def cache_key(video,exercise,plate_mm,model,checkpoint,recover_early_back=None,plate_pick=None,plate_pick_weak=False):
     root=Path(__file__).resolve().parents[2]
     sources=list((root/'plate_pipeline/core').rglob('*.py'))
     sources += [root/p for p in ('feedback/pose.py','feedback/plate.py','tools/check_video.py','plate_pipeline/server/jobs.py','plate_pipeline/server/compare.py')]
     models=[Path(model),Path(checkpoint)]+sorted((Path.home()/'.cache/rtmlib/hub/checkpoints').glob('*.onnx'))
     config=dict(version=1,exercise=exercise,plate_mm=plate_mm,config=asdict(DEFAULT),
                 recover_early_back=DEFAULT.speed.recover_early_back if recover_early_back is None else bool(recover_early_back),
+                plate_pick=DEFAULT.track.plate_pick if plate_pick is None else bool(plate_pick),plate_pick_weak=bool(plate_pick_weak),
                 models={str(p):file_hash(p) for p in models},sources={str(p.relative_to(root)):file_hash(p) for p in sources})
     settings_hash=hashlib.sha256(json.dumps(config,sort_keys=True).encode()).hexdigest()
     sha=file_hash(video)

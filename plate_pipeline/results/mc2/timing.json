@@ -1,0 +1,16 @@
+[
+  {
+    "plate_pick": false,
+    "wall_s": 37.836652461002814,
+    "frames": 1477,
+    "recognition_s": 37.8,
+    "completed_reps": 4
+  },
+  {
+    "plate_pick": true,
+    "wall_s": 36.193534099991666,
+    "frames": 1477,
+    "recognition_s": 36.1,
+    "completed_reps": 4
+  }
+]
