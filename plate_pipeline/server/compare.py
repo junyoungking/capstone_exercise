@@ -182,7 +182,8 @@ def write_report(bundle, dest):
 
 
 def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,threads=6,model=None,checkpoint=None,
-            progress=None,ref_cache=None,posture_cards=False,scale_source="box",position_source="box",recover_early_back=None):
+            progress=None,ref_cache=None,posture_cards=False,scale_source="box",position_source="box",recover_early_back=None,
+            plate_pick=None,plate_pick_weak=False):
     """The M3a calculations, with observation callbacks and optional reference reuse.
 
     progress(stage, fraction, **details) reports work actually completed. Cached
@@ -201,7 +202,9 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
         if value is not None and (not np.isfinite(value) or value<=0): raise ValueError(name+' must be positive and finite')
     if scale_source not in ('box','ellipse') or position_source not in ('box','ellipse'): raise ValueError('invalid source')
     recover_early_back = DEFAULT.speed.recover_early_back if recover_early_back is None else bool(recover_early_back)
-    cfg = replace(DEFAULT, speed=replace(DEFAULT.speed,recover_early_back=recover_early_back))
+    plate_pick = (True if plate_pick_weak else DEFAULT.track.plate_pick) if plate_pick is None else bool(plate_pick)
+    cfg = replace(DEFAULT, speed=replace(DEFAULT.speed,recover_early_back=recover_early_back),
+                  track=replace(DEFAULT.track,plate_pick=plate_pick,plate_pick_weak=bool(plate_pick_weak)))
     # Legacy caches do not contain rim fits; never reuse them for an ellipse run.
     if scale_source == 'ellipse' or position_source == 'ellipse': ref_cache = None
     started=time.perf_counter()
@@ -221,7 +224,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     emit('prepare',0)
     cached=None;provenance={};hit=False
     if ref is not None and ref_cache is not None:
-        key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint,recover_early_back)
+        key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint,recover_early_back,plate_pick,plate_pick_weak)
         cached=Path(ref_cache)/key;hit=available(cached)
     settings=prepare(user,None if hit else ref,out)
     if hit:
@@ -237,7 +240,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     b=dict(schema_version=SCHEMA_VERSION,exercise=exercise,inputs=dict(plate_mm=plate_mm,load_kg=load_kg,height_cm=height_cm),
            show_3d=exercise!='benchpress',pose3d_scale='input_height' if height_cm is not None else 'model_native',
            posture_cards=bool(posture_cards),has_ref=ref is not None,ref=None,
-           scale_source=scale_source,position_source=position_source,recover_early_back=recover_early_back)
+           scale_source=scale_source,position_source=position_source,recover_early_back=recover_early_back,plate_pick=plate_pick,plate_pick_weak=bool(plate_pick_weak))
     observations={};timing={};stats={}
     with patch.object(ort,'InferenceSession',session):
         for role in roles:
@@ -250,15 +253,19 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
                 result=json.loads((dest/'plate/result.json').read_text());rows=read_rows(dest/'plate/rows.jsonl.gz')
             else:
                 def frame(seq,t,img,st,stage=stage,total=total):
-                    emit(stage,min((seq+1)/max(1,total),1),processed=seq+1,total=total)
+                    fraction=(total+seq+1)/(2*max(1,total)) if plate_pick else (seq+1)/max(1,total)
+                    emit(stage,min(fraction,1),processed=(total+seq+1 if plate_pick else seq+1),total=(2*total if plate_pick else total),pass_name='track' if plate_pick else 'detect_track')
+                def detect_frame(seq,t,img,stage=stage,total=total):
+                    emit(stage,min((seq+1)/(2*max(1,total)),.5),processed=seq+1,total=2*total,pass_name='detect')
                 result,rows,_=process_video(settings[role]['video'],'bench' if exercise=='benchpress' else exercise,
                     plate_mm=plate_mm,model=str(model),device='cpu',pose=False,out_dir=dest/'plate',on_frame=frame,
-                    scale_source=scale_source,position_source=position_source,cfg=cfg)
+                    scale_source=scale_source,position_source=position_source,cfg=cfg,on_detect=detect_frame if plate_pick else None)
             if not any(r.get('plate',{}).get('ellipse') for r in rows):
                 from core.recog.ellipse import annotate_video
                 annotate_video(settings[role]['video'],rows)
             observations[role]=dict(result=result,rows=rows)
-            emit(stage,1,processed=len(rows),total=len(rows),cached=role=='ref' and hit)
+            passes=2 if plate_pick and not (role=='ref' and hit) else 1
+            emit(stage,1,processed=passes*len(rows),total=passes*len(rows),cached=role=='ref' and hit)
         emit('pose',0)
         total=sum(len(observations[r]['rows']) for r in roles);done=0
         for role in roles:
@@ -288,7 +295,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
         timing[role]=time.perf_counter()-start
         if role=='ref' and cached is not None and not hit:
             # RTMPose may have populated its model cache during the first run.
-            key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint,recover_early_back)
+            key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint,recover_early_back,plate_pick,plate_pick_weak)
             publish(Path(ref_cache)/key,dest,out/'ref.mp4',provenance)
         emit('3d',(index+1)/len(roles),processed=index+1,total=len(roles),ref_cached=hit)
     emit('judge',0)
@@ -334,6 +341,8 @@ def main():
     ap.add_argument('--scale-source',choices=('box','ellipse'),default='box')
     ap.add_argument('--position-source',choices=('box','ellipse'),default='box')
     ap.add_argument('--recover-early-back',action=argparse.BooleanOptionalAction,default=None)
+    ap.add_argument('--plate-pick',action=argparse.BooleanOptionalAction,default=None)
+    ap.add_argument('--plate-pick-weak',action='store_true',help='experimental weak-only moving candidates')
     a = ap.parse_args()
     b = compare(**vars(a))
     print(json.dumps(dict(reps={r:len(b[r]['reps']) for r in ('user','ref') if b[r] is not None},timing=b['timing']),ensure_ascii=False))

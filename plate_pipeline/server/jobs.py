@@ -41,13 +41,27 @@ def pick_detection(dets, box):
     return min(dets, key=lambda d: (d.center[0] - cx) ** 2 + (d.center[1] - cy) ** 2)
 
 
-def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=None, exercise="squat", ellipse=False):
+def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=None, exercise="squat", ellipse=False,
+              track_cfg=DEFAULT.track, on_detect=None, detections=None):
     """Frame rows for a whole video. detector(image, seq) -> [Detection].
     rim enables circle fallback both for initialization and around the tracked box.
     With rim=False, wait for a detection (or an explicit init_box) to initialize.
     """
-    tr = PlateTracker()
+    tr = PlateTracker(track_cfg)
     rows = []
+    chosen = legacy = None
+    cached = detections
+    if track_cfg.plate_pick and detector is not None and init_box is None:
+        from core.recog.plate_pick import choose_plate
+        if cached is None:
+            cached = []
+            for seq, (t, img) in enumerate(video.frames(path)):
+                cached.append((seq, t, detector(img, seq)))
+                if on_detect is not None:
+                    on_detect(seq, t, img)
+        chosen, legacy, _ = choose_plate(cached, track_cfg)
+    # Leave the ordinary path completely unchanged when both initial picks match.
+    force_pick = chosen is not None and (chosen is not legacy or chosen.first[0] != chosen.first_high(track_cfg)[0])
     pose_cfg = getattr(pose, "cfg", DEFAULT.pose)
     every_n = getattr(pose, "every_n", pose_cfg.every_n)
     if pose is not None and every_n < 1:
@@ -57,7 +71,7 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
     ellipse_step = max(1, round(video.info(path).fps * .25)) if ellipse else 1
     for seq, (t, img) in enumerate(video.frames(path)):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        dets = detector(img, seq) if detector is not None else []
+        dets = cached[seq][2] if cached is not None else (detector(img, seq) if detector is not None else [])
         det = None
         if tr.box is None and not any(d.score >= tr.cfg.score_high for d in dets):
             if init_box is not None:
@@ -68,7 +82,19 @@ def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=
                     det.src = "rim"
         if det is None and rim and tr.box is not None:
             det = refine_circle(gray, tr.box)
-        st = tr.step(gray, dets=dets + ([det] if det is not None else []), t=t)
+        if force_pick and seq < chosen.first[0]:
+            st = tr.step(gray, dets=[], t=t)
+        elif force_pick and seq == chosen.first[0]:
+            initial = chosen.first[2]
+            if initial.score >= track_cfg.score_high:
+                st = tr.step(gray, dets=[initial], t=t)
+            else:
+                tr.step(gray, dets=[], t=t)
+                st = tr.start(gray, initial.box)
+                st.src, st.score = 'det_low', initial.score
+                tr.selected = initial
+        else:
+            st = tr.step(gray, dets=dets + ([det] if det is not None else []), t=t)
         det = tr.selected
         if st is not None and st.drift:
             for previous in reversed(rows):
@@ -164,7 +190,8 @@ def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT, scale_so
 
 
 def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None,
-                  pose=False, device="auto", on_frame=None, scale_source="box", position_source="box", ellipse=False, cfg=DEFAULT):
+                  pose=False, device="auto", on_frame=None, scale_source="box", position_source="box", ellipse=False, cfg=DEFAULT,
+                  on_detect=None):
     """rim: look for the plate rim when the detector gives nothing (default: only without a model)."""
     info = video.info(path)
     det = OnnxPlateDetector(model, device=device) if model else (BoxFileDetector(boxes) if boxes else None)
@@ -172,7 +199,8 @@ def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, mod
     t0 = time.time()
     try:
         rows = recognize(path, det, init_box, rim=(model is None) if rim is None else rim,
-                         pose=estimator, exercise=exercise, on_frame=on_frame, ellipse=ellipse or scale_source == "ellipse" or position_source == "ellipse")
+                         pose=estimator, exercise=exercise, on_frame=on_frame, ellipse=ellipse or scale_source == "ellipse" or position_source == "ellipse",
+                         track_cfg=cfg.track, on_detect=on_detect)
     finally:
         if pose is True:
             estimator.close()
@@ -211,11 +239,15 @@ def main():
     ap.add_argument("--pose-det-frequency", type=int, default=DEFAULT.pose.det_frequency)
     ap.add_argument("--out", default="out")
     ap.add_argument("--recover-early-back", action=argparse.BooleanOptionalAction, default=None)
+    ap.add_argument("--plate-pick", action=argparse.BooleanOptionalAction, default=None)
+    ap.add_argument("--plate-pick-weak", action="store_true", help="experimental weak-only moving candidates")
     a = ap.parse_args()
     box = tuple(float(v) for v in a.box.split(",")) if a.box else None
     estimator = PoseEstimator(cfg=replace(DEFAULT.pose, backend=a.pose_backend, mode=a.pose_mode, det_frequency=a.pose_det_frequency)) if a.pose else None
     try:
-        cfg = DEFAULT if a.recover_early_back is None else replace(DEFAULT, speed=replace(DEFAULT.speed,recover_early_back=a.recover_early_back))
+        cfg = replace(DEFAULT,
+            speed=replace(DEFAULT.speed,recover_early_back=DEFAULT.speed.recover_early_back if a.recover_early_back is None else a.recover_early_back),
+            track=replace(DEFAULT.track,plate_pick=(True if a.plate_pick_weak else DEFAULT.track.plate_pick) if a.plate_pick is None else a.plate_pick,plate_pick_weak=a.plate_pick_weak))
         res, _, _ = process_video(a.video, a.exercise, a.plate_mm, box, a.boxes, a.model, a.out,
                                   pose=estimator, device=a.device, cfg=cfg)
     finally:

@@ -31,6 +31,10 @@ class TrackCfg:
     fb_px: float = 1.0
     win: int = 21
     levels: int = 3
+    plate_pick: bool = False     # Opt in until the real-video regression gate passes.
+    plate_pick_weak: bool = False  # Experimental only: unconfirmed moving tracklets.
+    pick_gap_s: float = 0.75
+    pick_motion_diameters: float = 0.29
 
 
 @dataclass(frozen=True)
@@ -160,6 +164,7 @@ class Config:
     pose: PoseCfg = field(default_factory=PoseCfg)
     geometry: GeometryCfg = field(default_factory=GeometryCfg)
     pose3d: Pose3DCfg = field(default_factory=Pose3DCfg)
+    track: TrackCfg = field(default_factory=TrackCfg)
 
 
 DEFAULT = Config()

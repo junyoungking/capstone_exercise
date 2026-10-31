@@ -123,6 +123,8 @@ def test_cache_key_ignores_display_inputs_and_invalidates_inference(tmp_path,mon
     k,p=cache.cache_key(video,'squat',450,model,checkpoint)
     assert cache.cache_key(video,'squat',450,model,checkpoint)==(k,p)
     assert cache.cache_key(video,'squat',450,model,checkpoint,recover_early_back=True)[0] != cache.cache_key(video,'squat',450,model,checkpoint,recover_early_back=False)[0]
+    assert cache.cache_key(video,'squat',450,model,checkpoint,plate_pick=True)[0] != cache.cache_key(video,'squat',450,model,checkpoint,plate_pick=False)[0]
+    assert cache.cache_key(video,'squat',450,model,checkpoint,plate_pick=True,plate_pick_weak=True)[0] != cache.cache_key(video,'squat',450,model,checkpoint,plate_pick=True,plate_pick_weak=False)[0]
     assert cache.cache_key(video,'squat',400,model,checkpoint)[0]!=k
     assert cache.cache_key(video,'deadlift',450,model,checkpoint)[0]!=k
     model.write_bytes(b'changed weights');assert cache.cache_key(video,'squat',450,model,checkpoint)[0]!=k
