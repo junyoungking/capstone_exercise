@@ -75,6 +75,7 @@ class RepCfg:
 
 @dataclass(frozen=True)
 class SpeedCfg:
+    recover_early_back: bool = True  # Retry a missing/premature endpoint after confirmed 70% return.
     d_frac: float = 0.05        # endpoint offset d = 5% of ROM ...
     d_min_m: float = 0.015      # ... at least 1.5 cm
     end_avg_s: float = 0.1      # endpoint height = mean of +-0.1 s

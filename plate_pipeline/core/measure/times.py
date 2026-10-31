@@ -139,6 +139,26 @@ def rep_values(sig, raw_t, trip, rest, prev_end_t=None, next_entry_t=None, cfg: 
         if m2 is not None:
             rv.far_out = _endpoint(t, y, m2, a - 1, bot, +d, -1)
             rv.back = _endpoint(t, y, m2, b, top_a, -d, +1)
+        # A transient rise followed by a >3 cm dip can make _raise_end pick
+        # an early peak even though the FSM later observes a 70% return.
+        # Retry a missing endpoint or that contradiction in the same stretch
+        # and before the next rep; never invent a missing crossing.
+        if cfg.recover_early_back and (rv.back is None or rv.back < trip.end_t) and not trip.far_gap:
+            end_i = int(np.searchsorted(t, trip.end_t, side="left"))
+            stop = min(b, int(np.searchsorted(t, next_entry_t, side="left"))) if next_entry_t is not None else b
+            if a <= end_i < stop:
+                q2 = _raise_end(y, end_i, stop, cfg.drop_m)
+                top2 = _level(t, y, q2, h)
+                rom2 = top2 - bot
+                if rom2 >= cfg.min_rom_m:
+                    d2 = max(cfg.d_frac * rom2, cfg.d_min_m)
+                    mid2 = _mid(t, y, f, q2 + 1, 0.5 * (top2 + bot), +1)
+                    if mid2 is not None:
+                        out2 = _endpoint(t, y, mid2, a - 1, bot, +d2, -1)
+                        back2 = _endpoint(t, y, mid2, stop, top2, -d2, +1)
+                        if (out2 is not None and back2 is not None and out2 < back2
+                                and trip.end_t <= back2 <= t[stop-1]):
+                            rv.far_out, rv.back, rv.rom, rom = out2, back2, rom2, rom2
         r0, r1 = rv.far_out, rv.back
         if rv.start is not None and rv.far_in is not None:
             rv.down = rv.far_in - rv.start
