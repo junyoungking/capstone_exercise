@@ -41,35 +41,107 @@ def pick_detection(dets, box):
     return min(dets, key=lambda d: (d.center[0] - cx) ** 2 + (d.center[1] - cy) ** 2)
 
 
-def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=None, exercise="squat", ellipse=False,
-              track_cfg=DEFAULT.track, on_detect=None, detections=None, on_legacy=None):
-    """Detect once, track the legacy plate, then optionally track a safer pick.
+def _completed_both_sides(rows, cfg=DEFAULT):
+    """Completed backs using fixed 450 mm, independent of the selected exercise."""
+    if len(rows)<2 or not any(r.get('plate',{}).get('used') for r in rows):
+        return 0
+    duration=rows[-1]['t']-rows[0]['t']
+    fps=len(rows)/max(duration,1e-6)
+    counts=[]
+    for exercise in ('squat','deadlift'):
+        sets,_=analyse(rows,exercise,fps,plate_mm=450.,cfg=cfg)
+        counts.append(sum(v['back'] is not None for st in sets for v in st['rep_values']))
+    return max(counts)
 
-    Pose/ellipse are evaluated only on the final track.  ``on_legacy`` reports
-    actual first-tracking-pass progress separately from the final ``on_frame``.
+
+def recognize(path, detector=None, init_box=None, on_frame=None, rim=True, pose=None, exercise="squat", ellipse=False,
+              track_cfg=DEFAULT.track, on_detect=None, detections=None, on_legacy=None, on_attempt=None, analysis_cfg=DEFAULT):
+    """Detect once; start the original plate at its first safe linked detection.
+
+    Only candidate alternatives require additional KLT passes. Candidate
+    qualification is independent of the input plate diameter and exercise.
     """
     if not track_cfg.plate_pick or detector is None or init_box is not None:
-        rows, _ = _recognize_pass(path, detector, init_box, on_frame, rim, pose, exercise, ellipse, track_cfg, detections)
+        rows,_=_recognize_pass(path,detector,init_box,on_frame,rim,pose,exercise,ellipse,track_cfg,detections)
         return rows
-    from core.recog.plate_pick import choose_plate, safe_start
-    cached = detections
+    from core.recog.plate_pick import choose_plate,safe_start,moving_alternatives
+    cached=detections;image_size=None
     if cached is None:
-        cached = []
-        for seq, (t, img) in enumerate(video.frames(path)):
-            cached.append((seq, t, detector(img, seq)))
-            if on_detect is not None:
-                on_detect(seq, t, img)
-    legacy_rows, image_size = _recognize_pass(path, detector, None, on_legacy, rim, None, exercise, False, track_cfg, cached)
-    chosen, legacy, _ = choose_plate(cached, track_cfg, legacy_rows=legacy_rows)
-    initial = safe_start(chosen, image_size, track_cfg) if chosen is not None and image_size else None
-    high = legacy.first_high(track_cfg) if legacy is not None else None
-    changed = initial is not None and (chosen is not legacy or high is None or initial[0] != high[0])
-    # A single-callback caller must receive the final frames.  Server progress
-    # provides on_legacy separately, permitting this no-rerun fast path.
-    if not changed and pose is None and not ellipse and (on_frame is None or on_legacy is not None):
-        return legacy_rows
-    rows, _ = _recognize_pass(path, detector, None, on_frame, rim, pose, exercise, ellipse, track_cfg, cached,
-                              forced_start=initial if changed else None)
+        cached=[]
+        for seq,(t,img) in enumerate(video.frames(path)):
+            image_size=(img.shape[1],img.shape[0])
+            cached.append((seq,t,detector(img,seq)))
+            if on_detect is not None:on_detect(seq,t,img)
+    else:
+        info=video.info(path);image_size=(info.width,info.height)
+    _,legacy,tracks=choose_plate(cached,track_cfg)
+    initial=safe_start(legacy,image_size,track_cfg) if legacy is not None and image_size else None
+    high=legacy.first_high(track_cfg) if legacy else None
+    force_initial=initial if initial and high and initial[0]!=high[0] else None
+    legacy_rows,_=_recognize_pass(path,detector,None,on_legacy,rim,None,exercise,False,track_cfg,cached,forced_start=force_initial)
+    preferred,_,_=choose_plate(cached,track_cfg,legacy_rows=legacy_rows)
+    # choose_plate built fresh Candidate objects; match by detection identity/sequence.
+    # Candidate entries are held by the same cached frame lists, but tuple objects
+    # are rebuilt; use the first-high Detection object and frame number instead.
+    def key(tr):
+        item=tr.first_high(track_cfg) if tr is not None else None
+        return (item[0],id(item[2])) if item else None
+    alternatives=moving_alternatives(tracks,legacy,track_cfg)
+    preference=next((tr for tr in alternatives if key(tr)==key(preferred)),None)
+    chosen_rows=legacy_rows
+    if alternatives and track_cfg.pick_retry_zero and _completed_both_sides(legacy_rows,analysis_cfg)==0:
+        candidates=alternatives
+        require_completed=True
+    elif preference is not None:
+        candidates=[preference]
+        require_completed=False
+    else:
+        candidates=[];require_completed=False
+    for idx,candidate in enumerate(candidates):
+        start=safe_start(candidate,image_size,track_cfg)
+        def progress(seq,t,img,st,idx=idx):
+            if on_attempt is not None:on_attempt(idx,len(candidates),seq,t,img,st)
+        trial,_=_recognize_pass(path,detector,None,progress if on_attempt else None,rim,None,exercise,False,track_cfg,cached,forced_start=start)
+        if not require_completed or _completed_both_sides(trial,analysis_cfg)>0:
+            chosen_rows=trial
+            break
+    if pose is None and not ellipse and (on_frame is None or on_legacy is not None):return chosen_rows
+    return _attach_observations(path,chosen_rows,on_frame,pose,exercise,ellipse)
+
+
+def _attach_observations(path, rows, on_frame, pose, exercise, ellipse):
+    """Add pose/ellipse or final callbacks without running KLT a second time."""
+    from core.recog.track import PlateState
+    pose_cfg=getattr(pose,'cfg',DEFAULT.pose);every_n=getattr(pose,'every_n',pose_cfg.every_n)
+    if pose is not None and every_n<1:raise ValueError('pose.every_n must be positive')
+    side_lock=SideLock(exercise) if pose is not None else None;previous=None
+    ellipse_step=max(1,round(video.info(path).fps*.25)) if ellipse else 1
+    count=0
+    for seq,(t,img) in enumerate(video.frames(path)):
+        if seq>=len(rows):raise ValueError('Observation frames exceed plate rows')
+        count+=1;row=rows[seq];plate=row.get('plate')
+        st=PlateState(tuple(plate['box']),plate['src'],plate['n_pts'],plate['score']) if plate else None
+        if ellipse and plate and plate.get('used'):
+            from core.recog.ellipse import fit_plate_ellipse
+            sampled=seq%ellipse_step==0;fit=fit_plate_ellipse(img,plate['box']) if sampled else None
+            plate['ellipse']={**fit,'sampled':True} if fit is not None else {'source':'box','quality':0.0,'sampled':sampled}
+        if pose is not None and seq%every_n==0:
+            start=time.perf_counter();candidates=pose(img,t);elapsed=(time.perf_counter()-start)*1000
+            row['pose']={'n':len(candidates),'ms':round(elapsed,3)}
+            index=select_lifter(candidates,st.box if st is not None else None,previous,exercise,cfg=pose_cfg,image_size=(img.shape[1],img.shape[0]))
+            if hasattr(pose,'observe'):pose.observe(candidates[index] if index is not None else None,st.box if st is not None else None,(img.shape[1],img.shape[0]))
+            if index is not None:
+                lms=candidates[index];row['person']={'box':[round(v,1) for v in person_box(lms,pose_cfg.vis_thr)],
+                    'vis':round(float(lms[[11,12,23,24],3].mean()),2),'feet_y':feet_y(lms,pose_cfg.vis_thr,img.shape[0])}
+                row['kp']=[[round(float(p[0]),1),round(float(p[1]),1),round(float(p[3]),2)] for p in lms]
+                row['side']=side_lock.update(lms);center=person_center(lms,pose_cfg.vis_thr)
+                if center is not None:previous=center
+            elif pose_cfg.backend=='rtmpose':previous=None
+        if on_frame is not None:on_frame(seq,t,img,st)
+    if count!=len(rows):raise ValueError('Observation frames and plate rows differ')
+    if ellipse:
+        from core.recog.ellipse import smooth_ellipses,interpolate_ellipses
+        interpolate_ellipses(rows);smooth_ellipses(rows)
     return rows
 
 
@@ -208,7 +280,7 @@ def analyse(rows, exercise, fps, plate_mm=450.0, cfg: Config = DEFAULT, scale_so
 
 def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, model=None, out_dir=None, rim=None,
                   pose=False, device="auto", on_frame=None, scale_source="box", position_source="box", ellipse=False, cfg=DEFAULT,
-                  on_detect=None, on_legacy=None):
+                  on_detect=None, on_legacy=None, on_attempt=None):
     """rim: look for the plate rim when the detector gives nothing (default: only without a model)."""
     info = video.info(path)
     det = OnnxPlateDetector(model, device=device) if model else (BoxFileDetector(boxes) if boxes else None)
@@ -217,7 +289,7 @@ def process_video(path, exercise, plate_mm=450.0, init_box=None, boxes=None, mod
     try:
         rows = recognize(path, det, init_box, rim=(model is None) if rim is None else rim,
                          pose=estimator, exercise=exercise, on_frame=on_frame, ellipse=ellipse or scale_source == "ellipse" or position_source == "ellipse",
-                         track_cfg=cfg.track, on_detect=on_detect, on_legacy=on_legacy)
+                         track_cfg=cfg.track, on_detect=on_detect, on_legacy=on_legacy, on_attempt=on_attempt, analysis_cfg=cfg)
     finally:
         if pose is True:
             estimator.close()

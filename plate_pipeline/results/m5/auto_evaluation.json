@@ -1,0 +1,3439 @@
+[
+  {
+    "key": "squat/squat_11.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.07231524593820482,
+          4.52599469547246
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 144,
+    "frames": 144,
+    "selection_review": null
+  },
+  {
+    "key": "squat/stu4_69.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.7355216762834877,
+          3.04487276545545
+        ],
+        [
+          2.2244009500839086,
+          6.230637772347251
+        ],
+        [
+          4.87174375162011,
+          7.148651222150905
+        ],
+        [
+          6.175555757498092,
+          9.883273413986188
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 300,
+    "frames": 300,
+    "selection_review": null
+  },
+  {
+    "key": "squat/val1235.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.022117716187090575,
+          4.351857787523849
+        ],
+        [
+          2.6858639419084773,
+          7.462969034552067
+        ],
+        [
+          5.136934324943926,
+          9.466428695991452
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 300,
+    "frames": 300,
+    "selection_review": null
+  },
+  {
+    "key": "squat/val1256.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.050644991749378976,
+          3.534848324658188
+        ],
+        [
+          2.361370923924767,
+          5.334434379530906
+        ],
+        [
+          3.4192445751211853,
+          7.709710940958333
+        ],
+        [
+          6.669397472145604,
+          9.625128783568957
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 300,
+    "frames": 300,
+    "selection_review": null
+  },
+  {
+    "key": "benchpress/bench press_31.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "benchpress",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.5973885607206245,
+          2.8527118118448413
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 77,
+    "frames": 77,
+    "selection_review": {
+      "overlap_frames": 77,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/bench press_40.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "benchpress",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.00607156450307661,
+          3.2710505215319907
+        ],
+        [
+          0.7972393635590393,
+          4.333378557034797
+        ],
+        [
+          3.3840141109554494,
+          5.742169139220766
+        ],
+        [
+          4.328588140412167,
+          6.854828592436342
+        ],
+        [
+          5.807861033186231,
+          8.710757586255744
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 225,
+    "frames": 225,
+    "selection_review": {
+      "overlap_frames": 225,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/stu10_11.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          8.97955545621515,
+          15.487718932643666
+        ],
+        [
+          14.733128870552216,
+          16.228966614334652
+        ],
+        [
+          15.50708140707592,
+          16.966357058461167
+        ],
+        [
+          16.247382658719854,
+          17.671565680154167
+        ],
+        [
+          16.92873331619728,
+          18.46488453781604
+        ],
+        [
+          17.639653163114204,
+          19.21245119548721
+        ],
+        [
+          18.473892425762607,
+          19.936029650332856
+        ],
+        [
+          19.19530650688758,
+          20.657802903807593
+        ],
+        [
+          19.90623500943761,
+          21.37153284213244
+        ],
+        [
+          20.64874083279843,
+          22.04796216700951
+        ],
+        [
+          21.375163916292244,
+          22.823791110153742
+        ],
+        [
+          22.02984247681786,
+          23.483014440029038
+        ],
+        [
+          22.819571980082678,
+          24.246472306198182
+        ],
+        [
+          23.475799814275415,
+          24.88045793783823
+        ],
+        [
+          24.2531900353772,
+          25.67236735464223
+        ],
+        [
+          24.903007448489472,
+          26.388739873865205
+        ],
+        [
+          25.638782489189413,
+          27.195898123888036
+        ],
+        [
+          26.362351164356827,
+          27.91194194671721
+        ],
+        [
+          27.167251380690832,
+          28.775069367508166
+        ],
+        [
+          27.92945066675146,
+          29.410388422178535
+        ],
+        [
+          28.752550199453104,
+          30.223858203376164
+        ],
+        [
+          29.419383457462413,
+          30.922757940430152
+        ],
+        [
+          30.20931393079766,
+          31.775302254924405
+        ],
+        [
+          30.91191735880837,
+          32.484415004265884
+        ],
+        [
+          31.793581132337042,
+          33.401670882648204
+        ],
+        [
+          32.45303496918549,
+          34.01141593475304
+        ],
+        [
+          33.38432333635298,
+          35.01767072752333
+        ],
+        [
+          34.009071947385706,
+          35.664823628963504
+        ],
+        [
+          34.9847763007923,
+          36.80034541304548
+        ],
+        [
+          35.634233520127744,
+          37.385432320035896
+        ],
+        [
+          36.7582364493821,
+          38.51139451766454
+        ],
+        [
+          37.38652183663259,
+          39.07334516743259
+        ],
+        [
+          38.49665359469289,
+          40.32937680941896
+        ],
+        [
+          39.08835836740178,
+          40.8987629888421
+        ],
+        [
+          40.2533854143913,
+          42.30653486509401
+        ],
+        [
+          40.890500072446414,
+          42.85750287491202
+        ],
+        [
+          42.20036971879373,
+          44.88904328873903
+        ],
+        [
+          42.87237983816239,
+          46.37469790567199
+        ],
+        [
+          45.55859602773698,
+          50.63414844050496
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 1796,
+    "frames": 1798,
+    "selection_review": {
+      "overlap_frames": 1783,
+      "center_diff_gt_0_1": 1117,
+      "neutral_only": 13,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/stu8_15.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          3.2173399873364694,
+          5.0113428482003
+        ],
+        [
+          4.6006521290124125,
+          6.037040180492155
+        ],
+        [
+          5.192836986023835,
+          6.622044660843163
+        ],
+        [
+          6.25318770539245,
+          7.24962980566631
+        ],
+        [
+          15.530752711785498,
+          17.60150532310762
+        ],
+        [
+          17.087871212664005,
+          18.753237727906267
+        ],
+        [
+          17.758719071882766,
+          19.411127604987826
+        ],
+        [
+          18.893252677633708,
+          28.748002912627797
+        ],
+        [
+          28.948268759616216,
+          30.752799661126073
+        ],
+        [
+          30.918863232956454,
+          32.53000066674385
+        ],
+        [
+          32.701219518516474,
+          34.35161353876536
+        ],
+        [
+          34.545635802687826,
+          36.96024235501439
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 1088,
+    "frames": 1140,
+    "selection_review": {
+      "overlap_frames": 1088,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/stu8_7.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 25.65413464241971
+      },
+      "rep_intervals": [
+        [
+          8.815537748672986,
+          11.44731226546514
+        ],
+        [
+          10.042149749928825,
+          15.537854287670168
+        ],
+        [
+          14.554151050582117,
+          17.77410723916329
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 658,
+    "frames": 660,
+    "selection_review": {
+      "overlap_frames": 658,
+      "center_diff_gt_0_1": 7,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/test153.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "exercise": null,
+        "reason": "분류기 입력 없음"
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 76.76799367086345
+      },
+      "rep_intervals": [],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 300,
+    "frames": 300,
+    "selection_review": {
+      "overlap_frames": 300,
+      "center_diff_gt_0_1": 300,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "deadlift/deadlift_7.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.12893400640216168,
+          3.3069773909672047
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 150,
+    "frames": 150,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/deadlift_23.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "top",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 60.15232444566597
+      },
+      "rep_intervals": [],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 72,
+    "frames": 72,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/deadlift_30.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "top",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.0032422383715732805,
+          3.2009914584362686
+        ],
+        [
+          2.1593961670761916,
+          5.51139924982154
+        ],
+        [
+          4.472085057666863,
+          7.537447090133606
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 185,
+    "frames": 185,
+    "selection_review": null
+  },
+  {
+    "key": "squat/stu6_11_2.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.19004104586138143,
+          1.121794741773113
+        ],
+        [
+          0.7770611832197171,
+          1.9509910975571303
+        ],
+        [
+          1.5417724472409107,
+          2.3446876106686183
+        ],
+        [
+          2.0034235000279064,
+          3.2074147597659084
+        ],
+        [
+          2.8288196025290766,
+          3.587914818501024
+        ],
+        [
+          3.271809056190025,
+          4.559619732907341
+        ],
+        [
+          4.051466277048755,
+          5.003365154681512
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 158,
+    "frames": 160,
+    "selection_review": null
+  },
+  {
+    "key": "squat/stu6_11_3.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.0968757199017401,
+          1.066374300620327
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 37,
+    "frames": 39,
+    "selection_review": null
+  },
+  {
+    "key": "squat/val1250.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "exercise": null,
+        "reason": "분류기 입력 없음"
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 63.40612163761023
+      },
+      "rep_intervals": [],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 228,
+    "frames": 228,
+    "selection_review": null
+  },
+  {
+    "key": "benchpress/bench press_61.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "benchpress",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 49.466248446373676
+      },
+      "rep_intervals": [
+        [
+          0.029525318726600747,
+          1.4063565540219376
+        ],
+        [
+          0.8660488765938992,
+          2.4518319410996154
+        ],
+        [
+          1.4506925976963922,
+          2.9613679082076008
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 92,
+    "frames": 92,
+    "selection_review": {
+      "overlap_frames": 92,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/stu1_6_4.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 55.163182102027854
+      },
+      "rep_intervals": [
+        [
+          -0.9097429639704812,
+          3.3449427934858784
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 116,
+    "frames": 116,
+    "selection_review": {
+      "overlap_frames": 116,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/stu7_12_2.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "benchpress",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          1.293834055736275,
+          3.9181801340536273
+        ],
+        [
+          3.280917752328651,
+          5.3809386668725585
+        ],
+        [
+          4.3031806141018185,
+          6.195931008591314
+        ],
+        [
+          5.45490219246249,
+          7.568078637082178
+        ],
+        [
+          6.6383538512341875,
+          8.505390082123334
+        ],
+        [
+          7.781648177499552,
+          9.76063949108105
+        ],
+        [
+          8.9756866178991,
+          10.781996857788391
+        ],
+        [
+          10.05424873193263,
+          12.169687700827785
+        ],
+        [
+          11.236022221873503,
+          13.262490851575853
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 461,
+    "frames": 461,
+    "selection_review": {
+      "overlap_frames": 461,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/stu7_7.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.3053135784879185,
+          2.168368361317495
+        ],
+        [
+          1.3980821811338495,
+          3.7895322224100627
+        ],
+        [
+          3.041940661073163,
+          4.845604436790331
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 149,
+    "frames": 151,
+    "selection_review": {
+      "overlap_frames": 149,
+      "center_diff_gt_0_1": 8,
+      "neutral_only": 0,
+      "manual_only": 1
+    }
+  },
+  {
+    "key": "benchpress/stu8_6_2.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "benchpress",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.01951376010135275,
+          2.1340814995378006
+        ],
+        [
+          0.7892691340979177,
+          2.83272521546815
+        ],
+        [
+          2.0492616305504674,
+          4.169477898512384
+        ],
+        [
+          2.767484595656979,
+          4.8082542751258535
+        ],
+        [
+          4.006902989057523,
+          6.517556921137861
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 177,
+    "frames": 208,
+    "selection_review": {
+      "overlap_frames": 177,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "deadlift/deadlift_sihoo02.mp4",
+    "dataset": "midterm",
+    "scope": "outside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 34.09770469586492
+      },
+      "rep_intervals": [
+        [
+          0.33039487445773785,
+          4.872005672384058
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 136,
+    "frames": 136,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/PB_S01_R10.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.017919528170369237,
+          5.119286439078418
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 157,
+    "frames": 157,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/PB_S03_R13.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "bottom",
+      "floor": "bottom",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "deadlift",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.05325409817911997,
+          2.814645463041413
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 86,
+    "frames": 86,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/PB_S03_R14.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.4596068657844662,
+          3.3654889785178614
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 102,
+    "frames": 102,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/PB_S04_R03.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.19214845864788288,
+          3.9984238522837634
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 141,
+    "frames": 141,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/PB_S05_R22.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.020553722451687018,
+          2.9740780919057084
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 92,
+    "frames": 92,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/PB_S06_R25.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.23689687582589392,
+          3.4588052771321025
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 112,
+    "frames": 112,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/PB_S07_R19.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "bottom",
+      "floor": "bottom",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "deadlift",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.4294420164723778,
+          4.33073172206453
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 142,
+    "frames": 142,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S01_R01.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.004475107599897693,
+          3.9440493772030907
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 120,
+    "frames": 120,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S01_R07.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.08395599210531413,
+          4.733384126387443
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 142,
+    "frames": 142,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S01_R11.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.055156472260305955,
+          4.525221826967132
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 136,
+    "frames": 136,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S01_R16.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.10315666067931867,
+          4.876860145038128
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 151,
+    "frames": 151,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S01_R18.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.00698408740648454,
+          4.556745753281432
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 135,
+    "frames": 135,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S04_R03.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.10528721034202831,
+          2.8553513037868252
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 88,
+    "frames": 88,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S04_R04.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.07453104122616422,
+          3.051758341743777
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 95,
+    "frames": 95,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S04_R07.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.0915561169687657,
+          2.9089215560421495
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 90,
+    "frames": 90,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S05_R47.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.028672336363145645,
+          2.581004977202354
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 81,
+    "frames": 81,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S06_R63.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.19199940226809714,
+          3.201487457661143
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 97,
+    "frames": 97,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S07_R12.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 146,
+    "frames": 146,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S07_R14.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 151,
+    "frames": 151,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/GB_S07_R20.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.011850276211883615,
+          3.2366375796407856
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 140,
+    "frames": 140,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S01_R02.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.009916923428222646,
+          4.346180911255934
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 130,
+    "frames": 130,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S01_R03.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          -0.012671669943291275,
+          4.909769128296012
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 148,
+    "frames": 148,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S01_R04.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.01469987150955665,
+          4.676269633851039
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 137,
+    "frames": 137,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S01_R06.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.17655398310969972,
+          3.946718808817514
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 129,
+    "frames": 132,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S03_R11.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "bottom",
+      "floor": "bottom",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "deadlift",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.4985936034254437,
+          3.2096131272930797
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 117,
+    "frames": 117,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S04_R05.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.07658212830753153,
+          3.4356885977773723
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 99,
+    "frames": 99,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S05_R15.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.11019276002623185,
+          2.9003461400758233
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 90,
+    "frames": 90,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S05_R17.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.03677461530815679,
+          2.589735501931216
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 80,
+    "frames": 80,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S06_R31.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.3339141650591144,
+          3.34394756858832
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 103,
+    "frames": 103,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/LLK_S06_R32.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "top",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 105,
+    "frames": 105,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/deadlift_01.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 50.556648984242386
+      },
+      "rep_intervals": [
+        [
+          3.4880335523217934,
+          8.223249552973758
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 203,
+    "frames": 203,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/deadlift_02.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 51.25105654142406
+      },
+      "rep_intervals": [
+        [
+          0.2831052301026967,
+          3.8769651747119687
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 109,
+    "frames": 109,
+    "selection_review": null
+  },
+  {
+    "key": "deadlift/deadlift_03.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 52.5350592942992
+      },
+      "rep_intervals": [
+        [
+          0.40226956971330363,
+          3.7246414080541843
+        ],
+        [
+          2.6804651304499867,
+          17.926179217274623
+        ],
+        [
+          16.154549185834302,
+          19.71137041524044
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 489,
+    "frames": 489,
+    "selection_review": null
+  },
+  {
+    "key": "benchpress/bench_01.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "benchpress",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          6.661763701683173,
+          11.85728113769019
+        ],
+        [
+          10.873124119123482,
+          16.19138626298097
+        ],
+        [
+          14.779930922525432,
+          18.448284212997237
+        ],
+        [
+          17.13375859733284,
+          22.423016896708646
+        ],
+        [
+          19.62321860038984,
+          26.81137624447225
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 653,
+    "frames": 653,
+    "selection_review": {
+      "overlap_frames": 653,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/bench_02.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "benchpress",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          7.661210859241644,
+          13.959932854646825
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 360,
+    "frames": 360,
+    "selection_review": {
+      "overlap_frames": 360,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "benchpress/bench_03.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "benchpress",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "benchpress",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 39.300229973929824
+      },
+      "rep_intervals": [
+        [
+          7.7442856535434075,
+          11.299206818339435
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 309,
+    "frames": 309,
+    "selection_review": {
+      "overlap_frames": 309,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "squat/squat_01.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 61.24993650565446
+      },
+      "rep_intervals": [
+        [
+          6.7202695292794035,
+          10.291715120417994
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 343,
+    "frames": 343,
+    "selection_review": null
+  },
+  {
+    "key": "squat/squat_02.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 59.277627433769666
+      },
+      "rep_intervals": [
+        [
+          5.87146285442341,
+          9.996177657633766
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 262,
+    "frames": 262,
+    "selection_review": null
+  },
+  {
+    "key": "squat/squat_03.mp4",
+    "dataset": "midterm",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "top",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 59.40995773925747
+      },
+      "rep_intervals": [],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 299,
+    "frames": 299,
+    "selection_review": null
+  },
+  {
+    "key": "team9/squat/stu10_70.mp4",
+    "dataset": "team9",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "val",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          1.290448170245407,
+          3.142666158161014
+        ],
+        [
+          2.40040341175918,
+          5.804752947671985
+        ],
+        [
+          4.874882841409256,
+          6.7548403054613075
+        ],
+        [
+          5.838060136777352,
+          10.826698246239562
+        ],
+        [
+          9.982002183716503,
+          11.69028637160672
+        ],
+        [
+          10.826926715255851,
+          14.174912385353219
+        ],
+        [
+          13.368117823039157,
+          15.08559531394553
+        ],
+        [
+          14.1844450786972,
+          17.68322200052372
+        ],
+        [
+          16.81956361647299,
+          18.576949220863717
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 456,
+    "frames": 456,
+    "selection_review": null
+  },
+  {
+    "key": "team9/squat/stu3_64.mp4",
+    "dataset": "team9",
+    "scope": "outside",
+    "truth": "squat",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 41.47591824622941
+      },
+      "rep_intervals": [
+        [
+          1.9248483569052817,
+          3.4897502815691985
+        ],
+        [
+          2.743358870342272,
+          4.593428858394457
+        ],
+        [
+          3.9179174870066555,
+          5.93711547784685
+        ],
+        [
+          4.878138420730116,
+          6.862044022758301
+        ],
+        [
+          5.970715114791603,
+          8.272765443654201
+        ],
+        [
+          7.066348722621949,
+          9.241940731647148
+        ],
+        [
+          8.311997002524038,
+          10.629155703025354
+        ],
+        [
+          9.530895673837641,
+          11.694645723645388
+        ],
+        [
+          10.659707485929937,
+          13.07102435305444
+        ],
+        [
+          12.100007312660987,
+          14.025984500019018
+        ],
+        [
+          13.108331309504715,
+          15.514987317198292
+        ],
+        [
+          14.299804022956144,
+          16.4764654128849
+        ],
+        [
+          15.579829073095274,
+          18.072632742572836
+        ],
+        [
+          16.80039731009188,
+          19.034148733403487
+        ],
+        [
+          18.095768509079612,
+          20.601660916963713
+        ],
+        [
+          19.380454584789835,
+          21.528867636489625
+        ],
+        [
+          20.621532344289037,
+          23.04759095412264
+        ],
+        [
+          21.827448744336046,
+          23.974429180815843
+        ],
+        [
+          23.005504255855406,
+          28.685800362547013
+        ],
+        [
+          25.21210429945746,
+          29.845111634075238
+        ],
+        [
+          28.669529655146395,
+          31.71593147304199
+        ],
+        [
+          30.127694226454018,
+          33.0292674922024
+        ],
+        [
+          31.658378698402302,
+          34.819699893316375
+        ],
+        [
+          33.598565919428665,
+          35.87280635956158
+        ],
+        [
+          34.797179283205445,
+          37.809384992173236
+        ],
+        [
+          36.44378549738351,
+          38.96677771899804
+        ],
+        [
+          37.764745285047745,
+          40.92346522201094
+        ],
+        [
+          39.620649280345766,
+          42.16640616986423
+        ],
+        [
+          40.91675259027465,
+          44.16197348514391
+        ],
+        [
+          42.696935067318485,
+          45.48274699231201
+        ],
+        [
+          44.06307655712799,
+          47.38860230174449
+        ],
+        [
+          45.872254551988185,
+          48.68515106366676
+        ],
+        [
+          47.38364780371949,
+          50.22804393305909
+        ],
+        [
+          49.065019798107805,
+          51.456011730637535
+        ],
+        [
+          50.218426437028306,
+          53.2376922807312
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 1619,
+    "frames": 1620,
+    "selection_review": null
+  },
+  {
+    "key": "team9/squat/stu8_67.mp4",
+    "dataset": "team9",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.9764844841391707,
+          3.625918092261576
+        ],
+        [
+          2.178131228962385,
+          5.704652742254926
+        ],
+        [
+          4.520363995672719,
+          7.105768046884215
+        ],
+        [
+          5.646615138304607,
+          9.218737678602574
+        ],
+        [
+          8.026484942931752,
+          10.819916671835623
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 330,
+    "frames": 330,
+    "selection_review": null
+  },
+  {
+    "key": "team9/benchpress/stu9_10.mp4",
+    "dataset": "team9",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          8.103946386224766,
+          9.437274423910445
+        ],
+        [
+          8.74881472580534,
+          10.021158894949851
+        ],
+        [
+          9.449816019511895,
+          10.680651254621175
+        ],
+        [
+          9.998956295691187,
+          11.292645788096184
+        ],
+        [
+          10.69981816814586,
+          11.946484519621002
+        ],
+        [
+          11.31711615591105,
+          12.51447432180556
+        ],
+        [
+          11.969543324257023,
+          13.138592012972804
+        ],
+        [
+          12.479806629458599,
+          13.729550157398933
+        ],
+        [
+          13.184719543868804,
+          14.384594764704653
+        ],
+        [
+          13.661601749772144,
+          14.934981569217744
+        ],
+        [
+          14.420586396162925,
+          15.586304224080655
+        ],
+        [
+          14.93592018650122,
+          16.173783560973757
+        ],
+        [
+          15.62482517364528,
+          16.8708381554423
+        ],
+        [
+          16.11121067342057,
+          17.296311763391742
+        ],
+        [
+          16.892155091382683,
+          18.154706246752852
+        ],
+        [
+          17.219487112347398,
+          18.71316299375032
+        ],
+        [
+          18.201406648252192,
+          19.505455622287204
+        ],
+        [
+          18.648574961587805,
+          20.058493005276553
+        ],
+        [
+          19.495578936114594,
+          21.12156515442229
+        ],
+        [
+          20.009782170866504,
+          22.399780645703757
+        ],
+        [
+          21.760178822477318,
+          23.383708935881977
+        ],
+        [
+          22.36849517279236,
+          24.181720950258356
+        ],
+        [
+          23.625073388758963,
+          25.29981612310776
+        ],
+        [
+          24.170211062227338,
+          26.15691870792499
+        ],
+        [
+          25.54963315046614,
+          28.87854508219631
+        ],
+        [
+          28.53805850057935,
+          30.195657915269848
+        ],
+        [
+          29.807690182241693,
+          34.07810277212209
+        ],
+        [
+          34.86173520155164,
+          38.30190149222231
+        ],
+        [
+          40.58301068904697,
+          44.19143421508885
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 1439,
+    "frames": 1439,
+    "selection_review": {
+      "overlap_frames": 1416,
+      "center_diff_gt_0_1": 703,
+      "neutral_only": 23,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "team9/benchpress/stu2_10_edited.mp4",
+    "dataset": "team9",
+    "scope": "outside",
+    "truth": "benchpress",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.26898513169968885,
+          2.4247628070692606
+        ],
+        [
+          1.4507326462977765,
+          3.2283334026966712
+        ],
+        [
+          2.4260638812264768,
+          4.1932168622346255
+        ],
+        [
+          3.241711173687628,
+          5.09825390893448
+        ],
+        [
+          4.200159819428959,
+          6.2283652621437255
+        ],
+        [
+          5.101123309379327,
+          7.059756761902908
+        ],
+        [
+          6.189632887793051,
+          8.265405372132065
+        ],
+        [
+          7.091296884445339,
+          9.21283422688923
+        ],
+        [
+          8.216191433796524,
+          10.785581919632047
+        ],
+        [
+          9.164335654343569,
+          12.851403698198093
+        ],
+        [
+          11.6739794519667,
+          14.880759742339285
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 459,
+    "frames": 459,
+    "selection_review": {
+      "overlap_frames": 459,
+      "center_diff_gt_0_1": 0,
+      "neutral_only": 0,
+      "manual_only": 0
+    }
+  },
+  {
+    "key": "team9/deadlift/stu7_1_1.mp4",
+    "dataset": "team9",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "bottom",
+      "floor": "bottom",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "deadlift",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [
+        [
+          0.2724330516559125,
+          2.2877213294110317
+        ],
+        [
+          1.6103425428303946,
+          4.107877563549419
+        ],
+        [
+          3.531226287484234,
+          5.206096952455077
+        ],
+        [
+          4.553770408719483,
+          7.57890482653257
+        ],
+        [
+          7.094500368991152,
+          8.561281843312743
+        ],
+        [
+          8.113247471622467,
+          11.313970344885826
+        ],
+        [
+          10.729416254533364,
+          12.35475512424525
+        ],
+        [
+          11.667782065323571,
+          15.419125153593786
+        ],
+        [
+          14.805383720369369,
+          16.39110350818827
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 497,
+    "frames": 497,
+    "selection_review": null
+  },
+  {
+    "key": "team9/deadlift/stu4_2_-1.mp4",
+    "dataset": "team9",
+    "scope": "outside",
+    "truth": "deadlift",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "unknown",
+      "classifier": {
+        "status": "unavailable",
+        "exercise": null,
+        "reason": "분류기 입력 없음"
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": false,
+        "degrees": null
+      },
+      "rep_intervals": [],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 404,
+    "frames": 404,
+    "selection_review": null
+  },
+  {
+    "key": "team9/deadlift/deadlift_08.mp4",
+    "dataset": "team9",
+    "scope": "inside",
+    "truth": "deadlift",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "unknown",
+      "posture": "lying",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 46.768370173806055
+      },
+      "rep_intervals": [
+        [
+          2.9950474113203653,
+          6.008529999067753
+        ],
+        [
+          4.275400561249044,
+          7.413256091294819
+        ],
+        [
+          6.172327543457845,
+          8.09653929284277
+        ],
+        [
+          7.507778929178583,
+          10.709615012316695
+        ],
+        [
+          9.267894703642764,
+          12.760759839804763
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 312,
+    "frames": 312,
+    "selection_review": null
+  },
+  {
+    "key": "user_clip_1",
+    "dataset": "user_clip",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 59.70089078335726
+      },
+      "rep_intervals": [
+        [
+          5.803723671328364,
+          10.043197722329733
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 263,
+    "frames": 263,
+    "selection_review": null
+  },
+  {
+    "key": "user_clip_2",
+    "dataset": "user_clip",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "test",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "top",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": "squat",
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 59.151216540724505
+      },
+      "rep_intervals": [
+        [
+          2.9223022437112043,
+          11.245519350012994
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 299,
+    "frames": 299,
+    "selection_review": null
+  },
+  {
+    "key": "user_clip_3",
+    "dataset": "user_clip",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 55.80984922308289
+      },
+      "rep_intervals": [
+        [
+          4.528105747569004,
+          11.461057019452628
+        ],
+        [
+          9.74710432025441,
+          13.763705301310221
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 344,
+    "frames": 344,
+    "selection_review": null
+  },
+  {
+    "key": "user_clip_4",
+    "dataset": "user_clip",
+    "scope": "inside",
+    "truth": "squat",
+    "v40_split": "train",
+    "status": "evaluated",
+    "judgment": {
+      "rest": "unknown",
+      "floor": "top",
+      "posture": "standing",
+      "classifier": {
+        "status": "unavailable",
+        "reason": "v40 체크포인트 없음",
+        "exercise": null,
+        "votes": {}
+      },
+      "candidate": null,
+      "status": "needs_confirmation",
+      "exercise": null,
+      "angle": {
+        "reliable": true,
+        "degrees": 54.83416077966998
+      },
+      "rep_intervals": [
+        [
+          6.206643698092469,
+          12.963962174551522
+        ],
+        [
+          11.482747256404137,
+          14.795765892170845
+        ],
+        [
+          12.9128314387936,
+          19.967969269668174
+        ],
+        [
+          18.10248340389066,
+          22.26680973424681
+        ]
+      ],
+      "selection_ambiguous": null
+    },
+    "pose_valid": 572,
+    "frames": 572,
+    "selection_review": null
+  }
+]

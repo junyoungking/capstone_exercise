@@ -273,7 +273,7 @@ td .rv{color:var(--text-3);font-weight:500;font-size:12px;display:block}
       </div>
     </div>
 
-    <div class="kpis" id="kpis"></div><p class="quiet" id="pose-note"></p>
+    <p class="quiet" id="auto-compare-note" hidden></p><div class="kpis" id="kpis"></div><p class="quiet" id="pose-note"></p>
 
     <div class="stage">
       <div class="sgrid" id="sgrid">
@@ -856,7 +856,11 @@ function arrangeRecord() {
 }
 const exerciseName = {squat:"스쿼트",benchpress:"벤치프레스",deadlift:"데드리프트"}[B.exercise];
 $("#r-title").textContent = exerciseName + (HAS_REF ? " 비교 리포트" : " 기록 리포트");
-$("#exercise-chip").textContent = "선택한 종목 · " + exerciseName;
+$("#exercise-chip").textContent = (B.exercise_source === "automatic" ? "자동 인식 · " : B.exercise_source === "user_confirmed_auto" ? "자동 인식 · 직접 확인 · " : "선택한 종목 · ") + exerciseName;
+if (B.auto_result?.user?.candidate && B.auto_result?.ref?.candidate && B.auto_result.user.candidate !== B.auto_result.ref.candidate) {
+  $("#auto-compare-note").hidden = false;
+  $("#auto-compare-note").textContent = "내 영상과 기준 영상의 추정 종목이 다릅니다. 영상을 확인해 주세요.";
+}
 $("#three-sub").textContent = B.pose3d_scale === "input_height" ? "입력 키 기준" : "모델 자체 크기";
 document.body.classList.toggle("record", !HAS_REF);
 if (B.exercise === "deadlift") {

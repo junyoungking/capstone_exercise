@@ -95,6 +95,16 @@ def safe_start(candidate, image_size, cfg=TrackCfg()):
     return start
 
 
+def moving_alternatives(tracks, legacy, cfg=TrackCfg()):
+    """Confirmed moving candidates in the original first-high/score-area order."""
+    moving=[tr for tr in tracks if tr is not legacy and tr.first_high(cfg) is not None
+            and tr.motion() >= cfg.pick_motion_diameters]
+    def priority(tr):
+        seq, _, det=tr.first_high(cfg)
+        return (seq,-det.score*det.size[0]*det.size[1])
+    return sorted(moving,key=priority)
+
+
 def choose_plate(frames, cfg=TrackCfg(), legacy_rows=None):
     """Return selected/legacy candidates; both are None without confirmation.
 

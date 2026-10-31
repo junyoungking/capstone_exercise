@@ -181,9 +181,17 @@ def write_report(bundle, dest):
     (Path(dest)/'report.html').write_text(template.replace('/*__BUNDLE__*/null',encoded))
 
 
+def reusable_auto_pose(pose,exercise,frame_count,pose_cfg=DEFAULT.pose):
+    """Bench needs re-selection only if its recorded choice can differ."""
+    if exercise!='benchpress':return True
+    ambiguous=pose.get('selection_ambiguous')
+    return bool(not pose_cfg.bench_rep_guard and ambiguous is not None
+                and len(ambiguous)==frame_count and not np.any(ambiguous))
+
+
 def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,threads=6,model=None,checkpoint=None,
             progress=None,ref_cache=None,posture_cards=False,scale_source="box",position_source="box",recover_early_back=None,
-            plate_pick=None,plate_pick_weak=False):
+            plate_pick=None,plate_pick_weak=False,resume_auto=False,auto_confirmed=False):
     """The M3a calculations, with observation callbacks and optional reference reuse.
 
     progress(stage, fraction, **details) reports work actually completed. Cached
@@ -198,6 +206,8 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     from server.jobs import process_video
     from server.cache import cache_key,available,publish
     out=Path(out).resolve();out.mkdir(parents=True,exist_ok=True)
+    automatic_request=exercise=='auto'
+    if automatic_request:exercise='squat'  # neutral wrist selection until exercise is confirmed
     for name,value in (('plate_mm',plate_mm),('load_kg',load_kg),('height_cm',height_cm)):
         if value is not None and (not np.isfinite(value) or value<=0): raise ValueError(name+' must be positive and finite')
     if scale_source not in ('box','ellipse') or position_source not in ('box','ellipse'): raise ValueError('invalid source')
@@ -206,7 +216,7 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     cfg = replace(DEFAULT, speed=replace(DEFAULT.speed,recover_early_back=recover_early_back),
                   track=replace(DEFAULT.track,plate_pick=plate_pick,plate_pick_weak=bool(plate_pick_weak)))
     # Legacy caches do not contain rim fits; never reuse them for an ellipse run.
-    if scale_source == 'ellipse' or position_source == 'ellipse': ref_cache = None
+    if scale_source == 'ellipse' or position_source == 'ellipse' or automatic_request or resume_auto: ref_cache = None
     started=time.perf_counter()
     model=Path(model or os.environ.get('PLATE_MODEL',ROOT/'plate_pipeline/models/plate_tiny.onnx'))
     checkpoint=Path(checkpoint or os.environ.get('POSE3D_CHECKPOINT',Path.home()/'.cache/videopose3d/pretrained_h36m_detectron_coco.bin'))
@@ -226,7 +236,11 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     if ref is not None and ref_cache is not None:
         key,provenance=cache_key(ref,exercise,plate_mm,model,checkpoint,recover_early_back,plate_pick,plate_pick_weak)
         cached=Path(ref_cache)/key;hit=available(cached)
-    settings=prepare(user,None if hit else ref,out)
+    if resume_auto:
+        if not (out/'auto_pending.json').is_file():raise ValueError('자동 분석 기록이 없습니다')
+        settings={'user':dict(video=str(out/'user.mp4'))}
+        if ref is not None:settings['ref']=dict(video=str(out/'ref.mp4'))
+    else:settings=prepare(user,None if hit else ref,out)
     if hit:
         shutil.copy2(cached/'ref.mp4',out/'ref.mp4');settings['ref']=dict(video=str(out/'ref.mp4'))
     roles=list(settings)
@@ -240,7 +254,9 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
     b=dict(schema_version=SCHEMA_VERSION,exercise=exercise,inputs=dict(plate_mm=plate_mm,load_kg=load_kg,height_cm=height_cm),
            show_3d=exercise!='benchpress',pose3d_scale='input_height' if height_cm is not None else 'model_native',
            posture_cards=bool(posture_cards),has_ref=ref is not None,ref=None,
-           scale_source=scale_source,position_source=position_source,recover_early_back=recover_early_back,plate_pick=plate_pick,plate_pick_weak=bool(plate_pick_weak))
+           scale_source=scale_source,position_source=position_source,recover_early_back=recover_early_back,plate_pick=plate_pick,plate_pick_weak=bool(plate_pick_weak),
+           exercise_source=('automatic' if auto_confirmed else 'user_confirmed_auto' if resume_auto else 'manual'))
+    if resume_auto:b['auto_result']=json.loads((out/'auto_pending.json').read_text())
     observations={};timing={};stats={}
     with patch.object(ort,'InferenceSession',session):
         for role in roles:
@@ -248,34 +264,51 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
             dest=out/'analysis'/role;dest.mkdir(parents=True,exist_ok=True)
             total=video.info(settings[role]['video']).frames
             if total<=0: total=sum(1 for _ in video.frames(settings[role]['video']))
-            if role=='ref' and hit:
+            if resume_auto:
+                from server.jobs import analyse
+                result=json.loads((dest/'plate/result.json').read_text());rows=read_rows(dest/'plate/rows.jsonl.gz')
+                result['exercise']='bench' if exercise=='benchpress' else exercise
+                result['sets'],_=analyse(rows,result['exercise'],result['fps'],plate_mm,cfg=cfg,scale_source=scale_source,position_source=position_source)
+                (dest/'plate/result.json').write_text(json.dumps(result,ensure_ascii=False,indent=1))
+            elif role=='ref' and hit:
                 shutil.copytree(cached/'plate',dest/'plate',dirs_exist_ok=True)
                 result=json.loads((dest/'plate/result.json').read_text());rows=read_rows(dest/'plate/rows.jsonl.gz')
             else:
-                did_final_pass=[False]
+                attempt_passes=[0]
                 def frame(seq,t,img,st,stage=stage,total=total):
-                    did_final_pass[0]=True
+                    attempt_passes[0]=max(attempt_passes[0],1)
                     fraction=(2*total+seq+1)/(3*max(1,total)) if plate_pick else (seq+1)/max(1,total)
                     emit(stage,min(fraction,1),processed=(2*total+seq+1 if plate_pick else seq+1),total=(3*total if plate_pick else total),pass_name='track' if plate_pick else 'detect_track')
                 def detect_frame(seq,t,img,stage=stage,total=total):
                     emit(stage,min((seq+1)/(3*max(1,total)),1/3),processed=seq+1,total=3*total,pass_name='detect')
                 def legacy_frame(seq,t,img,st,stage=stage,total=total):
                     emit(stage,min((total+seq+1)/(3*max(1,total)),2/3),processed=total+seq+1,total=3*total,pass_name='legacy_track')
+                def attempt_frame(index,count,seq,t,img,st,stage=stage,total=total):
+                    attempt_passes[0]=max(attempt_passes[0],index+1)
+                    fraction=2/3+(index+(seq+1)/max(1,total))/(3*count)
+                    emit(stage,min(fraction,.999999),processed=seq+1,total=total,pass_name='candidate_track',candidate=index+1,candidates=count)
                 result,rows,_=process_video(settings[role]['video'],'bench' if exercise=='benchpress' else exercise,
                     plate_mm=plate_mm,model=str(model),device='cpu',pose=False,out_dir=dest/'plate',on_frame=frame,
                     scale_source=scale_source,position_source=position_source,cfg=cfg,on_detect=detect_frame if plate_pick else None,
-                    on_legacy=legacy_frame if plate_pick else None)
+                    on_legacy=legacy_frame if plate_pick else None,on_attempt=attempt_frame if plate_pick else None)
             if not any(r.get('plate',{}).get('ellipse') for r in rows):
                 from core.recog.ellipse import annotate_video
                 annotate_video(settings[role]['video'],rows)
             observations[role]=dict(result=result,rows=rows)
-            passes=(3 if did_final_pass[0] else 2) if plate_pick and not (role=='ref' and hit) else 1
+            passes=(2+attempt_passes[0]) if plate_pick and not resume_auto and not (role=='ref' and hit) else 1
             emit(stage,1,processed=passes*len(rows),total=passes*len(rows),cached=role=='ref' and hit)
         emit('pose',0)
         total=sum(len(observations[r]['rows']) for r in roles);done=0
         for role in roles:
             o=observations[role];dest=out/'analysis'/role
-            if role=='ref' and hit:
+            saved_pose=None;reuse_pose=False
+            if resume_auto:
+                with np.load(dest/'pose.npz',allow_pickle=False) as f:saved_pose={k:f[k] for k in f.files}
+                for k in ('fps','w','h','total'):saved_pose[k]=saved_pose[k].item()
+                reuse_pose=reusable_auto_pose(saved_pose,exercise,len(o['rows']))
+            if reuse_pose:
+                pose=saved_pose
+            elif role=='ref' and hit:
                 shutil.copy2(cached/'pose.npz',dest/'pose.npz')
                 with np.load(dest/'pose.npz',allow_pickle=False) as f: pose={k:f[k] for k in f.files}
                 for k in ('fps','w','h','total'): pose[k]=pose[k].item()
@@ -284,6 +317,22 @@ def compare(user,ref,exercise,out,plate_mm=450.,load_kg=None,height_cm=None,thre
                 pose=extract_pose(settings[role]['video'],dest/'pose.npz',exercise,no_cache=True,plate_rows=o['rows'],
                     rep_mask=plate_rep_mask(o['rows'],o['result']),pose_cfg=DEFAULT.pose,on_frame=frame)
             o['pose']=pose;done+=len(o['rows']);emit('pose',done/total,processed=done,total=total,ref_cached=hit)
+    if automatic_request:
+        from core.auto.judge import assess
+        emit('classify',0)
+        decisions=clean({role:assess(observations[role]['rows'],observations[role]['pose']) for role in roles})
+        (out/'auto_pending.json').write_text(json.dumps(decisions,ensure_ascii=False,allow_nan=False))
+        emit('classify',1,result=decisions)
+        selected=decisions['user'].get('exercise')
+        if selected and all(d.get('exercise')==selected for d in decisions.values()):
+            return compare(user,ref,selected,out,plate_mm,load_kg,height_cm,threads,model,checkpoint,progress,None,posture_cards,
+                           scale_source,position_source,recover_early_back,plate_pick,plate_pick_weak,resume_auto=True,auto_confirmed=True)
+        return {'needs_confirmation':True,'auto_result':decisions}
+    if not resume_auto and ref is not None:
+        from core.auto.judge import assess
+        emit('classify',0)
+        b['auto_result']=clean({role:assess(observations[role]['rows'],observations[role]['pose']) for role in roles})
+        emit('classify',1,result=b['auto_result'])
     emit('3d',0)
     # Loading the exact same model and doing the same postprocessing as M3a.
     vp3d=load_model(checkpoint,threads);ref_height=height_cm
@@ -339,7 +388,7 @@ def finalize_bundle(b, stats):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--user',required=True,type=Path);ap.add_argument('--ref',type=Path)
-    ap.add_argument('--exercise',required=True,choices=('squat','benchpress','deadlift'))
+    ap.add_argument('--exercise',default='auto',choices=('auto','squat','benchpress','deadlift'))
     ap.add_argument('--plate-mm',type=float,default=450.);ap.add_argument('--load-kg',type=float);ap.add_argument('--height-cm',type=float)
     ap.add_argument('--out',required=True,type=Path)
     ap.add_argument('--posture-cards',action='store_true')
@@ -348,8 +397,11 @@ def main():
     ap.add_argument('--recover-early-back',action=argparse.BooleanOptionalAction,default=None)
     ap.add_argument('--plate-pick',action=argparse.BooleanOptionalAction,default=None)
     ap.add_argument('--plate-pick-weak',action='store_true',help='experimental weak-only moving candidates')
+    ap.add_argument('--resume-auto',action='store_true',help='continue a pending automatic analysis using the selected exercise')
     a = ap.parse_args()
     b = compare(**vars(a))
+    if b.get('needs_confirmation'):
+        print(json.dumps(b,ensure_ascii=False));return
     print(json.dumps(dict(reps={r:len(b[r]['reps']) for r in ('user','ref') if b[r] is not None},timing=b['timing']),ensure_ascii=False))
 
 if __name__=='__main__': main()

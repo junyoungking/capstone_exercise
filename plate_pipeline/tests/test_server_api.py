@@ -10,7 +10,7 @@ def wait(client,id):
     samples=[]
     for _ in range(1000):
         job=client.get('/api/jobs/'+id).json();samples.append(job)
-        if job['status'] in ('completed','failed'):return job,samples
+        if job['status'] in ('completed','failed','needs_confirmation'):return job,samples
         time.sleep(.002)
     raise AssertionError('job did not finish')
 
@@ -89,7 +89,7 @@ def test_failures_optional_reference_validation_and_retry(tmp_path):
         assert submit(c,True,ref_id='nope').status_code==422
         assert submit(c,ref_id='nope').status_code==404
         assert submit(c,height_cm=-5).status_code==422
-        assert c.post('/api/jobs',data={'exercise':'auto'},files={'user':('x',b'video')}).status_code==422
+        assert c.post('/api/jobs',data={'exercise':'invalid'},files={'user':('x',b'video')}).status_code==422
         assert c.post('/api/jobs',data={'exercise':'squat'},files={'user':('x',b'')}).status_code==422
         assert c.post('/api/jobs',data={'exercise':'squat'},files={'user':('x',b'x'*17)}).status_code==413
         assert c.post('/api/jobs',content=b'x'*(1024*1024+33)).status_code==413
@@ -149,3 +149,29 @@ def test_interrupted_jobs_fail_on_restart(tmp_path):
     with TestClient(create_app(tmp_path,pipeline=Pipeline())) as c:
         job=c.get('/api/jobs/stopped').json()
         assert job['status']=='failed' and '서버가 중단' in job['error']
+
+
+def test_auto_waits_for_confirmation_then_reuses_job(tmp_path):
+    class AutoPipeline:
+        def __init__(self):self.calls=[]
+        def __call__(self,user,ref,exercise,out,progress,**kw):
+            self.calls.append((exercise,kw.get('resume_auto',False)))
+            out=Path(out);out.mkdir(parents=True,exist_ok=True)
+            if exercise=='auto':
+                progress('classify',1)
+                return {'needs_confirmation':True,'auto_result':{'user':{'status':'needs_confirmation','candidate':'squat'}}}
+            assert kw.get('resume_auto') is True
+            (out/'user.mp4').write_bytes(b'video');(out/'report.html').write_text('report');(out/'result_v3.json').write_text('{}')
+            return {'exercise':exercise,'exercise_source':'user_confirmed_auto','user':{'reps':[{'v':.4}]},'has_ref':False}
+    p=AutoPipeline()
+    with TestClient(create_app(tmp_path,pipeline=p)) as c:
+        jobid=c.post('/api/jobs',files={'user':('x.mp4',b'video')}).json()['id']
+        pending,_=wait(c,jobid)
+        assert pending['status']=='needs_confirmation' and pending['auto_result']['user']['candidate']=='squat'
+        assert c.get('/api/sessions').json()==[]
+        assert c.post(f'/api/jobs/{jobid}/confirm',json={'exercise':'unknown'}).status_code==422
+        assert c.post(f'/api/jobs/{jobid}/confirm',json={'exercise':'deadlift'}).status_code==202
+        done,_=wait(c,jobid);assert done['status']=='completed'
+        session=c.get('/api/sessions').json()[0]
+        assert session['exercise']=='deadlift' and session['exercise_source']=='user_confirmed_auto'
+        assert p.calls==[('auto',False),('deadlift',True)]

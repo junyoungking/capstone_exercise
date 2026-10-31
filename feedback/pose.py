@@ -33,6 +33,9 @@ def _read_cache(cache_path: Path, video_path: Path, mtime_ns: int, selection: st
                 "video": video_path.as_posix(),
                 "mtime_ns": mtime_ns,
                 "raw_lms": saved["raw_lms"].copy() if "raw_lms" in saved else saved["lms"].copy(),
+                "raw_scores": saved["raw_scores"].copy() if "raw_scores" in saved else None,
+                "selection_reset": saved["selection_reset"].copy() if "selection_reset" in saved else None,
+                "selection_ambiguous": saved["selection_ambiguous"].copy() if "selection_ambiguous" in saved else None,
             }
         if data["lms"].shape != (data["total"], 33, 4):
             return None
@@ -117,6 +120,10 @@ def extract_pose(
         data['inference_timing'] = sequence.timings
         data['score_distribution'] = sequence.score_distribution
         data['tracking'] = sequence.tracking
+    if hasattr(sequence, 'raw_scores'):
+        data['raw_scores'] = np.asarray(sequence.raw_scores,dtype=np.float32)
+        data['selection_reset'] = np.asarray(sequence.selection_reset,dtype=bool)
+        data['selection_ambiguous'] = np.asarray(sequence.selection_ambiguous,dtype=bool)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(cache_path, **{k:v for k,v in data.items() if k not in ('inference_timing', 'score_distribution', 'tracking')})
     data["cache_hit"] = False
@@ -143,6 +150,12 @@ def choose_plate_candidate(candidates, row, previous_center, exercise, size, *, 
 
 class _PlateSequence(list):
     """Keep selected raw landmarks for quality checks before EMA smoothing."""
+
+
+def _competing_reclining(candidates,selected,row,size,previous_center=None,cfg=None,in_rep=False):
+    """Whether bench's real selection would choose a different person now."""
+    bench,_=choose_plate_candidate(candidates,row,previous_center,'benchpress',size,cfg=cfg,in_rep=in_rep)
+    return bench is not selected
 
 
 def extract_plate_sequence(video_path, exercise, rows):
@@ -193,6 +206,10 @@ def extract_backend_sequence(video_path, exercise, rows, cfg, *, rep_mask=None, 
     fps = capture.get(cv2.CAP_PROP_FPS)
     smoother, sequence, previous = LandmarkSmoother(), _PlateSequence(), None
     sequence.raw_lms = []
+    sequence.raw_scores = []
+    sequence.selection_reset = []
+    sequence.selection_ambiguous = []
+    was_visible = False
     if rep_mask is None:
         rep_mask = np.zeros(len(rows), dtype=bool)
     if len(rep_mask) != len(rows):
@@ -210,8 +227,16 @@ def extract_backend_sequence(video_path, exercise, rows, cfg, *, rep_mask=None, 
                 candidates = estimator(image, seq/fps)
                 for candidate in candidates:
                     candidate[:, :2] /= [w, h]
+                previous_before=previous
                 raw, previous = choose_plate_candidate(candidates, rows[seq], previous,
                                                         exercise, (w, h), cfg=cfg, in_rep=bool(rep_mask[seq]))
+                sequence.selection_ambiguous.append(_competing_reclining(candidates,raw,rows[seq],(w,h),previous_before,cfg,bool(rep_mask[seq])))
+                is_visible=raw is not None
+                sequence.selection_reset.append(bool(is_visible and not was_visible));was_visible=is_visible
+                raw_index=next((i for i,candidate in enumerate(candidates) if candidate is raw),None)
+                scores=getattr(estimator,'frame_scores',[])
+                sequence.raw_scores.append(np.asarray(scores[raw_index],dtype=np.float32).copy()
+                    if raw_index is not None and raw_index<len(scores) else np.full(17,np.nan,dtype=np.float32))
                 if hasattr(estimator, "observe"):
                     pixels = None if raw is None else np.asarray(raw).copy()
                     if pixels is not None:

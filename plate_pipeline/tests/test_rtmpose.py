@@ -76,14 +76,17 @@ def test_backend_switch_all_people_and_empty_detection(monkeypatch):
     def detect(image):calls.append('detect');return np.zeros((3,4))
     def pose(image,bboxes):
         calls.append(('pose',len(bboxes)))
-        return np.ones((3,26,2)),np.full((3,26),.3)
+        scores=np.full((3,26),.3);scores[:,0]=.9
+        return np.ones((3,26,2)),scores
     def body(**kw):
         assert kw['backend']=='onnxruntime' and kw['device']=='cpu'
         return SimpleNamespace(det_model=detect,pose_model=pose)
     monkeypatch.setitem(sys.modules,'rtmlib',SimpleNamespace(BodyWithFeet=body))
     estimator=PoseEstimator(cfg=replace(DEFAULT.pose,mode='balanced'))
     assert isinstance(estimator,RTMPoseEstimator)
-    assert len(estimator(np.zeros((40,60,3),np.uint8),0))==3
+    people=estimator(np.zeros((40,60,3),np.uint8),0)
+    assert len(people)==3
+    assert estimator.frame_scores[0][0]==pytest.approx(.9) and people[0][0,3]==1.
     assert calls==['detect',('pose',3)] and estimator.every_n==1
     monkeypatch.setattr(MediaPipeEstimator,'__init__',lambda self,**kw:None)
     assert isinstance(PoseEstimator(cfg=replace(DEFAULT.pose,backend='mediapipe')),MediaPipeEstimator)

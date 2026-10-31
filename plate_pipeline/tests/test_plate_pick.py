@@ -151,8 +151,69 @@ def test_recognize_retracks_a_confirmed_moving_alternative(monkeypatch):
     def detector(img,seq):
         calls.append(seq)
         return [det(20,20,120),det(300,20+seq*10,100,.7)]
-    rows=recognize('ignored',detector,rim=False,track_cfg=replace(TrackCfg(),plate_pick=True),
+    rows=recognize('ignored',detector,rim=False,track_cfg=replace(TrackCfg(),plate_pick=True,pick_retry_zero=False),
                    on_legacy=lambda seq,t,img,st:legacy.append(seq),
-                   on_frame=lambda seq,t,img,st:final.append(seq))
+                   on_attempt=lambda i,n,seq,t,img,st:final.append(seq))
     assert calls==legacy==final==list(range(6))
     assert rows[0]['plate']['box'][0]==300
+
+
+def test_zero_rep_retries_confirmed_moving_candidate(monkeypatch):
+    from server import jobs
+    frames=[np.random.default_rng(i).integers(0,255,(260,500,3),dtype=np.uint8) for i in range(8)]
+    monkeypatch.setattr(jobs.video,'frames',lambda path:iter((i*.1,img.copy()) for i,img in enumerate(frames)))
+    calls=[]
+    def detector(img,seq):
+        calls.append(seq);return [det(20,20,120),det(300,20+seq*8,100,.7)]
+    def completed(rows,cfg):
+        first=next((r['plate']['box'][0] for r in rows if r.get('plate',{}).get('used')),0)
+        return int(first>200)
+    monkeypatch.setattr(jobs,'_completed_both_sides',completed)
+    rows=jobs.recognize('ignored',detector,rim=False,track_cfg=replace(TrackCfg(),plate_pick=True,pick_retry_zero=True))
+    assert calls==list(range(8)) and rows[0]['plate']['box'][0]==300
+
+
+def test_early_safe_initialization_uses_two_video_passes(monkeypatch):
+    from server import jobs
+    images=[np.random.default_rng(i).integers(0,255,(160,240,3),dtype=np.uint8) for i in range(6)]
+    passes=[]
+    def frames(path):
+        passes.append(1);return iter((i*.1,img.copy()) for i,img in enumerate(images))
+    monkeypatch.setattr(jobs.video,'frames',frames)
+    rows=jobs.recognize('ignored',lambda img,i:[det(20,20,70,.1 if i<2 else .8)],rim=False,
+                        track_cfg=replace(TrackCfg(),plate_pick=True))
+    assert rows[0]['plate']['src']=='det_low' and len(passes)==2
+
+
+def test_retry_count_uses_both_rest_sides_and_fixed_diameter(monkeypatch):
+    from server import jobs
+    calls=[]
+    def fake(rows,exercise,fps,plate_mm,cfg):
+        calls.append((exercise,plate_mm));return ([{'rep_values':[{'back':1.0}]}] if exercise=='deadlift' else []),{}
+    monkeypatch.setattr(jobs,'analyse',fake)
+    rows=[{'t':0.,'plate':{'used':True}},{'t':1.,'plate':{'used':True}}]
+    assert jobs._completed_both_sides(rows)==1
+    assert calls==[('squat',450.),('deadlift',450.)]
+
+
+def test_zero_rep_without_successful_alternative_keeps_original(monkeypatch):
+    from server import jobs
+    images=[np.random.default_rng(i).integers(0,255,(260,500,3),dtype=np.uint8) for i in range(8)]
+    monkeypatch.setattr(jobs.video,'frames',lambda path:iter((i*.1,img.copy()) for i,img in enumerate(images)))
+    monkeypatch.setattr(jobs,'_completed_both_sides',lambda rows,cfg:0)
+    detector=lambda img,seq:[det(20,20,120),det(300,20+seq*8,100,.7)]
+    rows=jobs.recognize('ignored',detector,rim=False,track_cfg=replace(TrackCfg(),plate_pick=True,pick_retry_zero=True))
+    assert rows[0]['plate']['box'][0]==20
+
+
+def test_final_frame_callbacks_do_not_repeat_klt(monkeypatch):
+    from server import jobs
+    images=[np.random.default_rng(i).integers(0,255,(160,240,3),dtype=np.uint8) for i in range(6)]
+    monkeypatch.setattr(jobs.video,'frames',lambda path:iter((i*.1,img.copy()) for i,img in enumerate(images)))
+    original=jobs._recognize_pass;passes=[];seen=[]
+    def tracked(*args,**kw):
+        passes.append(1);return original(*args,**kw)
+    monkeypatch.setattr(jobs,'_recognize_pass',tracked)
+    rows=jobs.recognize('ignored',lambda img,i:[det(20,20,70,.1 if i<2 else .8)],rim=False,
+                        track_cfg=replace(TrackCfg(),plate_pick=True),on_frame=lambda i,t,img,st:seen.append(i))
+    assert len(rows)==len(seen)==6 and len(passes)==1

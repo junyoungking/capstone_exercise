@@ -31,8 +31,9 @@ class TrackCfg:
     fb_px: float = 1.0
     win: int = 21
     levels: int = 3
-    plate_pick: bool = False     # Opt in until the real-video regression gate passes.
+    plate_pick: bool = True      # M5 decision: use confirmed offline plate selection by default.
     plate_pick_weak: bool = False  # Experimental only: unconfirmed moving tracklets.
+    pick_retry_zero: bool = True   # Retry moving confirmed candidates if neither rest side completes a rep.
     pick_gap_s: float = 0.75
     pick_motion_diameters: float = 0.29
 

@@ -20,7 +20,7 @@ from fastapi.responses import FileResponse,HTMLResponse,JSONResponse,RedirectRes
 from pydantic import BaseModel, Field
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-STAGES=('prepare','plate_user','plate_ref','pose','3d','judge','report')
+STAGES=('prepare','plate_user','plate_ref','pose','classify','3d','judge','report')
 LIMIT=512*1024*1024
 WEB=Path(__file__).parent/'web'
 
@@ -28,6 +28,10 @@ WEB=Path(__file__).parent/'web'
 class RescaleInput(BaseModel):
     plate_mm_user: float | None = Field(default=None, gt=0, le=1000, allow_inf_nan=False)
     plate_mm_ref: float | None = Field(default=None, gt=0, le=1000, allow_inf_nan=False)
+
+
+class ExerciseConfirmation(BaseModel):
+    exercise: str
 
 
 class BodyLimit:
@@ -135,6 +139,10 @@ class Worker:
                 if self.plate_pick is not None:args['plate_pick']=self.plate_pick
                 if self.plate_pick_weak:args['plate_pick_weak']=True
                 bundle=self.pipeline(**args)
+                if bundle.get('needs_confirmation'):
+                    with self.lock:
+                        job.update(status='needs_confirmation',auto_result=bundle['auto_result'],error=None)
+                    self.store.put('jobs',id,job);self.queue.task_done();continue
                 now=time.monotonic()
                 with self.lock:
                     for item in job['stages'].values():
@@ -142,7 +150,7 @@ class Worker:
                         elif item.get('started_at') is not None: item['elapsed_s']=max(item['elapsed_s'],now-item['started_at']) if item['status']=='running' else item['elapsed_s']
                     job.update(session_id=id,report_url=f'/sessions/{id}',error=None,ref_cache_hit=bundle.get('ref_cache',{}).get('hit',False))
                 speeds=[r['v'] for r in bundle['user']['reps'] if r['v'] is not None]
-                session=dict(id=id,date=job['created_at'],exercise=bundle['exercise'],reps=len(bundle['user']['reps']),has_ref=bundle.get('has_ref',bundle.get('ref') is not None),vmax=max(speeds) if speeds else None,report_url=f'/sessions/{id}',ref_id=job.get('ref_id'))
+                session=dict(id=id,date=job['created_at'],exercise=bundle['exercise'],reps=len(bundle['user']['reps']),has_ref=bundle.get('has_ref',bundle.get('ref') is not None),vmax=max(speeds) if speeds else None,report_url=f'/sessions/{id}',ref_id=job.get('ref_id'),exercise_source=bundle.get('exercise_source','manual'))
                 self.store.put('sessions',id,session)
                 with self.lock: job['status']='completed'
             except Exception as exc:
@@ -230,11 +238,23 @@ def create_app(data_dir=None,pipeline=None,posture_cards=False,upload_limit=LIMI
         # Stored input paths stay internal.
         result.pop('inputs',None)
         return result
+    @app.post('/api/jobs/{id}/confirm',status_code=202)
+    def confirm_exercise(id,data:ExerciseConfirmation):
+        if data.exercise not in ('squat','benchpress','deadlift'):raise HTTPException(422,'종목을 선택해 주세요.')
+        with worker.lock:
+            job=worker.live.get(id) or store.get('jobs',id)
+            if job is None:raise HTTPException(404,'작업을 찾을 수 없습니다.')
+            if job['status']!='needs_confirmation':raise HTTPException(409,'종목 확인을 기다리는 작업이 아닙니다.')
+            job['inputs']['exercise']=data.exercise;job['inputs']['resume_auto']=True
+            if data.exercise=='benchpress':job['stages']['pose']=dict(progress=0.,elapsed_s=0.,status='pending')
+            job['status']='queued';job['error']=None
+            worker.submit(job)
+        return {'id':id}
     @app.post('/api/jobs',status_code=202)
     async def jobs(user:UploadFile=File(...),ref:UploadFile|None=File(None),ref_id:str|None=Form(None),
-                   exercise:str=Form(...),plate_mm:float=Form(450),load_kg:float|None=Form(None),height_cm:float|None=Form(None)):
+                   exercise:str=Form('auto'),plate_mm:float=Form(450),load_kg:float|None=Form(None),height_cm:float|None=Form(None)):
         import math
-        if exercise not in ('squat','benchpress','deadlift'):raise HTTPException(422,'종목을 선택해 주세요.')
+        if exercise not in ('auto','squat','benchpress','deadlift'):raise HTTPException(422,'종목을 선택해 주세요.')
         if any(v is not None and (not math.isfinite(v) or v<=0) for v in (plate_mm,load_kg,height_cm)):
             raise HTTPException(422,'지름·중량·키는 양수여야 합니다.')
         if ref is not None and ref_id:raise HTTPException(422,'새 기준 영상과 저장된 기준 중 하나만 선택해 주세요.')

@@ -379,6 +379,7 @@ class RTMPoseEstimator:
         self.lost_frames = []
         self.timings = dict(person_detection=0., pose=0.)
         self.scores = []
+        self.frame_scores = []
 
     def __call__(self, image_bgr, t_s):
         import time
@@ -402,6 +403,9 @@ class RTMPoseEstimator:
         self.timings['person_detection'] += detected-start
         self.timings['pose'] += time.perf_counter()-detected
         self.scores.extend(np.asarray(scores).reshape(-1).tolist())
+        # Visibility is clipped after division by .6 and cannot be inverted.
+        # Keep the original COCO17 scores aligned with the candidate list.
+        self.frame_scores = [np.asarray(s[:17],dtype=np.float32).copy() for s in scores]
         self.frame += 1
         return [halpe_to_mp33(p, s, self.cfg.score_reference) for p, s in zip(points, scores)]
 

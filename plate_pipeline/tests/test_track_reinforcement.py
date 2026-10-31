@@ -2,6 +2,8 @@
 import cv2
 import numpy as np
 import pytest
+from dataclasses import replace
+from core.config import TrackCfg
 
 from core.recog.plate import Detection
 from core.recog.track import PlateTracker
@@ -25,7 +27,8 @@ def image(y=100):
 def recognize(monkeypatch, detections, ys=None):
     ys = ys or [100+i for i in range(len(detections))]
     monkeypatch.setattr(jobs.video, 'frames', lambda _: iter((i/30, image(y)) for i,y in enumerate(ys)))
-    return jobs.recognize('fake', detector=lambda _,i: detections[i], rim=False)
+    return jobs.recognize('fake', detector=lambda _,i: detections[i], rim=False,
+                          track_cfg=replace(TrackCfg(),plate_pick=False))
 
 
 def test_low_cannot_start_and_high_tier_precedes_low(monkeypatch):
