@@ -87,3 +87,72 @@ def test_weak_only_candidate_is_experimental():
     assert choose_plate(frames)[0] is None
     chosen, legacy, _ = choose_plate(frames, replace(TrackCfg(), plate_pick_weak=True))
     assert chosen is not None and legacy is None and chosen.first_high(TrackCfg()) is None
+
+
+def _tracked(y, src='det', used=True):
+    return {'plate': {'src': src, 'used': used, 'center': [100., float(y)], 'size_px': [100., 100.]}}
+
+
+def test_legacy_track_motion_overrides_fragmented_detection_track():
+    frames = stream([det(20, 20, size=120), det(300, 20, score=.7)],
+                    [det(20, 20, size=120), det(300, 30, score=.7)],
+                    [det(300, 40, score=.7)], [det(300, 60, score=.7)],
+                    [det(300, 80, score=.7)])
+    rows = [_tracked(y, src='det_low' if i % 2 else 'det') for i,y in enumerate((0, 20, 45, 65))]
+    chosen, legacy, _ = choose_plate(frames, legacy_rows=rows)
+    assert len(legacy.items) == 2
+    assert chosen is legacy
+
+
+def test_tracked_stationary_legacy_yields_to_confirmed_mover():
+    frames = stream(*[[det(20, 20, size=120), det(300, y, score=.7)] for y in (20, 30, 40, 55, 70)])
+    chosen, legacy, _ = choose_plate(frames, legacy_rows=[_tracked(y) for y in (2, 3, 3, 4)])
+    assert legacy.first[2].box[0] == 20 and chosen.first[2].box[0] == 300
+
+
+def test_absent_detected_evidence_is_not_stationarity_or_klt_motion():
+    from core.recog.plate_pick import tracked_motion
+    frames = stream(*[[det(20, 20, size=120), det(300, y, score=.7)] for y in (20, 30, 40, 55, 70)])
+    rows = [_tracked(0), _tracked(5)] + [_tracked(y, 'klt') for y in (20, 40, 60, 80)]
+    assert tracked_motion(rows) is None
+    chosen, legacy, _ = choose_plate(frames, legacy_rows=rows)
+    assert chosen is legacy
+
+
+def test_weak_backtrack_stops_at_one_pixel_frame_edge():
+    from core.recog.plate_pick import safe_start
+    frames = stream([det(1, 20, 100, .1)], [det(2, 20, 100, .1)],
+                    [det(3, 20, 100, .2)], [det(4, 20, 100, .8)])
+    chosen, _, _ = choose_plate(frames)
+    assert chosen.first[0] == 0
+    assert safe_start(chosen, (300, 200))[0] == 1
+    assert safe_start(chosen, (104, 200))[0] == 3
+
+
+def test_detection_runs_once_and_progress_distinguishes_tracking_passes(monkeypatch):
+    images=[np.random.default_rng(i).integers(0,255,(180,240,3),dtype=np.uint8) for i in range(5)]
+    monkeypatch.setattr('server.jobs.video.frames',lambda path:iter((i*.1,img.copy()) for i,img in enumerate(images)))
+    calls=[];detected=[];legacy=[];final=[]
+    def detector(img,seq):
+        calls.append(seq)
+        return [det(20,20,70,score=.8)]
+    rows=recognize('ignored',detector,rim=False,track_cfg=replace(TrackCfg(),plate_pick=True),
+                   on_detect=lambda seq,t,img:detected.append(seq),
+                   on_legacy=lambda seq,t,img,st:legacy.append(seq),
+                   on_frame=lambda seq,t,img,st:final.append(seq))
+    assert len(rows)==5 and calls==detected==legacy==list(range(5))
+    assert final==[]  # the unchanged original track is reused
+
+
+def test_recognize_retracks_a_confirmed_moving_alternative(monkeypatch):
+    images=[np.random.default_rng(i).integers(0,255,(250,500,3),dtype=np.uint8) for i in range(6)]
+    monkeypatch.setattr('server.jobs.video.frames',lambda path:iter((i*.1,img.copy()) for i,img in enumerate(images)))
+    calls=[];legacy=[];final=[]
+    def detector(img,seq):
+        calls.append(seq)
+        return [det(20,20,120),det(300,20+seq*10,100,.7)]
+    rows=recognize('ignored',detector,rim=False,track_cfg=replace(TrackCfg(),plate_pick=True),
+                   on_legacy=lambda seq,t,img,st:legacy.append(seq),
+                   on_frame=lambda seq,t,img,st:final.append(seq))
+    assert calls==legacy==final==list(range(6))
+    assert rows[0]['plate']['box'][0]==300
