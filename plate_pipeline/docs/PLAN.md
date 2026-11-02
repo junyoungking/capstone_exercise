@@ -241,7 +241,8 @@ S2~S7은 2026-10-22에 feedback-ui를 확인하고 다시 짰다. 예전 단계�
 - 저장소 정리 (2026-11-02, 사용자 결정, aa4ea6d):
   - public 유지. 팀원용 안내는 루트 `README.md`.
   - 지금 코드가 안 쓰는 지난 학기 파일 22개(노트북, `realtime_compare_*.py`, `phase_experiments/` 등)는 `legacy/`로 옮겼다. `.idea/`는 추적에서 뺐다.
-  - GitHub 기본 브랜치를 `plate-pipeline`으로 바꾸고, 병합이 끝난 `integ/*` 18개를 지운다. 이 세션은 프록시가 설정 변경과 브랜치 삭제를 막아서 사용자 쪽에서 한다.
+  - GitHub 기본 브랜치를 `plate-pipeline`으로 바꾸고, 병합이 끝난 `integ/*` 18개를 지웠다 (Codex가 사용자 컴퓨터에서 실행. 이 세션은 프록시가 설정 변경과 브랜치 삭제를 막는다).
+  - 남은 브랜치: main, feedback-ui, plate-pipeline, integ/m5-auto(검토 전), integ/midterm-eval(병합됨), integ/midterm-figs·midterm-shots(중간 발표 그림·캡처, 병합 안 됨).
   - 앞으로 병합한 `integ/*`는 다음 Codex 프롬프트 첫 줄에서 지운다 (`feedback-ui`, `main`은 남김).
 - 영상, 데이터셋, 모델 파일(`data/`, `datasets/`, `models/`, `eval_out/`, `train/plate/work/`)은 커밋하지 않는다.
 - 규칙이나 설정값을 바꾸면 `tests/`와 `sim/`을 다시 돌린다. 숫자는 문서의 근거·출처 탭에 적는다.
