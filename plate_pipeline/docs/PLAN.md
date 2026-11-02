@@ -6,7 +6,7 @@
 
 - 1차 신호는 원판이다 (지름 450 mm로 cm 환산). 포즈는 보조다.
 - 설계 문서는 Claude Docs "3대 운동 기록·피드백 파이프라인 — 처음부터 설계"다. 탭은 파이프라인, 구현 설계, 근거·출처, 반복 기록 넷이다.
-- 코드는 GitHub `junyoungking/capstone_exercise`의 **`plate-pipeline` 브랜치, `plate_pipeline/` 폴더**에 있다. main은 건드리지 않는다.
+- 코드는 GitHub `junyoungking/capstone_exercise`(public)의 **`plate-pipeline` 브랜치(기본 브랜치), `plate_pipeline/` 폴더**에 있다. main은 건드리지 않는다. 팀원용 안내는 루트 `README.md`다.
 - 저장소 루트의 예전 YOLO 바벨 검출 코드(`model/extract_barbell_yolo_world.py` 등)는 잘 안 돼서 쓰지 않는다. 보지 않는다.
 
 ## 기말 목표와 마일스톤 (2026-10-26 결정, 지금 기준)
@@ -237,7 +237,8 @@ S2~S7은 2026-10-22에 feedback-ui를 확인하고 다시 짰다. 예전 단계�
 
 ## 5. 작업 규칙
 - 저장소 루트의 `CLAUDE.md`에 세션용 요약이 있다.
-- 커밋은 `plate-pipeline` 브랜치에만 한다. `.gitignore`가 `*.md`를 막지만 `plate_pipeline/**/*.md`는 예외다.
+- 커밋은 `plate-pipeline` 브랜치에만 한다. `.gitignore`가 `*.md`를 막지만 `plate_pipeline/**/*.md`, 루트 `README.md`, `legacy/README.md`는 예외다.
+- 저장소 정리 (2026-11-02, 사용자 결정): public 유지. GitHub 기본 브랜치를 `plate-pipeline`으로 바꿨다. 병합이 끝난 `integ/*` 19개를 지웠고, 앞으로도 병합하면 바로 지운다 (`feedback-ui`, `main`은 남김). 지금 코드가 안 쓰는 지난 학기 파일 22개(노트북, `realtime_compare_*.py`, `phase_experiments/` 등)는 `legacy/`로 옮겼고, `.idea/`는 추적에서 뺐다.
 - 영상, 데이터셋, 모델 파일(`data/`, `datasets/`, `models/`, `eval_out/`, `train/plate/work/`)은 커밋하지 않는다.
 - 규칙이나 설정값을 바꾸면 `tests/`와 `sim/`을 다시 돌린다. 숫자는 문서의 근거·출처 탭에 적는다.
 

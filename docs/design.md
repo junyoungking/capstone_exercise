@@ -526,7 +526,7 @@ Space 재생/정지 · ←/→ 1프레임 · Shift+←/→ 10프레임 · 1~5 �
 ## 9. ST-GCN 연결 정보
 
 6단계에서 확인한 연결 정보다. 원본 모델·실시간 코드는 수정하지 않는다.
-- [x] ST-GCN 모델 코드: `model/realtime_stgcn_infer.py`의 `RealtimeSTGCNInfer`, `MultiTaskSTGCNMLP`, `build_model_from_cfg`. 실시간 연결은 `unified_feedback_v4.py:_create_realtime_infer`, `realtime_compare_side_infer.py:_init_rep_counter`에서 확인했다.
+- [x] ST-GCN 모델 코드: `model/realtime_stgcn_infer.py`의 `RealtimeSTGCNInfer`, `MultiTaskSTGCNMLP`, `build_model_from_cfg`. 실시간 연결은 `unified_feedback_v4.py:_create_realtime_infer`, `legacy/realtime_compare_side_infer.py:_init_rep_counter`에서 확인했다.
 - [x] 체크포인트: **임시** `data/data/STGCN_LSTM/ablation/mlp_h64_c16_ts2_do03_aug1/best_ep009.pt`. 사용자가 선택했고 `run_demo.py --segment model --ckpt <경로>`로 명시한다. 기존 실시간 기본 체크포인트와 같다고 간주하지 않는다. 메타데이터: MLP, hidden=64, clip_len=16, dropout=0.3, pose 입력 3채널.
 - [x] 학습 전처리: `model/train_ablation.py:normalize_kpts`, `build_pose_input_features`, `CausalWindowDataset` (target=`phases[end]`). 추론에서는 같은 전처리를 제공하는 `model/realtime_stgcn_infer.py:normalize_kpts`, `build_pose_input_features`를 import한다. 입력은 x·y·visibility, 골반 중심과 어깨–골반 길이로 정규화한다. 미검출은 학습 추출과 같이 0으로 유지한다.
 - [x] phase 클래스 인덱스: `0=ready`, `1=down`, `2=up` (`model/realtime_stgcn_infer.py:PHASE_NAMES`, 체크포인트 메타데이터).

@@ -1,66 +1,51 @@
 # plate_pipeline
 
-원판 추적 기반 3대 운동 기록·피드백 파이프라인의 구현이다. 설계는 Claude Docs 문서 "3대 운동 기록·피드백 파이프라인 — 처음부터 설계"에 있고, 이 폴더는 그 문서의 구현 설계 탭을 따른다. 1학기 코드(저장소 루트)와는 섞지 않는다.
+원판 추적 기반 3대 운동 기록·피드백 파이프라인의 구현이다. 영상에서 원판을 찾아 따라가고(검출 + KLT), 바 높이 신호에서 상태기계로 rep을 세고, rep마다 깊이·시간·속도를 잰다. 포즈(RTMPose)는 리프터 고르기, 골격 표시, 자세 값에 쓰고(자세 문장은 검증 전까지 끔), 3D(VideoPose3D)는 보기용이다. 웹 앱이 업로드부터 리포트·운동 기록까지 처리한다.
 
-지금 들어 있는 것은 구현 순서의 1~2단계와 3단계(업로드 경로)의 첫 부분이다. 1단계는 신호 처리, 상태기계, rep 값 계산, 세트 닫기, 합성 시험 도구, 2단계는 세트 요약, 판정 배수 표, 비교 판정, 문장 템플릿과 대조다. 영상을 읽거나 원판을 찾는 부분은 아직 없다.
+진행과 결정은 [docs/PLAN.md](docs/PLAN.md), 설치·모델 파일·찍는 법은 [루트 README](../README.md)에 있다. 이 파일의 "합성 생성기"부터 아래는 단계별 작업 기록이다.
 
 ## 구성
 
 ```text
 core/
-  config.py          설정값 전부 (라이브·최종 신호, 상태기계, 속도)
-  signal/final.py    최종 계산: 이웃 이상치 3회 검사, 0.5초 이하 공백 보간, 영위상 버터워스 5 Hz
-  signal/live.py     라이브 계산: 처음 5개 중앙값으로 시작, 이상치 게이트, 인과 버터워스 4 Hz
-  judge/state.py     상태기계 (진입 6 cm, 최소 폭 13 cm, 복귀 70%, 바운스 0.4초, 미완료 20초, 공백 규칙)
-  judge/sets.py      최종 계산의 부분 rep, 다른 자리, 리랙 판정
-  judge/session.py   세트 닫기 (마지막 rep 뒤 45초, 종목 라벨 3초, 라이브 잠정 리포트 5초)
-  measure/times.py   시각 4개 (끝점 외삽 2*t1 - t2), ROM, 먼 점 거리, 평균 속도, 템포
-  crit_table.json    판정 배수 표 A·B·C (sim/crit.py가 만듦, 문서 표와 같음)
-  io/video.py        PyAV로 프레임과 시각 (회전 메타데이터 반영)
-  io/rows.py         프레임 줄 (gzip JSONL)
-  recog/plate.py     원판 검출기 자리 (ONNX, 라벨 박스) + 모델이 없을 때 쓰는 원판 테두리 원 찾기
-  recog/track.py     KLT 추적 (원판 고리 부분에만 점, 검출이 가까우면 그쪽으로)
-  signal/height.py   프레임 줄 → 바 높이·가로 위치 (m), 프레임마다 원판 크기로 환산
-  compare/summary.py 세트 요약: 값별 rep 번호와 값, 2차 차분 산포 (낮은 신뢰도 rep은 빠짐)
-  compare/judge.py   세트 안 비교와 기준 영상 비교, 건너뛴 이유
-  text/templates.py  문장 템플릿, 순서 (기준 비교 먼저, 비율 큰 순), 3개까지 보이기, none·skip 문장, 측정 요약
-  text/check.py      판정어 검사, 숫자·단위·방향 대조, 합니다체 검사
-  text/polish.py     LLM 다듬기 (기본 꺼짐, 대조에 걸리면 템플릿 문장으로 되돌림)
-sim/
-  gen.py             합성 궤적과 관측 (생성기 값은 GEN에 전부 있음)
-  scenarios.py       깨뜨리기 상황 41가지 + 따로 돌린 둘
-  evaluate.py        코어를 돌려 정답과 비교
-  run_base.py        기본 시험: fps x 잡음별 횟수, 잡음별 속도 오차
-  run_break.py       깨뜨리기 시험
-  crit.py            판정 배수 표 만들기 (정규분포 40만 번, 씨앗 2026)
-  run_compare.py     비교 판정 시험: 표 대조, 정규분포 시험, 생성기 시험
-  two_sets.py        한 녹화에 두 세트 (같은 종목 / 다른 종목)
-  run_sets.py        세트 시험: 두 세트, 마지막 rep 실패, 횟수·속도가 나오는 시점
-train/plate/          원판 검출기 학습 (README.md에 순서): 프레임 뽑기, Grounding DINO 자동 라벨, 손으로 고치는 도구,
-                      데이터셋 만들기 (세션 단위 분리), YOLOX-Tiny 미세조정, ONNX 내보내기
-eval/
-  plate_recall.py    시험 프레임에서 원판 검출 재현율 (95%, 벤치 따로)
-  noise.py           쉬는 바의 위치 잡음 (0.5 cm)
-  counts.py          내 세트들의 횟수 일치
+  config.py          설정값 전부 (추적, 신호, 상태기계, 속도, 포즈, 기하, 3D)
+  io/                video.py PyAV 프레임·시각(회전 반영), rows.py 프레임 줄(gzip JSONL)
+  recog/             plate.py 원판 검출(YOLOX-Tiny ONNX), track.py KLT 추적, plate_pick.py 영상 전체로 원판 고르기,
+                     pose.py RTMPose·MediaPipe와 리프터 고르기, ellipse.py 원판 테두리 타원(실험)
+  signal/            height.py 바 높이(m), final.py 최종 신호, live.py 라이브 신호
+  judge/             state.py 상태기계(진입 6 cm, 최소 폭 13 cm, 복귀 70%), sets.py 부분 rep·리랙, session.py 세트 닫기
+  measure/times.py   시각 4개, ROM, 템포, 평균 속도
+  geometry/          카메라 각도, 키 공식, 원판 지름 확인, pose3d.py 3D 다듬기·뼈 길이 고정
+  compare/           세트 요약과 비교 판정
+  text/              문장 템플릿, 숫자·판정어 검사, LLM 다듬기(기본 끔)
 server/
-  jobs.py            업로드 처리: 영상 → 프레임 줄 → 최종 계산 → 세트 → 리포트
-  report.py          세트 리포트 HTML (문장, 바 높이, rep 표, 템포 막대, 속도)
+  app.py             웹 앱 (FastAPI, 127.0.0.1): 업로드 → 작업 → 진행률 → 리포트, 운동 기록, 다시 계산
+  jobs.py            영상 하나 처리 (원판·포즈 → 프레임 줄 → 신호 → 세트)
+  compare.py         두 영상 → result_v3.json과 오프라인 리포트
+  findings.py        세트 단위 판정과 rep 북마크
+  rescale.py         원판 지름을 바꿔 저장된 기록으로 다시 계산
+  cache.py schema.py report.py web/   기준 영상 캐시, 결과 형식, 리포트, 화면
+sim/                 합성 궤적, 깨뜨리기, 비교 판정 시험 (sim/README.md)
+eval/                실제 영상 평가 (단계별 하위 폴더, BASELINE.md, M*_NOTES.md)
+train/plate/         원판 검출기 학습 (README.md에 순서)
 tests/               pytest 단위 시험
-results/             시험 결과 (json)
+docs/                PLAN.md(진행·결정), DESIGN.md(화면 규칙), midterm/(중간 발표 데모·그림)
+results/             단계별 결과 (REPORT.md, 작은 JSON, 캡처 몇 장)
 ```
 
 ## 실행
 
 ```bash
 cd plate_pipeline
-pip install numpy scipy pytest av opencv-python
-python -m pytest -q tests
-python -m sim.run_break --sets 600       # 깨뜨리기 41가지 (2코어로 약 10분)
-python -m sim.run_base                   # 기본 시험 (2코어로 약 15분)
-python -m sim.crit                       # 배수 표 다시 만들기 (약 1분)
-python -m sim.run_compare                # 비교 판정 시험 (2코어로 약 10분)
-python -m sim.run_sets                   # 세트 시험 (2코어로 약 1분)
-python -m server.jobs VIDEO --exercise squat --box x0,y0,x1,y1 --out out   # 영상 하나 처리
+python -m pytest -q tests                      # 단위 시험
+python -m server.app --port 8000               # 웹 앱 (http://127.0.0.1:8000)
+python -m server.compare --user a.mp4 --ref b.mp4 --exercise squat --out out    # 리포트 파일만
+python -m server.jobs VIDEO --exercise squat --model models/plate_tiny.onnx --out out   # 영상 하나 (--pose로 포즈도)
+python -m sim.run_break --sets 600             # 깨뜨리기 41가지 (2코어로 약 10분)
+python -m sim.run_base                         # 기본 시험 (2코어로 약 15분)
+python -m sim.crit                             # 배수 표 다시 만들기 (약 1분)
+python -m sim.run_compare                      # 비교 판정 시험 (2코어로 약 10분)
+python -m sim.run_sets                         # 세트 시험 (2코어로 약 1분)
 ```
 
 ## 합성 생성기

@@ -57,6 +57,10 @@ runs/
 !plate_pipeline/**/*.md
 !plate_pipeline/*.md
 
+# repo docs for the team
+!/README.md
+!legacy/README.md
+
 # plate_pipeline run outputs
 plate_pipeline/results/*.log
 plate_pipeline/results/break_quick.json
