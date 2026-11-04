@@ -39,7 +39,7 @@ pip install -r plate_pipeline/server/requirements.txt
 
 | 파일 | 놓는 곳 | 받는 곳 |
 |---|---|---|
-| `plate_tiny.onnx` (원판 검출기, 우리가 학습) | `plate_pipeline/models/` | 팀장에게 받는다 |
+| `plate_tiny.onnx` (원판 검출기, 우리가 학습) | `plate_pipeline/models/` | 팀 공유 드라이브 [plate_pipeline_models](https://drive.google.com/drive/folders/1UJhd7Vfl3OySR6urEBz5xPTY48jh7MM5) (팀원만 열림) |
 | `pretrained_h36m_detectron_coco.bin` (3D) | `~/.cache/videopose3d/` | [VideoPose3D](https://github.com/facebookresearch/VideoPose3D) 공개 가중치 ([내려받기](https://dl.fbaipublicfiles.com/video-pose-3d/pretrained_h36m_detectron_coco.bin)) |
 | RTMPose (2D 포즈) | 자동 | 처음 실행할 때 rtmlib가 내려받는다 |
 
